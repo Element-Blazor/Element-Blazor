@@ -1,0 +1,16 @@
+﻿@using System.Threading.Tasks;
+<button class="layui-btn layui-btn-@theme">@ChildContent</button>
+
+@functions{
+    private string theme;
+    [Parameter]
+    ButtonTheme Theme { get; set; }
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitAsync()
+    {
+        theme = await Task.FromResult(Theme.ToString().ToLower());
+    }
+}
