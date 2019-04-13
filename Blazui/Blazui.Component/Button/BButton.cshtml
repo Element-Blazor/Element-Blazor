@@ -1,27 +1,64 @@
 ﻿@using System.Threading.Tasks;
 
-@if (Theme == ButtonTheme.Disabled)
-{
-    <button type="@Type.ToString().ToLower()" disabled class="layui-btn layui-btn-@Theme.ToString().ToLower()" onclick="@OnClick">@ChildContent</button>
-}
-else
-{
-<button type="@Type.ToString().ToLower()" class="layui-btn layui-btn-@Theme.ToString().ToLower()" onclick="@OnClick">@ChildContent</button>
-}
+<button type="@Type.ToString().ToLower()" disabled="@disabled" class="layui-btn layui-btn-@(Theme.ToString().ToLower()) @fluid @size @radius" onclick="@OnClick">@ChildContent</button>
 
 @functions{
+
+    bool disabled = false;
+    string fluid = string.Empty;
+    string size = string.Empty;
+    string radius = string.Empty;
+
     [Parameter]
     ButtonTheme Theme { get; set; } = ButtonTheme.Default;
 
     [Parameter]
     private Action<UIMouseEventArgs> OnClick { get; set; }
 
+    [Parameter]
     private ButtonType Type { get; set; } = ButtonType.Button;
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
+    [Parameter]
+    private ButtonSize Size { get; set; }
+
+    [Parameter]
+    private bool IsFluid { get; set; } = false;
+
+    [Parameter]
+    private bool IsRadius { get; set; }
+
     protected override async Task OnInitAsync()
     {
+        if (Theme == ButtonTheme.Disabled)
+        {
+            disabled = true;
+        }
+        if (IsFluid)
+        {
+            fluid = "layui-btn-fluid";
+        }
+        switch (Size)
+        {
+            case ButtonSize.Default:
+                size = string.Empty;
+                break;
+            case ButtonSize.Large:
+                size = "layui-btn-lg";
+                break;
+            case ButtonSize.Small:
+                size = "layui-btn-sm";
+                break;
+            case ButtonSize.XSmall:
+                size = "layui-btn-xs";
+                break;
+        }
+        if (IsRadius)
+        {
+            radius = "layui-btn-radius";
+        }
+        await Task.CompletedTask;
     }
 }
