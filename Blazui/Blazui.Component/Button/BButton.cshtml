@@ -1,19 +1,27 @@
 ﻿@using System.Threading.Tasks;
-<button class="layui-btn layui-btn-@theme" onclick="@OnClick" >@ChildContent</button>
+
+@if (Theme == ButtonTheme.Disabled)
+{
+    <button type="@Type.ToString().ToLower()" disabled class="layui-btn layui-btn-@Theme.ToString().ToLower()" onclick="@OnClick">@ChildContent</button>
+}
+else
+{
+<button type="@Type.ToString().ToLower()" class="layui-btn layui-btn-@Theme.ToString().ToLower()" onclick="@OnClick">@ChildContent</button>
+}
 
 @functions{
-    private string theme;
     [Parameter]
-    ButtonTheme Theme { get; set; }
+    ButtonTheme Theme { get; set; } = ButtonTheme.Default;
 
     [Parameter]
     private Action<UIMouseEventArgs> OnClick { get; set; }
+
+    private ButtonType Type { get; set; } = ButtonType.Button;
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
     protected override async Task OnInitAsync()
     {
-        theme = await Task.FromResult(Theme.ToString().ToLower());
     }
 }
