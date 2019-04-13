@@ -1,7 +1,7 @@
 # blazui
 
 #### 介绍
-layui的blazor版本
+Element的blazor版本
 
 #### 软件架构
 软件架构说明
