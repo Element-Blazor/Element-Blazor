@@ -6,5 +6,13 @@
 Welcome to your new app.
 
 @*<SurveyPrompt Title="How is Blazor working for you?" />*@
-<BButton Theme="ButtonTheme.Danger">危险按钮</BButton>
+<BButton Theme="ButtonTheme.Danger" OnClick="@test">@text</BButton>
 <BButton Theme="ButtonTheme.Disabled">禁用按钮</BButton>
+
+@functions{
+    private string text { get; set; } = "按钮";
+    private void test(UIMouseEventArgs e)
+    {
+        text = e.CtrlKey.ToString();
+    }
+}

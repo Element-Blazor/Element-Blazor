@@ -1,10 +1,13 @@
 ﻿@using System.Threading.Tasks;
-<button class="layui-btn layui-btn-@theme">@ChildContent</button>
+<button class="layui-btn layui-btn-@theme" onclick="@OnClick" >@ChildContent</button>
 
 @functions{
     private string theme;
     [Parameter]
     ButtonTheme Theme { get; set; }
+
+    [Parameter]
+    private Action<UIMouseEventArgs> OnClick { get; set; }
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
