@@ -1,7 +1,7 @@
-﻿<label role="checkbox" aria-checked="true" class="el-checkbox is-checked">
-    <span aria-checked="mixed" class="el-checkbox__input is-checked">
+﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @disabled">
+    <span aria-checked="mixed" class="el-checkbox__input @isChecked @disabled">
         <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" class="el-checkbox__original" value="" />
+        <input type="checkbox" aria-hidden="true" class="el-checkbox__original @disabled" value="" />
     </span>
     <span class="el-checkbox__label">
         备选项<!---->
@@ -9,5 +9,46 @@
 </label>
 
 @functions{
+    private string isChecked;
+    private string disabled;
+    
+    [Parameter]
+    private bool IsChecked
+    {
+        get
+        {
+            return isChecked == "is-checked";
+        }
+        set
+        {
+            if (value)
+            {
+                isChecked = "is-checked";
+            }
+            else
+            {
+                isChecked = null;
+            }
+        }
+    }
 
+    [Parameter]
+    private bool IsDisabled
+    {
+        get
+        {
+            return disabled == "is-disabled";
+        }
+        set
+        {
+            if (value)
+            {
+                disabled = "is-disabled";
+            }
+            else
+            {
+                disabled = null;
+            }
+        }
+    }
 }

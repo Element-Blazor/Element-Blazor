@@ -1,0 +1,16 @@
+﻿<div role="group" aria-label="checkbox-group" class="el-checkbox-group">
+    @ChildContent
+</div>
+@functions{
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    private object Model { get; set; }
+
+    protected async Task OnInitAsync()
+    {
+
+    }
+}
