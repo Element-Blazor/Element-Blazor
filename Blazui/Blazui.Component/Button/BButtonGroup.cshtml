@@ -3,7 +3,25 @@
 </div>
 
 @functions{
-    
+
+    private RenderFragment c;
     [Parameter]
-    private RenderFragment ChildContent { get; set; }
+    private RenderFragment ChildContent
+    {
+        get
+        {
+            return c;
+        }
+        set
+        {
+            c = value;
+            Console.WriteLine(c.Method.DeclaringType.Assembly.CodeBase);
+        }
+    }
+
+    protected async Task OnParametersSetAsync()
+    {
+        Console.WriteLine(ChildContent);
+        await Task.CompletedTask;
+    }
 }

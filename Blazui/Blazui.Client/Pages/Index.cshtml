@@ -1,7 +1,8 @@
 ﻿@page "/"
 @*<SurveyPrompt Title="How is Blazor working for you?" />*@
 @using Blazui.Component.Button
-<BButton Theme="@ButtonTheme.Danger" OnClick="@test">@text</BButton>
+@addTagHelper *,Blazui.Component
+<BButton Theme="@ButtonTheme.Danger" OnClick="@test"><BButton Theme="@ButtonTheme.Disabled">禁用按钮</BButton></BButton>
 <BButton Theme="@ButtonTheme.Disabled">禁用按钮</BButton>
 <BButton Theme="@ButtonTheme.Warm">暖色按钮</BButton>
 <BButton Theme="@ButtonTheme.Primary">原始按钮</BButton>

@@ -8,3 +8,22 @@
 <BCheckBox IsDisabled="true"></BCheckBox>
 <BCheckBox IsDisabled="true" IsChecked="true"></BCheckBox>
 <BCheckBox IsChecked="true"></BCheckBox>
+<br />
+<br />
+<BCheckBoxGroup SelectedItems="@selectedValues" Model="@values">
+    <BCheckBox IsChecked="@context.IsChecked" IsDisabled="@context.IsDisabled">@context.Label</BCheckBox>
+</BCheckBoxGroup>
+
+@functions{
+    private List<string> selectedValues = new List<string>()
+{
+        "列表选项1",
+        "列表选项3"
+    };
+    private List<string> values = new List<string>()
+{
+        "列表选项1",
+        "列表选项2",
+        "列表选项3"
+    };
+}
