@@ -1,0 +1,57 @@
+﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
+    <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled">
+        <span class="el-checkbox__inner"></span>
+        <input type="checkbox" aria-hidden="true" class="el-checkbox__original @isDisabled" value="" />
+    </span>
+    <span class="el-checkbox__label">
+        @ChildContent
+    </span>
+</label>
+
+@functions{
+    private string isChecked;
+    private string isDisabled;
+
+    [Parameter]
+    private bool IsChecked
+    {
+        get
+        {
+            return isChecked == "is-checked";
+        }
+        set
+        {
+            if (value)
+            {
+                isChecked = "is-checked";
+            }
+            else
+            {
+                isChecked = null;
+            }
+        }
+    }
+
+    [Parameter]
+    private bool IsDisabled
+    {
+        get
+        {
+            return isDisabled == "is-disabled";
+        }
+        set
+        {
+            if (value)
+            {
+                isDisabled = "is-disabled";
+            }
+            else
+            {
+                isDisabled = null;
+            }
+        }
+    }
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+}

@@ -1,57 +1,71 @@
-﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @disabled">
-    <span aria-checked="mixed" class="el-checkbox__input @isChecked @disabled">
-        <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" class="el-checkbox__original @disabled" value="" />
-    </span>
-    <span class="el-checkbox__label">
-        @ChildContent
-    </span>
-</label>
+﻿@typeparam TModel
+@foreach (var item in models)
+{
+    <BSimpleCheckBox IsChecked="@item.IsChecked" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+}
 
 @functions{
-    private string isChecked;
-    private string disabled;
+    //private string isChecked;
+    //private string disabled;
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private bool IsChecked
+    private Func<TModel, bool> IsItemChecked { get; set; }
+
+    [Parameter]
+    private IEnumerable<TModel> SelectedItems { get; set; }
+
+    [Parameter]
+    protected List<TModel> For { get; set; }
+
+    private IList<CheckBoxOption> models { get; set; }
+
+    protected bool IsCollectionDataSource()
     {
-        get
+        return For != null;
+    }
+
+    protected bool ModelItemIsSimpleType { get; set; }
+
+    protected override void OnInit()
+    {
+        if (IsCollectionDataSource())
         {
-            return isChecked == "is-checked";
-        }
-        set
-        {
-            if (value)
+            var type = typeof(TModel);
+            ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
+            if (ModelItemIsSimpleType)
             {
-                isChecked = "is-checked";
-            }
-            else
-            {
-                isChecked = null;
+                models = new List<CheckBoxOption>();
+                foreach (var item in For)
+                {
+                    models.Add(ConvertModelItem(item));
+                }
             }
         }
     }
 
-    [Parameter]
-    private bool IsDisabled
+    private CheckBoxOption ConvertModelItem(TModel modelItem)
     {
-        get
+        if (ModelItemIsSimpleType)
         {
-            return disabled == "is-disabled";
-        }
-        set
-        {
-            if (value)
+            var isChecked = false;
+            if (IsItemChecked != null)
             {
-                disabled = "is-disabled";
+                isChecked = IsItemChecked(modelItem);
             }
-            else
+            if (SelectedItems != null)
             {
-                disabled = null;
+                isChecked = SelectedItems.Contains(modelItem);
             }
+            return new CheckBoxOption()
+            {
+                IsChecked = isChecked,
+                IsDisabled = false,
+                Label = Convert.ToString(modelItem)
+            };
         }
+        return null;
     }
 }

@@ -4,15 +4,19 @@
 *@
 @addTagHelper *,Blazui.Component
 
-<BCheckBox></BCheckBox>
-<BCheckBox IsDisabled="true"></BCheckBox>
-<BCheckBox IsDisabled="true" IsChecked="true"></BCheckBox>
-<BCheckBox IsChecked="true"></BCheckBox>
+@*<BCheckBox></BCheckBox>
+    <BCheckBox IsDisabled="true"></BCheckBox>
+    <BCheckBox IsDisabled="true" IsChecked="true"></BCheckBox>
+    <BCheckBox IsChecked="true"></BCheckBox>*@
+<BCheckBox For="@values" IsItemChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
 <br />
+<BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
 <br />
-<BCheckBoxGroup SelectedItems="@selectedValues" Model="@values">
-    <BCheckBox IsChecked="@context.IsChecked" IsDisabled="@context.IsDisabled">@context.Label</BCheckBox>
-</BCheckBoxGroup>
+<BSimpleCheckBox IsChecked="true">硬编码选项1</BSimpleCheckBox>
+<br />
+@*<BCheckBoxGroup SelectedItems="@selectedValues" Model="@values">
+        <BCheckBox IsChecked="@context.IsChecked" IsDisabled="@context.IsDisabled">@context.Label</BCheckBox>
+    </BCheckBoxGroup>*@
 
 @functions{
     private List<string> selectedValues = new List<string>()
