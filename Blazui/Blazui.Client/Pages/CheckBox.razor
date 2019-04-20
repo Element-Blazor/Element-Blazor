@@ -5,33 +5,33 @@
 @using Blazui.Component.CheckBox
 @using System.Collections.ObjectModel
 @*<div>
-    动态渲染：
-    <br />
-    <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-    <br />
-    <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
-</div>
-<div>
-    硬编码：
-    <br />
-    <BSimpleCheckBox Status="@Status.Checked">硬编码选项1</BSimpleCheckBox>
-    <BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
-    <BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
-</div>
-<div>
-    复选框组：
-    <br />
-    <BCheckBoxGroup>
+        动态渲染：
+        <br />
         <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-    </BCheckBoxGroup>
-</div>*@
+        <br />
+        <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
+    </div>
+    <div>
+        硬编码：
+        <br />
+        <BSimpleCheckBox Status="@Status.Checked">硬编码选项1</BSimpleCheckBox>
+        <BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
+        <BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
+    </div>
+    <div>
+        复选框组：
+        <br />
+        <BCheckBoxGroup>
+            <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+        </BCheckBoxGroup>
+    </div>*@
 <div>
     多选状态（已选中数据：@count）：
     <br />
     <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll"></BSimpleCheckBox>
     @*<BCheckBoxGroup>
-        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-    </BCheckBoxGroup>*@
+            <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+        </BCheckBoxGroup>*@
 </div>
 @functions{
     private List<string> selectedValues = new List<string>()
@@ -54,10 +54,7 @@
 
     void SelectAll(UIMouseEventArgs e)
     {
-        this.Invoke(() =>
-        {
-            count++;
-        });
+        count++;
     }
 
     void OnSelectAllStatusChagned(UIMouseEventArgs e)
