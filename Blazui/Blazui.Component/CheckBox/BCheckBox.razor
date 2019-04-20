@@ -1,47 +1,87 @@
 ﻿@typeparam TModel
 @foreach (var item in models)
 {
-    <BSimpleCheckBox IsChecked="@item.IsChecked" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+    <BSimpleCheckBox Status="@item.Status" Tag="@item" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
 }
 
 @functions{
-    //private string isChecked;
-    //private string disabled;
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsChecked { get; set; }
+    private Func<TModel, bool>
+    IsChecked
+    { get; set; }
 
     [Parameter]
-    private IEnumerable<TModel> SelectedItems { get; set; }
+    private Func<TModel, bool>
+        IsIndeterminate
+    { get; set; }
 
     [Parameter]
-    protected List<TModel> For { get; set; }
+    private IList<TModel>
+        SelectedItems
+    { get; set; }
 
-    private IList<CheckBoxOption> models { get; set; }
+    [Parameter]
+    protected IList<TModel>
+        For
+    { get; set; }
 
-    protected bool IsCollectionDataSource()
+    private IList<CheckBoxOption>
+        models
+    { get; set; }
+
+    private void OnInnerStatusChanged(UIMouseEventArgs e)
     {
-        return For != null;
+        //var option = (CheckBoxOption)tag;
+        //var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
+        //if (SelectedItems != null)
+        //{
+        //    if (status == Status.Checked)
+        //    {
+        //        lock (SelectedItems)
+        //        {
+        //            if (!SelectedItems.Contains(model))
+        //            {
+        //                SelectedItems.Add(model);
+        //            }
+        //        }
+        //    }
+        //    else if (status == Status.UnChecked)
+        //    {
+        //        lock (SelectedItems)
+        //        {
+        //            SelectedItems.Remove(model);
+        //        }
+        //    }
+        //}
+        if (OnStatusChanged.HasDelegate)
+        {
+            OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
+        }
     }
+    [Parameter]
+    private EventCallback<UIMouseEventArgs> OnStatusChanged { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 
     protected override void OnInit()
     {
-        if (IsCollectionDataSource())
+        if (For == null)
         {
-            var type = typeof(TModel);
-            ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
-            if (ModelItemIsSimpleType)
+            return;
+        }
+        var type = typeof(TModel);
+        ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
+        if (ModelItemIsSimpleType)
+        {
+            models = new List<CheckBoxOption>
+                ();
+            foreach (var item in For)
             {
-                models = new List<CheckBoxOption>();
-                foreach (var item in For)
-                {
-                    models.Add(ConvertModelItem(item));
-                }
+                models.Add(ConvertModelItem(item));
             }
         }
     }
@@ -50,14 +90,19 @@
     {
         if (ModelItemIsSimpleType)
         {
-            var isChecked = false;
+            Status status = CheckBox.Status.Checked;
             if (IsChecked != null)
             {
-                isChecked = IsChecked(modelItem);
+                status = IsChecked(modelItem) ? Status.Checked : Status.UnChecked;
+            }
+
+            if (IsIndeterminate != null)
+            {
+                status = IsIndeterminate(modelItem) ? Status.Indeterminate : Status.UnChecked;
             }
             return new CheckBoxOption()
             {
-                IsChecked = isChecked,
+                Status = status,
                 IsDisabled = false,
                 Label = Convert.ToString(modelItem)
             };

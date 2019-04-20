@@ -1,7 +1,7 @@
 ﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
-    <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled">
+    <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
         <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" onclick="@OnClick" class="el-checkbox__original @isDisabled" value="" />
+        <input type="checkbox" aria-hidden="true" onclick="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
     </span>
     <span class="el-checkbox__label">
         @ChildContent
@@ -10,36 +10,70 @@
 
 @functions{
     private string isChecked;
+    private string isIndeterminate;
     private string isDisabled;
 
     [Parameter]
-    private bool IsChecked
+    private object Tag { get; set; }
+
+    [Parameter]
+    private Status Status
     {
         get
         {
-            return isChecked == "is-checked";
+            if (!string.IsNullOrWhiteSpace(isChecked))
+            {
+                return Status.Checked;
+            }
+            if (!string.IsNullOrWhiteSpace(isIndeterminate))
+            {
+                return Status.Indeterminate;
+            }
+            return Status.UnChecked;
         }
         set
         {
-            if (value)
+            switch (value)
             {
-                isChecked = "is-checked";
+                case Status.UnChecked:
+                    isChecked = null;
+                    isIndeterminate = null;
+                    break;
+                case Status.Checked:
+                    isChecked = "is-checked";
+                    isIndeterminate = null;
+                    break;
+                case Status.Indeterminate:
+                    isChecked = null;
+                    isIndeterminate = "is-indeterminate";
+                    break;
             }
-            else
-            {
-                isChecked = null;
-            }
+            OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
         }
     }
 
-    void OnClick(UIMouseEventArgs uIMouseEvent)
+    [Parameter]
+    private EventCallback<UIMouseEventArgs> OnStatusChanged { get; set; }
+
+    void changeStatus(UIMouseEventArgs uIMouseEvent)
     {
-        Console.WriteLine(new System.Diagnostics.StackTrace().ToString());
-        if (IsDisabled)
-        {
-            return;
-        }
-        this.IsChecked = !this.IsChecked;
+        OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
+        //if (IsDisabled)
+        //{
+        //    return;
+        //}
+        //switch (Status)
+        //{
+        //    case Status.Indeterminate:
+        //        Status = Status.Checked;
+        //        break;
+        //    case Status.Checked:
+        //        Status = Status.UnChecked;
+        //        break;
+        //    case Status.UnChecked:
+        //        Status = Status.Checked;
+        //        break;
+        //}
     }
 
     [Parameter]

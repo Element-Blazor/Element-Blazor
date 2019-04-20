@@ -2,32 +2,74 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@*<BCheckBox></BCheckBox>
-    <BCheckBox IsDisabled="true"></BCheckBox>
-    <BCheckBox IsDisabled="true" IsChecked="true"></BCheckBox>
-    <BCheckBox IsChecked="true"></BCheckBox>*@
-<BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-<br />
-<BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
-<br />
-<BSimpleCheckBox IsChecked="true">硬编码选项1</BSimpleCheckBox>
-<BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
-<BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
-<br />
-<BCheckBoxGroup>
+@using Blazui.Component.CheckBox
+@using System.Collections.ObjectModel
+@*<div>
+    动态渲染：
+    <br />
     <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-</BCheckBoxGroup>
-
+    <br />
+    <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
+</div>
+<div>
+    硬编码：
+    <br />
+    <BSimpleCheckBox Status="@Status.Checked">硬编码选项1</BSimpleCheckBox>
+    <BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
+    <BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
+</div>
+<div>
+    复选框组：
+    <br />
+    <BCheckBoxGroup>
+        <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+    </BCheckBoxGroup>
+</div>*@
+<div>
+    多选状态（已选中数据：@count）：
+    <br />
+    <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll"></BSimpleCheckBox>
+    @*<BCheckBoxGroup>
+        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+    </BCheckBoxGroup>*@
+</div>
 @functions{
     private List<string> selectedValues = new List<string>()
 {
         "列表选项1",
         "列表选项3"
     };
+    int count = 0;
     private List<string> values = new List<string>()
 {
         "列表选项1",
         "列表选项2",
         "列表选项3"
     };
+
+    protected override void OnInit()
+    {
+        count = selectedValues.Count;
+    }
+
+    void SelectAll(UIMouseEventArgs e)
+    {
+        this.Invoke(() =>
+        {
+            count++;
+        });
+    }
+
+    void OnSelectAllStatusChagned(UIMouseEventArgs e)
+    {
+        //if (status == Status.Checked)
+        //{
+        //    selectedValues.Add(item);
+        //}
+        //else if (status == Status.UnChecked)
+        //{
+        //    selectedValues.Remove(item);
+        //}
+        count++;//= selectedValues.Count;
+    }
 }
