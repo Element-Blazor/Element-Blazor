@@ -2,20 +2,21 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
 @*<BCheckBox></BCheckBox>
     <BCheckBox IsDisabled="true"></BCheckBox>
     <BCheckBox IsDisabled="true" IsChecked="true"></BCheckBox>
     <BCheckBox IsChecked="true"></BCheckBox>*@
-<BCheckBox For="@values" IsItemChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+<BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
 <br />
 <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
 <br />
 <BSimpleCheckBox IsChecked="true">硬编码选项1</BSimpleCheckBox>
+<BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
+<BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
 <br />
-@*<BCheckBoxGroup SelectedItems="@selectedValues" Model="@values">
-        <BCheckBox IsChecked="@context.IsChecked" IsDisabled="@context.IsDisabled">@context.Label</BCheckBox>
-    </BCheckBoxGroup>*@
+<BCheckBoxGroup>
+    <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+</BCheckBoxGroup>
 
 @functions{
     private List<string> selectedValues = new List<string>()

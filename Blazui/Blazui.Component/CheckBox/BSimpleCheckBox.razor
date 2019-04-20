@@ -1,7 +1,7 @@
 ﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
     <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled">
         <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" class="el-checkbox__original @isDisabled" value="" />
+        <input type="checkbox" aria-hidden="true" onclick="@OnClick" class="el-checkbox__original @isDisabled" value="" />
     </span>
     <span class="el-checkbox__label">
         @ChildContent
@@ -30,6 +30,15 @@
                 isChecked = null;
             }
         }
+    }
+
+    void OnClick(UIMouseEventArgs uIMouseEvent)
+    {
+        if (IsDisabled)
+        {
+            return;
+        }
+        this.IsChecked = !this.IsChecked;
     }
 
     [Parameter]

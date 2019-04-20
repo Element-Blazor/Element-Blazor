@@ -1,83 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Components.RenderTree;
 <div role="group" aria-label="checkbox-group" class="el-checkbox-group">
-    @if (list != null)
-    {
-        @foreach (CheckBoxOption item in list)
-        {
-            @ChildContent(item)
-        }
-    }
+    @ChildContent
 </div>
 @functions{
 
-    private string child;
     [Parameter]
-    private RenderFragment<CheckBoxOption> ChildContent { get; set; }
+    private RenderFragment ChildContent { get; set; }
 
-    [Parameter]
-    private object SelectedItems { get; set; }
 
-    [Parameter]
-    private object Model { get; set; }
-
-    private List<CheckBoxOption> list;
-    private bool isSimpleType;
-
-    protected override Task OnInitAsync()
+    protected async override Task OnInitAsync()
     {
-        if (Model != null)
-        {
-            var modelType = Model.GetType();
-            if (!modelType.IsGenericType && !modelType.IsArray)
-            {
-                throw new ArgumentOutOfRangeException(nameof(Model), "复选框组的数据源只能是集合或数组");
-            }
-            if (IsListDataSource(modelType))
-            {
-                InitListDataSource(modelType);
-                RenderListSelectedItems();
-            }
-        }
-        return base.OnInitAsync();
-    }
 
-    private void RenderListSelectedItems()
-    {
-    }
-
-    private bool IsListDataSource(Type modelType)
-    {
-        var interfaces = modelType.GetInterfaces();
-        return interfaces.Any(x => x.IsGenericType && (x.GetGenericTypeDefinition() == typeof(IList<>) || modelType.GetGenericTypeDefinition() == typeof(IEnumerable<>)));
-    }
-
-    private void InitListDataSource(Type modelType)
-    {
-        var datas = Model as System.Collections.IEnumerable;
-        var selectedItemsType = SelectedItems.GetType();
-        var selectedItems = new List<string>();
-        if (selectedItemsType.IsGenericType && IsListDataSource(selectedItemsType))
-        {
-            var selectedItemType = selectedItemsType.GetGenericArguments()[0];
-            var selectedItemIsSimpleType = selectedItemType.IsValueType || selectedItemType.IsPrimitive || selectedItemType == typeof(string);
-            foreach (var item in (SelectedItems as System.Collections.IEnumerable))
-            {
-                selectedItems.Add(item.ToString());
-            }
-        }
-        var type = modelType.GetGenericArguments()[0];
-        isSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
-        if (isSimpleType)
-        {
-            list = new List<CheckBoxOption>();
-            foreach (var item in datas)
-            {
-                list.Add(new CheckBoxOption()
-                {
-                    IsChecked = selectedItems.Contains(item.ToString(), StringComparer.OrdinalIgnoreCase),
-                    Label = item.ToString()
-                });
-            }
-        }
     }
 }

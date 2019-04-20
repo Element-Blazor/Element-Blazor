@@ -12,7 +12,7 @@
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsItemChecked { get; set; }
+    private Func<TModel, bool> IsChecked { get; set; }
 
     [Parameter]
     private IEnumerable<TModel> SelectedItems { get; set; }
@@ -51,13 +51,9 @@
         if (ModelItemIsSimpleType)
         {
             var isChecked = false;
-            if (IsItemChecked != null)
+            if (IsChecked != null)
             {
-                isChecked = IsItemChecked(modelItem);
-            }
-            if (SelectedItems != null)
-            {
-                isChecked = SelectedItems.Contains(modelItem);
+                isChecked = IsChecked(modelItem);
             }
             return new CheckBoxOption()
             {
