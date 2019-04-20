@@ -1,12 +1,12 @@
-FROM microsoft/dotnet:2.2-sdk as builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0.100-preview4 as builder
 WORKDIR /app
 
 COPY . ./
 RUN cd /app/Blazui \
     dotnet restore --configfile=/app/nuget.config \
-    dotnet publish Blazui.Client -c Release
+    dotnet publish Blazui.Server -c Release
 
-FROM microsoft/dotnet:2.2-aspnetcore-runtime as production
+FROM mcr.microsoft.com/dotnet/core/runtime:3.0.0-preview4 as production
 WORKDIR /app
-COPY --from=0 /app/Blazui/Blazui.Client/bin/Release/netstandard2.0/publish/ /app/
-ENTRYPOINT [ "sh", "-c", "dotnet Blazui.Client.dll" ]
+COPY --from=0 /app/Blazui/Blazui.Server/bin/Release/netcoreapp3.0/publish/ /app/
+ENTRYPOINT [ "sh", "-c", "dotnet Blazui.Server.dll" ]
