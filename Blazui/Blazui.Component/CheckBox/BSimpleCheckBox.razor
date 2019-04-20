@@ -34,6 +34,7 @@
 
     void OnClick(UIMouseEventArgs uIMouseEvent)
     {
+        Console.WriteLine(new System.Diagnostics.StackTrace().ToString());
         if (IsDisabled)
         {
             return;
