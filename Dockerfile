@@ -2,8 +2,9 @@ FROM microsoft/dotnet:2.2-sdk as builder
 WORKDIR /app
 
 COPY . ./
+CD /app/Blazui
 RUN dotnet restore --configfile=/app/nuget.config
-RUN dotnet publish Blazui/Blazui.Client -c Release
+RUN dotnet publish Blazui.Client -c Release
 
 FROM microsoft/dotnet:2.2-aspnetcore-runtime as production
 WORKDIR /app
