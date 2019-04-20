@@ -33,9 +33,11 @@ namespace Blazui.Server
                 app.UseBlazorDebugging();
             }
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
 
             app.UseBlazor<Client.Startup>();
