@@ -1,4 +1,5 @@
-﻿@typeparam TModel
+﻿@using  Blazui.Component.EventArgs
+@typeparam TModel
 @foreach (var item in models)
 {
     <BSimpleCheckBox Status="@item.Status" Tag="@item" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
@@ -10,60 +11,55 @@
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool>
-    IsChecked
+    private Func<TModel, bool> IsChecked
     { get; set; }
 
     [Parameter]
-    private Func<TModel, bool>
-        IsIndeterminate
+    private Func<TModel, bool> IsIndeterminate
     { get; set; }
 
     [Parameter]
-    private IList<TModel>
-        SelectedItems
+    private IList<TModel> SelectedItems
     { get; set; }
 
     [Parameter]
-    protected IList<TModel>
-        For
+    protected IList<TModel> For
     { get; set; }
 
-    private IList<CheckBoxOption>
-        models
+    private IList<CheckBoxOption> models
     { get; set; }
 
-    private void OnInnerStatusChanged(UIMouseEventArgs e)
+    private void OnInnerStatusChanged(ChangeEventArgs<BSimpleCheckBox> e)
     {
-        //var option = (CheckBoxOption)tag;
-        //var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
-        //if (SelectedItems != null)
-        //{
-        //    if (status == Status.Checked)
-        //    {
-        //        lock (SelectedItems)
-        //        {
-        //            if (!SelectedItems.Contains(model))
-        //            {
-        //                SelectedItems.Add(model);
-        //            }
-        //        }
-        //    }
-        //    else if (status == Status.UnChecked)
-        //    {
-        //        lock (SelectedItems)
-        //        {
-        //            SelectedItems.Remove(model);
-        //        }
-        //    }
-        //}
+        var option = (CheckBoxOption)e.Target.Tag;
+        var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
+        if (SelectedItems != null)
+        {
+            if (e.Target.Status == Status.Checked)
+            {
+                lock (SelectedItems)
+                {
+                    if (!SelectedItems.Contains(model))
+                    {
+                        SelectedItems.Add(model);
+                    }
+                }
+            }
+            else if (e.Target.Status == Status.UnChecked)
+            {
+                lock (SelectedItems)
+                {
+                    SelectedItems.Remove(model);
+                }
+            }
+        }
         if (OnStatusChanged.HasDelegate)
         {
-            OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
+            OnStatusChanged.InvokeAsync(e).GetAwaiter().GetResult();
         }
     }
     [Parameter]
-    private EventCallback<UIMouseEventArgs> OnStatusChanged { get; set; }
+    private EventCallback<ChangeEventArgs<BSimpleCheckBox>> OnStatusChanged { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 

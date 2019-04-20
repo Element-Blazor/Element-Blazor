@@ -1,7 +1,8 @@
-﻿<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
+﻿@using  Blazui.Component.EventArgs
+<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
     <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
         <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" onclick="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
+        <input type="checkbox" aria-hidden="true" onchange="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
     </span>
     <span class="el-checkbox__label">
         @ChildContent
@@ -14,10 +15,10 @@
     private string isDisabled;
 
     [Parameter]
-    private object Tag { get; set; }
+    public object Tag { get; set; }
 
     [Parameter]
-    private Status Status
+    public Status Status
     {
         get
         {
@@ -31,49 +32,59 @@
             }
             return Status.UnChecked;
         }
-        set
+        private set
         {
+            if (isChecked != null)
+            {
+                return;
+            }
+            isChecked = string.Empty;
+            isIndeterminate = string.Empty;
             switch (value)
             {
                 case Status.UnChecked:
-                    isChecked = null;
-                    isIndeterminate = null;
+                    isChecked = string.Empty;
+                    isIndeterminate = string.Empty;
                     break;
                 case Status.Checked:
                     isChecked = "is-checked";
-                    isIndeterminate = null;
+                    isIndeterminate = string.Empty;
                     break;
                 case Status.Indeterminate:
-                    isChecked = null;
+                    isChecked = string.Empty;
                     isIndeterminate = "is-indeterminate";
                     break;
             }
-            OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
         }
     }
 
     [Parameter]
-    private EventCallback<UIMouseEventArgs> OnStatusChanged { get; set; }
+    private EventCallback<ChangeEventArgs<BSimpleCheckBox>> OnStatusChanged { get; set; }
 
-    void changeStatus(UIMouseEventArgs uIMouseEvent)
+    void changeStatus(UIChangeEventArgs uIMouseEvent)
     {
-        OnStatusChanged.InvokeAsync(null).GetAwaiter().GetResult();
-        //if (IsDisabled)
-        //{
-        //    return;
-        //}
-        //switch (Status)
-        //{
-        //    case Status.Indeterminate:
-        //        Status = Status.Checked;
-        //        break;
-        //    case Status.Checked:
-        //        Status = Status.UnChecked;
-        //        break;
-        //    case Status.UnChecked:
-        //        Status = Status.Checked;
-        //        break;
-        //}
+        if (IsDisabled)
+        {
+            return;
+        }
+        switch (Status)
+        {
+            case Status.UnChecked:
+                isChecked = "is-checked";
+                isIndeterminate = string.Empty;
+                break;
+            case Status.Checked:
+                isChecked = string.Empty;
+                isIndeterminate = string.Empty;
+                break;
+            case Status.Indeterminate:
+                isChecked = "is-checked";
+                isIndeterminate = string.Empty;
+                break;
+        }
+        var args = new ChangeEventArgs<BSimpleCheckBox>();
+        args.Target = this;
+        OnStatusChanged.InvokeAsync(args).GetAwaiter().GetResult();
     }
 
     [Parameter]

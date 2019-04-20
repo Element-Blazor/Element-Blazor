@@ -1,9 +1,11 @@
-﻿@page "/checkbox"
+﻿
+@using Blazui.Component.CheckBox
+@using System.Collections.ObjectModel
+@using Blazui.Component.EventArgs
+@page "/checkbox"
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@using Blazui.Component.CheckBox
-@using System.Collections.ObjectModel
 @*<div>
         动态渲染：
         <br />
@@ -28,10 +30,10 @@
 <div>
     多选状态（已选中数据：@count）：
     <br />
-    <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll"></BSimpleCheckBox>
-    @*<BCheckBoxGroup>
-            <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-        </BCheckBoxGroup>*@
+    <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll">全选</BSimpleCheckBox>
+    <BCheckBoxGroup>
+        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+    </BCheckBoxGroup>
 </div>
 @functions{
     private List<string> selectedValues = new List<string>()
@@ -52,21 +54,24 @@
         count = selectedValues.Count;
     }
 
-    void SelectAll(UIMouseEventArgs e)
+    void SelectAll(ChangeEventArgs<BSimpleCheckBox> e)
     {
+
         count++;
     }
 
-    void OnSelectAllStatusChagned(UIMouseEventArgs e)
+    void OnSelectAllStatusChagned(ChangeEventArgs<BSimpleCheckBox> e)
     {
-        //if (status == Status.Checked)
-        //{
-        //    selectedValues.Add(item);
-        //}
-        //else if (status == Status.UnChecked)
-        //{
-        //    selectedValues.Remove(item);
-        //}
+        var status = e.Target.Status;
+        var item = Convert.ToString(e.Target.Tag);
+        if (status == Status.Checked)
+        {
+            selectedValues.Add(item);
+        }
+        else if (status == Status.UnChecked)
+        {
+            selectedValues.Remove(item);
+        }
         count++;//= selectedValues.Count;
     }
 }
