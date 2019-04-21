@@ -1,62 +1,41 @@
 ﻿@using  Blazui.Component.EventArgs
-<label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
-    <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
-        <span class="el-checkbox__inner"></span>
-        <input type="checkbox" aria-hidden="true" onchange="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
-    </span>
-    <span class="el-checkbox__label">
-        @ChildContent
-    </span>
-</label>
+@{
+    var isChecked = string.Empty;
+    var isIndeterminate = string.Empty;
+    switch (Status)
+    {
+        case Status.UnChecked:
+            isChecked = string.Empty;
+            isIndeterminate = string.Empty;
+            break;
+        case Status.Checked:
+            isChecked = "is-checked";
+            isIndeterminate = string.Empty;
+            break;
+        case Status.Indeterminate:
+            isChecked = string.Empty;
+            isIndeterminate = "is-indeterminate";
+            break;
+    }
+    <label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
+        <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
+            <span class="el-checkbox__inner"></span>
+            <input type="checkbox" aria-hidden="true" onchange="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
+        </span>
+        <span class="el-checkbox__label">
+            @ChildContent
+        </span>
+    </label>
+}
 
 @functions{
-    private string isChecked;
-    private string isIndeterminate;
     private string isDisabled;
 
     [Parameter]
     public object Tag { get; set; }
 
     [Parameter]
-    public Status Status
-    {
-        get
-        {
-            if (!string.IsNullOrWhiteSpace(isChecked))
-            {
-                return Status.Checked;
-            }
-            if (!string.IsNullOrWhiteSpace(isIndeterminate))
-            {
-                return Status.Indeterminate;
-            }
-            return Status.UnChecked;
-        }
-        private set
-        {
-            if (isChecked != null)
-            {
-                return;
-            }
-            isChecked = string.Empty;
-            isIndeterminate = string.Empty;
-            switch (value)
-            {
-                case Status.UnChecked:
-                    isChecked = string.Empty;
-                    isIndeterminate = string.Empty;
-                    break;
-                case Status.Checked:
-                    isChecked = "is-checked";
-                    isIndeterminate = string.Empty;
-                    break;
-                case Status.Indeterminate:
-                    isChecked = string.Empty;
-                    isIndeterminate = "is-indeterminate";
-                    break;
-            }
-        }
-    }
+    public Status Status { get; set; }
 
     [Parameter]
     private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
@@ -70,16 +49,13 @@
         switch (Status)
         {
             case Status.UnChecked:
-                isChecked = "is-checked";
-                isIndeterminate = string.Empty;
+                Status = Status.Checked;
                 break;
             case Status.Checked:
-                isChecked = string.Empty;
-                isIndeterminate = string.Empty;
+                Status = Status.UnChecked;
                 break;
             case Status.Indeterminate:
-                isChecked = "is-checked";
-                isIndeterminate = string.Empty;
+                Status = Status.Checked;
                 break;
         }
         var args = new ChangeEventArgs<BSimpleCheckBox>();

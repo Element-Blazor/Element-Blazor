@@ -11,23 +11,18 @@
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsChecked
-    { get; set; }
+    private Func<TModel, bool> IsChecked { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsIndeterminate
-    { get; set; }
+    private Func<TModel, bool> IsIndeterminate { get; set; }
 
     [Parameter]
-    private IList<TModel> SelectedItems
-    { get; set; }
+    private IList<TModel> SelectedItems { get; set; }
 
     [Parameter]
-    protected IList<TModel> For
-    { get; set; }
+    protected IList<TModel> For { get; set; }
 
-    private IList<CheckBoxOption> models
-    { get; set; }
+    private IList<CheckBoxOption> models { get; set; }
 
     private void OnInnerStatusChanged(UIChangeEventArgs e)
     {
@@ -59,12 +54,13 @@
             OnStatusChanged.InvokeAsync(e).GetAwaiter().GetResult();
         }
     }
+
     [Parameter]
     private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 
-    protected override void OnInit()
+    protected override void OnParametersSet()
     {
         if (For == null)
         {
@@ -74,8 +70,7 @@
         ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
         if (ModelItemIsSimpleType)
         {
-            models = new List<CheckBoxOption>
-                ();
+            models = new List<CheckBoxOption>();
             foreach (var item in For)
             {
                 models.Add(ConvertModelItem(item));
@@ -97,6 +92,10 @@
             {
                 status = IsIndeterminate(modelItem) ? Status.Indeterminate : Status.UnChecked;
             }
+            if (SelectedItems != null)
+            {
+                status = SelectedItems.Contains(modelItem) ? Status.Checked : Status.UnChecked;
+            }
             return new CheckBoxOption()
             {
                 Status = status,
@@ -105,5 +104,10 @@
             };
         }
         return null;
+    }
+
+    public void Render()
+    {
+        this.StateHasChanged();
     }
 }

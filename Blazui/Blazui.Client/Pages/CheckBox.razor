@@ -1,63 +1,74 @@
 ﻿
-@using Blazui.Component.CheckBox
-@using System.Collections.ObjectModel
-@using Blazui.Component.EventArgs
 @page "/checkbox"
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <div>
-        动态渲染：
-        <br />
-        <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-        <br />
-        <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
-    </div>
-    <div>
-        硬编码：
-        <br />
-        <BSimpleCheckBox Status="@Status.Checked">硬编码选项1</BSimpleCheckBox>
-        <BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
-        <BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
-    </div>
-    <div>
-        复选框组：
-        <br />
-        <BCheckBoxGroup>
-            <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
-        </BCheckBoxGroup>
-    </div>
-<div>
-    多选状态（已选中数据：@string.Join(",", selectedValues)）：
+    动态渲染：
     <br />
-    <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll">全选</BSimpleCheckBox>
+    <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+    <br />
+    <BCheckBox For="@values" SelectedItems="@selectedValues"></BCheckBox>
+</div>
+<div>
+    硬编码：
+    <br />
+    <BSimpleCheckBox Status="@Status.Checked">硬编码选项1</BSimpleCheckBox>
+    <BSimpleCheckBox>硬编码选项2</BSimpleCheckBox>
+    <BSimpleCheckBox IsDisabled="true">硬编码选项3</BSimpleCheckBox>
+</div>
+<div>
+    复选框组：
+    <br />
     <BCheckBoxGroup>
-        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+        <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
+    </BCheckBoxGroup>
+</div>
+<div>
+    复选框组（已选中数据：@string.Join(",", selectedValues)）：
+    <br />
+    <BSimpleCheckBox Status="@status1" OnStatusChanged="@SelectAll">全选</BSimpleCheckBox>
+    <BCheckBoxGroup>
+        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@IsChecked"></BCheckBox>
     </BCheckBoxGroup>
 </div>
 @functions{
-    private List<string> selectedValues = new List<string>()
-{
-        "列表选项1",
-        "列表选项3"
-    };
-    int count = 0;
-    private List<string> values = new List<string>()
-{
-        "列表选项1",
-        "列表选项2",
-        "列表选项3"
-    };
+    private Status status1 = Status.Indeterminate;
+    private List<string> selectedValues;
+    private List<string> values;
 
     protected override void OnInit()
     {
-        count = selectedValues.Count;
+        selectedValues = new List<string>()
+{
+                "列表选项1",
+                "列表选项3"
+            };
+        values = new List<string>()
+{
+                    "列表选项1",
+                    "列表选项2",
+                    "列表选项3"
+                };
     }
 
     void SelectAll(UIChangeEventArgs e)
     {
+        var args = (ChangeEventArgs<BSimpleCheckBox>)e;
+        status1 = args.Target.Status;
+        if (status1 == Status.Checked)
+        {
+            selectedValues = new List<string>(values);
+        }
+        else if (status1 == Status.UnChecked)
+        {
+            selectedValues = new List<string>();
+        }
+    }
 
-        count++;
+    private bool IsChecked(string item)
+    {
+        return selectedValues.Contains(item);
     }
 
     void OnSelectAllStatusChagned(UIChangeEventArgs e)
@@ -72,6 +83,18 @@
         else if (status == Status.UnChecked)
         {
             selectedValues.Remove(item.Label);
+        }
+        if (values.Count == selectedValues.Count)
+        {
+            status1 = Status.Checked;
+        }
+        else if (selectedValues.Count <= 0)
+        {
+            status1 = Status.UnChecked;
+        }
+        else if (values.Count > selectedValues.Count)
+        {
+            status1 = Status.Indeterminate;
         }
     }
 }
