@@ -20,7 +20,7 @@
     <label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
         <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
             <span class="el-checkbox__inner"></span>
-            <input type="checkbox" aria-hidden="true" onchange="@changeStatus" class="el-checkbox__original @isDisabled" value="" />
+            <input type="checkbox" aria-hidden="true" onchange="@ChangeStatus" class="el-checkbox__original @isDisabled" value="" />
         </span>
         <span class="el-checkbox__label">
             @ChildContent
@@ -38,28 +38,46 @@
     public Status Status { get; set; }
 
     [Parameter]
+    public object TrueValue { get; set; }
+
+    [Parameter]
+    public object FalseValue { get; set; }
+
+    [Parameter]
     private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
 
-    void changeStatus(UIChangeEventArgs uIMouseEvent)
+    void ChangeStatus(UIChangeEventArgs uIMouseEvent)
     {
         if (IsDisabled)
         {
             return;
         }
+        var oldValue = new CheckBoxValue()
+        {
+            Status = Status
+        };
+        var newValue = new CheckBoxValue();
         switch (Status)
         {
             case Status.UnChecked:
+                oldValue.Value = FalseValue;
                 Status = Status.Checked;
+                newValue.Value = TrueValue;
+                Console.WriteLine(newValue.Value);
                 break;
             case Status.Checked:
                 Status = Status.UnChecked;
+                oldValue.Value = TrueValue;
+                newValue.Value = FalseValue;
                 break;
             case Status.Indeterminate:
                 Status = Status.Checked;
                 break;
         }
-        var args = new ChangeEventArgs<BSimpleCheckBox>();
-        args.Target = this;
+        newValue.Status = Status;
+        var args = new ChangeEventArgs<CheckBoxValue>();
+        args.OldValue = oldValue;
+        args.NewValue = newValue;
         OnStatusChanged.InvokeAsync(args).GetAwaiter().GetResult();
     }
 

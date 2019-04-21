@@ -8,6 +8,7 @@ namespace Blazui.Component.EventArgs
 {
     public class ChangeEventArgs<T> : UIChangeEventArgs
     {
-        public T Target { get; set; }
+        public T OldValue { get; set; }
+        public T NewValue { get; set; }
     }
 }

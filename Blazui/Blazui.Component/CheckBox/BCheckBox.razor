@@ -2,7 +2,7 @@
 @typeparam TModel
 @foreach (var item in models)
 {
-    <BSimpleCheckBox Status="@item.Status" Tag="@item" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+    <BSimpleCheckBox Status="@item.Status" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
 }
 
 @functions{
@@ -11,27 +11,53 @@
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsChecked { get; set; }
+    private Func<TModel, bool>
+    IsChecked
+    { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsIndeterminate { get; set; }
+    private Func<TModel, bool>
+        IsIndeterminate
+    { get; set; }
 
     [Parameter]
-    private IList<TModel> SelectedItems { get; set; }
+    private IList<TModel>
+        SelectedItems
+    { get; set; }
 
     [Parameter]
-    protected IList<TModel> For { get; set; }
+    protected IList<TModel>
+        For
+    { get; set; }
 
-    private IList<CheckBoxOption> models { get; set; }
+    [Parameter]
+    private Func<TModel, object>
+        TrueValue
+    { get; set; }
+
+    [Parameter]
+    private Func<TModel, object>
+        FalseValue
+    { get; set; }
+
+    [Parameter]
+    private Func<TModel, string>
+        Label
+    { get; set; }
+
+    private IList<CheckBoxOption>
+        models
+    { get; set; }
 
     private void OnInnerStatusChanged(UIChangeEventArgs e)
     {
-        var args = (ChangeEventArgs<BSimpleCheckBox>)e;
-        var option = (CheckBoxOption)args.Target.Tag;
-        var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
+        var args = (ChangeEventArgs<CheckBoxValue>
+            )e;
+        var option = args.NewValue;
+        var model = (TModel)Convert.ChangeType(option.Value, typeof(TModel));
         if (SelectedItems != null)
         {
-            if (args.Target.Status == Status.Checked)
+            if (option.Status == Status.Checked)
             {
                 lock (SelectedItems)
                 {
@@ -41,7 +67,7 @@
                     }
                 }
             }
-            else if (args.Target.Status == Status.UnChecked)
+            else if (option.Status == Status.UnChecked)
             {
                 lock (SelectedItems)
                 {
@@ -56,7 +82,9 @@
     }
 
     [Parameter]
-    private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
+    private EventCallback<UIChangeEventArgs>
+        OnStatusChanged
+    { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 
@@ -70,7 +98,8 @@
         ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
         if (ModelItemIsSimpleType)
         {
-            models = new List<CheckBoxOption>();
+            models = new List<CheckBoxOption>
+                ();
             foreach (var item in For)
             {
                 models.Add(ConvertModelItem(item));
@@ -96,12 +125,26 @@
             {
                 status = SelectedItems.Contains(modelItem) ? Status.Checked : Status.UnChecked;
             }
-            return new CheckBoxOption()
+
+            var label = string.Empty;
+            if (Label != null)
+            {
+                label = Label(modelItem);
+            }
+            else if (ModelItemIsSimpleType)
+            {
+                label = Convert.ToString(modelItem);
+            }
+            var option = new CheckBoxOption()
             {
                 Status = status,
+                TrueValue = TrueValue == null ? label : TrueValue(modelItem),
+                FalseValue = FalseValue == null ? label : FalseValue(modelItem),
                 IsDisabled = false,
-                Label = Convert.ToString(modelItem)
+                Label = label
             };
+            Console.WriteLine(option.TrueValue);
+            Console.WriteLine(option.FalseValue);
         }
         return null;
     }
