@@ -1,0 +1,64 @@
+﻿<li role="menuitem" tabindex="0" onclick="@OnClick" onmouseover="@OnOver" onmouseout="@OnOut" class="el-menu-item @(active?"is-active":"")" style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">@ChildContent</li>
+@functions {
+
+    [Parameter]
+    private string Index { get; set; }
+
+    private bool active { get; set; }
+
+    [Parameter]
+    private string Route { get; set; }
+
+    [CascadingParameter]
+    private Menu ContainerMenu { get; set; }
+
+    private string textColor;
+    private string backgroundColor;
+    private string borderColor;
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    public void Active()
+    {
+        active = true;
+        textColor = ContainerMenu.ActiveTextColor;
+        borderColor = ContainerMenu.ActiveTextColor;
+
+    }
+    public void DeActive()
+    {
+        active = false;
+        textColor = ContainerMenu.TextColor;
+        borderColor = "transparent";
+    }
+
+    protected override void OnInit()
+    {
+        backgroundColor = ContainerMenu.BackgroundColor;
+
+        if (ContainerMenu.DefaultActive == Index)
+        {
+            ContainerMenu.ChangeActiveItem(this);
+        }
+
+        base.OnInit();
+    }
+
+    private void OnOver()
+    {
+        //todo: 颜色值经过计算而得
+        backgroundColor = "rgb(67, 74, 80)";
+    }
+
+    private void OnOut()
+    {
+        backgroundColor = ContainerMenu.BackgroundColor;
+    }
+
+    private void OnClick()
+    {
+        //todo: redirect to route
+        ContainerMenu.ChangeActiveItem(this);
+    }
+}

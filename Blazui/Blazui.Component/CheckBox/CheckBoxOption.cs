@@ -7,7 +7,7 @@ namespace Blazui.Component.CheckBox
 {
     public class CheckBoxOption
     {
-        public bool IsChecked { get; set; }
+        public Status Status { get; set; }
         public bool IsDisabled { get; set; }
         public string Label { get; set; }
     }

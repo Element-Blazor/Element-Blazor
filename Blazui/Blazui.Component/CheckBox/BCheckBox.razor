@@ -1,47 +1,83 @@
-﻿@typeparam TModel
+﻿@using  Blazui.Component.EventArgs
+@typeparam TModel
 @foreach (var item in models)
 {
-    <BSimpleCheckBox IsChecked="@item.IsChecked" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+    <BSimpleCheckBox Status="@item.Status" Tag="@item" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
 }
 
 @functions{
-    //private string isChecked;
-    //private string disabled;
 
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool> IsItemChecked { get; set; }
+    private Func<TModel, bool> IsChecked
+    { get; set; }
 
     [Parameter]
-    private IEnumerable<TModel> SelectedItems { get; set; }
+    private Func<TModel, bool> IsIndeterminate
+    { get; set; }
 
     [Parameter]
-    protected List<TModel> For { get; set; }
+    private IList<TModel> SelectedItems
+    { get; set; }
 
-    private IList<CheckBoxOption> models { get; set; }
+    [Parameter]
+    protected IList<TModel> For
+    { get; set; }
 
-    protected bool IsCollectionDataSource()
+    private IList<CheckBoxOption> models
+    { get; set; }
+
+    private void OnInnerStatusChanged(ChangeEventArgs<BSimpleCheckBox> e)
     {
-        return For != null;
+        var option = (CheckBoxOption)e.Target.Tag;
+        var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
+        if (SelectedItems != null)
+        {
+            if (e.Target.Status == Status.Checked)
+            {
+                lock (SelectedItems)
+                {
+                    if (!SelectedItems.Contains(model))
+                    {
+                        SelectedItems.Add(model);
+                    }
+                }
+            }
+            else if (e.Target.Status == Status.UnChecked)
+            {
+                lock (SelectedItems)
+                {
+                    SelectedItems.Remove(model);
+                }
+            }
+        }
+        if (OnStatusChanged.HasDelegate)
+        {
+            OnStatusChanged.InvokeAsync(e).GetAwaiter().GetResult();
+        }
     }
+    [Parameter]
+    private EventCallback<ChangeEventArgs<BSimpleCheckBox>> OnStatusChanged { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 
     protected override void OnInit()
     {
-        if (IsCollectionDataSource())
+        if (For == null)
         {
-            var type = typeof(TModel);
-            ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
-            if (ModelItemIsSimpleType)
+            return;
+        }
+        var type = typeof(TModel);
+        ModelItemIsSimpleType = type.IsValueType || type.IsPrimitive || type == typeof(string);
+        if (ModelItemIsSimpleType)
+        {
+            models = new List<CheckBoxOption>
+                ();
+            foreach (var item in For)
             {
-                models = new List<CheckBoxOption>();
-                foreach (var item in For)
-                {
-                    models.Add(ConvertModelItem(item));
-                }
+                models.Add(ConvertModelItem(item));
             }
         }
     }
@@ -50,18 +86,19 @@
     {
         if (ModelItemIsSimpleType)
         {
-            var isChecked = false;
-            if (IsItemChecked != null)
+            Status status = CheckBox.Status.Checked;
+            if (IsChecked != null)
             {
-                isChecked = IsItemChecked(modelItem);
+                status = IsChecked(modelItem) ? Status.Checked : Status.UnChecked;
             }
-            if (SelectedItems != null)
+
+            if (IsIndeterminate != null)
             {
-                isChecked = SelectedItems.Contains(modelItem);
+                status = IsIndeterminate(modelItem) ? Status.Indeterminate : Status.UnChecked;
             }
             return new CheckBoxOption()
             {
-                IsChecked = isChecked,
+                Status = status,
                 IsDisabled = false,
                 Label = Convert.ToString(modelItem)
             };

@@ -1,5 +1,5 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">WebApplication5</a>
+    <a class="navbar-brand" href="">Blazui</a>
     <button class="navbar-toggler" onclick="@ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -29,6 +29,11 @@
         </li>
     </ul>
 </div>
+<menu Mode="vertical" DefaultActive="1" TextColor="#fff" BackgroundColor="#545c64" ActiveTextColor="#ffd04b">
+    <MenuItem>菜单项一</MenuItem>
+    <MenuItem Index="1">菜单项（默认选中）</MenuItem>
+    <MenuItem>菜单项三</MenuItem>
+</menu>
 
 @functions {
     bool collapseNavMenu = true;

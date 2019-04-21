@@ -1,0 +1,49 @@
+﻿<CascadingValue Value=this>
+    <ul role="menubar" class="@modeClass el-menu">@ChildContent</ul>
+</CascadingValue>
+
+@functions {
+
+    [Parameter]
+    private string Mode { get; set; } = "vertical";
+    private string modeClass;
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    private bool Collapse { get; set; } = false;
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = "#fff";
+
+    [Parameter]
+    public string TextColor { get; set; } = "#303133";
+
+    [Parameter]
+    public string ActiveTextColor { get; set; } = "#409EFF";
+
+    [Parameter]
+    public string DefaultActive { get; set; }
+
+    public MenuItem ActiveItem { get; private set; }
+
+    public void ChangeActiveItem(MenuItem item) {
+        if (ActiveItem !=null) {
+            ActiveItem.DeActive();
+        }
+
+        if (item != null) {
+            item.Active();
+            ActiveItem = item;
+        }
+        StateHasChanged();
+    }
+
+    protected override void OnInit()
+    {
+        modeClass = Mode == "horizontal" ? "el-menu--horizontal" : "";
+        base.OnInit();
+    }
+
+}
