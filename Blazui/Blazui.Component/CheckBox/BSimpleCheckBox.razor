@@ -59,7 +59,7 @@
     }
 
     [Parameter]
-    private EventCallback<ChangeEventArgs<BSimpleCheckBox>> OnStatusChanged { get; set; }
+    private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
 
     void changeStatus(UIChangeEventArgs uIMouseEvent)
     {

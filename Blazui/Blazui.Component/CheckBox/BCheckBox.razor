@@ -29,13 +29,14 @@
     private IList<CheckBoxOption> models
     { get; set; }
 
-    private void OnInnerStatusChanged(ChangeEventArgs<BSimpleCheckBox> e)
+    private void OnInnerStatusChanged(UIChangeEventArgs e)
     {
-        var option = (CheckBoxOption)e.Target.Tag;
+        var args = (ChangeEventArgs<BSimpleCheckBox>)e;
+        var option = (CheckBoxOption)args.Target.Tag;
         var model = (TModel)Convert.ChangeType(option.Label, typeof(TModel));
         if (SelectedItems != null)
         {
-            if (e.Target.Status == Status.Checked)
+            if (args.Target.Status == Status.Checked)
             {
                 lock (SelectedItems)
                 {
@@ -45,7 +46,7 @@
                     }
                 }
             }
-            else if (e.Target.Status == Status.UnChecked)
+            else if (args.Target.Status == Status.UnChecked)
             {
                 lock (SelectedItems)
                 {
@@ -59,7 +60,7 @@
         }
     }
     [Parameter]
-    private EventCallback<ChangeEventArgs<BSimpleCheckBox>> OnStatusChanged { get; set; }
+    private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
 
     protected bool ModelItemIsSimpleType { get; set; }
 

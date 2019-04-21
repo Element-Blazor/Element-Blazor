@@ -6,7 +6,7 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@*<div>
+<div>
         动态渲染：
         <br />
         <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
@@ -26,9 +26,9 @@
         <BCheckBoxGroup>
             <BCheckBox For="@values" IsChecked="@((item)=>selectedValues.Contains(item))"></BCheckBox>
         </BCheckBoxGroup>
-    </div>*@
+    </div>
 <div>
-    多选状态（已选中数据：@count）：
+    多选状态（已选中数据：@string.Join(",", selectedValues)）：
     <br />
     <BSimpleCheckBox Status="@Status.Indeterminate" OnStatusChanged="@SelectAll">全选</BSimpleCheckBox>
     <BCheckBoxGroup>
@@ -54,24 +54,24 @@
         count = selectedValues.Count;
     }
 
-    void SelectAll(ChangeEventArgs<BSimpleCheckBox> e)
+    void SelectAll(UIChangeEventArgs e)
     {
 
         count++;
     }
 
-    void OnSelectAllStatusChagned(ChangeEventArgs<BSimpleCheckBox> e)
+    void OnSelectAllStatusChagned(UIChangeEventArgs e)
     {
-        var status = e.Target.Status;
-        var item = Convert.ToString(e.Target.Tag);
+        var args = (ChangeEventArgs<BSimpleCheckBox>)e;
+        var status = args.Target.Status;
+        var item = (CheckBoxOption)args.Target.Tag;
         if (status == Status.Checked)
         {
-            selectedValues.Add(item);
+            selectedValues.Add(item.Label);
         }
         else if (status == Status.UnChecked)
         {
-            selectedValues.Remove(item);
+            selectedValues.Remove(item.Label);
         }
-        count++;//= selectedValues.Count;
     }
 }
