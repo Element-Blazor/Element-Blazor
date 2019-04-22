@@ -2,7 +2,7 @@
 @typeparam TModel
 @foreach (var item in models)
 {
-    <BSimpleCheckBox Status="@item.Status" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+    <BSimpleCheckBox Status="@item.Status" OnStatusChanged="@OnInnerStatusChanged" IsDisabled="item.IsDisabled" TrueValue="@item.TrueValue" FalseValue="@item.FalseValue">@item.Label</BSimpleCheckBox>
 }
 
 @functions{
@@ -53,6 +53,7 @@
     {
         var args = (ChangeEventArgs<CheckBoxValue>
             )e;
+        Console.WriteLine(args.NewValue);
         var option = args.NewValue;
         var model = (TModel)Convert.ChangeType(option.Value, typeof(TModel));
         if (SelectedItems != null)
@@ -143,8 +144,7 @@
                 IsDisabled = false,
                 Label = label
             };
-            Console.WriteLine(option.TrueValue);
-            Console.WriteLine(option.FalseValue);
+            return option;
         }
         return null;
     }

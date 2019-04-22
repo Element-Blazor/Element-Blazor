@@ -63,7 +63,6 @@
                 oldValue.Value = FalseValue;
                 Status = Status.Checked;
                 newValue.Value = TrueValue;
-                Console.WriteLine(newValue.Value);
                 break;
             case Status.Checked:
                 Status = Status.UnChecked;
@@ -72,12 +71,15 @@
                 break;
             case Status.Indeterminate:
                 Status = Status.Checked;
+                oldValue.Value = default;
+                newValue.Value = TrueValue;
                 break;
         }
         newValue.Status = Status;
         var args = new ChangeEventArgs<CheckBoxValue>();
         args.OldValue = oldValue;
         args.NewValue = newValue;
+        Console.WriteLine(newValue.Value);
         OnStatusChanged.InvokeAsync(args).GetAwaiter().GetResult();
     }
 
