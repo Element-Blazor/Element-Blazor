@@ -41,6 +41,14 @@
         <BSimpleCheckBoxButton Status="@status2">广州</BSimpleCheckBoxButton>
     </BCheckBoxGroup>
 </div>
+<div>
+    按钮复选框组（已选中数据：@string.Join(",", selectedValues)）：
+    <br />
+    <BSimpleCheckBox Status="@status1" OnStatusChanged="@SelectAll">全选</BSimpleCheckBox>
+    <BCheckBoxGroup>
+        <BCheckBoxButton OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@IsChecked"></BCheckBoxButton>
+    </BCheckBoxGroup>
+</div>
 @functions{
     private void ChangeValue1(UIChangeEventArgs e)
     {

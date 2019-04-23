@@ -8,32 +8,22 @@
 @functions{
 
     [Parameter]
-    private RenderFragment ChildContent { get; set; }
+    protected RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    private Func<TModel, bool>
-    IsChecked
-    { get; set; }
+    private Func<TModel, bool> IsChecked { get; set; }
 
     [Parameter]
-    private Func<TModel, bool>
-        IsIndeterminate
-    { get; set; }
+    private Func<TModel, bool> IsIndeterminate { get; set; }
 
     [Parameter]
-    private IList<TModel>
-        SelectedItems
-    { get; set; }
+    private IList<TModel> SelectedItems { get; set; }
 
     [Parameter]
-    protected IList<TModel>
-        For
-    { get; set; }
+    protected IList<TModel> For { get; set; }
 
     [Parameter]
-    private Func<TModel, object>
-        TrueValue
-    { get; set; }
+    private Func<TModel, object> TrueValue { get; set; }
 
     [Parameter]
     private Func<TModel, object>
@@ -45,11 +35,9 @@
         Label
     { get; set; }
 
-    private IList<CheckBoxOption>
-        models
-    { get; set; }
+    protected IList<CheckBoxOption> models { get; set; }
 
-    private void OnInnerStatusChanged(UIChangeEventArgs e)
+    protected void OnInnerStatusChanged(UIChangeEventArgs e)
     {
         var args = (ChangeEventArgs<CheckBoxValue>
             )e;
