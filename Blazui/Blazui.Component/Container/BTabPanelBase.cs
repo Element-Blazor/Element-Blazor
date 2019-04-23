@@ -8,9 +8,14 @@ namespace Blazui.Component.Container
 {
     public class BTabPanelBase : ComponentBase, ITab
     {
-
+        protected ElementRef tabPanel;
         [CascadingParameter]
         private BTabs BTabs { get; set; }
+
+        protected void Activate(UIMouseEventArgs e)
+        {
+            Console.WriteLine(tabPanel);
+        }
 
         [Parameter]
         public string Title { get; set; }
