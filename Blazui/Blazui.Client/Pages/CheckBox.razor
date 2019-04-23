@@ -33,10 +33,12 @@
     </BCheckBoxGroup>
 </div>
 <div>
-    复选框组（至少选择1项，最多选择两项）：
+    按钮复选框组
     <br />
     <BCheckBoxGroup>
-        <BCheckBox OnStatusChanged="@OnSelectAllStatusChagned" For="@values" IsChecked="@IsChecked"></BCheckBox>
+        <BSimpleCheckBoxButton Status="@status2">上海</BSimpleCheckBoxButton>
+        <BSimpleCheckBoxButton Status="@status2">北京</BSimpleCheckBoxButton>
+        <BSimpleCheckBoxButton Status="@status2">广州</BSimpleCheckBoxButton>
     </BCheckBoxGroup>
 </div>
 @functions{
@@ -44,7 +46,6 @@
     {
         var args = (ChangeEventArgs<CheckBoxValue>)e;
         value1 = Convert.ToInt32(args.NewValue.Value);
-        Console.WriteLine(value1);
         status2 = args.NewValue.Status;
 
     }

@@ -7,6 +7,12 @@
     [Parameter]
     private RenderFragment ChildContent { get; set; }
 
+    [Parameter]
+    public int? Min { get; set; }
+
+    [Parameter]
+    public int? Max { get; set; }
+
 
     protected async override Task OnInitAsync()
     {

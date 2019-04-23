@@ -1,24 +1,22 @@
 ﻿@using  Blazui.Component.EventArgs
 @{
-    var isChecked = string.Empty;
-    var isIndeterminate = string.Empty;
     switch (Status)
     {
         case Status.UnChecked:
-            isChecked = string.Empty;
-            isIndeterminate = string.Empty;
+            _isChecked = string.Empty;
+            _isIndeterminate = string.Empty;
             break;
         case Status.Checked:
-            isChecked = "is-checked";
-            isIndeterminate = string.Empty;
+            _isChecked = "is-checked";
+            _isIndeterminate = string.Empty;
             break;
         case Status.Indeterminate:
-            isChecked = string.Empty;
-            isIndeterminate = "is-indeterminate";
+            _isChecked = string.Empty;
+            _isIndeterminate = "is-indeterminate";
             break;
     }
-    <label role="checkbox" aria-checked="true" class="el-checkbox @isChecked @isDisabled">
-        <span aria-checked="mixed" class="el-checkbox__input @isChecked @isDisabled @isIndeterminate">
+    <label role="checkbox" aria-checked="true" class="el-checkbox @_isChecked @isDisabled">
+        <span aria-checked="mixed" class="el-checkbox__input @_isChecked @isDisabled @_isIndeterminate">
             <span class="el-checkbox__inner"></span>
             <input type="checkbox" aria-hidden="true" onchange="@ChangeStatus" class="el-checkbox__original @isDisabled" value="" />
         </span>
@@ -29,10 +27,9 @@
 }
 
 @functions{
-    private string isDisabled;
-
-    [Parameter]
-    public object Tag { get; set; }
+    protected string _isChecked = string.Empty;
+    protected string _isIndeterminate = string.Empty;
+    protected string isDisabled;
 
     [Parameter]
     public Status Status { get; set; }
@@ -46,7 +43,7 @@
     [Parameter]
     private EventCallback<UIChangeEventArgs> OnStatusChanged { get; set; }
 
-    void ChangeStatus(UIChangeEventArgs uIMouseEvent)
+    protected void ChangeStatus(UIChangeEventArgs uIMouseEvent)
     {
         if (IsDisabled)
         {
@@ -79,7 +76,6 @@
         var args = new ChangeEventArgs<CheckBoxValue>();
         args.OldValue = oldValue;
         args.NewValue = newValue;
-        Console.WriteLine(newValue.Value);
         OnStatusChanged.InvokeAsync(args).GetAwaiter().GetResult();
     }
 
@@ -104,5 +100,5 @@
     }
 
     [Parameter]
-    private RenderFragment ChildContent { get; set; }
+    protected RenderFragment ChildContent { get; set; }
 }
