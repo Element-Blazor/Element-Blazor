@@ -8,6 +8,33 @@ namespace Blazui.Component.Container
 {
     public class BTabsBase : ComponentBase
     {
+        private int barOffsetLeft;
+
+        public int BarOffsetLeft
+        {
+            get
+            {
+                return barOffsetLeft;
+            }
+            set
+            {
+                barOffsetLeft = value;
+                this.StateHasChanged();
+            }
+        }
+        private int barWidth;
+        public int BarWidth
+        {
+            get
+            {
+                return barWidth;
+            }
+            set
+            {
+                barWidth = value;
+                this.StateHasChanged();
+            }
+        }
         [Parameter]
         protected RenderFragment ChildContent { get; set; }
         public ITab ActiveTab { get; protected set; }

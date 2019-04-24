@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.Dom;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +11,20 @@ namespace Blazui.Component.Container
     public class BTabPanelBase : ComponentBase, ITab
     {
         protected ElementRef tabPanel;
+
+        [Inject]
+        private IJSRuntime JSRuntime { get; set; }
+
         [CascadingParameter]
         private BTabs BTabs { get; set; }
 
-        protected void Activate(UIMouseEventArgs e)
+        protected async Task Activate(UIMouseEventArgs e)
         {
-            Console.WriteLine(tabPanel);
+            var dom = tabPanel.Dom(JSRuntime);
+            var width = await dom.GetClientWidthAsync();
+            var offsetLeft = await dom.GetOffsetLeftAsync();
+            BTabs.BarWidth = width;
+            BTabs.BarOffsetLeft = offsetLeft;
         }
 
         [Parameter]
