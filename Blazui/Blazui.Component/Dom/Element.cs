@@ -11,11 +11,13 @@ namespace Blazui.Component.Dom
     {
         private readonly ElementRef elementRef;
         private readonly IJSRuntime jSRuntime;
+        public Style Style { get; }
 
         public Element(ElementRef elementRef, IJSRuntime jSRuntime)
         {
             this.elementRef = elementRef;
             this.jSRuntime = jSRuntime;
+            this.Style = new Style(elementRef, jSRuntime);
         }
 
         public async Task<int> GetClientWidthAsync()

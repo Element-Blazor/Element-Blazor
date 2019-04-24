@@ -10,21 +10,14 @@ namespace Blazui.Component.Container
 {
     public class BTabPanelBase : ComponentBase, ITab
     {
-        protected ElementRef tabPanel;
-
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
+        public ElementRef Element { get; set; }
 
         [CascadingParameter]
         private BTabs BTabs { get; set; }
 
         protected async Task Activate(UIMouseEventArgs e)
         {
-            var dom = tabPanel.Dom(JSRuntime);
-            var width = await dom.GetClientWidthAsync();
-            var offsetLeft = await dom.GetOffsetLeftAsync();
-            BTabs.BarWidth = width;
-            BTabs.BarOffsetLeft = offsetLeft;
+            await BTabs.SetActivateTabAsync(this);
         }
 
         [Parameter]
@@ -35,19 +28,19 @@ namespace Blazui.Component.Container
 
         protected string IsActive { get; set; }
 
-        protected override void OnInit()
+        protected override async Task OnInitAsync()
         {
-            BTabs.AddTab(this);
+            await BTabs.AddTabAsync(this);
         }
 
         public void Dispose()
         {
-            BTabs.RemoveTab(this);
+            BTabs.RemoveTabAsync(this).GetAwaiter().GetResult();
         }
 
-        private void Activate()
+        private async Task ActivateAsync()
         {
-            BTabs.SetActivateTab(this);
+            await BTabs.SetActivateTabAsync(this);
         }
     }
 }

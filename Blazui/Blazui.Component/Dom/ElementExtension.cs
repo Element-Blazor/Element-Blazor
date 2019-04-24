@@ -13,5 +13,16 @@ namespace Blazui.Component.Dom
         {
             return new Element(elementRef, jSRuntime);
         }
+
+        public static async Task<IJSRuntime> AlertAsync(this IJSRuntime jSRuntime, string message)
+        {
+            await jSRuntime.InvokeAsync<object>("alert", message);
+            return jSRuntime;
+        }
+        public static async Task<IJSRuntime> AlertAsync(this IJSRuntime jSRuntime, int message)
+        {
+            await jSRuntime.InvokeAsync<object>("alert", message.ToString());
+            return jSRuntime;
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace Blazui.Component.Container
     public interface ITab
     {
         RenderFragment ChildContent { get; set; }
+        ElementRef Element { get; set; }
     }
 }

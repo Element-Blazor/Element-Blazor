@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazui.Component.Dom;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace Blazui.Component.Container
 {
     public class BTabsBase : ComponentBase
     {
+
+        [Inject]
+        private IJSRuntime JSRuntime { get; set; }
         private int barOffsetLeft;
 
         public int BarOffsetLeft
@@ -39,23 +44,40 @@ namespace Blazui.Component.Container
         protected RenderFragment ChildContent { get; set; }
         public ITab ActiveTab { get; protected set; }
 
-        public void AddTab(ITab tab)
+        public async Task AddTabAsync(ITab tab)
         {
             if (ActiveTab == null)
             {
-                SetActivateTab(tab);
+                await SetActivateTabAsync(tab);
             }
         }
 
-        public void RemoveTab(ITab tab)
+        protected override async Task OnAfterRenderAsync()
+        {
+            var dom = ActiveTab.Element.Dom(JSRuntime);
+            var width = await dom.GetClientWidthAsync();
+            var paddingLeft = await dom.Style.GetPaddingLeftAsync();
+            var offsetLeft = await dom.GetOffsetLeftAsync();
+            var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
+            var barWidth = width - padding;
+            var barOffsetLeft = offsetLeft + paddingLeft;
+            if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
+            {
+                return;
+            }
+            BarWidth = barWidth;
+            BarOffsetLeft = barOffsetLeft;
+        }
+
+        public async Task RemoveTabAsync(ITab tab)
         {
             if (ActiveTab == tab)
             {
-                SetActivateTab(null);
+                await SetActivateTabAsync(null);
             }
         }
 
-        public void SetActivateTab(ITab tab)
+        public async Task SetActivateTabAsync(ITab tab)
         {
             if (ActiveTab != tab)
             {
