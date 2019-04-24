@@ -10,7 +10,11 @@ namespace Blazui.Component.Container
 {
     public class BTabsBase : ComponentBase
     {
+        protected string tabType;
 
+        [Parameter]
+        public TabType Type { get; set; }
+        public IList<ITab> TabPanels { get; set; } = new List<ITab>();
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
         private int barOffsetLeft;
@@ -46,6 +50,10 @@ namespace Blazui.Component.Container
 
         public async Task AddTabAsync(ITab tab)
         {
+            if (!TabPanels.Contains(tab))
+            {
+                TabPanels.Add(tab);
+            }
             if (ActiveTab == null)
             {
                 await SetActivateTabAsync(tab);
@@ -81,7 +89,12 @@ namespace Blazui.Component.Container
         {
             if (ActiveTab != tab)
             {
+                if (ActiveTab != null)
+                {
+                    ActiveTab.IsActive = false;
+                }
                 ActiveTab = tab;
+                ActiveTab.IsActive = true;
                 StateHasChanged();
             }
         }

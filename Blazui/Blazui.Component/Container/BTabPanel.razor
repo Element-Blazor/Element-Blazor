@@ -1,2 +1,9 @@
 ﻿@inherits BTabPanelBase
-<div ref="@Element" aria-controls="pane" role="tab" tabindex="-1" onclick="@Activate" class="el-tabs__item is-top">@Title</div>
+@{
+    var isActive = string.Empty;
+    if (IsActive && Tabs.Type!= TabType.Normal)
+    {
+        isActive = "is-active";
+    }
+}
+<div ref="@Element" aria-controls="pane" role="tab" tabindex="-1" onclick="@Activate" class="el-tabs__item is-top @isActive">@Title</div>

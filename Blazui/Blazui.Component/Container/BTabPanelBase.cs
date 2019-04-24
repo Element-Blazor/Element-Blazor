@@ -10,14 +10,15 @@ namespace Blazui.Component.Container
 {
     public class BTabPanelBase : ComponentBase, ITab
     {
+        public bool IsActive { get; set; }
         public ElementRef Element { get; set; }
 
         [CascadingParameter]
-        private BTabs BTabs { get; set; }
+        public BTabs Tabs { get; set; }
 
         protected async Task Activate(UIMouseEventArgs e)
         {
-            await BTabs.SetActivateTabAsync(this);
+            await Tabs.SetActivateTabAsync(this);
         }
 
         [Parameter]
@@ -26,21 +27,14 @@ namespace Blazui.Component.Container
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        protected string IsActive { get; set; }
-
         protected override async Task OnInitAsync()
         {
-            await BTabs.AddTabAsync(this);
+            await Tabs.AddTabAsync(this);
         }
 
         public void Dispose()
         {
-            BTabs.RemoveTabAsync(this).GetAwaiter().GetResult();
-        }
-
-        private async Task ActivateAsync()
-        {
-            await BTabs.SetActivateTabAsync(this);
+            Tabs.RemoveTabAsync(this).GetAwaiter().GetResult();
         }
     }
 }

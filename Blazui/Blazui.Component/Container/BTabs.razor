@@ -1,10 +1,27 @@
 ﻿@inherits BTabsBase
-<div class="el-tabs el-tabs--top">
+@{
+    switch (Type)
+    {
+        case TabType.Normal:
+            tabType = string.Empty;
+            break;
+        case TabType.BorderCard:
+            tabType = "el-tabs--border-card";
+            break;
+        case TabType.Card:
+            tabType = "el-tabs--card";
+            break;
+    }
+}
+<div class="el-tabs @tabType el-tabs--top">
     <div class="el-tabs__header is-top">
         <div class="el-tabs__nav-wrap is-top">
             <div class="el-tabs__nav-scroll">
                 <div role="tablist" class="el-tabs__nav is-top" style="transform: translateX(0px);">
-                    <div class="el-tabs__active-bar is-top" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
+                    @if (Type == TabType.Normal)
+                    {
+                        <div class="el-tabs__active-bar is-top" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
+                    }
                     <CascadingValue Value=this>
                         @ChildContent
                     </CascadingValue>

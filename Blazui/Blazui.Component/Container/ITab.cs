@@ -10,5 +10,6 @@ namespace Blazui.Component.Container
     {
         RenderFragment ChildContent { get; set; }
         ElementRef Element { get; set; }
+        bool IsActive { get; set; }
     }
 }
