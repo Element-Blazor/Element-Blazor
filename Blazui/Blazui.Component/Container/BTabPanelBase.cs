@@ -22,6 +22,11 @@ namespace Blazui.Component.Container
         }
 
         [Parameter]
+        public string Name { get; set; }
+
+        public int Index { get; set; }
+
+        [Parameter]
         public string Title { get; set; }
 
         [Parameter]
@@ -29,6 +34,7 @@ namespace Blazui.Component.Container
 
         protected override async Task OnInitAsync()
         {
+            Index = Tabs.TabPanels.Count;
             await Tabs.AddTabAsync(this);
         }
 
