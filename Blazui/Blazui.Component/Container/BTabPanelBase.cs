@@ -10,22 +10,21 @@ namespace Blazui.Component.Container
 {
     public class BTabPanelBase : ComponentBase, ITab
     {
-        protected ElementRef tabPanel;
-
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
+        public bool IsActive { get; set; }
+        public ElementRef Element { get; set; }
 
         [CascadingParameter]
-        private BTabs BTabs { get; set; }
+        public BTab TabContainer { get; set; }
 
         protected async Task Activate(UIMouseEventArgs e)
         {
-            var dom = tabPanel.Dom(JSRuntime);
-            var width = await dom.GetClientWidthAsync();
-            var offsetLeft = await dom.GetOffsetLeftAsync();
-            BTabs.BarWidth = width;
-            BTabs.BarOffsetLeft = offsetLeft;
+            await TabContainer.SetActivateTabAsync(this);
         }
+
+        [Parameter]
+        public string Name { get; set; }
+
+        public int Index { get; set; }
 
         [Parameter]
         public string Title { get; set; }
@@ -33,21 +32,26 @@ namespace Blazui.Component.Container
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        protected string IsActive { get; set; }
-
-        protected override void OnInit()
+        protected override async Task OnInitAsync()
         {
-            BTabs.AddTab(this);
+            Index = TabContainer.TabPanels.Count;
+            await TabContainer.AddTabAsync(this);
         }
 
         public void Dispose()
         {
-            BTabs.RemoveTab(this);
+            TabContainer.RemoveTabAsync(this).GetAwaiter().GetResult();
         }
 
-        private void Activate()
+        public event Func<ITab, Task> OnRenderCompletedAsync;
+
+        protected override async Task OnAfterRenderAsync()
         {
-            BTabs.SetActivateTab(this);
+            if (OnRenderCompletedAsync != null)
+            {
+                await OnRenderCompletedAsync(this);
+            }
+            await base.OnAfterRenderAsync();
         }
     }
 }

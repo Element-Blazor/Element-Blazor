@@ -9,5 +9,9 @@ namespace Blazui.Component.Container
     public interface ITab
     {
         RenderFragment ChildContent { get; set; }
+        ElementRef Element { get; set; }
+        bool IsActive { get; set; }
+        event Func<ITab, Task> OnRenderCompletedAsync;
+        BTab TabContainer { get; }
     }
 }
