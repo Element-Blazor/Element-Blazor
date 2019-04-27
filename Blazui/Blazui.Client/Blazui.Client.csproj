@@ -23,4 +23,10 @@
     <ProjectReference Include="..\Blazui.Shared\Blazui.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Demo\BasicTab.razor">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

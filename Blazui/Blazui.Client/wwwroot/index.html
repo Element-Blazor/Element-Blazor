@@ -8,6 +8,29 @@
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
     <link href="css/site.css" rel="stylesheet" />
+    <script src="prism.js"></script>
+    <link href="prism.css" rel="stylesheet" />
+    <script>
+        window.renderHightlight = function (el) {
+            console.log(el);
+            Prism.highlightAllUnder(el);
+        }
+    </script>
+    <style>
+    :not(pre) > code[class*="language-"], pre[class*="language-"] {
+        background-color: white;
+    }
+
+    pre {
+        margin: 0;
+    }
+
+        pre[class*="language-"] {
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
 </head>
 <body>
     <app>Loading...</app>

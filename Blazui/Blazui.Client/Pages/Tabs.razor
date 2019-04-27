@@ -1,19 +1,22 @@
 ﻿@page "/tabs"
-<BTabs>
-    <BTabPanel Title="用户管理">用户管理1</BTabPanel>
-    <BTabPanel Title="角色管理">角色管理1</BTabPanel>
-    <BTabPanel Title="部门管理">部门管理1</BTabPanel>
-    <BTabPanel Title="人员管理">人员管理1</BTabPanel>
-</BTabs>
-<BTabs Type="@TabType.Card">
-    <BTabPanel Title="用户管理" Name="a">用户管理1</BTabPanel>
-    <BTabPanel Title="角色管理" Name="b">角色管理1</BTabPanel>
-    <BTabPanel Title="部门管理" Name="c">部门管理1</BTabPanel>
-    <BTabPanel Title="人员管理" Name="d">人员管理1</BTabPanel>
-</BTabs>
-<BTabs Type="@TabType.BorderCard">
-    <BTabPanel Title="用户管理">用户管理1</BTabPanel>
-    <BTabPanel Title="角色管理">角色管理1</BTabPanel>
-    <BTabPanel Title="部门管理">部门管理1</BTabPanel>
-    <BTabPanel Title="人员管理">人员管理1</BTabPanel>
-</BTabs>
+@inherits TabsBase
+<BCard For="@demos">
+    <Header>
+        @context.Title  - @context.Description
+    </Header>
+    <Body>
+        <BTab Type="@TabType.BorderCard" OnActiveTabChanged="@ActiveTabChanged">
+            <BTabPanel Title="运行效果">
+                <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
+            </BTabPanel>
+            <BTabPanel Title="示例代码">
+                <pre class="language-xml"><code class="language-xml">@context.Code</code></pre>
+            </BTabPanel>
+        </BTab>
+    </Body>
+</BCard>
+<style>
+    .el-card {
+        margin-bottom: 10px;
+    }
+</style>

@@ -1,4 +1,4 @@
-﻿@inherits BTabsBase
+﻿@inherits BTabBase
 @{
     switch (Type)
     {
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="el-tabs__content">
+    <div class="el-tabs__content" ref="@Content">
         @ActiveTab?.ChildContent
     </div>
 </div>

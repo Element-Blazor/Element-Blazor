@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component.Dom;
+using Blazui.Component.EventArgs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Blazui.Component.Container
 {
-    public class BTabsBase : ComponentBase
+    public class BTabBase : ComponentBase
     {
         protected string tabType;
 
+        /// <summary>
+        /// 渲染后的内容区域
+        /// </summary>
+        public ElementRef Content { get; set; }
         [Parameter]
         public TabType Type { get; set; }
-        public IList<ITab> TabPanels { get; set; } = new List<ITab>();
+        public ObservableCollection<ITab> TabPanels { get; set; } = new ObservableCollection<ITab>();
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
         private int barOffsetLeft;
@@ -46,6 +53,9 @@ namespace Blazui.Component.Container
         }
         [Parameter]
         protected RenderFragment ChildContent { get; set; }
+
+        [Parameter]
+        public EventCallback<UIChangeEventArgs> OnActiveTabChanged { get; set; }
         public ITab ActiveTab { get; protected set; }
 
         public async Task AddTabAsync(ITab tab)
@@ -71,6 +81,10 @@ namespace Blazui.Component.Container
             var barOffsetLeft = offsetLeft + paddingLeft;
             if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
             {
+                if (OnRenderCompleteAsync != null)
+                {
+                    await OnRenderCompleteAsync();
+                }
                 return;
             }
             BarWidth = barWidth;
@@ -87,16 +101,26 @@ namespace Blazui.Component.Container
 
         public async Task SetActivateTabAsync(ITab tab)
         {
+            var eventArgs = new ChangeEventArgs<ITab>();
+            eventArgs.OldValue = ActiveTab;
+            eventArgs.NewValue = tab;
             if (ActiveTab != tab)
             {
                 if (ActiveTab != null)
                 {
+
                     ActiveTab.IsActive = false;
                 }
                 ActiveTab = tab;
                 ActiveTab.IsActive = true;
                 StateHasChanged();
+                if (OnActiveTabChanged.HasDelegate)
+                {
+                    await OnActiveTabChanged.InvokeAsync(eventArgs);
+                }
             }
         }
+
+        public event Func<Task> OnRenderCompleteAsync;
     }
 }

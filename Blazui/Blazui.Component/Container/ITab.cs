@@ -11,5 +11,7 @@ namespace Blazui.Component.Container
         RenderFragment ChildContent { get; set; }
         ElementRef Element { get; set; }
         bool IsActive { get; set; }
+        event Func<ITab, Task> OnRenderCompletedAsync;
+        BTab TabContainer { get; }
     }
 }

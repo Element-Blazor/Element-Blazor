@@ -14,11 +14,11 @@ namespace Blazui.Component.Container
         public ElementRef Element { get; set; }
 
         [CascadingParameter]
-        public BTabs Tabs { get; set; }
+        public BTab TabContainer { get; set; }
 
         protected async Task Activate(UIMouseEventArgs e)
         {
-            await Tabs.SetActivateTabAsync(this);
+            await TabContainer.SetActivateTabAsync(this);
         }
 
         [Parameter]
@@ -34,13 +34,24 @@ namespace Blazui.Component.Container
 
         protected override async Task OnInitAsync()
         {
-            Index = Tabs.TabPanels.Count;
-            await Tabs.AddTabAsync(this);
+            Index = TabContainer.TabPanels.Count;
+            await TabContainer.AddTabAsync(this);
         }
 
         public void Dispose()
         {
-            Tabs.RemoveTabAsync(this).GetAwaiter().GetResult();
+            TabContainer.RemoveTabAsync(this).GetAwaiter().GetResult();
+        }
+
+        public event Func<ITab, Task> OnRenderCompletedAsync;
+
+        protected override async Task OnAfterRenderAsync()
+        {
+            if (OnRenderCompletedAsync != null)
+            {
+                await OnRenderCompletedAsync(this);
+            }
+            await base.OnAfterRenderAsync();
         }
     }
 }
