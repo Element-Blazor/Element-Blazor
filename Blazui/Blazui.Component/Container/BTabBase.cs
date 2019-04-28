@@ -13,14 +13,44 @@ namespace Blazui.Component.Container
 {
     public class BTabBase : ComponentBase
     {
-        protected string tabType;
-
         /// <summary>
         /// 渲染后的内容区域
         /// </summary>
         public ElementRef Content { get; set; }
         [Parameter]
         public TabType Type { get; set; }
+
+        [Parameter]
+        public bool Editable { get; set; }
+
+        internal (string headerPosition, string tabPosition) GetPosition()
+        {
+            var headerPosition = string.Empty;
+            var tabPosition = string.Empty;
+            switch (TabPosition)
+            {
+                case TabPosition.Top:
+                    tabPosition = "el-tabs--top";
+                    headerPosition = "is-top";
+                    break;
+                case TabPosition.Bottom:
+                    tabPosition = "el-tabs--bottom";
+                    headerPosition = "is-bottom";
+                    break;
+                case TabPosition.Left:
+                    tabPosition = "el-tabs--left";
+                    headerPosition = "is-left";
+                    break;
+                case TabPosition.Right:
+                    tabPosition = "el-tabs--right";
+                    headerPosition = "is-right";
+                    break;
+            }
+            return (headerPosition, tabPosition);
+        }
+
+        [Parameter]
+        public TabPosition TabPosition { get; set; }
         public ObservableCollection<ITab> TabPanels { get; set; } = new ObservableCollection<ITab>();
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
@@ -122,5 +152,14 @@ namespace Blazui.Component.Container
         }
 
         public event Func<Task> OnRenderCompleteAsync;
+
+        protected override void OnParametersSet()
+        {
+            if (Type == TabType.Normal && Editable)
+            {
+                throw new NotSupportedException("TabType为Card的情况下才能进行编辑");
+            }
+            base.OnParametersSet();
+        }
     }
 }

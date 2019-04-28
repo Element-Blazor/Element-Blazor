@@ -29,8 +29,7 @@ namespace Blazui.Client.Pages
     <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
     <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
 </BTab>",
-                Description = "基础的、简洁的标签页。",
-                Title = "基础用法",
+                Title = "基础的、简洁的标签页",
                 Demo = typeof(BasicTab)
             });
             demos.Add(new DemoModel()
@@ -41,8 +40,7 @@ namespace Blazui.Client.Pages
     <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
     <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
 </BTab>",
-                Description = "选项卡样式的标签页。",
-                Title = "选项卡样式",
+                Title = "选项卡样式的标签页",
                 Demo = typeof(CardTab)
             });
             demos.Add(new DemoModel()
@@ -53,9 +51,30 @@ namespace Blazui.Client.Pages
     <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
     <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
 </BTab>",
-                Description = "卡片化的标签页。",
-                Title = "卡片化",
+                Title = "卡片化的标签页",
                 Demo = typeof(BorderCardTab)
+            });
+            demos.Add(new DemoModel()
+            {
+                Code = @"<BTab Type=""@TabType.BorderCard""  TabPosition=""@TabPosition.Left"">
+    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
+    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
+    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
+    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
+</BTab>",
+                Title = "在左边的标签页",
+                Demo = typeof(LeftTab)
+            });
+            demos.Add(new DemoModel()
+            {
+                Code = @"<BTab Type=""@TabType.BorderCard""  TabPosition=""@TabPosition.Left"">
+    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
+    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
+    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
+    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
+</BTab>",
+                Title = "可编辑的标签页",
+                Demo = typeof(EditableTab)
             });
             return base.OnInitAsync();
         }
