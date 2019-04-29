@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
@@ -25,6 +26,10 @@ namespace Blazui.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                ContentTypeProvider = CreateContentTypeProvider()
+            });
             app.UseResponseCompression();
 
             if (env.IsDevelopment())
@@ -41,6 +46,23 @@ namespace Blazui.Server
             });
 
             app.UseBlazor<Client.Startup>();
+        }
+
+        private static IContentTypeProvider CreateContentTypeProvider()
+        {
+            var result = new FileExtensionContentTypeProvider();
+            AddMapping(result, ".woff", "application/font-woff");
+            AddMapping(result, ".ttf", "application/font-ttf");
+
+            return result;
+        }
+
+        private static void AddMapping(FileExtensionContentTypeProvider provider, string name, string mimeType)
+        {
+            if (!provider.Mappings.ContainsKey(name))
+            {
+                provider.Mappings.Add(name, mimeType);
+            }
         }
     }
 }
