@@ -1,0 +1,111 @@
+﻿@implements IMenuItem
+@inject IUriHelper urihelper;
+<li role="menuitem" tabindex="0" aria-haspopup="true"
+    onclick="@OnClick"
+    onmouseover="@OnOver"
+    onmouseout="@OnOut"
+    class="el-submenu @(active?"is-active":"") @(opened?"is-opened":"")"
+    style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;" aria-expanded="@(opened?"true":"")">
+    <div class="el-submenu__title" style="border-bottom-color: transparent; color: rgb(255, 255, 255); background-color:@backgroundColor;">
+        @Label
+        <i class="el-submenu__icon-arrow el-icon-arrow-down"></i>
+    </div>
+</li>
+<div class="el-menu--horizontal" x-placement="bottom-start" style="position: absolute; top: 129px; left: 104px; z-index: 2099; display: none;">
+    <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start" style="background-color: rgb(84, 92, 100);">
+        <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项1</li>
+        <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项2</li>
+        <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项3</li>
+        <li role="menuitem" aria-haspopup="true" class="el-submenu">
+            <div class="el-submenu__title" style="border-bottom-color: transparent; color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">
+                选项4
+                <i class="el-submenu__icon-arrow el-icon-arrow-right"></i>
+            </div>
+            <div class="el-menu--horizontal" style="display: none;">
+                <ul role="menu" class="el-menu el-menu--popup el-menu--popup-right-start" style="background-color: rgb(84, 92, 100);">
+                    <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项1</li>
+                    <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项2</li>
+                    <li role="menuitem" tabindex="-1" class="el-menu-item" style="color: rgb(255, 255, 255); background-color: rgb(84, 92, 100);">选项3</li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+@ChildContent
+
+@functions {
+
+    [Parameter]
+    private string Index { get; set; }
+
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    private bool Disabled { get; set; } = false;
+
+    [Parameter]
+    private string Label { get; set; }
+
+    [Parameter]
+    private string Route { get; set; }
+
+    [CascadingParameter]
+    private Menu ContainerMenu { get; set; }
+
+    private string textColor;
+    private string backgroundColor;
+    private string borderColor;
+
+    private bool active { get; set; }
+    private bool opened { get; set; } = false;
+
+    public void Active()
+    {
+        active = true;
+        textColor = ContainerMenu.ActiveTextColor;
+        borderColor = ContainerMenu.ActiveTextColor;
+
+    }
+    public void DeActive()
+    {
+        active = false;
+        textColor = ContainerMenu.TextColor;
+        borderColor = "transparent";
+    }
+
+    protected override void OnInit()
+    {
+        backgroundColor = ContainerMenu.BackgroundColor;
+
+        if (ContainerMenu.DefaultActive == Index)
+        {
+            ContainerMenu.ChangeActiveItem(this);
+        }
+
+        base.OnInit();
+    }
+
+    private void OnOver()
+    {
+        //todo: 颜色值经过计算而得
+        backgroundColor = "rgb(67, 74, 80)";
+        opened = true;
+    }
+
+    private void OnOut()
+    {
+        backgroundColor = ContainerMenu.BackgroundColor;
+        opened = false;
+    }
+
+    private void OnClick()
+    {
+        if (!string.IsNullOrEmpty(Route))
+        {
+            urihelper.NavigateTo(Route);
+        }
+
+        ContainerMenu.ChangeActiveItem(this);
+    }
+}

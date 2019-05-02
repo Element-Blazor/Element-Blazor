@@ -15,20 +15,20 @@
     private bool Collapse { get; set; } = false;
 
     [Parameter]
-    public string BackgroundColor { get; set; } = "#fff";
+    public string BackgroundColor { get; private set; } = "#fff";
 
     [Parameter]
-    public string TextColor { get; set; } = "#303133";
+    public string TextColor { get; private set; } = "#303133";
 
     [Parameter]
-    public string ActiveTextColor { get; set; } = "#409EFF";
+    public string ActiveTextColor { get; private set; } = "#409EFF";
 
     [Parameter]
-    public string DefaultActive { get; set; }
+    public string DefaultActive { get; private set; }
 
-    public MenuItem ActiveItem { get; private set; }
+    public IMenuItem ActiveItem { get; private set; }
 
-    public void ChangeActiveItem(MenuItem item) {
+    public void ChangeActiveItem(IMenuItem item) {
         if (ActiveItem !=null) {
             ActiveItem.DeActive();
         }

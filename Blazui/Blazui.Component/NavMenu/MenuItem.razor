@@ -1,10 +1,23 @@
-﻿<li role="menuitem" tabindex="0" onclick="@OnClick" onmouseover="@OnOver" onmouseout="@OnOut" class="el-menu-item @(active?"is-active":"")" style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">@ChildContent</li>
+﻿@implements IMenuItem
+@inject IUriHelper urihelper;
+<li role="menuitem" tabindex="0"
+    onclick="@OnClick"
+    onmouseover="@OnOver"
+    onmouseout="@OnOut"
+    class="el-menu-item @(active?"is-active":"")"
+    style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+    @ChildContent
+</li>
 @functions {
 
     [Parameter]
     private string Index { get; set; }
 
-    private bool active { get; set; }
+    [Parameter]
+    private RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    private bool Disabled { get; set; } = false;
 
     [Parameter]
     private string Route { get; set; }
@@ -16,8 +29,7 @@
     private string backgroundColor;
     private string borderColor;
 
-    [Parameter]
-    private RenderFragment ChildContent { get; set; }
+    private bool active { get; set; }
 
     public void Active()
     {
@@ -58,7 +70,11 @@
 
     private void OnClick()
     {
-        //todo: redirect to route
+        if (!string.IsNullOrEmpty(Route))
+        {
+            urihelper.NavigateTo(Route);
+        }
+
         ContainerMenu.ChangeActiveItem(this);
     }
 }
