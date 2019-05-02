@@ -140,31 +140,16 @@ namespace Blazui.Component.Container
             BarOffsetLeft = barOffsetLeft;
         }
 
-        public async Task RemoveTabAsync(ITab tab)
-        {
-            var index = TabPanels.IndexOf(tab);
-            if (!RemovedTabPanels.Contains(tab))
-            {
-                RemovedTabPanels.Add(tab);
-            }
-            TabPanels.Remove(TabPanels.FirstOrDefault(x => x.Name == tab.Name));
-            ITab activeTab;
-            if (index <= TabPanels.Count - 1)
-            {
-                activeTab = TabPanels[index];
-            }
-            else
-            {
-                activeTab = TabPanels[TabPanels.Count - 1];
-            }
-            await SetActivateTabAsync(activeTab);
-        }
-
         public void Refresh()
         {
             StateHasChanged();
         }
 
+        public async Task SetActivateTabAsync(string name)
+        {
+            var tab = TabPanels.FirstOrDefault(x => x.Name == name);
+            await SetActivateTabAsync(tab);
+        }
         public async Task SetActivateTabAsync(ITab tab)
         {
             if (ActiveTab != null && ActiveTab.Name == tab.Name)

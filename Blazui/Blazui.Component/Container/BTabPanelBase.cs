@@ -90,16 +90,23 @@ namespace Blazui.Component.Container
             }
 
             var removingTab = For.FirstOrDefault(x => Name(x) == tab.Name);
+            var removingIndex = For.IndexOf(removingTab);
             if (removingTab != null)
             {
                 For.Remove(removingTab);
+            }
+            var activeIndex = 0;
+            if (removingIndex > For.Count - 1)
+            {
+                activeIndex = For.Count - 1;
             }
 
             if (OnTabCloseAsync != null)
             {
                 await OnTabCloseAsync(tab);
             }
-            tab.TabContainer.Refresh();
+            var activeModel = For.ElementAt(activeIndex);
+            await tab.TabContainer.SetActivateTabAsync(Name(activeModel));
         }
 
         [Parameter]

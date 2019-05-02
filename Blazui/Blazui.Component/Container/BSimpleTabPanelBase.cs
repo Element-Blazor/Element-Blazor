@@ -80,11 +80,6 @@ namespace Blazui.Component.Container
             await Task.CompletedTask;
         }
 
-        public void Dispose()
-        {
-            TabContainer.RemoveTabAsync(this).GetAwaiter().GetResult();
-        }
-
 
         [Parameter]
         public Func<ITab, Task> OnRenderCompletedAsync { get; set; }
