@@ -10,12 +10,22 @@ namespace Blazui.Component.Dynamic
     public class BDynamicComponent : ComponentBase
     {
         [Parameter]
-        public Type Component { get; set; }
+        public object Component { get; set; }
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenComponent(0, Component);
-            builder.CloseComponent();
+            if (Component is Type type)
+            {
+                builder.OpenComponent(0, type);
+                builder.CloseComponent();
+                return;
+            }
+            if (Component is RenderFragment renderFragment)
+            {
+                builder.AddContent(0, renderFragment);
+                return;
+            }
+            builder.AddMarkupContent(0, Convert.ToString(Component));
         }
     }
 }

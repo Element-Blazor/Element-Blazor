@@ -1,0 +1,27 @@
+﻿@inherits BSimpleTabPanelBase
+@{
+    var isActive = string.Empty;
+    var ariaSelected = string.Empty;
+    if (IsActive && TabContainer.Type != TabType.Normal)
+    {
+        isActive = "is-active";
+        ariaSelected = "true";
+    }
+
+    var name = Name;
+    if (string.IsNullOrWhiteSpace(name))
+    {
+        name = Index.ToString();
+    }
+    var position = TabContainer.GetPosition();
+    var headerPosition = position.headerPosition;
+    var tabPosition = position.tabPosition;
+    var isClosableCls = isClosable ? "is-closable" : string.Empty;
+}
+<div ref="@Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" onclick="@Activate" class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
+    @Title
+    @if (isClosable)
+    {
+        <span class="el-icon-close" onclick="@RemoveTabPanelAsync"></span>
+    }
+</div>

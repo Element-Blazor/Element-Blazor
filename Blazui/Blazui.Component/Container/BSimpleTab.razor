@@ -1,0 +1,55 @@
+﻿@inherits BSimpleTabBase
+@{
+    var tabType = string.Empty;
+    switch (Type)
+    {
+        case TabType.Normal:
+            tabType = string.Empty;
+            break;
+        case TabType.BorderCard:
+            tabType = "el-tabs--border-card";
+            break;
+        case TabType.Card:
+            tabType = "el-tabs--card";
+            break;
+    }
+    var position = GetPosition();
+    var headerPosition = position.headerPosition;
+    var tabPosition = position.tabPosition;
+}
+<div class="el-tabs @tabType @tabPosition">
+    @if (TabPosition == TabPosition.Bottom)
+    {
+        <div class="el-tabs__content" ref="@Content">
+            @ActiveTab?.ChildContent
+        </div>
+    }
+    <div class="el-tabs__header @headerPosition">
+        @if (IsEditable || (IsAddable.HasValue && IsAddable.Value))
+        {
+            <span tabindex="0" class="el-tabs__new-tab" onclick="@OnAddingTab"><i class="el-icon-plus"></i></span>
+        }
+        <div class="el-tabs__nav-wrap @headerPosition">
+            <div class="el-tabs__nav-scroll">
+                <div role="tablist" class="el-tabs__nav @headerPosition" style="transform: translateX(0px);">
+                    @if (Type == TabType.Normal)
+                    {
+                        <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
+                    }
+                    <CascadingValue Value=this>
+                        @ChildContent
+                    </CascadingValue>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (TabPosition != TabPosition.Bottom)
+    {
+        <div class="el-tabs__content" ref="@Content">
+            @if (ActiveTab != null)
+            {
+                @ActiveTab.ChildContent
+            }
+        </div>
+    }
+</div>

@@ -1,6 +1,38 @@
-﻿<BTab Type="@TabType.Card" Editable="@true">
-    <BTabPanel Title="用户管理">用户管理1</BTabPanel>
-    <BTabPanel Title="角色管理">角色管理1</BTabPanel>
-    <BTabPanel Title="部门管理">部门管理1</BTabPanel>
-    <BTabPanel Title="人员管理">人员管理1</BTabPanel>
+﻿<BTab Type="@TabType.Card" ref="tabs" IsEditable="@true" OnAddingTab="@OnAddingTabAsync">
+    <BTabPanel For="@models" Title="@(item=>item.Title)" Name="@(item=>item.Name)" Content="@(item=>item.Content)">
+    </BTabPanel>
 </BTab>
+@functions{
+    private IList<TabOption> models = new List<TabOption>()
+{
+        new TabOption
+        {
+            Name="tab1",
+             Title="选项卡1",
+             Content="内容1"
+        },
+        new TabOption
+        {
+            Name="tab2",
+            Title="卡2",
+             Content="内容2"
+        },
+        new TabOption
+        {
+            Name="tab3",
+            Title="卡3",
+             Content="内容3",
+             IsClosable=true
+        },
+        new TabOption
+        {
+            Name="tab4",
+            Title="Component",
+             Content=typeof(TestCheckBoxInTab)
+        }
+    };
+    private BTab tabs;
+    private void OnAddingTabAsync(UIMouseEventArgs e)
+    {
+    }
+}

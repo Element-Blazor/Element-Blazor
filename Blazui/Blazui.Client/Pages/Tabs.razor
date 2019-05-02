@@ -5,14 +5,14 @@
         @context.Title
     </Header>
     <Body>
-        <BTab Type="@TabType.BorderCard" OnActiveTabChanged="@ActiveTabChanged">
-            <BTabPanel Title="运行效果">
+        <BSimpleTab Type="@TabType.BorderCard" OnActiveTabChanged="@ActiveTabChanged">
+            <BSimpleTabPanel Title="运行效果">
                 <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
-            </BTabPanel>
-            <BTabPanel Title="示例代码">
+            </BSimpleTabPanel>
+            <BSimpleTabPanel Title="示例代码">
                 <pre class="language-xml"><code class="language-xml">@context.Code</code></pre>
-            </BTabPanel>
-        </BTab>
+            </BSimpleTabPanel>
+        </BSimpleTab>
     </Body>
 </BCard>
 <style>

@@ -1,20 +1,9 @@
-﻿@inherits BTabPanelBase
-@{
-    var isActive = string.Empty;
-    var ariaSelected = string.Empty;
-    if (IsActive && TabContainer.Type != TabType.Normal)
-    {
-        isActive = "is-active";
-        ariaSelected = "true";
-    }
-
-    var name = Name;
-    if (string.IsNullOrWhiteSpace(name))
-    {
-        name = Index.ToString();
-    }
-    var position = TabContainer.GetPosition();
-    var headerPosition = position.headerPosition;
-    var tabPosition = position.tabPosition;
+﻿@inherits BTabPanelBase<TModel>
+@typeparam TModel
+@using Blazui.Component.Dynamic
+@foreach (var item in models)
+{
+    <BSimpleTabPanel IsClosable="@item.IsClosable" Name="@item.Name" OnRenderCompletedAsync="@OnRenderCompletedInternalAsync" OnTabCloseAsync="@RemoveTabCloseAsync" Title="@item.Title">
+        <BDynamicComponent Component="@item.Content"></BDynamicComponent>
+    </BSimpleTabPanel>
 }
-<div ref="@Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" onclick="@Activate" class="el-tabs__item @headerPosition @isActive" aria-selected="@ariaSelected">@Title</div>
