@@ -92,6 +92,9 @@ namespace Blazui.Component.Container
         [Parameter]
         public EventCallback<UIChangeEventArgs> OnActiveTabChanged { get; set; }
 
+        [Parameter]
+        public Func<ITab, Task<bool>> OnActiveTabChangingAsync { get; set; }
+
         public ITab ActiveTab { get; protected set; }
 
         internal async Task AddTabAsync(ITab tab)
@@ -152,6 +155,14 @@ namespace Blazui.Component.Container
         }
         public async Task SetActivateTabAsync(ITab tab)
         {
+            if (OnActiveTabChangingAsync != null)
+            {
+                var allowSwitching = await OnActiveTabChangingAsync(tab);
+                if (!allowSwitching)
+                {
+                    return;
+                }
+            }
             if (ActiveTab != null && ActiveTab.Name == tab.Name)
             {
                 return;

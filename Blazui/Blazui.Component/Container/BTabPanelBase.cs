@@ -54,6 +54,14 @@ namespace Blazui.Component.Container
 
         protected override async Task OnParametersSetAsync()
         {
+            if (Name == null)
+            {
+                throw new ArgumentException("必须指定Name属性");
+            }
+            if (Title == null)
+            {
+                throw new ArgumentException("必须指定Title属性");
+            }
             models = For.Select(x => new TabOption()
             {
                 IsClosable = IsClosable?.Invoke(x),
@@ -109,17 +117,27 @@ namespace Blazui.Component.Container
             await tab.TabContainer.SetActivateTabAsync(Name(activeModel));
         }
 
-        [Parameter]
-        public Func<ITab, Task> OnRenderCompletedAsync { get; set; }
+        public event Func<ITab, Task> OnRenderCompletedAsync;
 
         [Parameter]
-        public EventCallback<BTabPanelBase<T>> OnAllTabRenderCompletedAsync { get; set; }
+        public Func<ITab, Task> OnEachTabRenderCompleted { get; set; }
+
+        protected async Task OnInternalEachTabRenderCompleted(ITab tab)
+        {
+            if (OnEachTabRenderCompleted != null)
+            {
+                await OnEachTabRenderCompleted(tab);
+            }
+        }
+
+        [Parameter]
+        public Func<BTabPanelBase<T>, Task> OnAllTabRenderCompletedAsync { get; set; }
 
         protected override async Task OnAfterRenderAsync()
         {
-            if (OnAllTabRenderCompletedAsync.HasDelegate)
+            if (OnAllTabRenderCompletedAsync != null)
             {
-                await OnAllTabRenderCompletedAsync.InvokeAsync(this);
+                await OnAllTabRenderCompletedAsync(this);
             }
             await base.OnAfterRenderAsync();
         }

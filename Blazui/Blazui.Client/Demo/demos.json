@@ -1,0 +1,27 @@
+﻿[
+  {
+    "name": "tabs",
+    "demos": [
+      {
+        "title": "基础的、简洁的标签页",
+        "name": "BasicTab"
+      },
+      {
+        "title": "选项卡样式的标签页",
+        "name": "CardTab"
+      },
+      {
+        "title": "卡片化的标签页",
+        "name": "BorderCardTab"
+      },
+      {
+        "title": "在左边的标签页",
+        "name": "LeftTab"
+      },
+      {
+        "title": "可编辑的标签页",
+        "name": "EditableTab"
+      }
+    ]
+  }
+]

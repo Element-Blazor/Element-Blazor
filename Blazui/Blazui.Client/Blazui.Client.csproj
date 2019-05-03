@@ -33,13 +33,16 @@
     <Content Update="Demo\CardTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\EditableTab.razor">
+    <Content Update="Demo\demos.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\EditableTab\EditableTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\LeftTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\TestCheckBoxInTab.razor">
+    <Content Update="Demo\EditableTab\TestCheckBoxInTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Pages\CheckBox.razor">

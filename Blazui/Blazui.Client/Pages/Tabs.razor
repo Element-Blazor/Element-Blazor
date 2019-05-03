@@ -1,22 +1,43 @@
 ﻿@page "/tabs"
 @inherits TabsBase
-<BCard For="@demos">
-    <Header>
-        @context.Title
-    </Header>
-    <Body>
-        <BSimpleTab Type="@TabType.BorderCard" OnActiveTabChanged="@ActiveTabChanged">
-            <BSimpleTabPanel Title="运行效果">
-                <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
-            </BSimpleTabPanel>
-            <BSimpleTabPanel Title="示例代码">
-                <pre class="language-xml"><code class="language-xml">@context.Code</code></pre>
-            </BSimpleTabPanel>
-        </BSimpleTab>
-    </Body>
-</BCard>
-<style>
-    .el-card {
-        margin-bottom: 10px;
+
+@if (demos == null)
+{
+    @("Loading")
+}
+else
+{
+    <BCard For="@demos">
+        <Header>
+            @context.Title
+        </Header>
+        <Body>
+            <BSimpleTab Type="@TabType.BorderCard">
+                <BSimpleTabPanel Title="运行效果">
+                    <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
+                </BSimpleTabPanel>
+                <BSimpleTabPanel Title="示例代码">
+                    <BTab OnActiveTabChangingAsync="@ActiveTabChangingAsync">
+                        <BTabPanel For="@context.Codes" Content="@(code => GetCode(code.Code, code.Language))" Title="@(code => code.FileName)" Name="@(code=>GetName(code.FileName))"></BTabPanel>
+                    </BTab>
+                </BSimpleTabPanel>
+            </BSimpleTab>
+        </Body>
+    </BCard>
+    <style>
+        .el-card {
+            margin-bottom: 10px;
+        }
+    </style>
+}
+@functions{
+    private string GetCode(string code, string language)
+    {
+        return $"<pre lang=\"{language}\">{code}</pre>";
     }
-</style>
+
+    private string GetName(string fileName)
+    {
+        return fileName.Replace(".", string.Empty);
+    }
+}

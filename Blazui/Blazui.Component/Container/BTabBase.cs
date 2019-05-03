@@ -33,6 +33,18 @@ namespace Blazui.Component.Container
         [Parameter]
         public EventCallback<UIChangeEventArgs> OnActiveTabChanged { get; set; }
 
+        [Parameter]
+        public Func<ITab, Task<bool>> OnActiveTabChangingAsync { get; set; }
+
+        protected async Task<bool> OnInternalActiveTabChangingAsync(ITab tab)
+        {
+            if (OnActiveTabChangingAsync == null)
+            {
+                return await Task.FromResult(true);
+            }
+            return await OnActiveTabChangingAsync(tab);
+        }
+
         //internal async Task AddTabAsync(TabOption option)
         //{
         //    if (!TabPanels.Contains(tab))

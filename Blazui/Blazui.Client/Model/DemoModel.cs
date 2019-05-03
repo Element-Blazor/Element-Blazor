@@ -9,7 +9,12 @@ namespace Blazui.Client.Model
     public class DemoModel
     {
         public string Title { get; set; }
-        public string Code { get; set; }
+        public IList<CodeModel> Codes { get; set; } = new List<CodeModel>();
         public Type Demo { get; set; }
+
+        /// <summary>
+        /// 示例类型
+        /// </summary>
+        public string Type { get; set; }
     }
 }

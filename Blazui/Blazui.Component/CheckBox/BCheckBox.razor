@@ -41,7 +41,6 @@
     {
         var args = (ChangeEventArgs<CheckBoxValue>
             )e;
-        Console.WriteLine(args.NewValue);
         var option = args.NewValue;
         var model = (TModel)Convert.ChangeType(option.Value, typeof(TModel));
         if (SelectedItems != null)

@@ -9,5 +9,6 @@ namespace Blazui.Client.Model
     {
         public string Language { get; set; }
         public string Code { get; set; }
+        public string FileName { get; set; }
     }
 }

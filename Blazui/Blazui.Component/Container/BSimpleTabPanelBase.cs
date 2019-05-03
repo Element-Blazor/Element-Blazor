@@ -28,15 +28,15 @@ namespace Blazui.Component.Container
         }
 
         [Parameter]
-        public EventCallback<ITab> OnTabCloseAsync { get; set; }
+        public EventCallback<ITab> OnTabClose { get; set; }
 
-        protected async Task RemoveTabPanelAsync(UIMouseEventArgs e)
+        protected async Task OnInternalTabCloseAsync(UIMouseEventArgs e)
         {
-            if (!OnTabCloseAsync.HasDelegate)
+            if (!OnTabClose.HasDelegate)
             {
                 return;
             }
-            await OnTabCloseAsync.InvokeAsync(this);
+            await OnTabClose.InvokeAsync(this);
         }
 
         public bool IsActive { get; set; }
@@ -82,13 +82,19 @@ namespace Blazui.Component.Container
 
 
         [Parameter]
-        public Func<ITab, Task> OnRenderCompletedAsync { get; set; }
+        public Func<ITab, Task> OnRenderCompleted { get; set; }
+
+        public event Func<ITab, Task> OnRenderCompletedAsync;
 
         protected override async Task OnAfterRenderAsync()
         {
             if (OnRenderCompletedAsync != null)
             {
                 await OnRenderCompletedAsync(this);
+            }
+            if (OnRenderCompleted != null)
+            {
+                await OnRenderCompleted(this);
             }
             await base.OnAfterRenderAsync();
         }

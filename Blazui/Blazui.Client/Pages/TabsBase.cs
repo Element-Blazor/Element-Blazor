@@ -14,84 +14,33 @@ namespace Blazui.Client.Pages
 {
     public class TabsBase : PageBase
     {
-        protected List<DemoModel> demos { get; set; } = new List<DemoModel>();
+        protected IList<DemoModel> demos;
 
         [Inject]
         private HttpClient httpClient { get; set; }
 
-        protected override Task OnInitAsync()
+        [Inject]
+        private IUriHelper UriHelper { get; set; }
+
+        protected override async Task OnInitAsync()
         {
-            demos.Add(new DemoModel()
+            var router = UriHelper.GetAbsoluteUri().Split('/').LastOrDefault();
+            var uri = $"api/sample/{router}";
+            demos = await httpClient.GetJsonAsync<IList<DemoModel>>(uri);
+            foreach (var item in demos)
             {
-                Code = @"<BTab>
-    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
-    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
-    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
-    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
-</BTab>",
-                Title = "基础的、简洁的标签页",
-                Demo = typeof(BasicTab)
-            });
-            demos.Add(new DemoModel()
-            {
-                Code = @"<BTab Type=""@TabType.Card"">
-    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
-    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
-    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
-    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
-</BTab>",
-                Title = "选项卡样式的标签页",
-                Demo = typeof(CardTab)
-            });
-            demos.Add(new DemoModel()
-            {
-                Code = @"<BTab Type=""@TabType.BorderCard"">
-    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
-    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
-    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
-    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
-</BTab>",
-                Title = "卡片化的标签页",
-                Demo = typeof(BorderCardTab)
-            });
-            demos.Add(new DemoModel()
-            {
-                Code = @"<BTab Type=""@TabType.BorderCard""  TabPosition=""@TabPosition.Left"">
-    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
-    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
-    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
-    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
-</BTab>",
-                Title = "在左边的标签页",
-                Demo = typeof(LeftTab)
-            });
-            demos.Add(new DemoModel()
-            {
-                Code = @"<BTab Type=""@TabType.BorderCard""  TabPosition=""@TabPosition.Left"">
-    <BTabPanel Title=""用户管理"">用户管理1</BTabPanel>
-    <BTabPanel Title=""角色管理"">角色管理1</BTabPanel>
-    <BTabPanel Title=""部门管理"">部门管理1</BTabPanel>
-    <BTabPanel Title=""人员管理"">人员管理1</BTabPanel>
-</BTab>",
-                Title = "可编辑的标签页",
-                Demo = typeof(EditableTab)
-            });
-            return base.OnInitAsync();
+                item.Demo = Type.GetType(item.Type);
+            }
         }
 
-        //protected RenderFragment RenderComponent(DemoModel context)
-        //{
-
-        //}
-
-        protected async Task ActiveTabChanged(UIChangeEventArgs e)
+        protected async Task<bool> ActiveTabChangingAsync(ITab tab)
         {
-            var eventArgs = (ChangeEventArgs<ITab>)e;
-            eventArgs.NewValue.OnRenderCompletedAsync -= TabCode_OnRenderCompleteAsync;
-            eventArgs.NewValue.OnRenderCompletedAsync += TabCode_OnRenderCompleteAsync;
+            tab.OnRenderCompletedAsync += TabCode_OnRenderCompleteAsync;
+            return await Task.FromResult(true);
         }
         protected async Task TabCode_OnRenderCompleteAsync(ITab tab)
         {
+            tab.OnRenderCompletedAsync -= TabCode_OnRenderCompleteAsync;
             await jSRuntime.InvokeAsync<object>("renderHightlight", tab.TabContainer.Content);
         }
     }
