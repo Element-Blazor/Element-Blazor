@@ -20,7 +20,11 @@
       },
       {
         "title": "可编辑的标签页",
-        "name": "EditableTab"
+        "name": "EditableTab",
+        "files": [
+          "Edittable.razor",
+          "TestCheckBoxInTab.razor"
+        ]
       }
     ]
   }

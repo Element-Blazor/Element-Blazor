@@ -46,7 +46,7 @@ namespace Blazui.Server.Controllers
                     continue;
                 }
                 demoModel.Type += "." + item.Name;
-                var codeFiles = Directory.EnumerateFiles(Path.Combine(location, item.Name));
+                var codeFiles = Directory.EnumerateFiles(Path.Combine(location, item.Name)).OrderBy(x => item.Files.IndexOf(x));
                 foreach (var codeFile in codeFiles)
                 {
                     var extension = codeFile.Split('.').LastOrDefault().ToLower();

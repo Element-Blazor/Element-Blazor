@@ -9,5 +9,6 @@ namespace Blazui.Client.Model
     {
         public string Name { get; set; }
         public string Title { get; set; }
+        public IList<string> Files { get; set; }
     }
 }
