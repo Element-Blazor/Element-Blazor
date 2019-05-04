@@ -1,0 +1,28 @@
+﻿@inherits BButtonBase
+@{
+    var isPlain = string.Empty;
+    if (IsPlain)
+    {
+        isPlain = "is-plain";
+    }
+    var isRound = string.Empty;
+    if (IsRound)
+    {
+        isRound = "is-round";
+    }
+    var isDisabled = string.Empty;
+    if (IsDisabled)
+    {
+        isDisabled = "is-disabled";
+    }
+}
+<button type="button" onclick="@OnButtonClickedAsync" class="el-button el-button--@Type.ToString().ToLower() @isPlain @isRound @isDisabled">
+    @if (string.IsNullOrWhiteSpace(Icon))
+    {
+        <span>@ChildContent</span>
+    }
+    else
+    {
+        <i class="@Icon"></i>
+    }
+</button>

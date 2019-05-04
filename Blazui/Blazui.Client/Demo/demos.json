@@ -27,5 +27,25 @@
         ]
       }
     ]
+  },
+  {
+    "name": "button",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicButton",
+        "files": [
+          "BasicButton.razor"
+        ]
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledButton"
+      },
+      {
+        "title": "文字按钮",
+        "name": "TextButton"
+      }
+    ]
   }
 ]

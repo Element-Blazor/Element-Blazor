@@ -24,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Demo\BasicButton\BasicButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\BasicTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -36,6 +39,9 @@
     <Content Update="Demo\demos.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="Demo\DisabledButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\EditableTab\EditableTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -44,6 +50,9 @@
     </Content>
     <Content Update="Demo\EditableTab\TestCheckBoxInTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\TextButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Pages\CheckBox.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

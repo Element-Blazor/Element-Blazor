@@ -58,10 +58,9 @@ namespace Blazui.Server.Controllers
                         case "razor":
                             break;
                         case "css":
-
                             break;
                         case "cs":
-
+                            language = "csharp";
                             break;
                     }
                     demoModel.Codes.Add(new CodeModel()

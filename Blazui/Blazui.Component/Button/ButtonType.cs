@@ -7,19 +7,18 @@ namespace Blazui.Component.Button
 {
     public enum ButtonType
     {
-        /// <summary>
-        /// 普通按钮
-        /// </summary>
-        Button,
+        Default,
 
-        /// <summary>
-        /// 提交按钮
-        /// </summary>
-        Submit,
+        Primary,
 
-        /// <summary>
-        /// 重置按钮
-        /// </summary>
-        Reset
+        Success,
+
+        Info,
+
+        Warning,
+
+        Danger,
+
+        Text
     }
 }

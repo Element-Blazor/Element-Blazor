@@ -1,50 +1,9 @@
 ﻿@page "/"
-@*<SurveyPrompt Title="How is Blazor working for you?" />*@
-<BButton Theme="@ButtonTheme.Danger" OnClick="@test"><BButton Theme="@ButtonTheme.Disabled">禁用按钮</BButton></BButton>
-<BButton Theme="@ButtonTheme.Disabled">禁用按钮</BButton>
-<BButton Theme="@ButtonTheme.Warm">暖色按钮</BButton>
-<BButton Theme="@ButtonTheme.Primary">原始按钮</BButton>
-<BButton Theme="@ButtonTheme.Normal">百搭按钮</BButton>
-<BButton Theme="@ButtonTheme.Default">默认按钮</BButton>
-
-<br />
-<br />
-<BButton Size="@ButtonSize.Large">大型按钮</BButton>
-<BButton Size="@ButtonSize.Default">默认按钮</BButton>
-<BButton Size="@ButtonSize.Small">小型按钮</BButton>
-<BButton Size="@ButtonSize.XSmall">迷你按钮</BButton>
-<br />
-<br />
-<BButton Size="@ButtonSize.Large" IsFluid="true">流体按钮</BButton>
-
-<br />
-<br />
-
-<BButton Theme="@ButtonTheme.Danger" OnClick="@test" IsRadius="true">@text</BButton>
-<BButton Theme="@ButtonTheme.Disabled" IsRadius="true">圆形按钮</BButton>
-<BButton Theme="@ButtonTheme.Warm" IsRadius="true">圆形按钮</BButton>
-<BButton Theme="@ButtonTheme.Primary" IsRadius="true">圆形按钮</BButton>
-<BButton Theme="@ButtonTheme.Normal" IsRadius="true">圆形按钮</BButton>
-<BButton Theme="@ButtonTheme.Default" IsRadius="true">圆形按钮</BButton>
-<br />
-<br />
-<BButtonGroup>
-    <BButton Theme="@ButtonTheme.Danger" OnClick="@test" IsRadius="true">@text</BButton>
-    <BButton Theme="@ButtonTheme.Disabled" IsRadius="true">圆形按钮</BButton>
-    <BButton Theme="@ButtonTheme.Warm" IsRadius="true">圆形按钮</BButton>
-    <BButton Theme="@ButtonTheme.Primary" IsRadius="true">圆形按钮</BButton>
-    <BButton Theme="@ButtonTheme.Normal" IsRadius="true">圆形按钮</BButton>
-    <BButton Theme="@ButtonTheme.Default" IsRadius="true">圆形按钮</BButton>
-    <BButton Size="@ButtonSize.Large">大型按钮</BButton>
-    <BButton Size="@ButtonSize.Default">默认按钮</BButton>
-    <BButton Size="@ButtonSize.Small">小型按钮</BButton>
-    <BButton Size="@ButtonSize.XSmall">迷你按钮</BButton>
-</BButtonGroup>
-@functions{
-    private string text { get; set; } = "按钮";
-    private void test(UIMouseEventArgs e)
+@inject IUriHelper uriHelper;
+@functions{ 
+    protected override Task OnInitAsync()
     {
-        Console.WriteLine(e.ToString());
-        text = e.CtrlKey.ToString();
+        uriHelper.NavigateTo("/button");
+        return base.OnInitAsync();
     }
 }
