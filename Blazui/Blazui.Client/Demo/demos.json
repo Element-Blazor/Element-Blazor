@@ -59,5 +59,22 @@
         "name": "ButtonSize"
       }
     ]
+  },
+  {
+    "name": "switch",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicSwitch"
+      },
+      {
+        "title": "文本描述",
+        "name": "TextSwitch"
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledSwitch"
+      }
+    ]
   }
 ]

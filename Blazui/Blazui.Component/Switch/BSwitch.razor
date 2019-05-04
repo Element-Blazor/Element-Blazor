@@ -1,0 +1,55 @@
+﻿@inherits BSwitchBase
+@{
+    var isChecked = string.Empty;
+    var ariaChecked = false;
+    if (ActiveValue == Value)
+    {
+        isChecked = "is-checked";
+        ariaChecked = true;
+    }
+    var backgroundColor = string.Empty;
+    if (ActiveValue == Value)
+    {
+        backgroundColor = ActiveColor;
+    }
+    else
+    {
+        backgroundColor = InactiveColor;
+    }
+    var showText = !string.IsNullOrWhiteSpace(ActiveText) && !string.IsNullOrWhiteSpace(InactiveText);
+    var leftIsActive = string.Empty;
+    var rightIsAcitve = string.Empty;
+    if (!ariaChecked)
+    {
+        leftIsActive = "is-active";
+    }
+    else
+    {
+        rightIsAcitve = "is-active";
+    }
+
+    var isDisabled = string.Empty;
+    var styleText = $"border-color: rgb(19, 206, 102); background-color: {backgroundColor};";
+    if (IsDisabled)
+    {
+        isDisabled = "is-disabled";
+        styleText = string.Empty;
+    }
+}
+<div role="switch" class="el-switch @isChecked @isDisabled" aria-checked="@ariaChecked">
+    <input type="checkbox" name="" disabled="@IsDisabled" true-value="@ActiveValue" class="el-switch__input">
+    @if (showText)
+    {
+        <span class="el-switch__label el-switch__label--left @leftIsActive">
+            <span aria-hidden="true">@InactiveText</span>
+        </span>
+    }
+    <span class="el-switch__core" onclick="@OnInternalSwitchChangedAsync" style="width: 40px; @styleText">
+    </span>
+    @if (showText)
+    {
+        <span class="el-switch__label el-switch__label--right @rightIsAcitve">
+            <span aria-hidden="true">@ActiveText</span>
+        </span>
+    }
+</div>
