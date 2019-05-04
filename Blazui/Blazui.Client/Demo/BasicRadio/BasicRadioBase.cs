@@ -9,5 +9,6 @@ namespace Blazui.Client.Demo.BasicRadio
     public class BasicRadioBase : ComponentBase
     {
         protected string selectedValue = "1";
+        protected string selectedValue1 = "3";
     }
 }

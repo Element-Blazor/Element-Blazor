@@ -2,15 +2,16 @@
 @{
     var isChecked = string.Empty;
     var ariaChecked = false;
+    
     if (Value == SelectedValue)
     {
         isChecked = "is-checked";
         ariaChecked = true;
     }
 
-    var checkedValue = Value = SelectedValue;
+    var checkedValue = Value == SelectedValue;
 }
-<label role="radio" tabindex="0" class="el-radio @isChecked" onclick="@OnRadioChanged"  aria-checked="@ariaChecked">
+<label role="radio" tabindex="0" class="el-radio @isChecked" onclick="@OnRadioChangedAsync"  aria-checked="@ariaChecked">
     <span class="el-radio__input @isChecked">
         <span class="el-radio__inner"></span>
         <input type="radio" aria-hidden="true" tabindex="-1" checked="@checkedValue" class="el-radio__original" value="@Value">
