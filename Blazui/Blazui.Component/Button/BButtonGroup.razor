@@ -1,26 +1,4 @@
-﻿<div class="layui-btn-container">
+﻿@inherits BButtonGroupBase
+<div class="el-button-group">
     @ChildContent
 </div>
-
-@functions{
-
-    private RenderFragment c;
-    [Parameter]
-    private RenderFragment ChildContent
-    {
-        get
-        {
-            return c;
-        }
-        set
-        {
-            c = value;
-            Console.WriteLine(c.Method.DeclaringType.Assembly.CodeBase);
-        }
-    }
-
-    protected async Task OnParametersSetAsync()
-    {
-        await Task.CompletedTask;
-    }
-}

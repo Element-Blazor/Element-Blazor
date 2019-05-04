@@ -45,6 +45,18 @@
       {
         "title": "文字按钮",
         "name": "TextButton"
+      },
+      {
+        "title": "按钮组",
+        "name": "ButtonGroup"
+      },
+      {
+        "title": "加载中",
+        "name": "LoadingButton"
+      },
+      {
+        "title": "按钮大小",
+        "name": "ButtonSize"
       }
     ]
   }

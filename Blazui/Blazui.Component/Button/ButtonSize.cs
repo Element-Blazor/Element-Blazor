@@ -7,13 +7,11 @@ namespace Blazui.Component.Button
 {
     public enum ButtonSize
     {
+        Default,
         Medium,
 
         Small,
 
-        /// <summary>
-        /// 迷你按钮
-        /// </summary>
         Mini
     }
 }
