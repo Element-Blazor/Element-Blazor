@@ -24,7 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Demo\BasicButton\BasicButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicRadio\BasicRadio.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\BasicSwitch.razor">
