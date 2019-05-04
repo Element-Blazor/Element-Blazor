@@ -69,8 +69,8 @@ namespace Blazui.Server.Controllers
                         FileName = Path.GetFileName(codeFile),
                         Language = language
                     });
-                    demos.Add(demoModel);
                 }
+                demos.Add(demoModel);
             }
             return demos;
         }

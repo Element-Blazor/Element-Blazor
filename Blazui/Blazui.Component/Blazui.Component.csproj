@@ -28,4 +28,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Build" Version="3.0.0-preview3-19153-02" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Switch\" />
+  </ItemGroup>
+
 </Project>
