@@ -87,6 +87,22 @@
           "BasicRadio.razor",
           "BasicRadioBase.cs"
         ]
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledRadio",
+        "files": [
+          "DisabledRadio.razor",
+          "DisabledRadioBase.cs"
+        ]
+      },
+      {
+        "title": "Change事件实现不允许切换状态",
+        "name": "DisallowChangeRadio",
+        "files": [
+          "DisallowChangeRadio.razor",
+          "DisallowChangeRadioBase.cs"
+        ]
       }
     ]
   }

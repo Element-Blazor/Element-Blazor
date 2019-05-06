@@ -14,9 +14,6 @@ namespace Blazui.Client.Pages
     {
         [Inject]
         protected IJSRuntime jSRuntime { get; set; }
-        protected override async Task OnAfterRenderAsync()
-        {
-        }
 
         protected IList<DemoModel> demos;
 

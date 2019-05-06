@@ -10,5 +10,6 @@ namespace Blazui.Component.EventArgs
     {
         public T OldValue { get; set; }
         public T NewValue { get; set; }
+        public bool DisallowChange { get; set; }
     }
 }

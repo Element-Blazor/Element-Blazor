@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.EventArgs;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,53 @@ namespace Blazui.Component.Radio
         public EventCallback<string> SelectedValueChanged { get; set; }
 
         [Parameter]
+        public EventCallback<ChangeEventArgs<string>> SelectedValueChanging { get; set; }
+
+        [Parameter]
         public string Value { get; set; }
+
+        [Parameter]
+        public bool IsDisabled { get; set; }
+
+        public event Func<ChangeEventArgs<string>, Task<bool>> OnValueChangingAsync;
+
+        public event Func<ChangeEventArgs<string>, Task> OnValueChangedAsync;
 
         protected async Task OnRadioChangedAsync(UIMouseEventArgs e)
         {
+            if (IsDisabled)
+            {
+                return;
+            }
+            var arg = new ChangeEventArgs<string>()
+            {
+                NewValue = Value,
+                OldValue = SelectedValue
+            };
+            if (SelectedValueChanging.HasDelegate)
+            {
+                await SelectedValueChanging.InvokeAsync(arg);
+                if (arg.DisallowChange)
+                {
+                    return;
+                }
+            }
+            if (OnValueChangingAsync != null)
+            {
+                var allowChanging = await OnValueChangingAsync(arg);
+                if (!allowChanging)
+                {
+                    return;
+                }
+            }
             SelectedValue = Value;
             if (SelectedValueChanged.HasDelegate)
             {
                 await SelectedValueChanged.InvokeAsync(Value);
+            }
+            if (OnValueChangedAsync != null)
+            {
+                await OnValueChangedAsync(arg);
             }
         }
     }
