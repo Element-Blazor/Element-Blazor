@@ -27,6 +27,10 @@ namespace Blazui.Component.Radio
         public string Value { get; set; }
 
         [Parameter]
+        public RadioSize Size { get; set; }
+        [Parameter]
+        public bool IsBordered { get; set; }
+        [Parameter]
         public bool IsDisabled { get; set; }
 
         public event Func<ChangeEventArgs<string>, Task<bool>> OnValueChangingAsync;

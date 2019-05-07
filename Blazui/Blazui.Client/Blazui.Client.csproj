@@ -33,6 +33,9 @@
     <Compile Update="Demo\DisallowChangeRadio\DisallowChangeRadioBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Demo\RadioButton\RadioButtonBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Demo\RadioGroup\RadioGroupBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -53,6 +56,9 @@
     </Content>
     <Content Update="Demo\BorderCardTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BorderedRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\ButtonGroup.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -88,6 +94,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\LoadingButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\RadioButton\RadioButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\RadioGroup\RadioGroup.razor">

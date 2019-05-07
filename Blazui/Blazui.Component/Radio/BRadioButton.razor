@@ -1,0 +1,30 @@
+﻿@inherits BRadioButtonBase
+@{
+    var isChecked = string.Empty;
+    var ariaChecked = false;
+
+    var selectedValue = RadioGroup == null ? SelectedValue : RadioGroup.SelectedValue;
+    if (Value == selectedValue)
+    {
+        isChecked = "is-active";
+        ariaChecked = true;
+    }
+
+    var checkedValue = Value == selectedValue;
+    var isDisabled = string.Empty;
+    var ariaDisabled = false;
+    if (IsDisabled)
+    {
+        isDisabled = "is-disabled";
+        ariaDisabled = true;
+    }
+    var size = RadioGroup == null ? string.Empty : RadioGroup.Size.ToString().ToLower();
+    if (!string.IsNullOrWhiteSpace(size))
+    {
+        size = "el-radio-button--" + size;
+    }
+}
+<label role="radio" tabindex="0" class="el-radio-button @isChecked @isDisabled @size" onclick="@OnRadioChangedAsync" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
+    <input type="radio" tabindex="-1" class="el-radio-button__orig-radio" checked="@checkedValue" value="@Value">
+    <span class="el-radio-button__inner">@ChildContent</span>
+</label>

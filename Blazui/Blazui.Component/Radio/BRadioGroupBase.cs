@@ -13,6 +13,8 @@ namespace Blazui.Component.Radio
         public EventCallback<string> SelectedValueChanged { get; set; }
 
         [Parameter]
+        public RadioSize Size { get; set; }
+        [Parameter]
         public EventCallback<ChangeEventArgs<string>> SelectedValueChanging { get; set; }
         [Parameter]
         public string SelectedValue { get; set; }
@@ -32,6 +34,7 @@ namespace Blazui.Component.Radio
             };
             if (SelectedValueChanging.HasDelegate)
             {
+                Console.WriteLine("2");
                 await SelectedValueChanging.InvokeAsync(arg);
                 if (arg.DisallowChange)
                 {

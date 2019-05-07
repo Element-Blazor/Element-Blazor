@@ -111,6 +111,18 @@
           "RadioGroup.razor",
           "RadioGroupBase.cs"
         ]
+      },
+      {
+        "title": "单选按钮组",
+        "name": "RadioButton",
+        "files": [
+          "RadioButton.razor",
+          "RadioButtonBase.cs"
+        ]
+      },
+      {
+        "title": "带边框的单选框",
+        "name": "BorderedRadio"
       }
     ]
   }
