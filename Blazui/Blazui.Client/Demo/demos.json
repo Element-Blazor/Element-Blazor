@@ -103,6 +103,14 @@
           "DisallowChangeRadio.razor",
           "DisallowChangeRadioBase.cs"
         ]
+      },
+      {
+        "title": "单选框组",
+        "name": "RadioGroup",
+        "files": [
+          "RadioGroup.razor",
+          "RadioGroupBase.cs"
+        ]
       }
     ]
   }

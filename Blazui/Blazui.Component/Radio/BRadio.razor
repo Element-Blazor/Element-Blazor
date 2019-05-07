@@ -1,15 +1,16 @@
-﻿@inherits RadioBase
+﻿@inherits BRadioBase
 @{
     var isChecked = string.Empty;
     var ariaChecked = false;
 
-    if (Value == SelectedValue)
+    var selectedValue = RadioGroup == null ? SelectedValue : RadioGroup.SelectedValue;
+    if (Value == selectedValue)
     {
         isChecked = "is-checked";
         ariaChecked = true;
     }
 
-    var checkedValue = Value == SelectedValue;
+    var checkedValue = Value == selectedValue;
     var isDisabled = string.Empty;
     var ariaDisabled = false;
     if (IsDisabled)

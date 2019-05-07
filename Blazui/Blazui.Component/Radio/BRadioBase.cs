@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Radio
 {
-    public class RadioBase : ComponentBase
+    public class BRadioBase : ComponentBase
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -20,6 +20,9 @@ namespace Blazui.Component.Radio
         [Parameter]
         public EventCallback<ChangeEventArgs<string>> SelectedValueChanging { get; set; }
 
+        [CascadingParameter]
+        public BRadioGroup RadioGroup { get; set; }
+
         [Parameter]
         public string Value { get; set; }
 
@@ -28,12 +31,17 @@ namespace Blazui.Component.Radio
 
         public event Func<ChangeEventArgs<string>, Task<bool>> OnValueChangingAsync;
 
-        public event Func<ChangeEventArgs<string>, Task> OnValueChangedAsync;
+        public event Func<ChangeEventArgs<string>, Task> OnSelectedValueChangedAsync;
 
         protected async Task OnRadioChangedAsync(UIMouseEventArgs e)
         {
             if (IsDisabled)
             {
+                return;
+            }
+            if (RadioGroup != null)
+            {
+                await RadioGroup.TrySetValueAsync(Value);
                 return;
             }
             var arg = new ChangeEventArgs<string>()
@@ -62,9 +70,9 @@ namespace Blazui.Component.Radio
             {
                 await SelectedValueChanged.InvokeAsync(Value);
             }
-            if (OnValueChangedAsync != null)
+            if (OnSelectedValueChangedAsync != null)
             {
-                await OnValueChangedAsync(arg);
+                await OnSelectedValueChangedAsync(arg);
             }
         }
     }
