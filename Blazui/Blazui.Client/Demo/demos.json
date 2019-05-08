@@ -125,5 +125,18 @@
         "name": "BorderedRadio"
       }
     ]
+  },
+  {
+    "name": "dropdownlist",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicDropDownList",
+        "files": [
+          "BasicDropDownList.razor",
+          "BasicDropDownListBase.cs"
+        ]
+      }
+    ]
   }
 ]
