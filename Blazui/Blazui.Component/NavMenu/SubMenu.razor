@@ -1,17 +1,19 @@
 ﻿@inherits MenuContainer
 @implements IMenuItem
 <li role="menuitem" tabindex="0" aria-haspopup="true"
-    onmouseover="@OnOver"
-    onmouseout="@OnOut"
     class="el-submenu @(active?"is-active":"") @(opened?"is-opened":"")"
     aria-expanded="@(opened?"true":"")">
-    <div onclick="@OnClick" class="el-submenu__title" style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+    <div onmouseover="@OnOver"
+         onmouseout="@OnOut" 
+         onclick="@OnClick" 
+         class="el-submenu__title" 
+         style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
         @Label
         <i class="el-submenu__icon-arrow el-icon-arrow-down"></i>
     </div>
     @if (IsVertical)
     {
-        <ul role="menu" class="el-menu el-menu--inline" style="background-color: @backgroundColor;@(opened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
+        <ul role="menu" class="el-menu el-menu--inline" style="@(opened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
             <CascadingValue Value="this">
                 @ChildContent
             </CascadingValue>
@@ -53,7 +55,6 @@
     public void Active()
     {
         active = true;
-
     }
     public void DeActive()
     {
@@ -65,6 +66,8 @@
             _activedItem.DeActive();
             _activedItem = null;
         }
+        OnOut();
+        StateHasChanged();
     }
 
     public override void ActiveItem(IMenuItem item)
@@ -90,12 +93,25 @@
     {
         //todo: 颜色值经过计算而得
         backgroundColor = Options.HoverColor;
+        textColor = Options.ActiveTextColor;
         //opened = true;
     }
 
     private void OnOut()
     {
+        if (!active || opened) {
+            backgroundColor = Options.BackgroundColor;
+            textColor = Options.TextColor;
+            return;
+        }
+        /*
+        if (IsVertical && !opened) {
+            backgroundColor = Options.HoverColor;
+            textColor = Options.ActiveTextColor;
+        }
         //opened = false;
+        backgroundColor = (!IsVertical || !opened)?Options.HoverColor:Options.BackgroundColor;
+        */
     }
 
     private void OnClick()

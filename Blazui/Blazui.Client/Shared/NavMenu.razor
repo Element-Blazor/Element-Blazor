@@ -6,21 +6,24 @@
 </div>
 <style>
     .sidebar .el-menu {
-        background-color:transparent;
+        background-color: transparent;
     }
 </style>
-@{ 
-    var navs = new[] {"Button","CheckBox","Tabs","Switch","Radio","DropDownList" };
-}
+
 <Menu Mode="vertical" DefaultActive="0" TextColor="#fff" HoverColor="rgba(255,255,255,0.25)" ActiveTextColor="#ffd04b">
-    @foreach (var nav in navs)
-    {
-        <MenuItem Route="@nav.ToLower()" Index="0">@nav</MenuItem>
-    }
-    @*<SubMenu Label="TestSubMenu">
-            <MenuItem Route="navmenu">Button</MenuItem>
-            <MenuItem Route="tabs">Tabs</MenuItem>
-        </SubMenu>*@
+    <MenuItem Route="">快速上手</MenuItem>
+    <SubMenu Label="Basic">
+        <MenuItem Route="button">Button 按钮</MenuItem>
+    </SubMenu>
+    <SubMenu Label="Form">
+        <MenuItem Route="radio">Radio 单选框</MenuItem>
+        <MenuItem Route="checkbox">Checkbox 多选框</MenuItem>
+        <MenuItem Route="dropdownlist">Select 选择器</MenuItem>
+    </SubMenu>
+    <SubMenu Label="Navigation">
+        <MenuItem Route="">NavMenu 导航菜单</MenuItem>
+        <MenuItem Route="switch">Tabs 标签页</MenuItem>
+    </SubMenu>
 </Menu>
 
 @functions {
