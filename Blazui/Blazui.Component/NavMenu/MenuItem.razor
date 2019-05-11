@@ -23,7 +23,10 @@
     private string Route { get; set; }
 
     [CascadingParameter]
-    private Menu ContainerMenu { get; set; }
+    public MenuContainer Container { get; set; }
+
+    [CascadingParameter]
+    public MenuOptions Options { get; set; }
 
     private string textColor;
     private string backgroundColor;
@@ -34,24 +37,28 @@
     public void Active()
     {
         active = true;
-        textColor = ContainerMenu.ActiveTextColor;
-        borderColor = ContainerMenu.ActiveTextColor;
+        textColor = Options.ActiveTextColor;
+        borderColor = Options.ActiveTextColor;
+        backgroundColor = Options.HoverColor;
 
     }
     public void DeActive()
     {
         active = false;
-        textColor = ContainerMenu.TextColor;
+        textColor = Options.TextColor;
         borderColor = "transparent";
+        backgroundColor = Options.BackgroundColor;
+        StateHasChanged();
     }
 
     protected override void OnInit()
     {
-        backgroundColor = ContainerMenu.BackgroundColor;
+        backgroundColor = Options.BackgroundColor;
+        textColor = Options.TextColor;
 
-        if (ContainerMenu.DefaultActive == Index)
+        if (Options.DefaultActiveIndex == Index)
         {
-            ContainerMenu.ChangeActiveItem(this);
+            Container.ActiveItem(this);
         }
 
         base.OnInit();
@@ -60,12 +67,12 @@
     private void OnOver()
     {
         //todo: 颜色值经过计算而得
-        backgroundColor = "rgb(67, 74, 80)";
+        backgroundColor = Options.HoverColor;
     }
 
     private void OnOut()
     {
-        backgroundColor = ContainerMenu.BackgroundColor;
+        backgroundColor = active?Options.HoverColor:Options.BackgroundColor;
     }
 
     private void OnClick()
@@ -75,6 +82,6 @@
             urihelper.NavigateTo(Route);
         }
 
-        ContainerMenu.ChangeActiveItem(this);
+        Container.ActiveItem(this);
     }
 }

@@ -1,5 +1,8 @@
-﻿<CascadingValue Value=this>
-    <ul role="menubar" class="@modeClass el-menu">@ChildContent</ul>
+﻿@inherits MenuContainer
+<CascadingValue Value=this>
+    <CascadingValue Value="Options">
+        <ul role="menubar" class="@modeClass el-menu">@ChildContent</ul>
+    </CascadingValue>
 </CascadingValue>
 
 @functions {
@@ -15,35 +18,36 @@
     private bool Collapse { get; set; } = false;
 
     [Parameter]
-    public string BackgroundColor { get; private set; } = "#fff";
+    private string BackgroundColor { get; set; }
 
     [Parameter]
-    public string TextColor { get; private set; } = "#303133";
+    private string TextColor { get; set; }
 
     [Parameter]
-    public string ActiveTextColor { get; private set; } = "#409EFF";
+    private string ActiveTextColor { get; set; } = "#409EFF";
 
     [Parameter]
-    public string DefaultActive { get; private set; }
+    private string HoverColor { get; set; } = "#ecf5ff";
 
-    public IMenuItem ActiveItem { get; private set; }
+    [Parameter]
+    private string DefaultActive { get; set; }
 
-    public void ChangeActiveItem(IMenuItem item) {
-        if (ActiveItem !=null) {
-            ActiveItem.DeActive();
-        }
-
-        if (item != null) {
-            item.Active();
-            ActiveItem = item;
-        }
-        StateHasChanged();
-    }
+    private MenuOptions Options { get; set; }
 
     protected override void OnInit()
     {
         modeClass = Mode == "horizontal" ? "el-menu--horizontal" : "";
+
+        Options = new MenuOptions
+        {
+            BackgroundColor = BackgroundColor,
+            ActiveTextColor = ActiveTextColor,
+            TextColor = TextColor,
+            DefaultActiveIndex = DefaultActive,
+            HoverColor = HoverColor,
+            Mode = Mode
+        };
+
         base.OnInit();
     }
-
 }

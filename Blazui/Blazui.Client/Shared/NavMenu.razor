@@ -4,61 +4,23 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
-
-<div class="@NavMenuCssClass" onclick="@ToggleNavMenu">
-    <ul class="nav flex-column">
-        @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>*@
-        @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>*@
-        @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>*@
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="button">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Button
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="checkbox">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> CheckBox
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="tabs">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Tabs
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="switch">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Switch
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="radio">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Radio
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="dropdownlist">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> DropDownList
-            </NavLink>
-        </li>
-    </ul>
-</div>
-@*<menu Mode="vertical" DefaultActive="1" TextColor="#fff" BackgroundColor="#545c64" ActiveTextColor="#ffd04b">
-    <MenuItem>菜单项一</MenuItem>
-    <MenuItem Index="1">菜单项（默认选中）</MenuItem>
-    <MenuItem>菜单项三</MenuItem>
-</menu>*@
+<style>
+    .sidebar .el-menu {
+        background-color:transparent;
+    }
+</style>
+<Menu Mode="vertical" DefaultActive="0" TextColor="#fff" HoverColor="rgba(255,255,255,0.25)" ActiveTextColor="#ffd04b">
+    <MenuItem Route="button" Index="0">Button</MenuItem>
+    <MenuItem Route="checkbox">CheckBox</MenuItem>
+    <MenuItem Route="tabs">Tabs</MenuItem>
+    <MenuItem Route="switch">Switch</MenuItem>
+    <MenuItem Route="radio">Radio</MenuItem>
+    <MenuItem Route="dropdownlist">DropDownList</MenuItem>
+    @*<SubMenu Label="TestSubMenu">
+            <MenuItem Route="navmenu">Button</MenuItem>
+            <MenuItem Route="tabs">Tabs</MenuItem>
+        </SubMenu>*@
+</Menu>
 
 @functions {
     bool collapseNavMenu = true;
