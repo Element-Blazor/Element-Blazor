@@ -7,5 +7,6 @@ namespace Blazui.Component.Input
 {
     public class InputValue
     {
+
     }
 }
