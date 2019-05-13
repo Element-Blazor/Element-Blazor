@@ -1,0 +1,26 @@
+﻿@inherits InputBase
+@{ 
+    string isDisabled = string.Empty;
+    string isDisabledClass = string.Empty;
+    if (IsDisabled)
+    {
+        isDisabled = "disabled";
+        isDisabledClass = " is-disabled";
+    }
+
+    string isInputClearable = string.Empty;
+    if (IsClearable)
+    {
+        isInputClearable = "disabled";
+        isDisabledClass += " el-input--suffix";
+    }
+}
+    <div class="el-input @isDisabledClass">
+        <input type="text" placeholder="@Placeholder" class="el-input__inner" value="@InputValue" @isDisabled />
+        <span class="el-input__suffix">
+        <span class="el-input__suffix-inner"><!---->
+            <i class="el-input__icon el-icon-circle-close el-input__clear">
+                </i><!----><!---->
+            </span><!---->
+        </span>
+    </div>
