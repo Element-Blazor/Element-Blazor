@@ -35,9 +35,8 @@ namespace Blazui.Component.Input
             isClearable = false;
         }
 
-        protected void OnChangeEventArgs(InputBase input)
+        protected void OnChangeEventArgs(UIChangeEventArgs input)
         {
-            input.
             int inputNum = 0;
             isClearable = inputNum > 0 && IsClearable;
         }

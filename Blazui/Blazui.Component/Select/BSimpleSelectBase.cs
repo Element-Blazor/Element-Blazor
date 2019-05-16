@@ -29,7 +29,7 @@ namespace Blazui.Component.Select
         [Parameter]
         public string Placeholder { get; set; } = "请选择";
         protected int zIndex { get; set; } = ComponentManager.GenerateZIndex();
-
+        private Task hideTask;
         [Parameter]
         public bool IsShow { get; set; }
 
