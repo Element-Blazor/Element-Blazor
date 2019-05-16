@@ -29,22 +29,24 @@ namespace Blazui.Component.Select
         [Parameter]
         public string Placeholder { get; set; } = "请选择";
         protected int zIndex { get; set; } = ComponentManager.GenerateZIndex();
-        private Task hideTask;
         [Parameter]
         public bool IsShow { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        private bool stopRender;
         [Parameter]
         internal EventCallback<UIMouseEventArgs> OnClick { get; set; }
         protected async Task OnSelectClickAsync(UIMouseEventArgs e)
         {
             if (IsShow)
             {
+                stopRender = true;
                 await style.SetTransformAsync("scaleY(0)");
                 await Task.Delay(10);
             }
+            stopRender = false;
             IsShow = !IsShow;
             if (!IsShow)
             {
@@ -57,14 +59,19 @@ namespace Blazui.Component.Select
             width = rect.Width;
         }
 
+
         protected override async Task OnAfterRenderAsync()
         {
+            if (stopRender)
+            {
+                return;
+            }
+            style = content.Dom(JSRuntime).Style;
             if (!IsShow)
             {
                 return;
             }
             await document.AppendAsync(content);
-            style = content.Dom(JSRuntime).Style;
             await Task.Delay(10);
             await style.SetTransformAsync("scaleY(1)");
         }
