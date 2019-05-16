@@ -127,14 +127,14 @@
     ]
   },
   {
-    "name": "dropdownlist",
+    "name": "select",
     "demos": [
       {
         "title": "基础用法",
-        "name": "BasicDropDownList",
+        "name": "BasicSelect",
         "files": [
-          "BasicDropDownList.razor",
-          "BasicDropDownListBase.cs"
+          "BasicSelect.razor",
+          "BasicSelectBase.cs"
         ]
       }
     ]

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Demo\BasicDropDownList\BasicDropDownListBase.cs">
+    <Compile Update="Demo\BasicSelect\BasicSelectBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
@@ -48,7 +48,7 @@
     <Content Update="Demo\BasicButton\BasicButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BasicDropDownList\BasicDropDownList.razor">
+    <Content Update="Demo\BasicSelect\BasicSelect.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\BasicRadio\BasicRadio.razor">

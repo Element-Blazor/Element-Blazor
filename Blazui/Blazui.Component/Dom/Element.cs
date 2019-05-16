@@ -29,12 +29,28 @@ namespace Blazui.Component.Dom
         {
             return await jSRuntime.InvokeAsync<int>("getOffsetLeft", elementRef);
         }
+
+        public async Task<int> GetOffsetTopAsync()
+        {
+            return await jSRuntime.InvokeAsync<int>("getOffsetTop", elementRef);
+        }
+
+        public async Task<BoundingClientRect> GetBoundingClientRectAsync()
+        {
+            return await jSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", elementRef);
+        }
+
         public int ClientHeight
         {
             get
             {
                 return jSRuntime.InvokeAsync<int>("getClientHeight", elementRef).GetAwaiter().GetResult();
             }
+        }
+
+        public async Task RemoveAsync()
+        {
+            await jSRuntime.InvokeAsync<int>("removeSelf", elementRef);
         }
     }
 }

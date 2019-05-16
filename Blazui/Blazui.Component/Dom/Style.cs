@@ -27,5 +27,25 @@ namespace Blazui.Component.Dom
         {
             return await jSRuntime.InvokeAsync<int>("getPaddingRight", elementRef);
         }
+
+        public async Task<int> GetLeftAsync()
+        {
+            return await jSRuntime.InvokeAsync<int>("getLeft", elementRef);
+        }
+
+        public async Task<int> GetTopAsync()
+        {
+            return await jSRuntime.InvokeAsync<int>("getTop", elementRef);
+        }
+
+        public async Task SetTransformAsync(string value)
+        {
+            await jSRuntime.InvokeAsync<object>("setTransform", elementRef, value);
+        }
+
+        public async Task SetTransitionAsync(string value)
+        {
+            await jSRuntime.InvokeAsync<object>("setTransitionAsync", elementRef, value);
+        }
     }
 }

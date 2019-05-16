@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Client.Demo.BasicDropDownList
+namespace Blazui.Component.Transition
 {
-    public class BasicDropDownListBase : ComponentBase
+    public class BTransitionBase : ComponentBase
     {
+
     }
 }

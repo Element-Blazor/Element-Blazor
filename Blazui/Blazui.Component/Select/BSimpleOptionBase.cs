@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.Select;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.DropDownList
+namespace Blazui.Component.Select
 {
-    public class BDropDownListItemBase : ComponentBase
+    public class BSimpleOptionBase : ComponentBase
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         [CascadingParameter]
-        public BSimpleDropDownList DropDownList { get; set; }
+        public BSimpleSelect DropDownList { get; set; }
     }
 }
