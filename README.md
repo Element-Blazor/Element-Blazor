@@ -8,7 +8,7 @@ http://blazui.com:9000
 #### 使用前提
 参考Blazor使用的前提条件
 
-1. 安装 .Net Core 3.0 Preview 4 Sdk
+1. 安装 .Net Core 3.0 Preview 5 Sdk
 2. 安装 VS2019
 3. 安装所有 VS2019 Blazor Extension
 
