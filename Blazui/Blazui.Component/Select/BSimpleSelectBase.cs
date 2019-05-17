@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Dom;
+using Blazui.Component.EventArgs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -31,14 +32,91 @@ namespace Blazui.Component.Select
         protected int zIndex { get; set; } = ComponentManager.GenerateZIndex();
         [Parameter]
         public bool IsShow { get; set; }
+        [Parameter]
+        public EventCallback<string> ValueChanged { get; set; }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        private bool stopRender;
         [Parameter]
-        internal EventCallback<UIMouseEventArgs> OnClick { get; set; }
-        protected async Task OnSelectClickAsync(UIMouseEventArgs e)
+        public string Value { get; set; }
+
+        public string Text { get; set; }
+
+        private bool stopRender;
+
+        public event Func<ChangeEventArgs<BSimpleOptionBase>, Task<bool>> OnSelectingAsync;
+
+        public event Func<ChangeEventArgs<BSimpleOptionBase>, Task> OnSelectAsync;
+
+        [Parameter]
+        public EventCallback<ChangeEventArgs<BSimpleOptionBase>> OnSelect { get; set; }
+
+        [Parameter]
+        public EventCallback<ChangeEventArgs<BSimpleOptionBase>> OnSelecting { get; set; }
+
+        internal BSimpleOptionBase CurrentSelectedItem
+        {
+            get
+            {
+                return selectedItem;
+            }
+            set
+            {
+                Value = value.Value;
+                selectedItem = value;
+            }
+        }
+
+        private BSimpleOptionBase selectedItem;
+
+        internal void Refresh()
+        {
+            StateHasChanged();
+        }
+
+        internal async Task OnInternalSelectAsync(BSimpleOptionBase item)
+        {
+            var args = new ChangeEventArgs<BSimpleOptionBase>();
+            args.NewValue = item;
+            args.OldValue = CurrentSelectedItem;
+            if (OnSelectingAsync != null)
+            {
+                var disallowChange = await OnSelectingAsync(args);
+                if (disallowChange || args.DisallowChange)
+                {
+                    return;
+                }
+            }
+            if (OnSelecting.HasDelegate)
+            {
+                await OnSelecting.InvokeAsync(args);
+                if (args.DisallowChange)
+                {
+                    return;
+                }
+            }
+            CurrentSelectedItem = item;
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(item.Value);
+            }
+            if (OnSelectAsync != null)
+            {
+                await OnSelectAsync(args);
+            }
+            await Toggle();
+            if (OnSelect.HasDelegate)
+            {
+                await OnSelect.InvokeAsync(args);
+            }
+            else
+            {
+                StateHasChanged();
+            }
+        }
+
+        private async Task Toggle()
         {
             if (IsShow)
             {
@@ -59,9 +137,22 @@ namespace Blazui.Component.Select
             width = rect.Width;
         }
 
+        [Parameter]
+        internal EventCallback<UIMouseEventArgs> OnClick { get; set; }
+        protected async Task OnSelectClickAsync(UIMouseEventArgs e)
+        {
+            await Toggle();
+        }
+
 
         protected override async Task OnAfterRenderAsync()
         {
+            //if (previousSelectedItem != CurrentSelectedItem)
+            //{
+            //    previousSelectedItem = CurrentSelectedItem;
+            //    StateHasChanged();
+            //    return;
+            //}
             if (stopRender)
             {
                 return;

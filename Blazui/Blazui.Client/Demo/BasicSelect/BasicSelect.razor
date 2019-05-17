@@ -1,5 +1,8 @@
 ﻿@inherits BasicSelectBase
-<BSimpleSelect>
-    <BSimpleOption>选项1</BSimpleOption>
-    <BSimpleOption>选项2</BSimpleOption>
+<p>
+    已选择：@Value
+</p>
+<BSimpleSelect bind-Value="@Value">
+    <BSimpleOption Text="选项1"></BSimpleOption>
+    <BSimpleOption Text="选项2"></BSimpleOption>
 </BSimpleSelect>

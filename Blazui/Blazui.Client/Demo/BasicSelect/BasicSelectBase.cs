@@ -8,5 +8,6 @@ namespace Blazui.Client.Demo.BasicSelect
 {
     public class BasicSelectBase : ComponentBase
     {
+        protected string Value;
     }
 }
