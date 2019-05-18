@@ -1,4 +1,15 @@
-﻿window.getClientHeight = function (el) {
+﻿window.onload = function () {
+    document.body.onmouseup = function () {
+        DotNet.invokeMethodAsync('Blazui.Component', 'OnBodyMouseUp');
+    };
+};
+window.childMoveToBody = function (el) {
+    document.body.append(el.children[0]);
+};
+window.getChild = function (el, idx) {
+    return el.children[idx];
+};
+window.getClientHeight = function (el) {
     return el.clientHeight || 0;
 };
 window.getClientWidth = function (el) {

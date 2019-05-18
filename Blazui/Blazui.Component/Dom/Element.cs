@@ -35,6 +35,16 @@ namespace Blazui.Component.Dom
             return await jSRuntime.InvokeAsync<int>("getOffsetTop", elementRef);
         }
 
+        public async Task ChildMoveToBodyAsync()
+        {
+            await jSRuntime.InvokeAsync<object>("childMoveToBody", elementRef);
+        }
+
+        public async Task<ElementRef> GetChildAsync(int index)
+        {
+            return await jSRuntime.InvokeAsync<ElementRef>("getChild", elementRef, index);
+        }
+
         public async Task<BoundingClientRect> GetBoundingClientRectAsync()
         {
             return await jSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", elementRef);
@@ -45,6 +55,14 @@ namespace Blazui.Component.Dom
             get
             {
                 return jSRuntime.InvokeAsync<int>("getClientHeight", elementRef).GetAwaiter().GetResult();
+            }
+        }
+
+        public IReadOnlyList<ElementRef> Children
+        {
+            get
+            {
+                return jSRuntime.InvokeAsync<IReadOnlyList<ElementRef>>("getChildren", elementRef).GetAwaiter().GetResult();
             }
         }
 

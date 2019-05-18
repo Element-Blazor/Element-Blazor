@@ -1,5 +1,6 @@
 ﻿using Blazui.Component.Dom;
 using Blazui.Component.EventArgs;
+using Blazui.Component.Popup;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -18,6 +19,8 @@ namespace Blazui.Component.Select
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
 
+        protected BPopupBase popup;
+
         [Inject]
         private Document document { get; set; }
 
@@ -29,7 +32,6 @@ namespace Blazui.Component.Select
         protected float width { get; set; }
         [Parameter]
         public string Placeholder { get; set; } = "请选择";
-        protected int zIndex { get; set; } = ComponentManager.GenerateZIndex();
         [Parameter]
         public bool IsShow { get; set; }
         [Parameter]
@@ -48,6 +50,7 @@ namespace Blazui.Component.Select
         public event Func<ChangeEventArgs<BSimpleOptionBase>, Task<bool>> OnSelectingAsync;
 
         public event Func<ChangeEventArgs<BSimpleOptionBase>, Task> OnSelectAsync;
+        public event Action OnDispose;
 
         [Parameter]
         public EventCallback<ChangeEventArgs<BSimpleOptionBase>> OnSelect { get; set; }
@@ -105,7 +108,7 @@ namespace Blazui.Component.Select
             {
                 await OnSelectAsync(args);
             }
-            await Toggle();
+            await ToggleAsync();
             if (OnSelect.HasDelegate)
             {
                 await OnSelect.InvokeAsync(args);
@@ -116,18 +119,26 @@ namespace Blazui.Component.Select
             }
         }
 
-        private async Task Toggle()
+        private bool executingToogle = false;
+
+        private async Task ToggleAsync()
         {
+            if (executingToogle)
+            {
+                return;
+            }
+            executingToogle = true;
             if (IsShow)
             {
-                stopRender = true;
+                popup.IsAlllowReRender = false;
                 await style.SetTransformAsync("scaleY(0)");
-                await Task.Delay(10);
+                await Task.Delay(200);
+                popup.IsAlllowReRender = true;
             }
-            stopRender = false;
             IsShow = !IsShow;
             if (!IsShow)
             {
+                executingToogle = false;
                 return;
             }
             var selectDom = elementSelect.Dom(JSRuntime);
@@ -135,36 +146,40 @@ namespace Blazui.Component.Select
             left = rect.Left;
             top = rect.Top + rect.Height;
             width = rect.Width;
+            popup.OnRenderCompleted += Popup_OnRenderCompletedAsync;
+        }
+
+        private async Task Popup_OnRenderCompletedAsync()
+        {
+            popup.OnRenderCompleted -= Popup_OnRenderCompletedAsync;
+            await Task.Delay(10);
+            await style.SetTransformAsync("scaleY(1)");
+            executingToogle = false;
         }
 
         [Parameter]
         internal EventCallback<UIMouseEventArgs> OnClick { get; set; }
+
         protected async Task OnSelectClickAsync(UIMouseEventArgs e)
         {
-            await Toggle();
+            await ToggleAsync();
         }
-
 
         protected override async Task OnAfterRenderAsync()
         {
-            //if (previousSelectedItem != CurrentSelectedItem)
-            //{
-            //    previousSelectedItem = CurrentSelectedItem;
-            //    StateHasChanged();
-            //    return;
-            //}
-            if (stopRender)
-            {
-                return;
-            }
+            popup.OnHide += HideAsync;
             style = content.Dom(JSRuntime).Style;
+            await Task.CompletedTask;
+        }
+
+        private async Task HideAsync()
+        {
+            popup.OnHide -= HideAsync;
             if (!IsShow)
             {
                 return;
             }
-            await document.AppendAsync(content);
-            await Task.Delay(10);
-            await style.SetTransformAsync("scaleY(1)");
+            await ToggleAsync();
         }
     }
 }

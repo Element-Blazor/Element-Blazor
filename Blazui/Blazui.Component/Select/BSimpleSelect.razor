@@ -1,4 +1,5 @@
 ﻿@inherits BSimpleSelectBase
+@using Blazui.Component.Popup
 <div class="el-select" onclick="@OnSelectClickAsync" ref="elementSelect">
     <div class="el-input el-input--suffix">
         <input type="text" readonly="readonly" autocomplete="off" value="@CurrentSelectedItem?.Text" placeholder="@Placeholder" class="el-input__inner" />
@@ -13,7 +14,9 @@
     var leftPx = left + "px";
     var topPx = top + "px";
     var widthPx = width + "px";
-    <div class="el-select-dropdown el-popper" ref="@content" style="transition:transform 0.2s linear 0s; transform:scaleY(0); position:absolute;width:@widthPx; transform-origin: center top 0px; z-index:@zIndex;left:@leftPx;top:@topPx;" x-placement="bottom-start">
+}
+<BPopup ref="@popup">
+    <div class="el-select-dropdown el-popper" ref="@content" style="transition:transform 0.2s linear 0s; transform:scaleY(0); position:absolute;width:@widthPx; transform-origin: center top 0px; z-index:@popup.ZIndex;left:@leftPx;top:@topPx;" x-placement="bottom-start">
         <div class="el-scrollbar" style="">
             <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
                 <ul class="el-scrollbar__view el-select-dropdown__list">
@@ -31,4 +34,4 @@
         </div>
         <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
     </div>
-}
+</BPopup>
