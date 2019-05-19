@@ -167,6 +167,10 @@ namespace Blazui.Component.Select
 
         protected override async Task OnAfterRenderAsync()
         {
+            if (popup == null)
+            {
+                return;
+            }
             popup.OnHide += HideAsync;
             style = content.Dom(JSRuntime).Style;
             await Task.CompletedTask;
