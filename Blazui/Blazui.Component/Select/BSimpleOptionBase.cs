@@ -19,6 +19,9 @@ namespace Blazui.Component.Select
         [Parameter]
         public string Text { get; set; }
 
+        [Parameter]
+        public bool IsDisabled { get; set; }
+
         protected override async Task OnParametersSetAsync()
         {
             if (string.IsNullOrWhiteSpace(Value))
@@ -33,8 +36,12 @@ namespace Blazui.Component.Select
             await Task.CompletedTask;
         }
 
-        public async Task SelectItemAsync()
+        public async Task SelectItemAsync(UIMouseEventArgs e)
         {
+            if (IsDisabled)
+            {
+                return;
+            }
             await Select.OnInternalSelectAsync(this);
         }
     }

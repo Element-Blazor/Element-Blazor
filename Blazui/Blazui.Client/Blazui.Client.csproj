@@ -93,6 +93,9 @@
     <Content Update="Demo\EditableTab\EditableTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Update="Demo\ItemDisabledSelect.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\LeftTab.razor">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

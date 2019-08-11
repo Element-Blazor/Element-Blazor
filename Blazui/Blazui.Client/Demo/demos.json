@@ -136,6 +136,10 @@
           "BasicSelect.razor",
           "BasicSelectBase.cs"
         ]
+      },
+      {
+        "title": "带禁用选项",
+        "name": "ItemDisabledSelect"
       }
     ]
   },
