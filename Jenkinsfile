@@ -1,7 +1,7 @@
 pipeline {
   agent {
-    dockerfile {
-      filename 'Dockerfile'
+    docker {
+      image 'registry.cn-shanghai.aliyuncs.com/wzyuchen/dotnetcoresdk:3.0.100-preview5'
     }
 
   }
