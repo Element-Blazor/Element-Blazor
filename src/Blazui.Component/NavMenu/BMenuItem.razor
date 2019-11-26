@@ -1,0 +1,9 @@
+﻿@inherits BMenuItemBase
+<li role="menuitem" tabindex="0"
+    @onclick="OnClick"
+    @onmouseover="OnOver"
+    @onmouseout="OnOut"
+    class="el-menu-item @(isActive?"is-active":"")"
+    style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+    @ChildContent
+</li>

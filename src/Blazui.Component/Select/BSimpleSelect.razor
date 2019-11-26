@@ -1,0 +1,14 @@
+﻿@inherits BSimpleSelectBase<TValue>
+@typeparam TValue
+@{
+    var suffixIconClsList = new List<string>();
+    suffixIconClsList.Add("el-select__caret");
+    suffixIconClsList.Add("el-icon-arrow-up");
+    if (DropDownOption != null && DropDownOption.IsShow)
+    {
+        suffixIconClsList.Add("is-reverse");
+    }
+}
+<div class="el-select" @onclick="OnSelectClick" @ref="elementSelect">
+    <BInput TValue="string" IsClearable="true" @bind-IsClearButtonClick="IsClearButtonClick" SuffixIcon="@string.Join(" ",suffixIconClsList)" Placeholder="@Placeholder" ValueChanged="UpdateValue" Value="@SelectedOption?.Text" AdditionalClearIcon="el-select__caret"></BInput>
+</div>

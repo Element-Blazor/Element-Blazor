@@ -1,0 +1,4 @@
+﻿@inherits BTabBase
+<BSimpleTab IsAddable="@IsAddable" IsClosable="@IsClosable" IsEditable="@IsEditable" ActiveTabName="@ActiveTabName" TabPosition="@TabPosition" Type="@Type" OnActiveTabChangingAsync="@OnInternalActiveTabChangingAsync" OnActiveTabChanged="OnActiveTabChanged" OnAddingTab="@OnAddingTab">
+    @ChildContent
+</BSimpleTab>

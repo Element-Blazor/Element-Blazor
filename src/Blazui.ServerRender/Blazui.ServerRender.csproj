@@ -1,0 +1,357 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>3f581a13-a2d9-4111-b6fb-a972af542a96</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\FetchData.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Demo\BasicButton\BasicButton.razor" />
+    <None Include="Demo\BasicInput\BasicInput.razor" />
+    <None Include="Demo\BasicRadio\BasicRadio.razor" />
+    <None Include="Demo\BasicSelect\BasicSelect.razor" />
+    <None Include="Demo\BasicSwitch.razor" />
+    <None Include="Demo\BasicTab.razor" />
+    <None Include="Demo\BorderCardTab.razor" />
+    <None Include="Demo\ButtonGroup.razor" />
+    <None Include="Demo\ButtonSize.razor" />
+    <None Include="Demo\CardTab.razor" />
+    <None Include="Demo\DisabledButton.razor" />
+    <None Include="Demo\DisabledRadio\DisabledRadio.razor" />
+    <None Include="Demo\DisabledSwitch.razor" />
+    <None Include="Demo\DisallowChangeRadio\DisallowChangeRadio.razor" />
+    <None Include="Demo\EditableTab\EditableTab.razor" />
+    <None Include="Demo\EditableTab\TestCheckBoxInTab.razor" />
+    <None Include="Demo\ItemDisabledSelect.razor" />
+    <None Include="Demo\LeftTab.razor" />
+    <None Include="Demo\LoadingButton.razor" />
+    <None Include="Demo\RadioButton\RadioButton.razor" />
+    <None Include="Demo\RadioGroup\RadioGroup.razor" />
+    <None Include="Demo\TextButton.razor" />
+    <None Include="Demo\TextSwitch.razor" />
+    <None Include="Pages\Error.razor" />
+    <None Include="Pages\_Host.cshtml" />
+    <None Include="wwwroot\vs\base\worker\workerMain.js" />
+    <None Include="wwwroot\vs\basic-languages\apex\apex.js" />
+    <None Include="wwwroot\vs\basic-languages\azcli\azcli.js" />
+    <None Include="wwwroot\vs\basic-languages\bat\bat.js" />
+    <None Include="wwwroot\vs\basic-languages\clojure\clojure.js" />
+    <None Include="wwwroot\vs\basic-languages\coffee\coffee.js" />
+    <None Include="wwwroot\vs\basic-languages\cpp\cpp.js" />
+    <None Include="wwwroot\vs\basic-languages\csharp\csharp.js" />
+    <None Include="wwwroot\vs\basic-languages\csp\csp.js" />
+    <None Include="wwwroot\vs\basic-languages\css\css.js" />
+    <None Include="wwwroot\vs\basic-languages\dockerfile\dockerfile.js" />
+    <None Include="wwwroot\vs\basic-languages\fsharp\fsharp.js" />
+    <None Include="wwwroot\vs\basic-languages\go\go.js" />
+    <None Include="wwwroot\vs\basic-languages\graphql\graphql.js" />
+    <None Include="wwwroot\vs\basic-languages\handlebars\handlebars.js" />
+    <None Include="wwwroot\vs\basic-languages\html\html.js" />
+    <None Include="wwwroot\vs\basic-languages\ini\ini.js" />
+    <None Include="wwwroot\vs\basic-languages\javascript\javascript.js" />
+    <None Include="wwwroot\vs\basic-languages\java\java.js" />
+    <None Include="wwwroot\vs\basic-languages\kotlin\kotlin.js" />
+    <None Include="wwwroot\vs\basic-languages\less\less.js" />
+    <None Include="wwwroot\vs\basic-languages\lua\lua.js" />
+    <None Include="wwwroot\vs\basic-languages\markdown\markdown.js" />
+    <None Include="wwwroot\vs\basic-languages\msdax\msdax.js" />
+    <None Include="wwwroot\vs\basic-languages\mysql\mysql.js" />
+    <None Include="wwwroot\vs\basic-languages\objective-c\objective-c.js" />
+    <None Include="wwwroot\vs\basic-languages\pascal\pascal.js" />
+    <None Include="wwwroot\vs\basic-languages\perl\perl.js" />
+    <None Include="wwwroot\vs\basic-languages\pgsql\pgsql.js" />
+    <None Include="wwwroot\vs\basic-languages\php\php.js" />
+    <None Include="wwwroot\vs\basic-languages\postiats\postiats.js" />
+    <None Include="wwwroot\vs\basic-languages\powerquery\powerquery.js" />
+    <None Include="wwwroot\vs\basic-languages\powershell\powershell.js" />
+    <None Include="wwwroot\vs\basic-languages\pug\pug.js" />
+    <None Include="wwwroot\vs\basic-languages\python\python.js" />
+    <None Include="wwwroot\vs\basic-languages\razor\razor.js" />
+    <None Include="wwwroot\vs\basic-languages\redis\redis.js" />
+    <None Include="wwwroot\vs\basic-languages\redshift\redshift.js" />
+    <None Include="wwwroot\vs\basic-languages\ruby\ruby.js" />
+    <None Include="wwwroot\vs\basic-languages\rust\rust.js" />
+    <None Include="wwwroot\vs\basic-languages\r\r.js" />
+    <None Include="wwwroot\vs\basic-languages\sb\sb.js" />
+    <None Include="wwwroot\vs\basic-languages\scheme\scheme.js" />
+    <None Include="wwwroot\vs\basic-languages\scss\scss.js" />
+    <None Include="wwwroot\vs\basic-languages\shell\shell.js" />
+    <None Include="wwwroot\vs\basic-languages\solidity\solidity.js" />
+    <None Include="wwwroot\vs\basic-languages\sql\sql.js" />
+    <None Include="wwwroot\vs\basic-languages\st\st.js" />
+    <None Include="wwwroot\vs\basic-languages\swift\swift.js" />
+    <None Include="wwwroot\vs\basic-languages\tcl\tcl.js" />
+    <None Include="wwwroot\vs\basic-languages\typescript\typescript.js" />
+    <None Include="wwwroot\vs\basic-languages\vb\vb.js" />
+    <None Include="wwwroot\vs\basic-languages\xml\xml.js" />
+    <None Include="wwwroot\vs\basic-languages\yaml\yaml.js" />
+    <None Include="wwwroot\vs\editor\editor.main.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.de.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.es.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.fr.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.it.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.ja.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.ko.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.ru.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.zh-cn.js" />
+    <None Include="wwwroot\vs\editor\editor.main.nls.zh-tw.js" />
+    <None Include="wwwroot\vs\language\css\cssMode.js" />
+    <None Include="wwwroot\vs\language\css\cssWorker.js" />
+    <None Include="wwwroot\vs\language\html\htmlMode.js" />
+    <None Include="wwwroot\vs\language\html\htmlWorker.js" />
+    <None Include="wwwroot\vs\language\json\jsonMode.js" />
+    <None Include="wwwroot\vs\language\json\jsonWorker.js" />
+    <None Include="wwwroot\vs\language\typescript\tsMode.js" />
+    <None Include="wwwroot\vs\language\typescript\tsWorker.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview2.19528.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazui.Component\Blazui.Component.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\BasicSelect\BasicSelectBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\CheckBox\CheckBoxGroupBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\CheckBox\DynamicRenderBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\CheckBox\HardCodeBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DatePicker\BasicPickerBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\BasicDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\ExmapleDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\NestDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DisabledRadio\DisabledRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DisallowChangeRadio\DisallowChangeRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\BasicFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\InlineFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\BasicLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\ServiceLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MessageBox\ConfirmMessageBoxBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MessageBox\BasicMessageBoxBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Message\BasicMessageBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Message\StatusMessageBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\RadioButton\RadioButtonBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\RadioGroup\RadioGroupBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\BasicTableBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\TestData.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Demo\BasicButton\BasicButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicInput\BasicInput.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicRadio\BasicRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicSelect\BasicSelect.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BasicTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BorderCardTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\BorderedRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\ButtonGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\ButtonSize.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\CardTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\CheckBox\CheckBoxButtonGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\CheckBox\CheckBoxGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\CheckBox\DynamicRender.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\CheckBox\HardCode.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\DatePicker\BasicPicker.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Dialog\BasicDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Dialog\ExampleDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Dialog\NestDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\DisabledButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\DisabledRadio\DisabledRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\DisabledSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\DisallowChangeRadio\DisallowChangeRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\EditableTab\EditableTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\EditableTab\TestCheckBoxInTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Form\AlignForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Form\BasicForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Form\InlineForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\ItemDisabledSelect.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\LeftTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\LoadingButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Loading\ManualLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Loading\ServiceLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Loading\CustomLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Loading\BasicLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Menu\VerticalMenu.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MessageBox\ConfirmMessageBox.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MessageBox\BasicMessageBox.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Message\StatusMessage.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Message\BasicMessage.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Pagination\BackgroundPagination.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Pagination\BasicPagination.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\RadioButton\RadioButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\RadioGroup\RadioGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\CustomColumnTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\CheckBoxTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\FixHeaderTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\BorderedTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\BasicTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Table\StripeTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\TextButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\TextSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

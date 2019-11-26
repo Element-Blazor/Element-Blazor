@@ -1,0 +1,30 @@
+﻿@inherits PageBase
+@if (demos == null)
+{
+    @("拼命加载中...")
+}
+else
+{
+    <BCard For="@demos">
+        <Header>
+            @context.Title
+        </Header>
+        <Body>
+            <BSimpleTab Type="@TabType.BorderCard">
+                <BSimpleTabPanel Title="运行效果">
+                    <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
+                </BSimpleTabPanel>
+                <BSimpleTabPanel Title="示例代码">
+                    <BTab OnActiveTabChangingAsync="@ActiveTabChangingAsync">
+                        <BTabPanel DataSource="@context.Codes" Content="@(code => GetCode(code.Code, code.Language))" Title="@(code => code.FileName)" Name="@(code=>GetName(code.FileName))"></BTabPanel>
+                    </BTab>
+                </BSimpleTabPanel>
+            </BSimpleTab>
+        </Body>
+    </BCard>
+    <style>
+        .el-card {
+            margin-bottom: 10px;
+        }
+    </style>
+}

@@ -1,0 +1,135 @@
+﻿@inherits BTableBase<TRow>
+@typeparam TRow
+@if (Headers.Any())
+{
+    var styles = new List<string>();
+    var tableClsList = new List<string>();
+    tableClsList.Add("el-table");
+    tableClsList.Add("el-table--fit");
+    tableClsList.Add("el-table--enable-row-hover");
+    tableClsList.Add("el-table--enable-row-transition");
+    if (IsStripe)
+    {
+        tableClsList.Add("el-table--striped");
+    }
+    if (IsBordered)
+    {
+        tableClsList.Add("el-table--border");
+    }
+
+    styles.Add("width:100%");
+    if (Height > 0)
+    {
+        tableClsList.Add("el-table--scrollable-y");
+        styles.Add("height:" + Height + "px");
+    }
+
+    <div style="@string.Join(";",styles)" @ref="Container" class="@string.Join(" ",tableClsList)">
+        <div class="el-table__header-wrapper" @ref="headerElement">
+            <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
+                <colgroup>
+                    @for (int i = 1; i <= Headers.Count; i++)
+                    {
+                        var header = Headers.ElementAt(i - 1);
+                        var width = header.Width;
+                        if (header.IsCheckBox)
+                        {
+                            width = 55;
+                        }
+                        <col name="el-table_1_column_@i" width="@width" />
+                    }
+                    <col name="gutter" width="0" />
+                </colgroup>
+                <thead class="has-gutter">
+                    <tr class="">
+                        @for (int i = 1; i <= Headers.Count; i++)
+                        {
+                            var header = Headers.ElementAt(i - 1);
+                            <th colspan="1" rowspan="1" class="el-table_1_column_@i     is-leaf">
+                                <div class="cell">
+                                    @if (header.IsCheckBox)
+                                    {
+                                        <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
+                                    }
+                                    else
+                                    {
+                                        @header.Text
+                                    }
+                                </div>
+                            </th>
+                        }
+                        <th class="gutter" style="width: 0px; display: none;"></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        @{
+            var bodyStyleList = new List<string>();
+            if (Height > 0)
+            {
+                bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
+            }
+        }
+        <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
+            <table cellspacing="0" cellpadding="0" border="0" class="el-table__body">
+                <colgroup>
+                    @for (int i = 1; i <= Headers.Count; i++)
+                    {
+                        var header = Headers.ElementAt(i - 1);
+                        var width = header.Width;
+                        if (header.IsCheckBox)
+                        {
+                            width = 55;
+                        }
+                        <col name="el-table_1_column_@i" width="@width" />
+                    }
+                </colgroup>
+                <tbody>
+                    @for (int i = 0; i < DataSource.Count; i++)
+                    {
+                        var clsList = new List<string>();
+                        clsList.Add("el-table__row");
+                        if (IsStripe && i % 2 == 1)
+                        {
+                            clsList.Add("el-table__row--striped");
+                        }
+                        var row = DataSource.ElementAt(i);
+                        <tr class="@string.Join(" ",clsList)">
+                            @for (int j = 1; j <= Headers.Count; j++)
+                            {
+                                var header = Headers.ElementAt(j - 1);
+                                <td rowspan="1" colspan="1" class="el-table_1_column_@j  ">
+                                    <div class="cell">
+                                        @if (header.IsCheckBox)
+                                        {
+                                            <BSimpleCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked: Status.UnChecked" StatusChanged="(status=>ChangeRowStatus(status,row))"></BSimpleCheckBox>
+                                        }
+                                        else if (header.Template != null)
+                                        {
+                                            @header.Template(row)
+                                        }
+                                        else if (header.Eval != null)
+                                        {
+                                            @header.Eval(row)
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="el-table__column-resize-proxy" style="display: none;"></div>
+        <div style="margin-top:20px;margin-bottom:20px;">
+            <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
+        </div>
+    </div>
+}
+else
+{
+    <CascadingValue Value="@this">
+        @ChildContent
+    </CascadingValue>
+}
