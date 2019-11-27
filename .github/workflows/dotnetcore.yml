@@ -17,6 +17,8 @@ jobs:
       run: dotnet build --configuration Release
     - name: Build Number Generator
       uses: einaregilsson/build-number@v2
+      with: 
+        token: ${{secrets.github_token}}
     - name: pack nuget
       run: dotnet pack /p:PackageVersion=0.0.2.${BUILD_NUMBER} --no-build --no-restore
     - name: push nuget
