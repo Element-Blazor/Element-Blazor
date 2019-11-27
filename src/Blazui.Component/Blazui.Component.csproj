@@ -6,7 +6,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <Version>0.0.1</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>wzxinchen</Authors>
     <IsPackable>true</IsPackable>
     <Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
