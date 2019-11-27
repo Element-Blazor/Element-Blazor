@@ -1,9 +1,0 @@
-﻿@inherits BTabPanelBase<TModel>
-@typeparam TModel
-@using Blazui.Component.Dynamic
-@foreach (var item in models)
-{
-    <BSimpleTabPanel IsClosable="@item.IsClosable" Name="@item.Name" OnRenderCompleted="@OnInternalEachTabRenderCompleted" OnTabClose="@OnEachTabRenderCompleted" Title="@item.Title">
-        <BDynamicComponent Component="@item.Content"></BDynamicComponent>
-    </BSimpleTabPanel>
-}

@@ -1,9 +1,0 @@
-﻿@page "/"
-@inject IUriHelper uriHelper;
-@functions{ 
-    protected override Task OnInitAsync()
-    {
-        uriHelper.NavigateTo("/button");
-        return base.OnInitAsync();
-    }
-}
