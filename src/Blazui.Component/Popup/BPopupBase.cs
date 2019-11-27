@@ -290,11 +290,12 @@ namespace Blazui.Component.Popup
                 return;
             }
             option.IsNew = false;
-            var rect = await option.Target.Dom(JSRuntime).GetBoundingClientRectAsync();
+            var targetEl = option.Target.Dom(JSRuntime);
+            var rect = await targetEl.GetBoundingClientRectAsync();
+            var top = await targetEl.GetTopRelativeBodyAsync();
             option.Left = rect.Left;
-            option.Top = rect.Bottom;
+            option.Top = top + rect.Height;
             option.Width = rect.Width;
-            option.Height = rect.Height;
             option.IsShow = true;
             option.ShowStatus = AnimationStatus.Begin;
             StateHasChanged();
@@ -324,15 +325,17 @@ namespace Blazui.Component.Popup
                 return;
             }
             option.IsNew = false;
-            var rect = await option.Target.Dom(JSRuntime).GetBoundingClientRectAsync();
+            var targetEl = option.Target.Dom(JSRuntime);
+            var rect = await targetEl.GetBoundingClientRectAsync();
+            var top = await targetEl.GetTopRelativeBodyAsync();
             option.Left = rect.Left;
-            option.Top = rect.Bottom;
+            option.Top = top + rect.Height;
             var style = option.Element.Dom(JSRuntime).Style;
             await style.SetAsync("left", $"{rect.Left}px");
-            await style.SetAsync("top", $"{rect.Bottom + 10}px");
+            await style.SetAsync("top", $"{option.Top + 10}px");
             await style.ClearAsync("display");
             await Task.Delay(10);
-            await style.SetAsync("top", $"{rect.Bottom}px");
+            await style.SetAsync("top", $"{option.Top}px");
             await style.SetAsync("opacity", $"1");
         }
 
