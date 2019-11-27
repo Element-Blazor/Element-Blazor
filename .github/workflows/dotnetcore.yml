@@ -20,6 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: pack nuget
-        run: dotnet pack /p:PackageVersion=0.0.2.${Build.BuildNumber} --no-build --no-restore
+        run: dotnet pack /p:PackageVersion=0.0.2.${GITHUB_SHA} --no-build --no-restore
       - name: push nuget
         run: dotnet push -s https://api.nuget.org/v3/index.json
