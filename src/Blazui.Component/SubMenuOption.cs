@@ -9,9 +9,16 @@ namespace Blazui.Component
 {
     public class SubMenuOption : PopupOption
     {
-        public Action Refresh { get; set; }
+        public SubMenuOption()
+        {
+            IsShow = true;
+        }
         public BSubMenuBase SubMenu { get; set; }
         public MenuOptions Options { get; set; }
         public RenderFragment Content { get; set; }
+        public TaskCompletionSource<int> TaskCompletionSource { get; set; }
+        public Func<SubMenuOption, Task> Close { get; set; }
+        public bool Closing { get; internal set; }
+        public bool CancelClose { get; internal set; }
     }
 }

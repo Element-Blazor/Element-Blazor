@@ -39,6 +39,7 @@ namespace Blazui.Component.NavMenu
 
         protected bool isActive = false;
         protected bool isOpened = false;
+        private SubMenuOption subMenuOption;
 
         protected bool IsVertical
         {
@@ -74,15 +75,30 @@ namespace Blazui.Component.NavMenu
 
         protected void OnOver()
         {
-            //todo: 颜色值经过计算而得
             if (TopMenu.Mode == MenuMode.Horizontal)
             {
-                PopupService.SubMenuOptions.Add(new SubMenuOption()
+                if (isOpened && subMenuOption.Closing)
+                {
+                    subMenuOption.Closing = false;
+                    return;
+                }
+                var taskCompletionSource = new TaskCompletionSource<int>();
+                subMenuOption = new SubMenuOption()
                 {
                     SubMenu = this,
                     Content = ChildContent,
                     Options = Options,
-                    Target = Element
+                    Target = Element,
+                    Closing = false,
+                    TaskCompletionSource = taskCompletionSource
+                };
+                PopupService.SubMenuOptions.Add(subMenuOption);
+                isOpened = true;
+                taskCompletionSource.Task.ContinueWith(task =>
+                {
+                    isOpened = false;
+                    isActive = false;
+                    InvokeAsync(StateHasChanged);
                 });
             }
             else
@@ -99,16 +115,22 @@ namespace Blazui.Component.NavMenu
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
+                subMenuOption.Closing = true;
+                Task.Delay(50).ContinueWith(task =>
+                {
+                    if (!subMenuOption.Closing)
+                    {
+                        return;
+                    }
+                    isOpened = false;
+                    isActive = false;
+                    InvokeAsync(() =>
+                    {
+                        subMenuOption.Close(subMenuOption);
+                    });
+                });
                 return;
             }
-            /*
-            if (IsVertical && !opened) {
-                backgroundColor = Options.HoverColor;
-                textColor = Options.ActiveTextColor;
-            }
-            //opened = false;
-            backgroundColor = (!IsVertical || !opened)?Options.HoverColor:Options.BackgroundColor;
-            */
         }
 
         protected void OnClick()
