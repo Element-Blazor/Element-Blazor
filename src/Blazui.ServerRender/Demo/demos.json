@@ -360,6 +360,13 @@
     "name": "menu",
     "demos": [
       {
+        "title": "横向菜单",
+        "name": "Menu",
+        "files": [
+          "HorizontalMenu.razor"
+        ]
+      },
+      {
         "title": "坚向菜单",
         "name": "Menu",
         "files": [

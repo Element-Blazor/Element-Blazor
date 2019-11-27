@@ -345,4 +345,35 @@
             <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
         </div>
     }
+    for (int i = 0; i < SubMenuOptions.Count; i++)
+    {
+        var option = SubMenuOptions[i];
+        var index = ZIndex++;
+        var height = "height:0;";
+        if (option.IsShow)
+        {
+            if (option.ShowStatus == AnimationStatus.Begin)
+            {
+                height = "height:0;";
+            }
+            else
+            {
+                height = "";
+            }
+        }
+        var style = "display:none";
+        if (option.IsShow)
+        {
+            style = "";
+        }
+        <div class="el-menu--horizontal" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@height transition:height 0.2s;@style;" x-placement="right-start">
+            <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
+                <CascadingValue Value="option.SubMenu">
+                    <CascadingValue Value="option.Options">
+                        @option.Content
+                    </CascadingValue>
+                </CascadingValue>
+            </ul>
+        </div>
+    }
 }

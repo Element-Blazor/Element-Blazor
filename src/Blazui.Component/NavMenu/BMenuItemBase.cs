@@ -54,7 +54,6 @@ namespace Blazui.Component.NavMenu
             textColor = Options.TextColor;
             borderColor = "transparent";
             backgroundColor = Options.BackgroundColor;
-            StateHasChanged();
         }
 
 
@@ -74,11 +73,20 @@ namespace Blazui.Component.NavMenu
         public void OnOver()
         {
             //todo: 颜色值经过计算而得
+            if (Options.Mode == MenuMode.Horizontal || !string.IsNullOrWhiteSpace(Options.HoverColor))
+            {
+                return;
+            }
             backgroundColor = Options.HoverColor;
         }
 
         public void OnOut()
         {
+            if (Options.Mode == MenuMode.Horizontal)
+            {
+                backgroundColor = Options.BackgroundColor;
+                return;
+            }
             backgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
         }
 

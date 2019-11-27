@@ -82,7 +82,7 @@ namespace Blazui.Component.NavMenu
                 TextColor = TextColor,
                 DefaultActiveIndex = DefaultActive,
                 HoverColor = HoverColor,
-                Mode = Mode.ToString().ToLower()
+                Mode = Mode
             };
 
             base.OnInitialized();

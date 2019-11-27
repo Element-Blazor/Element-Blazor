@@ -8,6 +8,10 @@ namespace Blazui.Component.NavMenu
 {
     public class BSubMenuBase : BMenuContainer, IMenuItem
     {
+        protected ElementReference Element { get; set; }
+        [Inject]
+        PopupService PopupService { get; set; }
+
         [Parameter]
         public string Index { get; set; }
 
@@ -40,7 +44,7 @@ namespace Blazui.Component.NavMenu
         {
             get
             {
-                return Options != null && Options.Mode == "vertical";
+                return Options != null && Options.Mode == MenuMode.Vertical;
             }
         }
 
@@ -71,7 +75,20 @@ namespace Blazui.Component.NavMenu
         protected void OnOver()
         {
             //todo: 颜色值经过计算而得
-            backgroundColor = Options.HoverColor;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                PopupService.SubMenuOptions.Add(new SubMenuOption()
+                {
+                    SubMenu = this,
+                    Content = ChildContent,
+                    Options = Options,
+                    Target = Element
+                });
+            }
+            else
+            {
+                backgroundColor = Options.HoverColor;
+            }
             textColor = Options.ActiveTextColor;
             //opened = true;
         }

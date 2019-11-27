@@ -17,14 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\element\fix.css" />
-    <None Include="wwwroot\element\fonts\element-icons.ttf" />
-    <None Include="wwwroot\element\fonts\element-icons.woff" />
-    <None Include="wwwroot\element\fonts\icomoon.eot" />
-    <None Include="wwwroot\element\fonts\icomoon.svg" />
-    <None Include="wwwroot\element\fonts\icomoon.ttf" />
-    <None Include="wwwroot\element\fonts\icomoon.woff" />
-    <None Include="wwwroot\element\index.css" />
     <None Include="wwwroot\js\dom.js" />
   </ItemGroup>
 

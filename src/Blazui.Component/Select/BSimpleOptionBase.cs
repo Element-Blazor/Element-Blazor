@@ -35,7 +35,7 @@ namespace Blazui.Component.Select
             {
                 return;
             }
-            _ = ((BSimpleSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
+            await ((BSimpleSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
         }
     }
 }

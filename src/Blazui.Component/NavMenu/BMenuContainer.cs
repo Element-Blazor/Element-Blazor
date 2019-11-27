@@ -8,7 +8,7 @@ namespace Blazui.Component.NavMenu
 {
     public class BMenuContainer : ComponentBase
     {
-        protected List<IMenuItem> _children = new List<IMenuItem>();
+        internal List<IMenuItem> Children { get; set; } = new List<IMenuItem>();
 
         [CascadingParameter]
         public BMenu TopMenu { get; set; }

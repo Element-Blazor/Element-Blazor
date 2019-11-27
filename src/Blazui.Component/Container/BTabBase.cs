@@ -50,6 +50,11 @@ namespace Blazui.Component.Container
             return await OnActiveTabChangingAsync(tab);
         }
 
+        public void Refresh()
+        {
+            StateHasChanged();
+        }
+
         [Parameter]
         public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
     }
