@@ -22,6 +22,6 @@ jobs:
     - name: pack nuget
       run: dotnet pack src/Blazui.Component/Blazui.Component.csproj /p:PackageVersion=0.0.2.${BUILD_NUMBER} -c Release --no-build --no-restore
     - name: Switch Directory
-      run: cd src/Blazui.Component/Blazui.Component/bin/Release/
+      run: cd ${GITHUB_WORKSPACE}/src/Blazui.Component/Blazui.Component/bin/Release/
     - name: push nuget
       run: dotnet nuget push Blazui.Component.0.0.2.${BUILD_NUMBER}.nupkg -s https://api.nuget.org/v3/index.json -k oy2d44fv6wifoxdcwgkas7iwi37eahuexbsilepbewbnnu
