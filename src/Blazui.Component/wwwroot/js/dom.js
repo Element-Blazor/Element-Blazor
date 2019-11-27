@@ -76,6 +76,15 @@ window.elementAppendChild = function (parent, child) {
     }
     parent.append(child);
 };
+window.getTopRelativeBody = function (el) {
+    if (!el) {
+        return 0;
+    }
+    var bodyRect = document.body.getBoundingClientRect(),
+        elemRect = el.getBoundingClientRect(),
+        offset = elemRect.top - bodyRect.top;
+    return offset;
+}
 window.Remove = function (el) {
     if (!el) {
         return;
