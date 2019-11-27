@@ -1,0 +1,379 @@
+﻿@inherits BPopupBase
+@using System.Globalization;
+@{
+    for (int i = 0; i < Messages.Count; i++)
+    {
+        var message = Messages[i];
+        var index = ZIndex++;
+        <div role="alert" class="el-message el-message--@(message.Type.ToString().ToLower())" @ref="message.Element" style="top: @(message.BeginTop)px;opacity:0;transition:top 0.5s,opacity 0.5s;z-index:@index;">
+            <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
+            <p class="el-message__content">@message.Message</p>
+        </div>
+    }
+    for (int i = 0; i < LoadingOptions.Count; i++)
+    {
+        var option = LoadingOptions[i];
+        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(ZIndex++)" @ref="option.Element">
+            <div class="el-loading-spinner">
+                @if (string.IsNullOrWhiteSpace(option.IconClass))
+                {
+                    <svg viewBox="25 25 50 50" class="circular">
+                        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                    </svg><!---->
+                }
+                else
+                {
+                    <i class="@option.IconClass"></i>
+                    <p class="el-loading-text">@option.Text</p>
+                }
+            </div>
+        </div>
+    }
+
+    for (int i = 0; i < DialogOptions.Count; i++)
+    {
+        var option = DialogOptions[i];
+        var shadowIndex = ZIndex++;
+        var index = ZIndex++;
+        if (option.IsDialog)
+        {
+            <div class="el-dialog__wrapper" style="z-index: @index;">
+                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;">
+                    <div class="el-dialog__header">
+                        <span class="el-dialog__title">@option.Title</span>
+                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" Click="(e=>CloseDialogAsync(option,
+                                        new DialogResult() {
+                                         Result= MessageBoxResult.Close
+                              }))">
+                        </BButton>
+                    </div>
+                    <div class="el-dialog__body">
+                        <BDynamicComponent Component="option.Content"></BDynamicComponent>
+                    </div>
+                    <div class="el-dialog__footer">
+                        <span class="dialog-footer">
+                            @foreach (var button in option.Buttons)
+                            {
+                                @button
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div tabindex="-1" role="dialog" aria-modal="true" aria-label="@option.Title" class="el-message-box__wrapper" style="z-index: @index">
+                <div class="el-message-box" style="opacity:0;" @ref="option.Element">
+                    <div class="el-message-box__header">
+                        <div class="el-message-box__title">
+                            <!---->
+                            <span>@option.Title</span>
+                        </div>
+                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" Click="(e=>CloseDialogAsync(option, new DialogResult() {
+                                         Result= MessageBoxResult.Close
+                              }))">
+                        </BButton>
+                    </div>
+                    <div class="el-message-box__content">
+                        <!---->
+                        <div class="el-message-box__message">
+                            <p><BDynamicComponent Component="option.Content"></BDynamicComponent></p>
+                        </div>
+                        <div class="el-message-box__input" style="display: none;">
+                            <div class="el-input">
+                                <!---->
+                                <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+                            </div>
+                            <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+                        </div>
+                    </div>
+                    <div class="el-message-box__btns">
+                        @foreach (var button in option.Buttons)
+                        {
+                            @button
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount==0 ? "0":"0.5");position:fixed;" @ref="@option.ShadowElement"></div>
+    }
+
+    for (int i = 0; i < DateTimePickerOptions.Count; i++)
+    {
+        var shadowIndex = ZIndex++;
+        var index = ZIndex++;
+        var option = DateTimePickerOptions[i];
+        var year = option.CurrentMonth.Year;
+        var month = option.CurrentMonth.Month;
+        var calendar = CultureInfo.InvariantCulture.Calendar;
+        var dayOfThisMonthStart = new DateTime(year, month, 1);
+        var dayOfThisMonthEnd = dayOfThisMonthStart.AddMonths(1).AddDays(-1);
+        var dayOfWeekOfThisMonthStart = calendar.GetDayOfWeek(dayOfThisMonthStart);
+        var dayOfWeekOfThisMonthEnd = calendar.GetDayOfWeek(dayOfThisMonthEnd);
+        var days = calendar.GetDaysInMonth(year, month);
+        var currentRenderingDay = 0;
+        var dayIndexOfMonthStart = 0;
+        var left = option.Left > 0 ? $"{option.Left}px" : string.Empty;
+        var top = option.Top > 0 ? $"{option.Top}px" : string.Empty;
+        var opacity = 0;
+        var display = "none";
+        if (option.Left > 0)
+        {
+            opacity = 1;
+            display = "";
+        }
+        var prefix = string.Empty;
+        var beginYear = 0;
+        var endYear = 0;
+        if (option.ShowYear > 0)
+        {
+            prefix = option.ShowYear.ToString().Substring(0, 3);
+            beginYear = Convert.ToInt32(prefix + "0");
+            endYear = Convert.ToInt32(prefix + "9");
+        }
+        <div class="el-picker-panel el-date-picker el-popper" style="left:@left;top:@top; z-index: @index; position: absolute;transition:top 0.3s,opacity 0.3s;display:@display;opacity:@opacity;" x-placement="bottom-start" @ref="option.Element">
+            <div class="el-picker-panel__body-wrapper">
+                <div class="el-picker-panel__body">
+                    <div class="el-date-picker__header">
+                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-d-arrow-left" OnClick="e=>GoPrevYear(option)"></BButton>
+                        @if (option.ShowYear == 0 && option.ShowMonth == 0)
+                        {
+                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-arrow-left" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(-1)"></BButton>
+                        }
+                        @if (option.ShowYear == 0 && option.ShowMonth == 0)
+                        {
+                            <span role="button" class="el-date-picker__header-label" @onclick="e => { option.ShowYear = year; option.ShowMonth = 0; }">@year 年</span>
+                            <span role="button" class="el-date-picker__header-label" @onclick="e => { option.ShowMonth = month; option.ShowYear = 0; }">@month 月</span>
+                        }
+                        else if (option.ShowYear == 0)
+                        {
+                            <span role="button" class="el-date-picker__header-label" @onclick="e => { option.ShowYear = year; option.ShowMonth = 0; }">@year 年</span>
+                        }
+                        else
+                        {
+                            <span role="button" class="el-date-picker__header-label">@beginYear - @endYear 年</span>
+                        }
+                        @if (option.ShowYear == 0 && option.ShowMonth == 0)
+                        {
+                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-arrow-right" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(1)"></BButton>
+                        }
+                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right" OnClick="e=>GoNextYear(option)"></BButton>
+                    </div>
+                    <div class="el-picker-panel__content">
+                        @if (option.ShowMonth > 0)
+                        {
+                            <table class="el-month-table">
+                                <tbody>
+                                    <tr>
+                                        <td class="@(option.ShowMonth==1 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,1)">
+                                            <div>
+                                                <a class="cell">一月</a>
+                                            </div>
+                                        </td>
+                                        <td class="@(option.ShowMonth==2 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,2)"><div><a class="cell">二月</a></div></td>
+                                        <td class="@(option.ShowMonth==3 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,3)"><div><a class="cell">三月</a></div></td>
+                                        <td class="@(option.ShowMonth==4 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,4)"><div><a class="cell">四月</a></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="@(option.ShowMonth==5 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,5)"><div><a class="cell">五月</a></div></td>
+                                        <td class="@(option.ShowMonth==6 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,6)"><div><a class="cell">六月</a></div></td>
+                                        <td class="@(option.ShowMonth==7 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,7)"><div><a class="cell">七月</a></div></td>
+                                        <td class="@(option.ShowMonth==8 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,8)"><div><a class="cell">八月</a></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="@(option.ShowMonth==9 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,9)"><div><a class="cell">九月</a></div></td>
+                                        <td class="@(option.ShowMonth==10 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,10)"><div><a class="cell">十月</a></div></td>
+                                        <td class="@(option.ShowMonth==11 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,11)"><div><a class="cell">十一月</a></div></td>
+                                        <td class="@(option.ShowMonth==12 ? "today":string.Empty)" @onclick="e=>OpenMonth(option,12)"><div><a class="cell">十二月</a></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                        else if (option.ShowYear > 0)
+                        {
+                            var yearIndex = 0;
+                            <table class="el-year-table">
+                                <tbody>
+                                    @((MarkupString)"<tr>")
+                                    @for (; beginYear <= endYear; beginYear++)
+                                    {
+                                        var currentYear = beginYear;
+                                        var today = beginYear == option.ShowYear ? "today" : string.Empty;
+                                    <td class="available @today" @onclick="@(e => { option.ShowYear = 0;option.CurrentMonth = new DateTime(currentYear, 1, 1); option.ShowMonth = 1; })">
+                                        <a class="cell">@beginYear</a>
+                                    </td>
+                                    if (++yearIndex % 4 == 0 || beginYear == endYear)
+                                    {
+                                        @((MarkupString)"</tr>")
+                                        if (beginYear != endYear)
+                                        {
+                                            @((MarkupString)"<tr>")
+                                        }
+                                    }
+                                }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <table cellspacing="0" cellpadding="0" class="el-date-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>日</th>
+                                            <th>一</th>
+                                            <th>二</th>
+                                            <th>三</th>
+                                            <th>四</th>
+                                            <th>五</th>
+                                            <th>六</th>
+                                        </tr>
+
+                                        @for (int weekIndex = 1; weekIndex <= 6; weekIndex++)
+                                        {
+                                            <tr class="el-date-table__row">
+                                                @for (int dayOfWeek = 0; dayOfWeek <= 6; dayOfWeek++)
+                                                {
+                                                    currentRenderingDay++;
+                                                    var dayCls = string.Empty;
+                                                    var currentDay = default(DateTime);
+                                                    if (weekIndex == 1)
+                                                    {
+                                                        var diffDays = dayOfWeek - dayOfWeekOfThisMonthStart.GetHashCode();
+                                                        currentDay = dayOfThisMonthStart.AddDays(diffDays);
+                                                        if (diffDays < 0)
+                                                        {
+                                                            dayCls += "prev-month";
+                                                        }
+                                                        else
+                                                        {
+                                                            dayCls += "available";
+                                                            if (dayIndexOfMonthStart == 0)
+                                                            {
+                                                                dayIndexOfMonthStart = currentRenderingDay;
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        currentDay = dayOfThisMonthStart.AddDays(currentRenderingDay - dayIndexOfMonthStart);
+                                                        if (currentDay.Month == month)
+                                                        {
+                                                            dayCls += "available";
+                                                        }
+                                                        else
+                                                        {
+                                                            dayCls += "available next-month";
+                                                        }
+                                                    }
+                                                    if (currentDay == DateTime.Today)
+                                                    {
+                                                        dayCls += " today";
+                                                    }
+                                                    <td class="@dayCls" @onclick="e=>SelectDay(option, currentDay)">
+                                                        <div>
+                                                            <span>
+                                                                @currentDay.Day
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                    </div>
+                </div>
+            </div>
+            <div class="el-picker-panel__footer" style="display: none;">
+                <button type="button" class="el-button el-picker-panel__link-btn el-button--text el-button--mini">
+                    <span>
+                        此刻
+                    </span>
+                </button><button type="button" class="el-button el-picker-panel__link-btn el-button--default el-button--mini is-plain">
+                    <span>
+                        确定
+                    </span>
+                </button>
+            </div>
+            <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
+        </div>
+        <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;opacity:0;position:fixed;" @ref="@option.ShadowElement" @onclick="e=>CloseDateTimePicker(option)"></div>
+    }
+
+    for (int i = 0; i < DropDownOptions.Count; i++)
+    {
+        var option = DropDownOptions[i];
+        var shadowIndex = ZIndex++;
+        var index = ZIndex++;
+        var transform = "scaleY(0)";
+        if (option.IsShow)
+        {
+            if (option.ShowStatus == AnimationStatus.Begin)
+            {
+                transform = "scaleY(0)";
+            }
+            else
+            {
+                transform = "scaleY(1)";
+            }
+        }
+        var style = "display:none";
+        if (option.IsShow)
+        {
+            style = "";
+        }
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@index" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(BPopupBase.ZIndex++);" x-placement="bottom-start">
+            <div class="el-scrollbar" style="">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
+                    <ul class="el-scrollbar__view el-select-dropdown__list">
+                        <CascadingValue Value="option">
+                            @option.OptionContent
+                        </CascadingValue>
+                    </ul>
+                </div>
+                <div class="el-scrollbar__bar is-horizontal">
+                    <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
+                </div>
+                <div class="el-scrollbar__bar is-vertical">
+                    <div class="el-scrollbar__thumb" style="transform: translateY(0%);"></div>
+                </div>
+            </div>
+            <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
+        </div>
+    }
+    for (int i = 0; i < SubMenuOptions.Count; i++)
+    {
+        var option = SubMenuOptions[i];
+        var index = ZIndex++;
+        var height = "height:0;";
+        if (option.IsShow)
+        {
+            if (option.ShowStatus == AnimationStatus.Begin)
+            {
+                height = "height:0;";
+            }
+            else
+            {
+                height = "";
+            }
+        }
+        var style = "display:none";
+        if (option.IsShow)
+        {
+            style = "";
+        }
+        <div class="el-menu--horizontal" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@height transition:height 0.2s;@style;" x-placement="right-start">
+            <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
+                <CascadingValue Value="option.SubMenu">
+                    <CascadingValue Value="option.Options">
+                        @option.Content
+                    </CascadingValue>
+                </CascadingValue>
+            </ul>
+        </div>
+    }
+}

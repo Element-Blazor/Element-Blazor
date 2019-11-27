@@ -1,0 +1,7 @@
+﻿@inherits BCheckBoxGroupBase<TValue>
+@typeparam TValue
+<div role="group" aria-label="checkbox-group" class="el-checkbox-group">
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</div>

@@ -1,0 +1,26 @@
+﻿@inherits BFormBase
+@{
+    var clsList = new List<string>();
+    if (Inline)
+    {
+        clsList.Add("el-form--inline");
+    }
+    switch (LabelAlign)
+    {
+        case LabelAlign.Left:
+            clsList.Add("el-form--label-left");
+            break;
+        case LabelAlign.Right:
+            clsList.Add("el-form--label-right");
+            break;
+        case LabelAlign.Top:
+            clsList.Add("el-form--label-top");
+            break;
+    }
+    clsList.Add("el-form");
+}
+<form class="@string.Join(" ",clsList)" style="@Style">
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</form>

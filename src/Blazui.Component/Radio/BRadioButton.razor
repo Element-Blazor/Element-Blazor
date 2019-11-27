@@ -1,0 +1,42 @@
+﻿@inherits BRadioButtonBase<TValue>
+@typeparam TValue
+@{
+    var isChecked = string.Empty;
+    var ariaChecked = false;
+    var currentSelectedValue = default(TValue);
+    if (RadioGroup != null)
+    {
+        currentSelectedValue = RadioGroup.SelectedValue;
+    }
+    else if (FormItem != null)
+    {
+        currentSelectedValue = FormItem.Value;
+    }
+    else
+    {
+        currentSelectedValue = SelectedValue;
+    }
+    var checkedValue = TypeHelper.Equal(Value, currentSelectedValue);
+    if (checkedValue)
+    {
+        isChecked = "is-active";
+        ariaChecked = true;
+    }
+
+    var isDisabled = string.Empty;
+    var ariaDisabled = false;
+    if (IsDisabled)
+    {
+        isDisabled = "is-disabled";
+        ariaDisabled = true;
+    }
+    var size = RadioGroup == null ? string.Empty : RadioGroup.Size.ToString().ToLower();
+    if (!string.IsNullOrWhiteSpace(size))
+    {
+        size = "el-radio-button--" + size;
+    }
+}
+<label role="radio" tabindex="0" class="el-radio-button @isChecked @isDisabled @size" @onclick="OnRadioChanged" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
+    <input type="radio" tabindex="-1" class="el-radio-button__orig-radio" checked="@checkedValue" value="@currentSelectedValue">
+    <span class="el-radio-button__inner">@ChildContent</span>
+</label>

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+    <Version>0.0.1</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>wzxinchen</Authors>
+    <IsPackable>true</IsPackable>
+    <Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ComponentManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\dom.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+  </ItemGroup>
+
+
+</Project>

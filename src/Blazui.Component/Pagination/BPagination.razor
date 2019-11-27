@@ -1,0 +1,26 @@
+﻿@inherits BPaginationBase
+@{
+    var pageClsList = new List<string>();
+    pageClsList.Add("el-pagination");
+    if (Background)
+    {
+        pageClsList.Add("is-background");
+    }
+}
+<div class="@string.Join(" ",pageClsList)">
+    <BButton Icon="el-icon-arrow-left" IsDisabled="previousDisabled" OnClick="(e=>Jump(CurrentPage-1))"></BButton>
+    <ul class="el-pager">
+        @for (int i = 1; i <= pageCount; i++)
+        {
+            var clsList = new List<string>();
+            clsList.Add("number");
+            var page = i;
+            if (page == CurrentPage)
+            {
+                clsList.Add("active");
+            }
+            <li class="@string.Join(" ",clsList)" @onclick="(e=>Jump(page))">@(@page)</li>
+        }
+    </ul>
+    <BButton Icon="el-icon-arrow-right" IsDisabled="nextDisabled" OnClick="(e=>Jump(CurrentPage+1))"></BButton>
+</div>

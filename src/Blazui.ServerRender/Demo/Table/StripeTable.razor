@@ -1,0 +1,9 @@
+﻿@inherits BasicTableBase
+
+<BTable TRow="TestData" DataSource="Datas" IsStripe="true">
+    <BTableColumns TRow="TestData">
+        <BTableColumn TRow="TestData" Width="100" Property="@(x=>x.Name)" Text="姓名"></BTableColumn>
+        <BTableDateTimeColumn TRow="TestData" Width="200" Format="yyyy-MM-dd" Property="@(x=>x.Time)" Text="时间"></BTableDateTimeColumn>
+        <BTableColumn TRow="TestData" Width="300" Property="@(x=>x.Address)" Text="地址"></BTableColumn>
+    </BTableColumns>
+</BTable>

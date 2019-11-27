@@ -1,0 +1,7 @@
+﻿@inherits CheckBoxGroupBase
+已选中数据：@string.Join(",", SelectedValues)
+<br />
+<BSimpleCheckBox Value="true" Status="@Status" StatusChanged="status=>SelectAll(status)">全选</BSimpleCheckBox>
+<BCheckBoxGroup TValue="List<int>">
+    <BCheckBoxButton TValue="int" Label="x=>x"  TModel="string" Value="x=>x.Length" DataSource="@Values" SelectedItems="SelectedValues"></BCheckBoxButton>
+</BCheckBoxGroup>

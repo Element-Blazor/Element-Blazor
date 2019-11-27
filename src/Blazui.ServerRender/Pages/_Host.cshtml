@@ -1,0 +1,34 @@
+﻿@page "/"
+@namespace Blazui.ServerRender.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+</head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
+
+    <script src="/_content/Blazui.Component/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs' }});
+        require(['vs/editor/editor.main'], function () {
+            window.renderHightlight = function (el) {
+                monaco.editor.colorizeElement(el.children[0], {
+                    theme: "vs"
+                });
+            }
+        });
+    </script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

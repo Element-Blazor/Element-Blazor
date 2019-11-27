@@ -1,0 +1,22 @@
+﻿@inherits BSubMenuBase
+<li role="menuitem" tabindex="0" aria-haspopup="true"
+    class="el-submenu @(isActive?"is-active":"") @(isOpened?"is-opened":"")"
+    aria-expanded="@(isOpened?"true":"")">
+    <div @onmouseover="OnOver"
+         @onmouseout="OnOut"
+         @onclick="OnClick"
+         @ref="Element"
+         class="el-submenu__title"
+         style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+        @Label
+        <i class="el-submenu__icon-arrow el-icon-arrow-down"></i>
+    </div>
+    @if (IsVertical)
+    {
+        <ul role="menu" class="el-menu el-menu--inline" style="@(isOpened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
+            <CascadingValue Value="this">
+                @ChildContent
+            </CascadingValue>
+        </ul>
+    }
+</li>

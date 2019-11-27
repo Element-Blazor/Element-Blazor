@@ -1,0 +1,47 @@
+﻿@inherits BFormItemBase<TValue>
+@typeparam TValue
+@{
+
+    var clsList = new List<string>();
+    clsList.Add("el-form-item");
+    if (IsRequired)
+    {
+        clsList.Add("is-required");
+    }
+    var isError = ValidationResult != null && !ValidationResult.IsValid;
+    if (isError)
+    {
+        clsList.Add("is-error");
+    }
+    var labelStyles = new List<string>();
+    var bodyStyles = new List<string>();
+    if (!Form.Inline)
+    {
+        labelStyles.Add("width:100px");
+
+        if (Form.LabelAlign != LabelAlign.Top)
+        {
+            bodyStyles.Add("margin-left:100px");
+        }
+    }
+}
+<div class="@string.Join(" ",clsList)">
+    <label for="name" class="el-form-item__label" style="@string.Join(";",labelStyles)">@Label</label>
+    <div class="el-form-item__content" style="@string.Join(";",bodyStyles)">
+        <CascadingValue Value="this">
+            @ChildContent
+        </CascadingValue>
+        @if (ValidationResult != null && !ValidationResult.IsValid)
+        {
+            @foreach (var errorMessage in ValidationResult.ErrorMessages)
+            {
+                var marginTop = IsShowing ? "3px" : "0px";
+                var opacity = IsShowing ? "0" : "1";
+                <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                    @errorMessage
+                </div>
+            }
+        }
+    </div>
+
+</div>
