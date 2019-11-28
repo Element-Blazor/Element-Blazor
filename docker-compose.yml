@@ -1,0 +1,6 @@
+web:
+  image: registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/blazui:latest
+  ports:
+    - "9000:80"
+  restart: always
+  hostname: blazui

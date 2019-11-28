@@ -16,7 +16,6 @@ namespace Blazui.Component
         public BlazuiException(string message, Exception exception)
             : base(message, exception)
         {
-
         }
     }
 }

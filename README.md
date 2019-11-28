@@ -29,18 +29,33 @@ Blazui 演示地址：http://blazui.com:9000
 
 1. 新建 Blazor 服务器端渲染应用
 2. 安装 Nuget 包 Blazui.Component
-3. 修改 Pages 文件夹下的 _Host.cshtml 文件内容，引入下面三个 css 文件
+3. 修改 Pages 文件夹下的 _Host.cshtml 为以下内容
 
 ```
-    <link href="/_content/Blazui.Component/element/index.css" rel="stylesheet" />
-    <link href="/_content/Blazui.Component/element/fix.css" rel="stylesheet" />
+@page "/"
+@namespace Blazui.ServerRender.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
-```
-然后在官方引入的唯一的 js 文件上方引入下面的 js 文件
+</head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
 
-```
-    <script src="/_content/Blazui.Component/js/dom.js"></script>
-```
+    <script src="_content/Blazui.Component/js/dom.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>
+
 4. 在 _Imports.razor 文件中添加以下代码
 
 ```
@@ -60,6 +75,26 @@ Blazui 演示地址：http://blazui.com:9000
 @using Blazui.Component.Form
 @using Blazui.Component.Select
 ```
+在 Startup.cs 的 ConfigureServices 方法中添加以下代码
+
+```
+services.AddBlazuiServices();
+```
+为了使弹窗类组件生效，需要将 MainLayout.razor 的内容改为如下
+
+```
+@inherits LayoutComponentBase
+<BPopup></BPopup>
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    @Body
+</div>
+```
+
 
 5. 在任意一个页面输入以下代码，运行可看效果
 
@@ -72,27 +107,28 @@ Blazui 演示地址：http://blazui.com:9000
 
 #### 计划
 
-###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin :fa-spinner: 
-###### nuget 包与开发文档 :fa-spinner: 
+###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin [ ]
+###### nuget 包
+###### 开发文档 [√]
 
 #### 可用组件列表
 
-###### 表格组件 :fa-check: 
-###### 消息提示组件 :fa-check: 
-###### Loading组件 :fa-check: 
-###### 下拉菜单组件 :fa-check: 
-###### 对话框组件 :fa-check: 
-###### 表单组件 :fa-check: 
-###### 按钮组件 :fa-check: 
-###### 输入框组件 :fa-check: 
-###### Radio组件 :fa-check: 
-###### 复选框组件 :fa-check: 
-###### Switch组件 :fa-check: 
-###### 导航菜单组件 :fa-check: 
-###### 标签页组件 :fa-check: 
-###### 分页组件 :fa-check: 
-###### 消息框组件 :fa-check: 
-###### 日期选择器组件 :fa-check: 
+###### 表格组件 [√] 
+###### 消息提示组件 [√] 
+###### Loading组件 [√] 
+###### 下拉菜单组件 [√] 
+###### 对话框组件 [√] 
+###### 表单组件 [√] 
+###### 按钮组件 [√] 
+###### 输入框组件 [√] 
+###### Radio组件 [√] 
+###### 复选框组件 [√] 
+###### Switch组件 [√] 
+###### 导航菜单组件 [√] 
+###### 标签页组件 [√] 
+###### 分页组件 [√] 
+###### 消息框组件 [√] 
+###### 日期选择器组件 [√] 
 
 #### 关注与讨论
 

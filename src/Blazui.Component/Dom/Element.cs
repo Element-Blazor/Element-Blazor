@@ -54,9 +54,9 @@ namespace Blazui.Component.Dom
             return await jSRuntime.InvokeAsync<BoundingClientRect>("getBoundingClientRect", elementReference);
         }
 
-        public async Task<int> GetTopRelativeBodyAsync()
+        public async Task<float> GetTopRelativeBodyAsync()
         {
-            return await jSRuntime.InvokeAsync<int>("getTopRelativeBody", elementReference);
+            return await jSRuntime.InvokeAsync<float>("getTopRelativeBody", elementReference);
         }
 
         public async Task SetDisabledAsync(bool isDisabled)

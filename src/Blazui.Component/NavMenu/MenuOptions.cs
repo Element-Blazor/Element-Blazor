@@ -19,6 +19,6 @@ namespace Blazui.Component.NavMenu
 
         public string DefaultActiveIndex { get; set; }
 
-        public string Mode { get; set; }
+        public MenuMode Mode { get; set; }
     }
 }

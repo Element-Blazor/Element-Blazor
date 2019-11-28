@@ -8,6 +8,10 @@ namespace Blazui.Component.NavMenu
 {
     public class BSubMenuBase : BMenuContainer, IMenuItem
     {
+        protected ElementReference Element { get; set; }
+        [Inject]
+        PopupService PopupService { get; set; }
+
         [Parameter]
         public string Index { get; set; }
 
@@ -35,27 +39,34 @@ namespace Blazui.Component.NavMenu
 
         protected bool isActive = false;
         protected bool isOpened = false;
+        private SubMenuOption subMenuOption;
 
         protected bool IsVertical
         {
             get
             {
-                return Options != null && Options.Mode == "vertical";
+                return Options != null && Options.Mode == MenuMode.Vertical;
             }
         }
 
-        public void Active()
+        public void Activate()
         {
             isActive = true;
-            isOpened = true;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                isOpened = true;
+            }
         }
-        public void DeActive()
+        public void DeActivate()
         {
             isActive = false;
-            isOpened = false;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                isOpened = false;
+            }
             borderColor = "transparent";
 
-            TopMenu.DeActive();
+            //TopMenu.DeActive();
             OnOut();
             StateHasChanged();
         }
@@ -68,30 +79,92 @@ namespace Blazui.Component.NavMenu
             base.OnInitialized();
         }
 
-        protected void OnOver()
+        protected async Task OnOverAsync()
         {
-            //todo: 颜色值经过计算而得
-            backgroundColor = Options.HoverColor;
-            textColor = Options.ActiveTextColor;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                if (isOpened && subMenuOption.Closing)
+                {
+                    subMenuOption.Closing = false;
+                    return;
+                }
+                var taskCompletionSource = new TaskCompletionSource<int>();
+                subMenuOption = new SubMenuOption()
+                {
+                    SubMenu = this,
+                    Content = ChildContent,
+                    Options = Options,
+                    Target = Element,
+                    Closing = false,
+                    TaskCompletionSource = taskCompletionSource
+                };
+                var prevMenuOption = PopupService.SubMenuOptions.FirstOrDefault();
+                if (prevMenuOption != null)
+                {
+                    await prevMenuOption.Close(prevMenuOption);
+                }
+                PopupService.SubMenuOptions.Add(subMenuOption);
+                isOpened = true;
+                await taskCompletionSource.Task;
+                DeActivate();
+            }
+            else
+            {
+                backgroundColor = Options.HoverColor;
+                textColor = Options.ActiveTextColor;
+                Activate();
+            }
             //opened = true;
+        }
+
+        internal async Task CloseAsync()
+        {
+            await subMenuOption.Close(subMenuOption);
+            isOpened = false;
+            isActive = false;
+        }
+
+        internal void CancelClose()
+        {
+            if (subMenuOption == null)
+            {
+                return;
+            }
+            subMenuOption.CancelClose = true;
         }
 
         protected void OnOut()
         {
-            if (!isActive || isOpened)
+            if (isActive || isOpened)
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
-                return;
+                if (TopMenu.Mode == MenuMode.Horizontal)
+                {
+                    subMenuOption.Closing = true;
+                    Task.Delay(50).ContinueWith(task =>
+                    {
+                        if (!subMenuOption.Closing)
+                        {
+                            return;
+                        }
+                        isOpened = false;
+                        isActive = false;
+                        if (subMenuOption.Close == null)
+                        {
+                            return;
+                        }
+                        InvokeAsync(() =>
+                        {
+                            subMenuOption.Close(subMenuOption);
+                        });
+                    });
+                }
+                else
+                {
+                    isActive = false;
+                }
             }
-            /*
-            if (IsVertical && !opened) {
-                backgroundColor = Options.HoverColor;
-                textColor = Options.ActiveTextColor;
-            }
-            //opened = false;
-            backgroundColor = (!IsVertical || !opened)?Options.HoverColor:Options.BackgroundColor;
-            */
         }
 
         protected void OnClick()

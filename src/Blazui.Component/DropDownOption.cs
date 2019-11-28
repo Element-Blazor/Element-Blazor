@@ -12,9 +12,7 @@ namespace Blazui.Component
     {
         public Action Refresh { get; set; }
         public object Select { get; set; }
-        public Action<object> OnSelectItem { get; set; }
         public RenderFragment OptionContent { get; set; }
-        internal float Height { get; set; }
         internal float Width { get; set; }
     }
 }

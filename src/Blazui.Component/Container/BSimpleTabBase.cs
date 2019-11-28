@@ -28,6 +28,79 @@ namespace Blazui.Component.Container
         [Parameter]
         public bool IsEditable { get; set; }
 
+        [Parameter]
+        public TabPosition TabPosition { get; set; }
+        public ObservableCollection<ITab> TabPanels { get; private set; } = new ObservableCollection<ITab>();
+
+        [Inject]
+        private IJSRuntime JSRuntime { get; set; }
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
+
+        [Parameter]
+        public EventCallback<BChangeEventArgs<ITab>> OnActiveTabChanged { get; set; }
+
+        [Parameter]
+        public Func<ITab, Task<bool>> OnActiveTabChangingAsync { get; set; }
+
+        internal string activeTabName;
+        [Parameter]
+        public string ActiveTabName
+        {
+            get
+            {
+                return activeTabName;
+            }
+            set
+            {
+                activeTabName = value;
+            }
+        }
+
+
+        [Parameter]
+        public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
+
+        public ITab ActiveTab { get; internal set; }
+        private int barOffsetLeft;
+
+        public int BarOffsetLeft
+        {
+            get
+            {
+                return barOffsetLeft;
+            }
+            set
+            {
+                barOffsetLeft = value;
+                this.StateHasChanged();
+            }
+        }
+        private int barWidth;
+        public int BarWidth
+        {
+            get
+            {
+                return barWidth;
+            }
+            set
+            {
+                barWidth = value;
+            }
+        }
+        internal async Task AddTabAsync(ITab tab)
+        {
+            if (TabPanels.Any(x => x.Name == tab.Name))
+            {
+                return;
+            }
+            TabPanels.Add(tab);
+            if (ActiveTab == null)
+            {
+                await SetActivateTabAsync(tab);
+            }
+        }
+
         internal (string headerPosition, string tabPosition) GetPosition()
         {
             var headerPosition = string.Empty;
@@ -53,80 +126,6 @@ namespace Blazui.Component.Container
             }
             return (headerPosition, tabPosition);
         }
-
-        [Parameter]
-        public TabPosition TabPosition { get; set; }
-        public ObservableCollection<ITab> TabPanels { get; private set; } = new ObservableCollection<ITab>();
-
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
-        private int barOffsetLeft;
-
-        public int BarOffsetLeft
-        {
-            get
-            {
-                return barOffsetLeft;
-            }
-            set
-            {
-                barOffsetLeft = value;
-                this.StateHasChanged();
-            }
-        }
-        private int barWidth;
-        public int BarWidth
-        {
-            get
-            {
-                return barWidth;
-            }
-            set
-            {
-                barWidth = value;
-                this.StateHasChanged();
-            }
-        }
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-
-        [Parameter]
-        public EventCallback<BChangeEventArgs<ITab>> OnActiveTabChanged { get; set; }
-
-        [Parameter]
-        public Func<ITab, Task<bool>> OnActiveTabChangingAsync { get; set; }
-
-        internal string activeTabName;
-        [Parameter]
-        public string ActiveTabName
-        {
-            get
-            {
-                return activeTabName;
-            }
-            set
-            {
-                activeTabName = value;
-            }
-        }
-        public ITab ActiveTab { get; internal set; }
-
-        internal async Task AddTabAsync(ITab tab)
-        {
-            if (TabPanels.Any(x => x.Name == tab.Name))
-            {
-                return;
-            }
-            TabPanels.Add(tab);
-            if (ActiveTab == null)
-            {
-                await SetActivateTabAsync(tab);
-            }
-        }
-
-        [Parameter]
-        public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
-
         protected override void OnAfterRender(bool firstRender)
         {
             if (!TabPanels.Any())
@@ -170,6 +169,7 @@ namespace Blazui.Component.Container
             }
             BarWidth = barWidth;
             BarOffsetLeft = barOffsetLeft;
+            StateHasChanged();
         }
 
         public void Refresh()

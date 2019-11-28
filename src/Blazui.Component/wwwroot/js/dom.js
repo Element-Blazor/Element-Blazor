@@ -83,7 +83,7 @@ window.getTopRelativeBody = function (el) {
     var bodyRect = document.body.getBoundingClientRect(),
         elemRect = el.getBoundingClientRect(),
         offset = elemRect.top - bodyRect.top;
-    return offset;
+    return this.parseFloat(offset);
 }
 window.Remove = function (el) {
     if (!el) {

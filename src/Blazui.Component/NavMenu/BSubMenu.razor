@@ -2,9 +2,10 @@
 <li role="menuitem" tabindex="0" aria-haspopup="true"
     class="el-submenu @(isActive?"is-active":"") @(isOpened?"is-opened":"")"
     aria-expanded="@(isOpened?"true":"")">
-    <div @onmouseover="OnOver"
+    <div @onmouseover="OnOverAsync"
          @onmouseout="OnOut"
          @onclick="OnClick"
+         @ref="Element"
          class="el-submenu__title"
          style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
         @Label

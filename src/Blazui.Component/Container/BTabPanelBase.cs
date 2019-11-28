@@ -75,6 +75,7 @@ namespace Blazui.Component.Container
                 Title = Title(x),
                 Content = Content(x)
             }).ToList();
+            TabContainer.Refresh();
         }
 
         //protected async Task OnRenderCompletedInternalAsync(ITab tab)
@@ -139,22 +140,22 @@ namespace Blazui.Component.Container
 
         protected async Task OnInternalEachTabRenderCompleted(ITab tab)
         {
-            //if (OnEachTabRenderCompleted.HasDelegate)
-            //{
-            //    await OnEachTabRenderCompleted.InvokeAsync(tab);
-            //}
+            if (OnEachTabRenderCompleted.HasDelegate)
+            {
+                await OnEachTabRenderCompleted.InvokeAsync(tab);
+            }
         }
 
         [Parameter]
-        public Func<BTabPanelBase<T>, Task> OnAllTabRenderCompletedAsync { get; set; }
+        public EventCallback<BTabPanelBase<T>> OnAllTabRenderCompleted { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            //if (OnAllTabRenderCompletedAsync != null)
-            //{
-            //    await OnAllTabRenderCompletedAsync(this);
-            //}
-            //await base.OnAfterRenderAsync(firstRender);
+            if (OnAllTabRenderCompleted.HasDelegate)
+            {
+                await OnAllTabRenderCompleted.InvokeAsync(this);
+            }
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Blazui.Component.Dom;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace Blazui.Component.Popup
         internal protected List<DialogOption> DialogOptions = new List<DialogOption>();
         internal protected List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
         internal protected List<DropDownOption> DropDownOptions = new List<DropDownOption>();
+        internal protected List<SubMenuOption> SubMenuOptions = new List<SubMenuOption>();
 
         internal async Task CloseDialogAsync(DialogOption option, DialogResult result)
         {
@@ -94,6 +96,35 @@ namespace Blazui.Component.Popup
             PopupService.DropDownOptions.CollectionChanged -= DropDownOptions_CollectionChanged;
             PopupService.DropDownOptions = new ObservableCollection<DropDownOption>();
             PopupService.DropDownOptions.CollectionChanged += DropDownOptions_CollectionChanged;
+
+            PopupService.SubMenuOptions.CollectionChanged -= SubMenuOptions_CollectionChanged;
+            PopupService.SubMenuOptions = new ObservableCollection<SubMenuOption>();
+            PopupService.SubMenuOptions.CollectionChanged += SubMenuOptions_CollectionChanged;
+        }
+
+        private void SubMenuOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var option = e.NewItems.OfType<SubMenuOption>().FirstOrDefault();
+                option.IsNew = true;
+                option.Instance = this;
+                option.Close = CloseSubMenuAsync;
+                SubMenuOptions.Add(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var option = e.OldItems.OfType<SubMenuOption>().FirstOrDefault();
+                SubMenuOptions.Remove(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
         }
 
         private void DropDownOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -280,8 +311,29 @@ namespace Blazui.Component.Popup
             _ = RenderDialogAsync();
             _ = RenderDateTimePickerAsync();
             _ = RenderDropDownAsync();
+            _ = RenderSubMenuAsync();
         }
 
+        private async Task RenderSubMenuAsync()
+        {
+            var option = SubMenuOptions.FirstOrDefault(x => x.IsNew);
+            if (option == null)
+            {
+                return;
+            }
+            option.IsNew = false;
+            var targetEl = option.Target.Dom(JSRuntime);
+            var rect = await targetEl.GetBoundingClientRectAsync();
+            var top = await targetEl.GetTopRelativeBodyAsync();
+            option.Left = rect.Left;
+            option.Top = top + rect.Height;
+            option.IsShow = true;
+            option.ShowStatus = AnimationStatus.Begin;
+            StateHasChanged();
+            await Task.Delay(10);
+            option.ShowStatus = AnimationStatus.End;
+            StateHasChanged();
+        }
         private async Task RenderDropDownAsync()
         {
             var option = DropDownOptions.FirstOrDefault(x => x.IsNew);
@@ -315,6 +367,42 @@ namespace Blazui.Component.Popup
             await Task.Delay(200);
             PopupService.DropDownOptions.Remove(option);
             option.Refresh();
+        }
+
+        internal async Task CloseSubMenuAsync(SubMenuOption option)
+        {
+            option.IsShow = false;
+            //option.HideStatus = AnimationStatus.Begin;
+            StateHasChanged();
+            await Task.Delay(200);
+            //option.HideStatus = AnimationStatus.End;
+            //StateHasChanged();
+            //await Task.Delay(200);
+            PopupService.SubMenuOptions.Remove(option);
+            option.TaskCompletionSource.TrySetResult(0);
+        }
+
+        internal void ShowSubMenu(SubMenuOption option)
+        {
+            option.Closing = false;
+        }
+
+        internal void ReadyCloseSubMenu(SubMenuOption option)
+        {
+            if (option.CancelClose)
+            {
+                option.CancelClose = false;
+                return;
+            }
+            option.Closing = true;
+            Task.Delay(500).ContinueWith(task =>
+            {
+                if (!option.Closing)
+                {
+                    return;
+                }
+                _ = CloseSubMenuAsync(option);
+            });
         }
 
         async Task RenderDateTimePickerAsync()
