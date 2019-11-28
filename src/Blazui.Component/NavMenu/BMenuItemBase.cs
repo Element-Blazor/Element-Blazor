@@ -32,6 +32,8 @@ namespace Blazui.Component.NavMenu
         public BMenuContainer Menu { get; set; }
 
         [CascadingParameter]
+        public BSubMenu ParentMenu { get; set; }
+        [CascadingParameter]
         public MenuOptions Options { get; set; }
 
         protected string textColor;

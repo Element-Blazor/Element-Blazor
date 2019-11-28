@@ -1,5 +1,6 @@
 ﻿using Blazui.Component.Dom;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ namespace Blazui.Component.Popup
             PopupService.DropDownOptions = new ObservableCollection<DropDownOption>();
             PopupService.DropDownOptions.CollectionChanged += DropDownOptions_CollectionChanged;
 
-            PopupService.SubMenuOptions.CollectionChanged += SubMenuOptions_CollectionChanged;
+            PopupService.SubMenuOptions.CollectionChanged -= SubMenuOptions_CollectionChanged;
             PopupService.SubMenuOptions = new ObservableCollection<SubMenuOption>();
             PopupService.SubMenuOptions.CollectionChanged += SubMenuOptions_CollectionChanged;
         }
@@ -108,6 +109,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<SubMenuOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.Close = CloseSubMenuAsync;
                 SubMenuOptions.Add(option);
                 InvokeAsync(() =>
                 {
@@ -365,6 +367,42 @@ namespace Blazui.Component.Popup
             await Task.Delay(200);
             PopupService.DropDownOptions.Remove(option);
             option.Refresh();
+        }
+
+        internal async Task CloseSubMenuAsync(SubMenuOption option)
+        {
+            option.IsShow = false;
+            //option.HideStatus = AnimationStatus.Begin;
+            StateHasChanged();
+            await Task.Delay(200);
+            //option.HideStatus = AnimationStatus.End;
+            //StateHasChanged();
+            //await Task.Delay(200);
+            PopupService.SubMenuOptions.Remove(option);
+            option.TaskCompletionSource.SetResult(0);
+        }
+
+        internal void ShowSubMenu(SubMenuOption option)
+        {
+            option.Closing = false;
+        }
+
+        internal void ReadyCloseSubMenu(MouseEventArgs e, SubMenuOption option)
+        {
+            if (option.CancelClose)
+            {
+                option.CancelClose = false;
+                return;
+            }
+            option.Closing = true;
+            Task.Delay(50).ContinueWith(task =>
+            {
+                if (!option.Closing)
+                {
+                    return;
+                }
+                _ = CloseSubMenuAsync(option);
+            });
         }
 
         async Task RenderDateTimePickerAsync()
