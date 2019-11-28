@@ -379,7 +379,7 @@ namespace Blazui.Component.Popup
             //StateHasChanged();
             //await Task.Delay(200);
             PopupService.SubMenuOptions.Remove(option);
-            option.TaskCompletionSource.SetResult(0);
+            option.TaskCompletionSource.TrySetResult(0);
         }
 
         internal void ShowSubMenu(SubMenuOption option)
@@ -387,7 +387,7 @@ namespace Blazui.Component.Popup
             option.Closing = false;
         }
 
-        internal void ReadyCloseSubMenu(MouseEventArgs e, SubMenuOption option)
+        internal void ReadyCloseSubMenu(SubMenuOption option)
         {
             if (option.CancelClose)
             {
@@ -395,7 +395,7 @@ namespace Blazui.Component.Popup
                 return;
             }
             option.Closing = true;
-            Task.Delay(50).ContinueWith(task =>
+            Task.Delay(500).ContinueWith(task =>
             {
                 if (!option.Closing)
                 {

@@ -32,7 +32,7 @@ namespace Blazui.Component.NavMenu
         public BMenuContainer Menu { get; set; }
 
         [CascadingParameter]
-        public BSubMenu ParentMenu { get; set; }
+        public BSubMenuBase ParentMenu { get; set; }
         [CascadingParameter]
         public MenuOptions Options { get; set; }
 
@@ -42,7 +42,7 @@ namespace Blazui.Component.NavMenu
 
         protected bool isActive { get; set; }
 
-        public void Active()
+        public void Activate()
         {
             isActive = true;
             textColor = Options.ActiveTextColor;
@@ -50,7 +50,7 @@ namespace Blazui.Component.NavMenu
             backgroundColor = Options.HoverColor;
 
         }
-        public void DeActive()
+        public void DeActivate()
         {
             isActive = false;
             textColor = Options.TextColor;
@@ -86,6 +86,10 @@ namespace Blazui.Component.NavMenu
         {
             if (Options.Mode == MenuMode.Horizontal)
             {
+                if (ParentMenu != null)
+                {
+                    ParentMenu.CancelClose();
+                }
                 backgroundColor = Options.BackgroundColor;
                 return;
             }
@@ -94,6 +98,10 @@ namespace Blazui.Component.NavMenu
 
         public void OnClick()
         {
+            if (ParentMenu != null && TopMenu.Mode == MenuMode.Horizontal)
+            {
+                _ = ParentMenu.CloseAsync();
+            }
             if (!string.IsNullOrEmpty(Route))
             {
                 navigationManager.NavigateTo(Route);

@@ -72,27 +72,28 @@ Blazui 演示地址：http://blazui.com:9000
 
 #### 计划
 
-###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin :fa-spinner: 
-###### nuget 包与开发文档 :fa-spinner: 
+###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin [ ]
+###### nuget 包
+###### 开发文档 [√]
 
 #### 可用组件列表
 
-###### 表格组件 :fa-check: 
-###### 消息提示组件 :fa-check: 
-###### Loading组件 :fa-check: 
-###### 下拉菜单组件 :fa-check: 
-###### 对话框组件 :fa-check: 
-###### 表单组件 :fa-check: 
-###### 按钮组件 :fa-check: 
-###### 输入框组件 :fa-check: 
-###### Radio组件 :fa-check: 
-###### 复选框组件 :fa-check: 
-###### Switch组件 :fa-check: 
-###### 导航菜单组件 :fa-check: 
-###### 标签页组件 :fa-check: 
-###### 分页组件 :fa-check: 
-###### 消息框组件 :fa-check: 
-###### 日期选择器组件 :fa-check: 
+###### 表格组件 [√] 
+###### 消息提示组件 [√] 
+###### Loading组件 [√] 
+###### 下拉菜单组件 [√] 
+###### 对话框组件 [√] 
+###### 表单组件 [√] 
+###### 按钮组件 [√] 
+###### 输入框组件 [√] 
+###### Radio组件 [√] 
+###### 复选框组件 [√] 
+###### Switch组件 [√] 
+###### 导航菜单组件 [√] 
+###### 标签页组件 [√] 
+###### 分页组件 [√] 
+###### 消息框组件 [√] 
+###### 日期选择器组件 [√] 
 
 #### 关注与讨论
 

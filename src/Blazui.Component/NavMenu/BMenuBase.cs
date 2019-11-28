@@ -44,13 +44,13 @@ namespace Blazui.Component.NavMenu
             if (item == activeItem)
                 return;
 
-            item.Active();
+            item.Activate();
             if (item.Menu is BSubMenu subMenu)
             {
-                subMenu.Active();
+                subMenu.Activate();
             }
             if (activeItem != null)
-                activeItem.DeActive();
+                activeItem.DeActivate();
 
             activeItem = item;
             if (ActiveItemChanged.HasDelegate)
@@ -66,7 +66,7 @@ namespace Blazui.Component.NavMenu
             {
                 return;
             }
-            ActiveItem.DeActive();
+            ActiveItem.DeActivate();
             ActiveItem = null;
         }
         protected MenuOptions Options { get; set; }

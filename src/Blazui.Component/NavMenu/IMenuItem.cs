@@ -12,8 +12,8 @@ namespace Blazui.Component.NavMenu
         object Model { get; set; }
         MenuOptions Options { get; set; }
 
-        void Active();
+        void Activate();
 
-        void DeActive();
+        void DeActivate();
     }
 }

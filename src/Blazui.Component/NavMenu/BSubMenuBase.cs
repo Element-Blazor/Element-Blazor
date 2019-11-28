@@ -49,18 +49,24 @@ namespace Blazui.Component.NavMenu
             }
         }
 
-        public void Active()
+        public void Activate()
         {
             isActive = true;
-            isOpened = true;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                isOpened = true;
+            }
         }
-        public void DeActive()
+        public void DeActivate()
         {
             isActive = false;
-            isOpened = false;
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                isOpened = false;
+            }
             borderColor = "transparent";
 
-            TopMenu.DeActive();
+            //TopMenu.DeActive();
             OnOut();
             StateHasChanged();
         }
@@ -73,7 +79,7 @@ namespace Blazui.Component.NavMenu
             base.OnInitialized();
         }
 
-        protected void OnOver()
+        protected async Task OnOverAsync()
         {
             if (TopMenu.Mode == MenuMode.Horizontal)
             {
@@ -92,44 +98,72 @@ namespace Blazui.Component.NavMenu
                     Closing = false,
                     TaskCompletionSource = taskCompletionSource
                 };
+                var prevMenuOption = PopupService.SubMenuOptions.FirstOrDefault();
+                if (prevMenuOption != null)
+                {
+                    await prevMenuOption.Close(prevMenuOption);
+                }
                 PopupService.SubMenuOptions.Add(subMenuOption);
                 isOpened = true;
-                taskCompletionSource.Task.ContinueWith(task =>
-                {
-                    isOpened = false;
-                    isActive = false;
-                    InvokeAsync(StateHasChanged);
-                });
+                await taskCompletionSource.Task;
+                DeActivate();
             }
             else
             {
                 backgroundColor = Options.HoverColor;
+                textColor = Options.ActiveTextColor;
+                Activate();
             }
-            textColor = Options.ActiveTextColor;
             //opened = true;
+        }
+
+        internal async Task CloseAsync()
+        {
+            await subMenuOption.Close(subMenuOption);
+            isOpened = false;
+            isActive = false;
+        }
+
+        internal void CancelClose()
+        {
+            if (subMenuOption == null)
+            {
+                return;
+            }
+            subMenuOption.CancelClose = true;
         }
 
         protected void OnOut()
         {
-            if (!isActive || isOpened)
+            if (isActive || isOpened)
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
-                subMenuOption.Closing = true;
-                Task.Delay(50).ContinueWith(task =>
+                if (TopMenu.Mode == MenuMode.Horizontal)
                 {
-                    if (!subMenuOption.Closing)
+                    subMenuOption.Closing = true;
+                    Task.Delay(50).ContinueWith(task =>
                     {
-                        return;
-                    }
-                    isOpened = false;
-                    isActive = false;
-                    InvokeAsync(() =>
-                    {
-                        subMenuOption.Close(subMenuOption);
+                        if (!subMenuOption.Closing)
+                        {
+                            return;
+                        }
+                        isOpened = false;
+                        isActive = false;
+                        if (subMenuOption.Close == null)
+                        {
+                            return;
+                        }
+                        InvokeAsync(() =>
+                        {
+                            subMenuOption.Close(subMenuOption);
+                        });
                     });
-                });
-                return;
+                }
+                else
+                {
+                    isActive = false;
+                }
             }
         }
 

@@ -11,7 +11,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BA4616F9-78F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6DB71671-F11C-44B8-BAE2-1A200AE42CD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazui.Component.Test", "test\Blazui.Component.Test\Blazui.Component.Test.csproj", "{2FE605AD-A6E8-4026-BA7A-0BB8F4D59187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Component.Test", "test\Blazui.Component.Test\Blazui.Component.Test.csproj", "{2FE605AD-A6E8-4026-BA7A-0BB8F4D59187}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E2D20D07-0EEF-477D-85F6-415974ECA79F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
