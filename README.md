@@ -56,6 +56,7 @@ Blazui 演示地址：http://blazui.com:9000
 </body>
 </html>
 
+```
 4. 在 _Imports.razor 文件中添加以下代码
 
 ```
@@ -108,8 +109,12 @@ services.AddBlazuiServices();
 #### 计划
 
 ###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin [ ]
-###### nuget 包
-###### 开发文档 [√]
+###### nuget 包 [√]
+###### 开发文档 [ ]
+###### 树形表格 [ ]
+###### 文件上传 [ ]
+###### 图片上传 [ ]
+###### 类似于EasyUI的布局面板 [ ]
 
 #### 可用组件列表
 
