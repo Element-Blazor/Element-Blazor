@@ -348,6 +348,7 @@
     for (int i = 0; i < SubMenuOptions.Count; i++)
     {
         var option = SubMenuOptions[i];
+        var shadowIndex = ZIndex++;
         var index = ZIndex++;
         var height = "height:0;";
         if (option.IsShow)
@@ -366,6 +367,7 @@
         {
             style = "";
         }
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement"></div>
         <div class="el-menu--horizontal" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@height transition:height 0.2s;@style;" x-placement="right-start">
             <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
                 <CascadingValue Value="option.SubMenu">
