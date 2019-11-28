@@ -45,6 +45,7 @@ Blazui 演示地址：http://blazui.com:9000
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
 </head>
 <body>
     <app>
