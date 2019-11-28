@@ -80,7 +80,7 @@ Blazui 演示地址：http://blazui.com:9000
 ```
 services.AddBlazuiServices();
 ```
-将 MainLayout.razor 的内容改为如下
+为了使弹窗类组件生效，需要将 MainLayout.razor 的内容改为如下
 
 ```
 @inherits LayoutComponentBase
