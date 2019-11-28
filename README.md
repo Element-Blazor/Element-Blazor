@@ -32,8 +32,6 @@ Blazui 演示地址：http://blazui.com:9000
 3. 修改 Pages 文件夹下的 _Host.cshtml 文件内容，引入下面三个 css 文件
 
 ```
-    <link href="/_content/Blazui.Component/element/index.css" rel="stylesheet" />
-    <link href="/_content/Blazui.Component/element/fix.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
 ```
 然后在官方引入的唯一的 js 文件上方引入下面的 js 文件
@@ -60,6 +58,26 @@ Blazui 演示地址：http://blazui.com:9000
 @using Blazui.Component.Form
 @using Blazui.Component.Select
 ```
+在 Startup.cs 的 ConfigureServices 方法中添加以下代码
+
+```
+services.AddBlazuiServices();
+```
+将 MainLayout.razor 的内容改为如下
+
+```
+@inherits LayoutComponentBase
+<BPopup></BPopup>
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    @Body
+</div>
+```
+
 
 5. 在任意一个页面输入以下代码，运行可看效果
 
