@@ -52,10 +52,7 @@ namespace Blazui.Component.NavMenu
         public void Activate()
         {
             isActive = true;
-            if (TopMenu.Mode == MenuMode.Horizontal)
-            {
-                isOpened = true;
-            }
+            isOpened = true;
         }
         public void DeActivate()
         {
@@ -106,13 +103,16 @@ namespace Blazui.Component.NavMenu
                 PopupService.SubMenuOptions.Add(subMenuOption);
                 isOpened = true;
                 await taskCompletionSource.Task;
-                DeActivate();
+                borderColor = "transparent";
+
+                isOpened = false;
+                OnOut();
             }
             else
             {
                 backgroundColor = Options.HoverColor;
                 textColor = Options.ActiveTextColor;
-                Activate();
+                isActive = true;
             }
             //opened = true;
         }

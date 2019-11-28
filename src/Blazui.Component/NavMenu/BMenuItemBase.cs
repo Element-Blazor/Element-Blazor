@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.EventArgs;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace Blazui.Component.NavMenu
 
         protected bool isActive { get; set; }
 
+        private string currentRoute;
         public void Activate()
         {
             isActive = true;
@@ -58,6 +60,8 @@ namespace Blazui.Component.NavMenu
             backgroundColor = Options.BackgroundColor;
         }
 
+        [Parameter]
+        public EventCallback<BChangeEventArgs<string>> OnRouteChanging { get; set; }
 
         protected override void OnInitialized()
         {
@@ -75,7 +79,7 @@ namespace Blazui.Component.NavMenu
         public void OnOver()
         {
             //todo: 颜色值经过计算而得
-            if (Options.Mode == MenuMode.Horizontal || !string.IsNullOrWhiteSpace(Options.HoverColor))
+            if (Options.Mode == MenuMode.Horizontal || string.IsNullOrWhiteSpace(Options.HoverColor))
             {
                 return;
             }
@@ -96,7 +100,7 @@ namespace Blazui.Component.NavMenu
             backgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
         }
 
-        public void OnClick()
+        public async Task OnClickAsync()
         {
             if (ParentMenu != null && TopMenu.Mode == MenuMode.Horizontal)
             {
@@ -104,10 +108,20 @@ namespace Blazui.Component.NavMenu
             }
             if (!string.IsNullOrEmpty(Route))
             {
+                if (OnRouteChanging.HasDelegate)
+                {
+                    var arg = new BChangeEventArgs<string>();
+                    arg.NewValue = Route;
+                    arg.OldValue = currentRoute;
+                    TopMenu.ActivateItem(this);
+                    await OnRouteChanging.InvokeAsync(arg);
+                    if (arg.DisallowChange)
+                    {
+                        return;
+                    }
+                }
                 navigationManager.NavigateTo(Route);
             }
-
-            TopMenu.ActivateItem(this);
         }
     }
 }
