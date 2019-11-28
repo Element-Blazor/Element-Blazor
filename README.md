@@ -29,16 +29,33 @@ Blazui 演示地址：http://blazui.com:9000
 
 1. 新建 Blazor 服务器端渲染应用
 2. 安装 Nuget 包 Blazui.Component
-3. 修改 Pages 文件夹下的 _Host.cshtml 文件内容，引入下面三个 css 文件
+3. 修改 Pages 文件夹下的 _Host.cshtml 为以下内容
 
 ```
+@page "/"
+@namespace Blazui.ServerRender.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
-```
-然后在官方引入的唯一的 js 文件上方引入下面的 js 文件
+</head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
 
-```
-    <script src="/_content/Blazui.Component/js/dom.js"></script>
-```
+    <script src="_content/Blazui.Component/js/dom.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>
+
 4. 在 _Imports.razor 文件中添加以下代码
 
 ```
