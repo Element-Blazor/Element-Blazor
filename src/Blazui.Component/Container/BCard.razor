@@ -2,7 +2,12 @@
 @typeparam TModel
 @foreach (var item in DataSource)
 {
-    <div class="el-card box-card is-always-shadow @(Cls?.Invoke(item))">
+    var shadow = "always";
+    if (Shadow != null)
+    {
+        shadow = Shadow(item).ToString().ToLower();
+    }
+    <div class="el-card box-card is-@shadow-shadow @(Cls?.Invoke(item))">
         @{
             if (Header != null)
             {

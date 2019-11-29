@@ -115,6 +115,23 @@
     ]
   },
   {
+    "name": "layout",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicLayout"
+      },
+      {
+        "title": "嵌套布局",
+        "name": "NestedLayout"
+      },
+      {
+        "title": "后台模板用法",
+        "name": "Layout"
+      }
+    ]
+  },
+  {
     "name": "table",
     "demos": [
       {
