@@ -75,7 +75,6 @@ Blazui 演示地址：http://blazui.com:9000
 @using Blazui.Component.Popup
 @using Blazui.Component.Pagination
 @using Blazui.Component.Form
-@using Blazui.Component.Select
 ```
 在 Startup.cs 的 ConfigureServices 方法中添加以下代码
 

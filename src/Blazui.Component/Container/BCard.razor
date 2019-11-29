@@ -1,12 +1,18 @@
 ﻿@inherits BCardBase<TModel>
 @typeparam TModel
-@foreach (var item in For)
+@foreach (var item in DataSource)
 {
-    <div class="el-card box-card is-always-shadow">
-        <div class="el-card__header">
-            @Header(item)
-        </div>
-        <div class="el-card__body">
+    <div class="el-card box-card is-always-shadow @(Cls?.Invoke(item))">
+        @{
+            if (Header != null)
+            {
+                <div class="el-card__header">
+                    @Header(item)
+                </div>
+            }
+        }
+
+        <div class="el-card__body @(BodyCls?.Invoke(item))">
             @Body(item)
         </div>
     </div>

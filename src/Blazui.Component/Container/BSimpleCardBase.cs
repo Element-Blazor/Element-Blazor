@@ -8,6 +8,10 @@ namespace Blazui.Component.Container
 {
     public class BSimpleCardBase : ComponentBase
     {
+        [Parameter]
+        public string Cls { get; set; }
+        [Parameter]
+        public string BodyCls { get; set; }
         protected List<string> titles { get; set; } = new List<string>();
         [Parameter]
         public string Title { get; set; }
