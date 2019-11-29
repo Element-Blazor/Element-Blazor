@@ -11,6 +11,8 @@ namespace Blazui.Component.Container
         [Parameter]
         public Func<TModel, string> Cls { get; set; }
         [Parameter]
+        public Func<TModel, string> Style { get; set; }
+        [Parameter]
         public Func<TModel, string> BodyCls { get; set; }
 
         [Parameter]

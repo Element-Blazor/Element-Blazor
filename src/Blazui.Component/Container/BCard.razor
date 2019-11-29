@@ -7,7 +7,7 @@
     {
         shadow = Shadow(item).ToString().ToLower();
     }
-    <div class="el-card box-card is-@shadow-shadow @(Cls?.Invoke(item))">
+    <div class="el-card box-card is-@shadow-shadow @(Cls?.Invoke(item))" style="@Style?.Invoke(item)">
         @{
             if (Header != null)
             {

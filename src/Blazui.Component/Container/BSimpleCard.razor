@@ -1,7 +1,7 @@
 ﻿@inherits BSimpleCardBase
 @if (!string.IsNullOrWhiteSpace(Title))
 {
-    <BCard DataSource="@titles" Cls="c=>Cls" BodyCls="c=>BodyCls" Shadow="c=>Shadow">
+    <BCard DataSource="@titles" Cls="c=>Cls" BodyCls="c=>BodyCls" Shadow="c=>Shadow" Style="c=>Style">
         <Header>
             @context
         </Header>
@@ -12,7 +12,7 @@
 }
 else
 {
-    <BCard DataSource="@titles" Cls="c=>Cls" BodyCls="c=>BodyCls"  Shadow="c=>Shadow">
+    <BCard DataSource="@titles" Cls="c=>Cls" BodyCls="c=>BodyCls" Shadow="c=>Shadow"  Style="c=>Style">
         <Body>
             @ChildContent
         </Body>
