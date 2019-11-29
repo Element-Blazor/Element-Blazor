@@ -54,6 +54,10 @@ namespace Blazui.Component.Container
             set
             {
                 activeTabName = value;
+                if (TabPanels.Any())
+                {
+                    ActiveTab = TabPanels.FirstOrDefault(x => x.Name == activeTabName);
+                }
             }
         }
 
@@ -73,7 +77,6 @@ namespace Blazui.Component.Container
             set
             {
                 barOffsetLeft = value;
-                this.StateHasChanged();
             }
         }
         private int barWidth;
@@ -152,24 +155,34 @@ namespace Blazui.Component.Container
         {
             arg.OnRenderCompletedAsync -= AcitveTabOnRenderCompletedAsync;
 
-            var dom = arg.Element.Dom(JSRuntime);
-            var width = await dom.GetClientWidthAsync();
-            var paddingLeft = await dom.Style.GetPaddingLeftAsync();
-            var offsetLeft = await dom.GetOffsetLeftAsync();
-            var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
-            var barWidth = width - padding;
-            var barOffsetLeft = offsetLeft + paddingLeft;
-            if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
+            if (Type == TabType.Normal)
+            {
+                var dom = arg.Element.Dom(JSRuntime);
+                var width = await dom.GetClientWidthAsync();
+                var paddingLeft = await dom.Style.GetPaddingLeftAsync();
+                var offsetLeft = await dom.GetOffsetLeftAsync();
+                var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
+                var barWidth = width - padding;
+                var barOffsetLeft = offsetLeft + paddingLeft;
+                if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
+                {
+                    if (OnTabRenderComplete.HasDelegate)
+                    {
+                        await OnTabRenderComplete.InvokeAsync(arg);
+                    }
+                    return;
+                }
+                BarWidth = barWidth;
+                BarOffsetLeft = barOffsetLeft;
+                StateHasChanged();
+            }
+            else
             {
                 if (OnTabRenderComplete.HasDelegate)
                 {
                     await OnTabRenderComplete.InvokeAsync(arg);
                 }
-                return;
             }
-            BarWidth = barWidth;
-            BarOffsetLeft = barOffsetLeft;
-            StateHasChanged();
         }
 
         public void Refresh()

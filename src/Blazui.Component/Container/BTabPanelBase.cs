@@ -75,7 +75,6 @@ namespace Blazui.Component.Container
                 Title = Title(x),
                 Content = Content(x)
             }).ToList();
-            TabContainer.Refresh();
         }
 
         //protected async Task OnRenderCompletedInternalAsync(ITab tab)

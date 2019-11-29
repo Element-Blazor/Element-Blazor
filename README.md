@@ -45,6 +45,7 @@ Blazui 演示地址：http://blazui.com:9000
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
 </head>
 <body>
     <app>
@@ -74,7 +75,6 @@ Blazui 演示地址：http://blazui.com:9000
 @using Blazui.Component.Popup
 @using Blazui.Component.Pagination
 @using Blazui.Component.Form
-@using Blazui.Component.Select
 ```
 在 Startup.cs 的 ConfigureServices 方法中添加以下代码
 

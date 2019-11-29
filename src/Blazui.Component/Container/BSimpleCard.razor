@@ -1,9 +1,32 @@
 ﻿@inherits BSimpleCardBase
-<BCard For="@titles">
-    <Header>
-        @context
-    </Header>
-    <Body>
-        @ChildContent
-    </Body>
-</BCard>
+@if (!string.IsNullOrWhiteSpace(Title))
+{
+    <BCard DataSource="@titles">
+        <Header>
+            @context
+        </Header>
+        <Body>
+            @ChildContent
+        </Body>
+        <Cls>
+            @Cls
+        </Cls>
+        <BodyCls>
+            @BodyCls
+        </BodyCls>
+    </BCard>
+}
+else
+{
+    <BCard DataSource="@titles">
+        <Body>
+            @ChildContent
+        </Body>
+        <Cls>
+            @Cls
+        </Cls>
+        <BodyCls>
+            @BodyCls
+        </BodyCls>
+    </BCard>
+}

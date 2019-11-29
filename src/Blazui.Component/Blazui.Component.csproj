@@ -13,11 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ComponentManager.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\js\dom.js" />
+    <None Include="wwwroot\css\fix.css" />
   </ItemGroup>
 
   <ItemGroup>

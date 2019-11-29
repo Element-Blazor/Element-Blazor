@@ -9,7 +9,11 @@ namespace Blazui.Component.Container
     public class BCardBase<TModel> : ComponentBase
     {
         [Parameter]
-        public IEnumerable<TModel> For { get; set; }
+        public RenderFragment<TModel> Cls { get; set; }
+        [Parameter]
+        public RenderFragment<TModel> BodyCls { get; set; }
+        [Parameter]
+        public IEnumerable<TModel> DataSource { get; set; }
         [Parameter]
         public RenderFragment<TModel> Header { get; set; }
 

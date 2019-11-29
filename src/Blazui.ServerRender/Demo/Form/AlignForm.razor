@@ -20,7 +20,7 @@
         <BDatePicker></BDatePicker>
     </BFormItem>
     <BFormItem TValue="bool" Label="即时配送" IsRequired="true" Name="@nameof(Activity.Delivery)">
-        <BSwitch TValue="bool"></BSwitch>
+        <BSwitch TValue="bool" ActiveValue="true" InactiveValue="false"></BSwitch>
     </BFormItem>
     <BFormItem TValue="IEnumerable<string>" Label="活动性质" IsRequired="true" Name="@nameof(Activity.Type)">
         <BCheckBoxGroup TValue="string">
