@@ -1,7 +1,51 @@
-﻿<div class="blz-layout">
-    <BSimpleCard></BSimpleCard>
-    <BSimpleCard Cls="blaz-lyayout-west" Title="左边"></BSimpleCard>
-    <BSimpleCard Cls="blaz-lyayout-center" Title="中间"></BSimpleCard>
-    <BSimpleCard Cls="blaz-lyayout-east" Title="右边"></BSimpleCard>
-    <BSimpleCard></BSimpleCard>
-</div>
+﻿@inherits BLayoutBase
+@{
+    var styles = new List<string>();
+    if (Width > 0)
+    {
+        styles.Add($"width:{Width}px");
+    }
+    if (Height > 0)
+    {
+        styles.Add($"height:{Height}px");
+    }
+    if (Fit)
+    {
+        styles.Add("flex:1");
+    }
+    <div class="blaz-layout" style="@string.Join(";", styles)">
+        @if (North != null)
+        {
+            <div class="blaz-layout-north blaz-layout-card">
+                @North
+            </div>
+        }
+        <div class="blaz-layout-container">
+            @if (West != null)
+            {
+                <div class="blaz-layout-west blaz-layout-card" style="width:@(WestWidth)px">
+                    @West
+                </div>
+            }
+            <div class="blaz-layout-center blaz-layout-card ">
+                @if (Center != null)
+                {
+                    @Center
+                }
+            </div>
+            @if (East != null)
+            {
+                <div class="blaz-layout-east blaz-layout-card " style="width:@(EastWidth)px">
+                    @East
+                </div>
+            }
+        </div>
+
+        @if (South != null)
+        {
+            <div class="blaz-layout-south blaz-layout-card">
+                @South
+            </div>
+        }
+    </div>
+}

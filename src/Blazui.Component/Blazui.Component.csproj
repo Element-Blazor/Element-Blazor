@@ -13,6 +13,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Container\BCenterBase.cs" />
+    <Compile Remove="Container\BEastBase.cs" />
+    <Compile Remove="Container\BNorthBase.cs" />
+    <Compile Remove="Container\BSouthBase.cs" />
+    <Compile Remove="Container\BWestBase.cs" />
+    <Compile Remove="Container\LayoutModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Container\BCenter.razor" />
+    <Content Remove="Container\BEast.razor" />
+    <Content Remove="Container\BNorth.razor" />
+    <Content Remove="Container\BSouth.razor" />
+    <Content Remove="Container\BWest.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\js\dom.js" />
     <None Include="wwwroot\css\fix.css" />
   </ItemGroup>

@@ -21,12 +21,10 @@
     <BMenuItem Route="dialog">Dialog 对话框</BMenuItem>
     <BMenuItem Route="datepicker">DatePicker 日期选择器</BMenuItem>
     <BMenuItem Route="form">Form 表单</BMenuItem>
+    <BMenuItem Route="layout">Layout 布局面板</BMenuItem>
 </BMenu>
 
 @code {
-    bool collapseNavMenu = true;
-
-    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     [Inject]
     NavigationManager NavigationManager { get; set; }
@@ -36,10 +34,5 @@
         {
             NavigationManager.NavigateTo("button");
         }
-    }
-
-    void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
     }
 }
