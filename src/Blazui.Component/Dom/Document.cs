@@ -41,5 +41,10 @@ namespace Blazui.Component.Dom
         {
             await jSRuntime.InvokeAsync<object>("remove", content);
         }
+
+        public async Task<int> GetClientWidthAsync()
+        {
+            return await jSRuntime.InvokeAsync<int>("getClientWidth");
+        }
     }
 }

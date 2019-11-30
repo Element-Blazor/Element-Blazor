@@ -22,6 +22,7 @@ namespace Blazui.Component
             option.Buttons.Add(okRenderFragment);
             DialogService.Dialogs.Add(option);
             var dialogResult = await option.TaskCompletionSource.Task;
+            await Task.Delay(10);
             return (MessageBoxResult)dialogResult.Result;
         }
 
@@ -42,16 +43,16 @@ namespace Blazui.Component
             return builder =>
             {
                 builder.OpenComponent<BButton>(0);
-                builder.AddAttribute(1, "Click", new Func<MouseEventArgs, Task>((MouseEventArgs e) =>
+                builder.AddAttribute(1, "Click", new Func<MouseEventArgs, Task>(async (MouseEventArgs e) =>
                 {
-                    return option.Instance.CloseDialogAsync(option, new DialogResult()
+                    await option.Instance.CloseDialogAsync(option, new DialogResult()
                     {
                         Result = result
                     });
                 }));
                 builder.AddAttribute(2, "Type", type);
                 builder.AddAttribute(3, "ChildContent", new RenderFragment(__builder2 => __builder2.AddMarkupContent(4, text)));
-                builder.AddAttribute(4, "Size", ButtonSize.Small);
+                builder.AddAttribute(5, "Size", ButtonSize.Small);
                 builder.CloseComponent();
             };
         }
@@ -65,6 +66,7 @@ namespace Blazui.Component
             option.Buttons.Add(okRenderFragment);
             DialogService.Dialogs.Add(option);
             var dialogResult = await option.TaskCompletionSource.Task;
+            await Task.Delay(10);
             return (MessageBoxResult)dialogResult.Result;
         }
     }

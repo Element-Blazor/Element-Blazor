@@ -131,7 +131,7 @@ namespace Blazui.Component.Select
                 IsClearButtonClick = false;
                 return;
             }
-            if (PopupService.DropDownOptions.Any(x => x.Target.Id == elementSelect.Id))
+            if (PopupService.SelectDropDownOptions.Any(x => x.Target.Id == elementSelect.Id))
             {
                 return;
             }
@@ -147,7 +147,7 @@ namespace Blazui.Component.Select
                 },
                 IsShow = true
             };
-            PopupService.DropDownOptions.Add(DropDownOption);
+            PopupService.SelectDropDownOptions.Add(DropDownOption);
         }
 
         protected override void FormItem_OnReset()

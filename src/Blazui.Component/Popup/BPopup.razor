@@ -303,9 +303,9 @@
         <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;opacity:0;position:fixed;" @ref="@option.ShadowElement" @onclick="e=>CloseDateTimePicker(option)"></div>
     }
 
-    for (int i = 0; i < DropDownOptions.Count; i++)
+    for (int i = 0; i < SelectDropDownOptions.Count; i++)
     {
-        var option = DropDownOptions[i];
+        var option = SelectDropDownOptions[i];
         var shadowIndex = ZIndex++;
         var index = ZIndex++;
         var transform = "scaleY(0)";
@@ -344,6 +344,44 @@
             </div>
             <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
         </div>
+    }
+    for (int i = 0; i < DropDownMenuOptions.Count; i++)
+    {
+        var option = DropDownMenuOptions[i];
+        var shadowIndex = ZIndex++;
+        var index = ZIndex++;
+        var transform = "scaleY(0)";
+        if (option.IsShow)
+        {
+            if (option.ShowStatus == AnimationStatus.Begin)
+            {
+                transform = "scaleY(0)";
+            }
+            else
+            {
+                transform = "scaleY(1)";
+            }
+        }
+        var style = "display:none";
+        if (option.IsShow)
+        {
+            style = "";
+        }
+        var dropDownStyles = new List<string>();
+        dropDownStyles.Add($"left:{option.Left}px");
+        dropDownStyles.Add($"top:{option.Top}px");
+        dropDownStyles.Add("transition:transform 0.2s linear 0s");
+        dropDownStyles.Add($"transform:{transform}");
+        dropDownStyles.Add("position:absolute");
+        dropDownStyles.Add("transform-origin: center top 0px");
+        dropDownStyles.Add($"z-index:{BPopupBase.ZIndex++}");
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@index" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="bottom-start">
+            <CascadingValue Value="option">
+                @option.OptionContent
+            </CascadingValue>
+            <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
+        </ul>
     }
     for (int i = 0; i < SubMenuOptions.Count; i++)
     {

@@ -39,7 +39,8 @@ namespace Blazui.Component.Popup
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
         internal protected List<DialogOption> DialogOptions = new List<DialogOption>();
         internal protected List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
-        internal protected List<DropDownOption> DropDownOptions = new List<DropDownOption>();
+        internal protected List<DropDownOption> SelectDropDownOptions = new List<DropDownOption>();
+        internal protected List<DropDownOption> DropDownMenuOptions = new List<DropDownOption>();
         internal protected List<SubMenuOption> SubMenuOptions = new List<SubMenuOption>();
 
         internal async Task CloseDialogAsync(DialogOption option, DialogResult result)
@@ -64,7 +65,7 @@ namespace Blazui.Component.Popup
             await style.ClearAsync("left");
             await style.ClearAsync("top");
             await style.ClearAsync("position");
-            option.TaskCompletionSource.SetResult(result);
+            option.TaskCompletionSource.TrySetResult(result);
             DialogService.Dialogs.Remove(option);
         }
 
@@ -93,13 +94,41 @@ namespace Blazui.Component.Popup
             PopupService.DateTimePickerOptions = new ObservableCollection<DateTimePickerOption>();
             PopupService.DateTimePickerOptions.CollectionChanged += DateTimePickerOptions_CollectionChanged;
 
-            PopupService.DropDownOptions.CollectionChanged -= DropDownOptions_CollectionChanged;
-            PopupService.DropDownOptions = new ObservableCollection<DropDownOption>();
-            PopupService.DropDownOptions.CollectionChanged += DropDownOptions_CollectionChanged;
+            PopupService.SelectDropDownOptions.CollectionChanged -= DropDownOptions_CollectionChanged;
+            PopupService.SelectDropDownOptions = new ObservableCollection<DropDownOption>();
+            PopupService.SelectDropDownOptions.CollectionChanged += DropDownOptions_CollectionChanged;
 
             PopupService.SubMenuOptions.CollectionChanged -= SubMenuOptions_CollectionChanged;
             PopupService.SubMenuOptions = new ObservableCollection<SubMenuOption>();
             PopupService.SubMenuOptions.CollectionChanged += SubMenuOptions_CollectionChanged;
+
+            PopupService.DropDownMenuOptions.CollectionChanged -= DropDownMenuOptions_CollectionChanged;
+            PopupService.DropDownMenuOptions = new ObservableCollection<DropDownOption>();
+            PopupService.DropDownMenuOptions.CollectionChanged += DropDownMenuOptions_CollectionChanged;
+        }
+
+        private void DropDownMenuOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
+                option.IsNew = true;
+                option.Instance = this;
+                DropDownMenuOptions.Add(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var option = e.OldItems.OfType<DropDownOption>().FirstOrDefault();
+                DropDownMenuOptions.Remove(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
         }
 
         private void SubMenuOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -134,7 +163,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                DropDownOptions.Add(option);
+                SelectDropDownOptions.Add(option);
                 InvokeAsync(() =>
                 {
                     StateHasChanged();
@@ -143,7 +172,7 @@ namespace Blazui.Component.Popup
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var option = e.OldItems.OfType<DropDownOption>().FirstOrDefault();
-                DropDownOptions.Remove(option);
+                SelectDropDownOptions.Remove(option);
                 InvokeAsync(() =>
                 {
                     StateHasChanged();
@@ -183,19 +212,13 @@ namespace Blazui.Component.Popup
                 option.IsNew = true;
                 option.Instance = this;
                 DialogOptions.Add(option);
-                InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+                StateHasChanged();
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var option = e.OldItems.OfType<DialogOption>().FirstOrDefault();
                 DialogOptions.Remove(option);
-                InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+                StateHasChanged();
             }
         }
 
@@ -304,14 +327,15 @@ namespace Blazui.Component.Popup
             }
         }
 
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            _ = RenderMessageAsync();
-            _ = RenderLoadingAsync();
-            _ = RenderDialogAsync();
-            _ = RenderDateTimePickerAsync();
-            _ = RenderDropDownAsync();
-            _ = RenderSubMenuAsync();
+            await RenderMessageAsync();
+            await RenderLoadingAsync();
+            await RenderDialogAsync();
+            await RenderDateTimePickerAsync();
+            await RenderDropDownAsync(SelectDropDownOptions, true);
+            await RenderDropDownAsync(DropDownMenuOptions, false);
+            await RenderSubMenuAsync();
         }
 
         private async Task RenderSubMenuAsync()
@@ -334,9 +358,9 @@ namespace Blazui.Component.Popup
             option.ShowStatus = AnimationStatus.End;
             StateHasChanged();
         }
-        private async Task RenderDropDownAsync()
+        private async Task RenderDropDownAsync(List<DropDownOption> dropDownOptions, bool autoWidth)
         {
-            var option = DropDownOptions.FirstOrDefault(x => x.IsNew);
+            var option = dropDownOptions.FirstOrDefault(x => x.IsNew);
             if (option == null)
             {
                 return;
@@ -347,7 +371,17 @@ namespace Blazui.Component.Popup
             var top = await targetEl.GetTopRelativeBodyAsync();
             option.Left = rect.Left;
             option.Top = top + rect.Height;
-            option.Width = rect.Width;
+            if (autoWidth)
+            {
+                option.Width = rect.Width;
+            }
+            var dropDownEl = option.Element.Dom(JSRuntime);
+            var width = await dropDownEl.GetClientWidthAsync();
+            var documentWidth = await Document.GetClientWidthAsync();
+            if (option.Left + width >= documentWidth)
+            {
+                option.Left = documentWidth - width - 10;
+            }
             option.IsShow = true;
             option.ShowStatus = AnimationStatus.Begin;
             StateHasChanged();
@@ -365,19 +399,16 @@ namespace Blazui.Component.Popup
             option.HideStatus = AnimationStatus.End;
             StateHasChanged();
             await Task.Delay(200);
-            PopupService.DropDownOptions.Remove(option);
-            option.Refresh();
+            PopupService.SelectDropDownOptions.Remove(option);
+            PopupService.DropDownMenuOptions.Remove(option);
+            option.Refresh?.Invoke();
         }
 
         internal async Task CloseSubMenuAsync(SubMenuOption option)
         {
             option.IsShow = false;
-            //option.HideStatus = AnimationStatus.Begin;
             StateHasChanged();
             await Task.Delay(200);
-            //option.HideStatus = AnimationStatus.End;
-            //StateHasChanged();
-            //await Task.Delay(200);
             PopupService.SubMenuOptions.Remove(option);
             option.TaskCompletionSource.TrySetResult(0);
         }
@@ -464,6 +495,7 @@ namespace Blazui.Component.Popup
             var top = await dom.GetOffsetTopAsync();
             var left = await dom.GetOffsetLeftAsync();
             var style = messageContent.Dom(JSRuntime).Style;
+            await style.SetAsync("opacity", "0");
             await style.SetAsync("position", "absolute");
             if (option.IsDialog)
             {

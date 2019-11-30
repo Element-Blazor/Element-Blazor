@@ -34,6 +34,7 @@
             flex: 1;
             margin-left: 5px;
             display: flex;
+            flex-direction: column;
         }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--card.el-tabs--top {
