@@ -13,11 +13,19 @@ namespace Blazui.Component.Dynamic
         [Parameter]
         public object Component { get; set; }
 
+        [Parameter]
+        public IDictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();
+
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             if (Component is Type type)
             {
                 builder.OpenComponent(0, type);
+                var seq = 1;
+                foreach (var key in Parameters.Keys)
+                {
+                    builder.AddAttribute(seq++, key, Parameters[key]);
+                }
                 builder.CloseComponent();
                 return;
             }

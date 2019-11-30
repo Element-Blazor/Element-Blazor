@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Button
 {
-    public class BButtonBase : ComponentBase
+    public class BButtonBase : BComponentBase
     {
         protected async Task OnButtonClickedAsync(MouseEventArgs e)
         {
