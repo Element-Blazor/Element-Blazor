@@ -19,12 +19,12 @@ namespace Blazui.Component.Table
         protected int headerHeight = 49;
 
         [Parameter]
-        public Action RenderCompleted { get; set; }
+        public EventCallback RenderCompleted { get; set; }
         /// <summary>
         /// 总记录数
         /// </summary>
         [Parameter]
-        public int Total { get; set; } = 100;
+        public int Total { get; set; }
 
         /// <summary>
         /// 每页条数
@@ -66,6 +66,10 @@ namespace Blazui.Component.Table
         public bool IsBordered { get; set; }
         public ElementReference Container { get; set; }
 
+        protected override void OnInitialized()
+        {
+            Total = DataSource.Count;
+        }
         protected override void OnAfterRender(bool firstRender)
         {
             if (requireRender)
@@ -74,7 +78,10 @@ namespace Blazui.Component.Table
                 requireRender = false;
                 return;
             }
-            RenderCompleted?.Invoke();
+            if (RenderCompleted.HasDelegate)
+            {
+                RenderCompleted.InvokeAsync(null);
+            }
         }
 
         protected override void OnParametersSet()

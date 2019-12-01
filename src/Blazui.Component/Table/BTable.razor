@@ -24,6 +24,7 @@
         styles.Add("height:" + Height + "px");
     }
 
+    var validColumnCount = Headers.Count(x => !x.IsCheckBox);
     <div style="@string.Join(";",styles)" @ref="Container" class="@string.Join(" ",tableClsList)">
         <div class="el-table__header-wrapper" @ref="headerElement">
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
@@ -31,10 +32,14 @@
                     @for (int i = 1; i <= Headers.Count; i++)
                     {
                         var header = Headers.ElementAt(i - 1);
-                        var width = header.Width;
+                        var width = header.Width.ToString();
                         if (header.IsCheckBox)
                         {
-                            width = 55;
+                            width = "55";
+                        }
+                        else if (!header.Width.HasValue || header.Width.Value <= 0)
+                        {
+                            width = (100d / validColumnCount).ToString() + "%";
                         }
                         <col name="el-table_1_column_@i" width="@width" />
                     }
@@ -77,10 +82,14 @@
                     @for (int i = 1; i <= Headers.Count; i++)
                     {
                         var header = Headers.ElementAt(i - 1);
-                        var width = header.Width;
+                        var width = header.Width.ToString();
                         if (header.IsCheckBox)
                         {
-                            width = 55;
+                            width = "55";
+                        }
+                        else if (!header.Width.HasValue || header.Width.Value <= 0)
+                        {
+                            width = (100d / validColumnCount).ToString() + "%";
                         }
                         <col name="el-table_1_column_@i" width="@width" />
                     }
@@ -122,7 +131,7 @@
             </table>
         </div>
         <div class="el-table__column-resize-proxy" style="display: none;"></div>
-        <div style="margin-top:20px;margin-bottom:20px;">
+        <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
             <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
         </div>
     </div>

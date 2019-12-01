@@ -54,6 +54,7 @@
                     overflow: auto;
                     padding: 10px;
                     display: flex;
+                    flex-direction: column;
                 }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--border-card.el-tabs--top {
@@ -73,6 +74,7 @@
                     overflow: auto;
                     padding: 10px;
                     display: flex;
+                    flex-direction: column;
                 }
 
         .blaz-layout > .blaz-layout-container > .blaz-layout-east {
@@ -93,4 +95,17 @@
         margin-bottom: 5px;
         display: flex;
         flex-direction: column;
+    }
+
+.el-table {
+    display: flex;
+    flex-direction: column;
+}
+
+    .el-table .el-table__body-wrapper {
+        flex: 1;
+    }
+
+    .el-table .el-table__header {
+        width: 100%;
     }
