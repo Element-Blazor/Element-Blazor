@@ -44,5 +44,7 @@ namespace Blazui.Component
         internal float Top { get; set; }
         internal float Left { get; set; }
         public bool IsNew { get; internal set; }
+        internal int ZIndex { get; set; }
+        internal int ShadowZIndex { get; set; }
     }
 }

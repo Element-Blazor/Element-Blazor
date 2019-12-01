@@ -20,5 +20,6 @@ namespace Blazui.Component
         internal int Index { get; set; }
         internal int BeginTop { get; set; }
         internal int EndTop { get; set; }
+        internal int ZIndex { get; set; }
     }
 }

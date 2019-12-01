@@ -79,7 +79,7 @@ namespace Blazui.Component.Input
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            SetFieldValue(Value);
+            SetInitilizeFieldValue(Value);
         }
 
         protected virtual Task OnFocusAsync()

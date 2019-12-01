@@ -21,6 +21,14 @@ namespace Blazui.Component.Form
             FormItem.Value = value;
             FormItem.Validate();
         }
+        protected void SetInitilizeFieldValue(TValue value)
+        {
+            if (FormItem == null)
+            {
+                return;
+            }
+            FormItem.Value = value;
+        }
 
         protected override void OnInitialized()
         {

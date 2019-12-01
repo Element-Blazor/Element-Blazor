@@ -4,7 +4,7 @@
     for (int i = 0; i < Messages.Count; i++)
     {
         var message = Messages[i];
-        var index = ZIndex++;
+        var index = message.ZIndex;
         <div role="alert" class="el-message el-message--@(message.Type.ToString().ToLower())" @ref="message.Element" style="top: @(message.BeginTop)px;opacity:0;transition:top 0.5s,opacity 0.5s;z-index:@index;">
             <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
             <p class="el-message__content">@message.Message</p>
@@ -13,7 +13,7 @@
     for (int i = 0; i < LoadingOptions.Count; i++)
     {
         var option = LoadingOptions[i];
-        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(ZIndex++)" @ref="option.Element">
+        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(option.ZIndex)" @ref="option.Element">
             <div class="el-loading-spinner">
                 @if (string.IsNullOrWhiteSpace(option.IconClass))
                 {
@@ -33,8 +33,8 @@
     for (int i = 0; i < DialogOptions.Count; i++)
     {
         var option = DialogOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         if (option.IsDialog)
         {
             var width = string.Empty;
@@ -107,9 +107,9 @@
 
     for (int i = 0; i < DateTimePickerOptions.Count; i++)
     {
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
         var option = DateTimePickerOptions[i];
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var year = option.CurrentMonth.Year;
         var month = option.CurrentMonth.Month;
         var calendar = CultureInfo.InvariantCulture.Calendar;
@@ -311,8 +311,8 @@
     for (int i = 0; i < SelectDropDownOptions.Count; i++)
     {
         var option = SelectDropDownOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var transform = "scaleY(0)";
         if (option.IsShow)
         {
@@ -330,8 +330,8 @@
         {
             style = "";
         }
-        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@index" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(BPopupBase.ZIndex++);" x-placement="bottom-start">
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(index);" x-placement="bottom-start">
             <div class="el-scrollbar" style="">
                 <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
                     <ul class="el-scrollbar__view el-select-dropdown__list">
@@ -353,8 +353,8 @@
     for (int i = 0; i < DropDownMenuOptions.Count; i++)
     {
         var option = DropDownMenuOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var transform = "scaleY(0)";
         if (option.IsShow)
         {
@@ -379,8 +379,8 @@
         dropDownStyles.Add($"transform:{transform}");
         dropDownStyles.Add("position:absolute");
         dropDownStyles.Add("transform-origin: center top 0px");
-        dropDownStyles.Add($"z-index:{BPopupBase.ZIndex++}");
-        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@index" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        dropDownStyles.Add($"z-index:{index}");
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
         <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="bottom-start">
             <CascadingValue Value="option">
                 @option.OptionContent
@@ -391,8 +391,8 @@
     for (int i = 0; i < SubMenuOptions.Count; i++)
     {
         var option = SubMenuOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var transform = "transform:scaleY(1);";
         var opacity = "1";
         if (option.IsShow)

@@ -32,7 +32,7 @@ namespace Blazui.Component.Popup
         [Inject]
         private Document Document { get; set; }
         public Action OnDispose { get; internal set; }
-        public static int ZIndex { get; internal set; } = 2000;
+        private static int ZIndex { get; set; } = 2000;
         protected List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
 
@@ -114,6 +114,8 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.ShadowZIndex++;
+                option.ZIndex = ZIndex++;
                 DropDownMenuOptions.Add(option);
                 InvokeAsync(() =>
                 {
@@ -138,6 +140,8 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<SubMenuOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.ShadowZIndex++;
+                option.ZIndex = ZIndex++;
                 option.Close = CloseSubMenuAsync;
                 SubMenuOptions.Add(option);
                 InvokeAsync(() =>
@@ -163,6 +167,8 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.ShadowZIndex++;
+                option.ZIndex = ZIndex++;
                 SelectDropDownOptions.Add(option);
                 InvokeAsync(() =>
                 {
@@ -187,6 +193,8 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DateTimePickerOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.ShadowZIndex++;
+                option.ZIndex = ZIndex++;
                 DateTimePickerOptions.Add(option);
                 InvokeAsync(() =>
                 {
@@ -211,6 +219,8 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DialogOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.ShadowZIndex++;
+                option.ZIndex = ZIndex++;
                 DialogOptions.Add(option);
                 StateHasChanged();
             }
@@ -258,6 +268,7 @@ namespace Blazui.Component.Popup
             {
                 var loadingOption = e.NewItems.OfType<LoadingOption>().FirstOrDefault();
                 loadingOption.IsNew = true;
+                loadingOption.ZIndex = ZIndex++;
                 LoadingOptions.Add(loadingOption);
                 InvokeAsync(() =>
                 {
@@ -281,6 +292,7 @@ namespace Blazui.Component.Popup
             {
                 var message = e.NewItems.OfType<MessageInfo>().FirstOrDefault();
                 message.IsNew = true;
+                message.ZIndex = ZIndex++;
                 lock (Messages)
                 {
                     message.Index = Messages.Count;
