@@ -52,6 +52,8 @@
                     border: 1px solid #EBEEF5;
                     border-top: none;
                     overflow: auto;
+                    padding: 10px;
+                    display: flex;
                 }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--border-card.el-tabs--top {
@@ -69,6 +71,8 @@
                     border: 1px solid #EBEEF5;
                     border-top: none;
                     overflow: auto;
+                    padding: 10px;
+                    display: flex;
                 }
 
         .blaz-layout > .blaz-layout-container > .blaz-layout-east {
