@@ -17,6 +17,8 @@ namespace Blazui.Component
         public DialogService DialogService { get; set; }
 
         [Inject]
+        public NavigationManager NavigationManager { get; set; }
+        [Inject]
         public IJSRuntime JSRuntime { get; set; }
 
         [Inject]

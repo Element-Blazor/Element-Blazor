@@ -26,6 +26,8 @@ namespace Blazui.Component.NavMenu
         [Parameter]
         public object Model { get; set; }
 
+        [Parameter]
+        public string Icon { get; set; } = "el-icon-menu";
 
         [CascadingParameter]
         public BMenu TopMenu { get; set; }
@@ -108,12 +110,12 @@ namespace Blazui.Component.NavMenu
             }
             if (!string.IsNullOrEmpty(Route))
             {
+                TopMenu.ActivateItem(this);
                 if (OnRouteChanging.HasDelegate)
                 {
                     var arg = new BChangeEventArgs<string>();
                     arg.NewValue = Route;
                     arg.OldValue = currentRoute;
-                    TopMenu.ActivateItem(this);
                     await OnRouteChanging.InvokeAsync(arg);
                     if (arg.DisallowChange)
                     {

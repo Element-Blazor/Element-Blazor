@@ -27,6 +27,8 @@ namespace Blazui.Component.NavMenu
         [Parameter]
         public object Model { get; set; }
 
+        [Parameter]
+        public string Icon { get; set; }
         [CascadingParameter]
         public BMenuContainer Menu { get; set; }
 

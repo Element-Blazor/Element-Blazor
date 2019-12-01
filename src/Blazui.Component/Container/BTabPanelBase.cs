@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Dom;
+using Blazui.Component.EventArgs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -133,6 +134,9 @@ namespace Blazui.Component.Container
 
         [Parameter]
         public EventCallback<ITab> OnRenderCompleted { get; set; }
+
+        [Parameter]
+        public EventCallback<BChangeEventArgs<ITab>> OnTabPanelChanging { get; set; }
 
         [Parameter]
         public EventCallback<ITab> OnEachTabRenderCompleted { get; set; }

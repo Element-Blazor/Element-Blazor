@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Dom;
+using Blazui.Component.EventArgs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -11,6 +12,8 @@ namespace Blazui.Component.Container
 {
     public class BSimpleTabPanelBase : ComponentBase, ITab, IDisposable
     {
+        [Parameter]
+        public EventCallback<BChangeEventArgs<ITab>> OnTabPanelChanging { get; set; }
         private static int tabIndex = 0;
         protected bool isClosable
         {
@@ -64,6 +67,17 @@ namespace Blazui.Component.Container
             if (!TabContainer.TabPanels.Any(x => x.Name == this.Name))
             {
                 return;
+            }
+            if (OnTabPanelChanging.HasDelegate)
+            {
+                var arg = new BChangeEventArgs<ITab>();
+                arg.OldValue = TabContainer.ActiveTab;
+                arg.NewValue = this;
+                await OnTabPanelChanging.InvokeAsync(arg);
+                if (arg.DisallowChange)
+                {
+                    return;
+                }
             }
             await TabContainer.SetActivateTabAsync(this);
         }
