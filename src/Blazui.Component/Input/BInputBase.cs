@@ -14,8 +14,6 @@ namespace Blazui.Component.Input
 {
     public class BInputBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
         [Parameter]
         public InputType Type { get; set; } = InputType.Text;
 
@@ -78,6 +76,11 @@ namespace Blazui.Component.Input
             SetFieldValue(Value);
         }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            SetFieldValue(Value);
+        }
 
         protected virtual Task OnFocusAsync()
         {

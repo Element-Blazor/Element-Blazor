@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.Dom;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,13 @@ namespace Blazui.Component.Form
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// 触发浏览器提交
+        /// </summary>
+        public async Task SubmitAsync(string url)
+        {
+            await Container.Dom(JSRuntime).SubmitAsync(url);
+        }
         public T GetValue<T>()
         {
             if (!IsValid())
@@ -42,26 +50,6 @@ namespace Blazui.Component.Form
                 }
 
                 object destValue = formItem.GetType().GetProperty("Value").GetValue(formItem);
-                //if (property.PropertyType.IsGenericType)
-                //{
-                //    if (property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                //    {
-                //        var type = Nullable.GetUnderlyingType(property.PropertyType);
-                //        if (formItem.Value != null && !string.IsNullOrWhiteSpace(formItem.Value.ToString()))
-                //        {
-                //            destValue = Convert.ChangeType(formItem.Value, type);
-                //        }
-                //    }
-                //    else
-                //    {
-                //        destValue = Convert.ChangeType(formItem.Value, property.PropertyType);
-                //    }
-                //}
-                //else
-                //{
-                //    destValue = Convert.ChangeType(formItem.Value, property.PropertyType);
-                //}
-
                 try
                 {
                     property.SetValue(value, destValue);

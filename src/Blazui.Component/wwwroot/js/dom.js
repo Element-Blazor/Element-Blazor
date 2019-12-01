@@ -10,6 +10,15 @@ window.getClientHeight = function (el) {
     }
     return el.clientHeight || 0;
 };
+window.submitForm = function (el, url) {
+    if (!el) {
+        return;
+    }
+
+    el.method = "post";
+    el.action = url;
+    el.submit();
+};
 window.getClientWidth = function (el) {
     if (!el) {
         return this.document.body.clientWidth;

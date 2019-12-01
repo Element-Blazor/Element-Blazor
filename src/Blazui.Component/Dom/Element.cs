@@ -29,6 +29,11 @@ namespace Blazui.Component.Dom
             return await jSRuntime.InvokeAsync<int>("getClientHeight", elementReference);
         }
 
+        public async Task SubmitAsync(string url)
+        {
+            await jSRuntime.InvokeVoidAsync("submitForm", elementReference, url);
+        }
+
         public async Task<int> GetOffsetLeftAsync()
         {
             return await jSRuntime.InvokeAsync<int>("getOffsetLeft", elementReference);

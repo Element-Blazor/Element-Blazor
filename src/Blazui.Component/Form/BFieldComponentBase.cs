@@ -8,6 +8,7 @@ namespace Blazui.Component.Form
 {
     public class BFieldComponentBase<TValue> : BComponentBase, IDisposable
     {
+        protected string Name { get; set; }
         [CascadingParameter]
         public BFormItemBase<TValue> FormItem { get; set; }
 
@@ -26,6 +27,7 @@ namespace Blazui.Component.Form
             if (FormItem != null)
             {
                 FormItem.OnReset += FormItem_OnReset;
+                Name = FormItem.Name;
             }
         }
 

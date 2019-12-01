@@ -20,7 +20,7 @@
     <label role="checkbox" aria-checked="true" class="el-checkbox @_isChecked @isDisabled">
         <span aria-checked="mixed" class="el-checkbox__input @_isChecked @isDisabled @_isIndeterminate">
             <span class="el-checkbox__inner"></span>
-            <input type="checkbox" aria-hidden="true" @onchange="ChangeStatus" class="el-checkbox__original @isDisabled" value="" />
+            <input type="checkbox" aria-hidden="true" @onchange="ChangeStatus" class="el-checkbox__original @isDisabled" name="@Name" value="@Value" />
         </span>
         <span class="el-checkbox__label">
             @ChildContent

@@ -18,6 +18,8 @@ namespace Blazui.Component.Form
         [Parameter]
         public bool IsRequired { get; set; }
 
+        [Parameter]
+        public string RequiredMessage { get; set; }
         internal bool IsShowing { get; set; } = true;
 
         [Parameter]
@@ -41,7 +43,7 @@ namespace Blazui.Component.Form
             if (IsRequired && !Rules.OfType<RequiredRule>().Any())
             {
                 var requiredRule = new RequiredRule();
-                requiredRule.ErrorMessage = $"请确认{Label}";
+                requiredRule.ErrorMessage = RequiredMessage ?? $"请确认{Label}";
                 Rules.Add(requiredRule);
             }
         }
