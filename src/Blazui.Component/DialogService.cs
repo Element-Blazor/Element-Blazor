@@ -31,13 +31,22 @@ namespace Blazui.Component
             });
         }
 
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(RenderFragment render, string title, float width)
+        {
+            return await ShowDialogAsync<TResult>((object)render, title, width);
+        }
+
         public async Task<DialogResult<TResult>> ShowDialogAsync<TComponent, TResult>(string title, float width)
             where TComponent : ComponentBase
+        {
+            return await ShowDialogAsync<TResult>(typeof(TComponent), title, width);
+        }
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title, float width)
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
             var option = new DialogOption()
             {
-                Content = typeof(TComponent),
+                Content = typeOrRender,
                 IsDialog = true,
                 Width = width,
                 Title = title,
@@ -50,6 +59,7 @@ namespace Blazui.Component
                 Result = (TResult)dialogResult.Result
             };
         }
+
         public async Task<DialogResult> ShowDialogAsync<TComponent>(string title)
             where TComponent : ComponentBase
         {
