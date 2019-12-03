@@ -24,7 +24,7 @@
         styles.Add("height:" + Height + "px");
     }
 
-    var validColumnCount = Headers.Count(x => !x.IsCheckBox);
+    var validColumnCount = Headers.Count();
     <div style="@string.Join(";",styles)" @ref="Container" class="@string.Join(" ",tableClsList)">
         <div class="el-table__header-wrapper" @ref="headerElement">
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
@@ -49,7 +49,11 @@
                     <tr class="">
                         @if (HasSelectionColumn)
                         {
-                            <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
+                            <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
+                                <div class="cell">
+                                    <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
+                                </div>
+                            </th>
                         }
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
@@ -108,32 +112,36 @@
                             clsList.Add("el-table__row--striped");
                         }
                         var row = DataSource.ElementAt(i);
-                    <tr class="@string.Join(" ",clsList)">
-                        @if (HasSelectionColumn)
-                        {
-                            <BSimpleCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked: Status.UnChecked" StatusChanged="(status=>ChangeRowStatus(status,row))"></BSimpleCheckBox>
-                        }
-                        @for (int j = 1; j <= Headers.Count; j++)
-                        {
-                            var header = Headers.ElementAt(j - 1);
-                            <td rowspan="1" colspan="1" class="el-table_1_column_@j  ">
-                                <div class="cell">
-                                    @if (header.IsCheckBox)
-                                    {
-                                        <BSimpleCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked: Status.UnChecked" IsDisabled="true"></BSimpleCheckBox>
-                                    }
-                                    else if (header.Template != null)
-                                    {
-                                        @header.Template(row)
-                                    }
-                                    else if (header.Eval != null)
-                                    {
-                                        @header.Eval(row)
-                                    }
-                                </div>
-                            </td>
-                        }
-                    </tr>
+                        <tr class="@string.Join(" ",clsList)">
+                            @if (HasSelectionColumn)
+                            {
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+                                        <BSimpleCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BSimpleCheckBox>
+                                    </div>
+                                </td>
+                            }
+                            @for (int j = 1; j <= Headers.Count; j++)
+                            {
+                                var header = Headers.ElementAt(j - 1);
+                                <td rowspan="1" colspan="1" class="el-table_1_column_@j  ">
+                                    <div class="cell">
+                                        @if (header.IsCheckBox)
+                                        {
+                                            <BSimpleCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BSimpleCheckBox>
+                                        }
+                                        else if (header.Template != null)
+                                        {
+                                            @header.Template(row)
+                                        }
+                                        else if (header.Eval != null)
+                                        {
+                                            @header.Eval(row)
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        </tr>
                     }
                 </tbody>
             </table>

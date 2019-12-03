@@ -187,6 +187,15 @@
           "BasicTableBase.cs",
           "TestData.cs"
         ]
+      },
+      {
+        "title": "自动生成列，宽度自适应",
+        "name": "Table",
+        "files": [
+          "AutoGenerateColumnTable.razor",
+          "AutoGenerateColumnTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
       }
     ]
   },

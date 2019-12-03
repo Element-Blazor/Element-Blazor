@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,10 +16,14 @@ namespace Blazui.Component.Table
     public class BTableBase<TRow> : ComponentBase, IContainerComponent
     {
         protected ElementReference headerElement;
-        public List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
+        internal List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
         private bool requireRender = true;
         protected int headerHeight = 49;
 
+        [Parameter]
+        public bool AutoGenerateColumns { get; set; } = true;
+        [Parameter]
+        public bool HasSelectionColumn { get; set; } = true;
         [Parameter]
         public EventCallback RenderCompleted { get; set; }
         /// <summary>
@@ -72,6 +78,36 @@ namespace Blazui.Component.Table
         }
         protected override void OnAfterRender(bool firstRender)
         {
+            if (AutoGenerateColumns)
+            {
+                typeof(TRow).GetProperties().Reverse().ToList().ForEach(property =>
+                {
+                    if (Headers.Any(x => x.Property == property.Name))
+                    {
+                        return;
+                    }
+                    Func<TRow, object> getMethod = row =>
+                      {
+                          return property.GetValue(row);
+                      };
+                    var attrs = property.GetCustomAttributes(true);
+                    var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
+                    }
+                    var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
+                    Headers.Insert(0, new TableHeader<TRow>()
+                    {
+                        Eval = getMethod,
+                        IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
+                        Property = property.Name,
+                        Text = text ?? property.Name,
+                        Width = width
+                    });
+                });
+
+            }
             if (requireRender)
             {
                 StateHasChanged();
