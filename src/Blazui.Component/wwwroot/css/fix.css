@@ -102,10 +102,15 @@
     flex-direction: column;
 }
 
-    .el-table .el-table__body-wrapper {
-        flex: 1;
-    }
+.el-table__body-wrapper {
+    flex: 1;
+    display: flex;
+}
 
-    .el-table .el-table__header {
-        width: 100%;
-    }
+.el-table__body, .el-table__footer, .el-table__header {
+    flex: 1;
+}
+
+.el-table__header-wrapper {
+    display: flex;
+}

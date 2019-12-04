@@ -48,6 +48,8 @@ namespace Blazui.Component.Table
         [Parameter]
         public HashSet<TRow> SelectedRows { get; set; } = new HashSet<TRow>();
 
+        [Parameter]
+        public EventCallback<HashSet<TRow>> SelectedRowsChanged { get; set; }
         protected Status selectAllStatus;
 
         [Inject]
@@ -151,6 +153,11 @@ namespace Blazui.Component.Table
             {
                 SelectedRows = new HashSet<TRow>();
             }
+
+            if (SelectedRowsChanged.HasDelegate)
+            {
+                _ = SelectedRowsChanged.InvokeAsync(SelectedRows);
+            }
             RefreshSelectAllStatus();
         }
 
@@ -163,6 +170,10 @@ namespace Blazui.Component.Table
             else
             {
                 SelectedRows.Remove(row);
+            }
+            if (SelectedRowsChanged.HasDelegate)
+            {
+                _ = SelectedRowsChanged.InvokeAsync(SelectedRows);
             }
             RefreshSelectAllStatus();
         }

@@ -60,14 +60,7 @@
                             var header = Headers.ElementAt(i - 1);
                             <th colspan="1" rowspan="1" class="el-table_1_column_@i     is-leaf">
                                 <div class="cell">
-                                    @if (header.IsCheckBox)
-                                    {
-                                        <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
-                                    }
-                                    else
-                                    {
-                                        @header.Text
-                                    }
+                                    @header.Text
                                 </div>
                             </th>
                         }
