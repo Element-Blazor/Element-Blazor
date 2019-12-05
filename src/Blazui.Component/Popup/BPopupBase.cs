@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Popup
@@ -140,23 +141,20 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<SubMenuOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                option.ShadowZIndex++;
+                option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 option.Close = CloseSubMenuAsync;
                 SubMenuOptions.Add(option);
-                InvokeAsync(() =>
-                {
-                    StateHasChanged();
-                });
+                StateHasChanged();
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var option = e.OldItems.OfType<SubMenuOption>().FirstOrDefault();
-                SubMenuOptions.Remove(option);
-                InvokeAsync(() =>
+                if (!SubMenuOptions.Remove(option))
                 {
-                    StateHasChanged();
-                });
+                    Console.WriteLine("SubMenuOptions_CollectionChanged Remove Failure");
+                }
+                StateHasChanged();
             }
         }
 
@@ -418,34 +416,63 @@ namespace Blazui.Component.Popup
 
         internal async Task CloseSubMenuAsync(SubMenuOption option)
         {
-            option.IsShow = false;
-            StateHasChanged();
-            await Task.Delay(200);
-            PopupService.SubMenuOptions.Remove(option);
-            option.TaskCompletionSource.TrySetResult(0);
-        }
-
-        internal void ShowSubMenu(SubMenuOption option)
-        {
-            option.Closing = false;
-        }
-
-        internal void ReadyCloseSubMenu(SubMenuOption option)
-        {
-            if (option.CancelClose)
+            await option.SubMenu.TopMenu.SemaphoreSlim.WaitAsync();
+            try
             {
-                option.CancelClose = false;
-                return;
-            }
-            option.Closing = true;
-            Task.Delay(500).ContinueWith(task =>
-            {
-                if (!option.Closing)
+                if (!option.IsShow)
                 {
                     return;
                 }
-                _ = CloseSubMenuAsync(option);
-            });
+                option.IsShow = false;
+                await InvokeAsync(StateHasChanged);
+                await Task.Delay(200);
+                option.SubMenu.DeActivate();
+                PopupService.SubMenuOptions.Remove(option);
+            }
+            finally
+            {
+                option.SubMenu.TopMenu.SemaphoreSlim.Release();
+            }
+        }
+
+        internal void KeepShowSubMenu(SubMenuOption option)
+        {
+            CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+        }
+        void CancelTokenSource(CancellationTokenSource cancellationTokenSource)
+        {
+            if (cancellationTokenSource == null)
+            {
+                return;
+            }
+            try
+            {
+                if (cancellationTokenSource.IsCancellationRequested)
+                {
+                    return;
+                }
+                cancellationTokenSource.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+
+            }
+        }
+
+        internal async Task ReadyCloseSubMenuAsync(SubMenuOption option)
+        {
+            option.ClosingTaskCancellationTokenSource = new System.Threading.CancellationTokenSource();
+            var task = Task.Delay(500, option.ClosingTaskCancellationTokenSource.Token).ContinueWith(async task =>
+              {
+                  if (task.IsCanceled)
+                  {
+                      CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                      return;
+                  }
+                  CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                  await CloseSubMenuAsync(option);
+              });
+            option.ClosingTask = await task;
         }
 
         async Task RenderDateTimePickerAsync()

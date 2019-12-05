@@ -8,7 +8,7 @@
     }
 
     var text = Formatter(Value);
-    var isClearable = Value != default && IsClearable && (IsFocus || IsMouseOver);
+    var isClearable = Value != null && IsClearable && (IsFocus || IsMouseOver);
     var cls = Cls;
     if (IsClearable || !string.IsNullOrWhiteSpace(SuffixIcon))
     {

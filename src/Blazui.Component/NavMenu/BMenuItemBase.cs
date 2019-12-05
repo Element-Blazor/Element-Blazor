@@ -80,7 +80,10 @@ namespace Blazui.Component.NavMenu
 
         public void OnOver()
         {
-            //todo: 颜色值经过计算而得
+            if (Options.Mode == MenuMode.Horizontal && ParentMenu != null)
+            {
+                ParentMenu.KeepSubMenuOpen();
+            }
             if (Options.Mode == MenuMode.Horizontal || string.IsNullOrWhiteSpace(Options.HoverColor))
             {
                 return;
@@ -92,10 +95,6 @@ namespace Blazui.Component.NavMenu
         {
             if (Options.Mode == MenuMode.Horizontal)
             {
-                if (ParentMenu != null)
-                {
-                    ParentMenu.CancelClose();
-                }
                 backgroundColor = Options.BackgroundColor;
                 return;
             }
@@ -106,7 +105,7 @@ namespace Blazui.Component.NavMenu
         {
             if (ParentMenu != null && TopMenu.Mode == MenuMode.Horizontal)
             {
-                _ = ParentMenu.CloseAsync();
+                await ParentMenu.CloseAsync();
             }
             if (!string.IsNullOrEmpty(Route))
             {

@@ -18,7 +18,7 @@ namespace Blazui.Component.Input
         public InputType Type { get; set; } = InputType.Text;
 
         [Parameter]
-        public Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
+        public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
 
         [Parameter]
         public bool IsClearButtonClick { get; set; }

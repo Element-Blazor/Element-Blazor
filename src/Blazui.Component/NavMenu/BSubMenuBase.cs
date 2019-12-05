@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.NavMenu
 {
     public class BSubMenuBase : BMenuContainer, IMenuItem
     {
+        internal SemaphoreSlim SemaphoreSlim { get; private set; } = new SemaphoreSlim(1, 1);
         protected ElementReference Element { get; set; }
         [Inject]
         PopupService PopupService { get; set; }
@@ -66,7 +69,7 @@ namespace Blazui.Component.NavMenu
             borderColor = "transparent";
 
             //TopMenu.DeActive();
-            OnOut();
+            _ = OnOutAsync();
             StateHasChanged();
         }
 
@@ -82,33 +85,52 @@ namespace Blazui.Component.NavMenu
         {
             if (TopMenu.Mode == MenuMode.Horizontal)
             {
-                if (isOpened && subMenuOption.Closing)
+                await SemaphoreSlim.WaitAsync();
+                try
                 {
-                    subMenuOption.Closing = false;
-                    return;
+                    if (isOpened)
+                    {
+                        try
+                        {
+                            if (subMenuOption != null
+                                && subMenuOption.ClosingTask != null
+                                && subMenuOption.ClosingTask.Status != TaskStatus.RanToCompletion
+                                && subMenuOption.ClosingTask.Status != TaskStatus.Canceled)
+                            {
+                                subMenuOption.ClosingTaskCancellationTokenSource.Cancel();
+                            }
+                        }
+                        catch (ObjectDisposedException)
+                        {
+
+                        }
+                        return;
+                    }
+                    subMenuOption = new SubMenuOption()
+                    {
+                        SubMenu = this,
+                        Content = ChildContent,
+                        Options = Options,
+                        Target = Element
+                    };
+                    var taskCompletionSource = new TaskCompletionSource<int>();
+                    subMenuOption.TaskCompletionSource = taskCompletionSource;
+                    while (PopupService.SubMenuOptions.Any())
+                    {
+                        await Task.Delay(50);
+                    }
+                    PopupService.SubMenuOptions.Add(subMenuOption);
+                    isOpened = true;
                 }
-                var taskCompletionSource = new TaskCompletionSource<int>();
-                subMenuOption = new SubMenuOption()
+                finally
                 {
-                    SubMenu = this,
-                    Content = ChildContent,
-                    Options = Options,
-                    Target = Element,
-                    Closing = false,
-                    TaskCompletionSource = taskCompletionSource
-                };
-                var prevMenuOption = PopupService.SubMenuOptions.FirstOrDefault();
-                if (prevMenuOption != null)
-                {
-                    await prevMenuOption.Close(prevMenuOption);
+                    SemaphoreSlim.Release();
                 }
-                PopupService.SubMenuOptions.Add(subMenuOption);
-                isOpened = true;
-                await taskCompletionSource.Task;
+                await subMenuOption.TaskCompletionSource.Task;
                 borderColor = "transparent";
 
                 isOpened = false;
-                OnOut();
+                await OnOutAsync();
             }
             else
             {
@@ -116,7 +138,21 @@ namespace Blazui.Component.NavMenu
                 textColor = Options.ActiveTextColor;
                 isActive = true;
             }
-            //opened = true;
+        }
+
+        private void SubMenuOptions_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (PopupService.SubMenuOptions.Any())
+            {
+                return;
+            }
+            PopupService.SubMenuOptions.CollectionChanged -= SubMenuOptions_CollectionChanged;
+            PopupService.SubMenuOptions.Add(subMenuOption);
+        }
+
+        internal void KeepSubMenuOpen()
+        {
+            subMenuOption.Instance.KeepShowSubMenu(subMenuOption);
         }
 
         internal async Task CloseAsync()
@@ -126,41 +162,56 @@ namespace Blazui.Component.NavMenu
             isActive = false;
         }
 
-        internal void CancelClose()
+        void CancelTokenSource(CancellationTokenSource cancellationTokenSource)
         {
-            if (subMenuOption == null)
+            if (cancellationTokenSource == null)
             {
                 return;
             }
-            subMenuOption.CancelClose = true;
+            try
+            {
+                if (cancellationTokenSource.IsCancellationRequested)
+                {
+                    return;
+                }
+                cancellationTokenSource.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+
+            }
         }
 
-        protected void OnOut()
+        protected async Task OnOutAsync()
         {
             if (isActive || isOpened)
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
-                if (TopMenu.Mode == MenuMode.Horizontal)
+                if (TopMenu.Mode == MenuMode.Horizontal && subMenuOption.IsShow)
                 {
-                    subMenuOption.Closing = true;
-                    Task.Delay(50).ContinueWith(task =>
-                    {
-                        if (!subMenuOption.Closing)
-                        {
-                            return;
-                        }
-                        isOpened = false;
-                        isActive = false;
-                        if (subMenuOption.Close == null)
-                        {
-                            return;
-                        }
-                        InvokeAsync(() =>
-                        {
-                            subMenuOption.Close(subMenuOption);
-                        });
-                    });
+                    subMenuOption.ClosingTaskCancellationTokenSource = new System.Threading.CancellationTokenSource();
+                    var option = subMenuOption;
+                    var closingTask = Task.Delay(50, subMenuOption.ClosingTaskCancellationTokenSource.Token).ContinueWith(async task =>
+                         {
+                             if (task.IsCanceled)
+                             {
+                                 CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                                 return;
+                             }
+                             CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                             isOpened = false;
+                             isActive = false;
+                             if (option.Close == null)
+                             {
+                                 return;
+                             }
+                             await InvokeAsync(async () =>
+                             {
+                                 await option.Close(option);
+                             });
+                         });
+                    subMenuOption.ClosingTask = await closingTask;
                 }
                 else
                 {

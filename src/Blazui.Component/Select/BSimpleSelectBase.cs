@@ -58,10 +58,10 @@ namespace Blazui.Component.Select
         public TValue Value { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnSelect { get; set; }
+        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnChange { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnSelecting { get; set; }
+        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnChanging { get; set; }
 
         internal BSimpleOptionBase<TValue> SelectedOption
         {
@@ -101,9 +101,9 @@ namespace Blazui.Component.Select
             var args = new BChangeEventArgs<BSimpleOptionBase<TValue>>();
             args.NewValue = item;
             args.OldValue = SelectedOption;
-            if (OnSelecting.HasDelegate)
+            if (OnChanging.HasDelegate)
             {
-                await OnSelecting.InvokeAsync(args);
+                await OnChanging.InvokeAsync(args);
                 if (args.DisallowChange)
                 {
                     return;
@@ -113,9 +113,9 @@ namespace Blazui.Component.Select
             await DropDownOption.Instance.CloseDropDownAsync(DropDownOption);
             SelectedOption = item;
             SetFieldValue(item.Value);
-            if (OnSelect.HasDelegate)
+            if (OnChange.HasDelegate)
             {
-                await OnSelect.InvokeAsync(args);
+                await OnChange.InvokeAsync(args);
             }
             IsClearButtonClick = false;
             StateHasChanged();

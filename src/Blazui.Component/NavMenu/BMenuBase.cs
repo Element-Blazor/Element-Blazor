@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.NavMenu
 {
     public class BMenuBase : BMenuContainer
     {
+        internal SemaphoreSlim SemaphoreSlim { get; private set; } = new SemaphoreSlim(1, 1);
         [Parameter]
         public MenuMode Mode { get; set; } = MenuMode.Vertical;
         protected string modeClass;

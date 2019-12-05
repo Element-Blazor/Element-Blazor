@@ -3,14 +3,14 @@
     class="el-submenu @(isActive?"is-active":"") @(isOpened?"is-opened":"")"
     aria-expanded="@(isOpened?"true":"")">
     <div @onmouseover="OnOverAsync"
-         @onmouseout="OnOut"
+         @onmouseout="OnOutAsync"
          @onclick="OnClick"
          @ref="Element"
          class="el-submenu__title"
          style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
-        <i class="@(Icon ?? "el-icon-menu")"></i>
+        <i class="@(Icon ?? "el-icon-menu")" @onmouseover:stopPropagation  @onmouseout:stopPropagation></i>
         @Label
-        <i class="el-submenu__icon-arrow el-icon-arrow-down"></i>
+        <i class="el-submenu__icon-arrow el-icon-arrow-down" @onmouseover:stopPropagation @onmouseout:stopPropagation></i>
     </div>
     @if (IsVertical)
     {

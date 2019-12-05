@@ -10,22 +10,22 @@ namespace Blazui.Component
     {
         public static bool Equal<TValue>(TValue value1, TValue value2)
         {
-            if (value1 == default && value2 != default)
+            if (value1 == null && value2 != null)
             {
                 return false;
             }
-            if (value1 != default && value2 == default)
+            if (value1 != null && value2 == null)
             {
                 return false;
             }
-            if (value1 == default && value2 == default)
+            if (value1 == null && value2 == null)
             {
                 return true;
             }
             var valueType = typeof(TValue);
             if (valueType == typeof(string))
             {
-                if (value1.ToString() == value2.ToString())
+                if (value1?.ToString() == value2?.ToString())
                 {
                     return true;
                 }

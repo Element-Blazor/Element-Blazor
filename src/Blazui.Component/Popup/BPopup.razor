@@ -413,7 +413,7 @@
             transform = "transform:scaleY(0);";
             opacity = "0";
         }
-        <div class="el-menu--horizontal" @onmouseover="e=>ShowSubMenu(option)" @onmouseout="e=>ReadyCloseSubMenu(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
+        <div class="el-menu--horizontal" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
             <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
                 <CascadingValue Value="option.SubMenu">
                     <CascadingValue Value="option.Options">
