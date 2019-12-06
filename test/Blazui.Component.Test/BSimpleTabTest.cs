@@ -18,14 +18,10 @@ namespace Blazui.Component.Test
         public async Task Test1Async()
         {
             await InitilizeAsync();
-            Browser browser = await Puppeteer.LaunchAsync(new LaunchOptions
-            {
-                Headless = !Debugger.IsAttached
-            });
-
-            // Create a new page and go to Bing Maps
-            Page page = await browser.NewPageAsync();
+            Page page = await Browser.NewPageAsync();
             await page.GoToAsync("https://localhost:5001");
+            await NavigateToMenuAsync(page, "Tabs ±Í«©“≥");
+            var demoCards = await WaitForDemoCardsAsync(page);
             await Task.Delay(TimeSpan.FromDays(1));
         }
     }
