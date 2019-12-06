@@ -19,6 +19,11 @@
             渲染后的内容区域
             </summary>
         </member>
+        <member name="P:Blazui.Component.Form.BFormBase.Validations">
+            <summary>
+            设置验证规则
+            </summary>
+        </member>
         <member name="M:Blazui.Component.Form.BFormBase.SubmitAsync(System.String)">
             <summary>
             触发浏览器提交
@@ -95,6 +100,12 @@
             <summary>
             多个单选组件选择的值
             </summary>
+        </member>
+        <member name="T:Blazui.Component.Select.OptionModel`1">
+            <summary>
+            下拉组件专用 Model 类，使用该类的属性将强制渲染成下拉框
+            </summary>
+            <typeparam name="TValue"></typeparam>
         </member>
         <member name="P:Blazui.Component.Table.BTableBase`1.Total">
             <summary>

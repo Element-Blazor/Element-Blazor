@@ -45,6 +45,7 @@ namespace Blazui.Component.CheckBox
                     Status = Status.Checked;
                     return;
                 }
+                Status = Status.UnChecked;
             }
         }
 

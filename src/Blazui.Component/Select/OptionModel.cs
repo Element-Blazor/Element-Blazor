@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
+    /// <summary>
+    /// 下拉组件专用 Model 类，使用该类的属性将强制渲染成下拉框
+    /// </summary>
+    /// <typeparam name="TValue"></typeparam>
     public class OptionModel<TValue>
     {
         public OptionModel(string text, TValue value)

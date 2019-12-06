@@ -71,7 +71,7 @@ namespace Blazui.Component.Radio
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            SelectedValue = default;
+            SelectedValue = TypeHelper.ChangeType<TValue>(value);
         }
 
         protected void OnRadioChanged(MouseEventArgs e)

@@ -36,6 +36,7 @@ namespace Blazui.Component.Form
 
         public override void Reset()
         {
+            Value = OriginValue;
             if (OnReset != null)
             {
                 OnReset(OriginValue, true);

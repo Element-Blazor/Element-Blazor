@@ -9,9 +9,7 @@ namespace Blazui.Component.Form
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {
-        [Parameter]
-        public bool AutoGenerateFields { get; set; } = false;
-        private bool RequireRefresh = true;
+        private bool requireRefresh = true;
         public ElementReference Container { get; set; }
 
         internal List<BFormItemBaseObject> Items { get; set; } = new List<BFormItemBaseObject>();
@@ -22,6 +20,9 @@ namespace Blazui.Component.Form
         [Parameter]
         public LabelAlign LabelAlign { get; set; }
 
+        /// <summary>
+        /// 设置验证规则
+        /// </summary>
         [Parameter]
         public List<FormFieldValidation> Validations { get; set; } = new List<FormFieldValidation>();
 
@@ -111,18 +112,11 @@ namespace Blazui.Component.Form
         }
         protected override void OnAfterRender(bool firstRender)
         {
-            if (!AutoGenerateFields)
+            if (requireRefresh)
             {
-                if (RequireRefresh)
-                {
-                    RequireRefresh = false;
-                    SetValues();
-                    StateHasChanged();
-                }
-            }
-            else
-            {
+                requireRefresh = false;
                 SetValues();
+                StateHasChanged();
             }
         }
 
