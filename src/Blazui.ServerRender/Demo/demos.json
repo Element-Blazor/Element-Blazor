@@ -111,6 +111,14 @@
           "AlignForm.razor",
           "BasicFormBase.cs"
         ]
+      },
+      {
+        "title": "表单双向绑定",
+        "name": "Form",
+        "files": [
+          "InitilizeForm.razor",
+          "InitilizeFormBase.cs"
+        ]
       }
     ]
   },

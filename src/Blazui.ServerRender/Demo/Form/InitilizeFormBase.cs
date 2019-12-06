@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Form;
+using Blazui.Component.Select;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -7,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.Form
 {
-    public class BasicFormBase : ComponentBase
+    public class InitilizeFormBase : ComponentBase
     {
         internal LabelAlign formAlign;
         [Inject]
         Component.MessageBox MessageBox { get; set; }
 
+        internal object value;
         protected BForm demoForm;
         protected void Submit()
         {
@@ -25,7 +27,22 @@ namespace Blazui.ServerRender.Demo.Form
             _ = MessageBox.AlertAsync(activity.ToString());
         }
 
-        
+        protected override void OnInitialized()
+        {
+            value = new Activity()
+            {
+                Area = new OptionModel<string>("区域1", "shanghai"),
+                Delivery = true,
+                Description = "详情",
+                Name = "测试",
+                Resource = "场地",
+                Time = DateTime.Now,
+                Type = new List<string>()
+                 {
+                     "Offline","Online"
+                 }
+            };
+        }
 
         protected void Reset()
         {

@@ -39,7 +39,7 @@ namespace Blazui.Component.Switch
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            SetFieldValue(Value);
+            SetFieldValue(Value, false);
         }
         protected async Task OnInternalSwitchChangedAsync(MouseEventArgs e)
         {
@@ -55,7 +55,7 @@ namespace Blazui.Component.Switch
             {
                 Value = InactiveValue;
             }
-            SetFieldValue(Value);
+            SetFieldValue(Value, true);
             if (OnChanged.HasDelegate)
             {
                 await OnChanged.InvokeAsync(e);
@@ -66,9 +66,24 @@ namespace Blazui.Component.Switch
             }
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            Value = InactiveValue;
+            if (value == null)
+            {
+                Value = InactiveValue;
+            }
+            else
+            {
+                var boolValue = Convert.ToBoolean(value);
+                if (boolValue)
+                {
+                    Value = ActiveValue;
+                }
+                else
+                {
+                    Value = InactiveValue;
+                }
+            }
         }
     }
 }

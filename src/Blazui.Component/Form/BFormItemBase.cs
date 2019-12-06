@@ -9,20 +9,15 @@ namespace Blazui.Component.Form
 {
     public class BFormItemBase<TValue> : BFormItemBaseObject
     {
-        private TValue value;
-        public TValue Value
-        {
-            get
-            {
-                return value;
-            }
-            set
-            {
-                this.value = value;
-            }
-        }
+        public TValue OriginValue { get; set; }
 
-        internal override void Validate()
+        /// <summary>
+        /// 初始值是否已渲染
+        /// </summary>
+        public bool OriginValueRendered { get; set; }
+        public TValue Value { get; set; }
+
+        public override void Validate()
         {
             ValidationResult = new ValidationResult();
             foreach (var item in Rules)
@@ -35,6 +30,17 @@ namespace Blazui.Component.Form
             }
             ValidationResult.IsValid = !ValidationResult.ErrorMessages.Any();
             StateHasChanged();
+        }
+
+        public event Action<object, bool> OnReset;
+
+        public override void Reset()
+        {
+            if (OnReset != null)
+            {
+                OnReset(OriginValue, true);
+            }
+            ValidationResult = null;
         }
     }
 }

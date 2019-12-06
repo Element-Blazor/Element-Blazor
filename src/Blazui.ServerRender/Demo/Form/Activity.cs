@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blazui.Component.Select;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Blazui.ServerRender.Demo.Form
     public class Activity
     {
         public string Name { get; set; }
-        public string Area { get; set; }
+        public OptionModel<string> Area { get; set; }
         public DateTime? Time { get; set; }
         public bool Delivery { get; set; }
         public List<string> Type { get; set; }

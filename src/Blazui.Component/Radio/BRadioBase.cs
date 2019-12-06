@@ -56,7 +56,7 @@ namespace Blazui.Component.Radio
                 if (TypeHelper.Equal(RadioGroup.SelectedValue, Value))
                 {
                     Status = RadioStatus.Selected;
-                    SetFieldValue(RadioGroup.SelectedValue);
+                    SetFieldValue(RadioGroup.SelectedValue, false);
                 }
             }
             else
@@ -64,12 +64,12 @@ namespace Blazui.Component.Radio
                 if (TypeHelper.Equal(SelectedValue, Value))
                 {
                     Status = RadioStatus.Selected;
-                    SetFieldValue(SelectedValue);
+                    SetFieldValue(SelectedValue, false);
                 }
             }
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             SelectedValue = default;
         }
@@ -106,7 +106,7 @@ namespace Blazui.Component.Radio
 
             if (RadioGroup == null)
             {
-                SetFieldValue(SelectedValue);
+                SetFieldValue(SelectedValue, true);
             }
             if (StatusChanged.HasDelegate)
             {

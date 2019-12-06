@@ -217,7 +217,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DialogOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                option.ShadowZIndex++;
+                option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 DialogOptions.Add(option);
                 StateHasChanged();

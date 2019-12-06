@@ -1,12 +1,5 @@
-﻿@inherits BasicFormBase
-
-<BRadioGroup TValue="LabelAlign" @bind-SelectedValue="formAlign">
-    <BRadioButton Value="LabelAlign.Left">左对齐</BRadioButton>
-    <BRadioButton Value="LabelAlign.Right">右对齐</BRadioButton>
-    <BRadioButton Value="LabelAlign.Top">顶部对齐</BRadioButton>
-</BRadioGroup>
-<br />
-<BForm Style="width:400px;" @ref="demoForm" LabelAlign="formAlign">
+﻿@inherits InitilizeFormBase
+<BForm Style="width:400px;" @ref="demoForm"  Value="value">
     <BFormItem TValue="string" Label="活动名称" Name="@nameof(Activity.Name)" IsRequired="true">
         <BInput TValue="string"></BInput>
     </BFormItem>

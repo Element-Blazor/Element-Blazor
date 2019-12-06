@@ -12,6 +12,10 @@
     <Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\blazui\src\Blazui.Component\Blazui.Component.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Container\BCenterBase.cs" />
     <Compile Remove="Container\BEastBase.cs" />

@@ -59,6 +59,9 @@ namespace Blazui.Component.Table
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
+        public bool EnablePagination { get; set; } = true;
+
+        [Parameter]
         public int Height { get; set; }
 
         /// <summary>

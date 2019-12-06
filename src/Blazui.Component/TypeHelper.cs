@@ -52,6 +52,11 @@ namespace Blazui.Component
             return ReferenceEquals(value1, value2);
         }
 
+        public static TValue ChangeType<TValue>(object value)
+        {
+            return (TValue)ChangeType(value, typeof(TValue));
+        }
+
         public static object ChangeType(object value, Type type)
         {
             object destValue = null;
@@ -62,7 +67,7 @@ namespace Blazui.Component
                     var nulltype = Nullable.GetUnderlyingType(type);
                     if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                     {
-                        destValue = Convert.ChangeType(value, type);
+                        destValue = Convert.ChangeType(value, nulltype);
                     }
                 }
                 else

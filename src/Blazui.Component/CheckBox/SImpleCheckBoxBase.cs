@@ -20,7 +20,7 @@ namespace Blazui.Component.CheckBox
         [Parameter]
         public Status Status { get; set; }
 
-        private TValue originValue;
+        private TValue rawValue;
         [Parameter]
         public TValue Value { get; set; }
 
@@ -32,13 +32,41 @@ namespace Blazui.Component.CheckBox
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            originValue = Value;
+            rawValue = Value;
         }
 
-        protected override void FormItem_OnReset()
+        protected override void OnParametersSet()
         {
+            base.OnParametersSet();
+            if (CheckBoxGroup != null)
+            {
+                if (CheckBoxGroup.SelectedItems.Contains(Value))
+                {
+                    Status = Status.Checked;
+                    return;
+                }
+            }
+        }
+
+        //private void CheckBoxGroup_FormItem_OnReset(object value, bool requireRerender)
+        //{
+        //    if (CheckBoxGroup.SelectedItems.Contains(Value))
+        //    {
+        //        Status = Status.Checked;
+        //        return;
+        //    }
+
+        protected override void FormItem_OnReset(object value, bool requireRerender)
+        {
+            if (CheckBoxGroup != null)
+            {
+                if (CheckBoxGroup.SelectedItems.Contains(TypeHelper.ChangeType<TValue>(value)))
+                {
+                    Status = Status.Checked;
+                    return;
+                }
+            }
             CheckBoxGroup?.SelectedItems?.Remove(Value);
-            Value = default;
             Status = Status.UnChecked;
         }
 
@@ -48,10 +76,6 @@ namespace Blazui.Component.CheckBox
             {
                 return;
             }
-            var oldValue = new CheckBoxValue()
-            {
-                Status = Status
-            };
             var newValue = new CheckBoxValue();
             switch (Status)
             {
@@ -65,32 +89,30 @@ namespace Blazui.Component.CheckBox
                     newValue.Status = Status.Checked;
                     break;
             }
+
+            var checkBoxValue = Value;
             if (newValue.Status == Status.Checked)
             {
                 CheckBoxGroup?.SelectedItems?.Add(Value);
-                Value = originValue;
             }
             else
             {
                 CheckBoxGroup?.SelectedItems?.Remove(Value);
-                Value = default;
+                checkBoxValue = default;
             }
             Status = newValue.Status;
 
             //有 CheckBoxGroup 时，视整个CheckBoxGroup为一个字段
             if (CheckBoxGroup == null)
             {
-                SetFieldValue(Value);
+                SetFieldValue(checkBoxValue, true);
             }
             if (ValueChanged.HasDelegate)
             {
-                _ = ValueChanged.InvokeAsync(Value);
+                _ = ValueChanged.InvokeAsync(checkBoxValue);
             }
             if (StatusChanged.HasDelegate)
             {
-                var args = new BChangeEventArgs<CheckBoxValue>();
-                args.OldValue = oldValue;
-                args.NewValue = newValue;
                 _ = StatusChanged.InvokeAsync(newValue.Status);
             }
         }

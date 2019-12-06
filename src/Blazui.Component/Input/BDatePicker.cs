@@ -65,7 +65,7 @@ namespace Blazui.Component.Input
             {
                 _ = DateChanged.InvokeAsync(Date);
             }
-            SetFieldValue(Date);
+            SetFieldValue(Date, true);
         }
     }
 }

@@ -8,21 +8,25 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
-    public class BSimpleSelectBase<TValue> : BFieldComponentBase<TValue>
+    public class BSimpleSelectBase<TValue> : BFieldComponentBase<OptionModel<TValue>>, IDisposable
     {
 
         protected ElementReference elementSelect;
 
         internal bool IsClearButtonClick { get; set; }
 
-        internal List<BSimpleOptionBase<TValue>> Options { get; set; } = new List<BSimpleOptionBase<TValue>>();
+        internal string Label { get; set; }
+        internal ObservableCollection<BSimpleOptionBase<TValue>> Options { get; set; } = new ObservableCollection<BSimpleOptionBase<TValue>>();
 
+        [Parameter]
+        public TValue InitialValue { get; set; }
         [Parameter]
         public string Placeholder { get; set; } = "请选择";
         [Parameter]
@@ -74,10 +78,12 @@ namespace Blazui.Component.Select
                 if (value == null)
                 {
                     Value = default;
+                    Label = string.Empty;
                 }
                 else
                 {
                     Value = value.Value;
+                    Label = value.Text;
                 }
                 selectedOption = value;
                 if (ValueChanged.HasDelegate)
@@ -112,7 +118,7 @@ namespace Blazui.Component.Select
 
             await DropDownOption.Instance.CloseDropDownAsync(DropDownOption);
             SelectedOption = item;
-            SetFieldValue(item.Value);
+            SetFieldValue(new OptionModel<TValue>(item.Text, item.Value), true);
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
@@ -150,9 +156,18 @@ namespace Blazui.Component.Select
             PopupService.SelectDropDownOptions.Add(DropDownOption);
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            selectedOption = null;
+            var optionModel = (OptionModel<TValue>)value;
+            if (optionModel == null)
+            {
+                SelectedOption = null;
+            }
+            else
+            {
+                Label = optionModel.Text;
+                Value = optionModel.Value;
+            }
         }
     }
 }

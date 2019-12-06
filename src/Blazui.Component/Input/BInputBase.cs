@@ -73,13 +73,7 @@ namespace Blazui.Component.Input
             {
                 _ = ValueChanged.InvokeAsync(Value);
             }
-            SetFieldValue(Value);
-        }
-
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            SetInitilizeFieldValue(Value);
+            SetFieldValue(Value, true);
         }
 
         protected virtual Task OnFocusAsync()
@@ -99,7 +93,7 @@ namespace Blazui.Component.Input
             {
                 _ = ValueChanged.InvokeAsync(Value);
             }
-            SetFieldValue(Value);
+            SetFieldValue(Value, true);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -108,17 +102,19 @@ namespace Blazui.Component.Input
             {
                 await InputElement.Dom(JSRuntime).SetDisabledAsync(IsDisabled);
             }
-
-            if (FormItem != null)
-            {
-                FormItem.OnReset += FormItem_OnReset;
-            }
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            this.Value = default;
-            if (ValueChanged.HasDelegate)
+            if (value == null)
+            {
+                Value = default;
+            }
+            else
+            {
+                Value = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
+            }
+            if (requireRerender && ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
             }

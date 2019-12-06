@@ -9,7 +9,9 @@ namespace Blazui.Component.Form
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {
-        protected bool RequireRerender = true;
+        [Parameter]
+        public bool AutoGenerateFields { get; set; } = false;
+        private bool RequireRefresh = true;
         public ElementReference Container { get; set; }
 
         internal List<BFormItemBaseObject> Items { get; set; } = new List<BFormItemBaseObject>();
@@ -33,6 +35,18 @@ namespace Blazui.Component.Form
         {
             await Container.Dom(JSRuntime).SubmitAsync(url);
         }
+
+        /// <summary>
+        /// 该属性仅用于设置表单初始值，获取表单输入值请使用 <seealso cref="GetValue{T}"/> 方法
+        /// </summary>
+        [Parameter]
+        public object Value { get; set; }
+
+        /// <summary>
+        /// 获取表单输入值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetValue<T>()
         {
             if (!IsValid())
@@ -62,12 +76,53 @@ namespace Blazui.Component.Form
             return value;
         }
 
+        private void SetValues()
+        {
+            if (Value == null)
+            {
+                return;
+            }
+            var properties = Value.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
+                if (formItem == null)
+                {
+                    continue;
+                }
+                var propertyValue = property.GetValue(Value);
+                var formItemType = formItem.GetType();
+                formItemType.GetProperty("OriginValue").SetValue(formItem, propertyValue);
+                formItemType.GetProperty("Value").SetValue(formItem, propertyValue);
+                formItem.Validate();
+                formItem.ShowErrorMessage();
+            }
+        }
+        internal void ShowErrorMessage()
+        {
+            _ = Task.Delay(10).ContinueWith((task) =>
+            {
+                foreach (var item in Items)
+                {
+                    item.IsShowing = false;
+                }
+                InvokeAsync(StateHasChanged);
+            });
+        }
         protected override void OnAfterRender(bool firstRender)
         {
-            if (RequireRerender)
+            if (!AutoGenerateFields)
             {
-                RequireRerender = false;
-                StateHasChanged();
+                if (RequireRefresh)
+                {
+                    RequireRefresh = false;
+                    SetValues();
+                    StateHasChanged();
+                }
+            }
+            else
+            {
+                SetValues();
             }
         }
 
@@ -89,19 +144,9 @@ namespace Blazui.Component.Form
             var isValid = Items.All(x => x.ValidationResult.IsValid);
             if (!isValid)
             {
-                Task.Delay(10).ContinueWith((task) =>
-                {
-                    foreach (var item in Items)
-                    {
-                        item.IsShowing = false;
-                    }
-                    InvokeAsync(() =>
-                    {
-                        StateHasChanged();
-                    });
-                });
+                ShowErrorMessage();
             }
-            return Items.All(x => x.ValidationResult.IsValid);
+            return isValid;
         }
     }
 }

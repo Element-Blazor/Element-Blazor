@@ -140,9 +140,12 @@
             </table>
         </div>
         <div class="el-table__column-resize-proxy" style="display: none;"></div>
-        <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
-            <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
-        </div>
+        @if (EnablePagination)
+        {
+            <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
+                <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
+            </div>
+        }
     </div>
 }
 else

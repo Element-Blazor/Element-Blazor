@@ -25,7 +25,6 @@ namespace Blazui.Component.Form
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        public event Action OnReset;
         [CascadingParameter]
         public BForm Form { get; set; }
 
@@ -48,15 +47,20 @@ namespace Blazui.Component.Form
             }
         }
 
-        internal void Reset()
+        internal void ShowErrorMessage()
         {
-            if (OnReset != null)
+            if (ValidationResult == null || ValidationResult.IsValid)
             {
-                OnReset();
+                return;
             }
-            ValidationResult = null;
+            IsShowing = true;
+            _ = Task.Delay(10).ContinueWith((task) =>
+            {
+                IsShowing = false;
+                InvokeAsync(StateHasChanged);
+            });
         }
-
-        internal abstract void Validate();
+        public abstract void Validate();
+        public abstract void Reset();
     }
 }
