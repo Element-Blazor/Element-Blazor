@@ -13,7 +13,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\blazui\src\Blazui.Component\Blazui.Component.xml</DocumentationFile>
+    <DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Component.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Component.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
