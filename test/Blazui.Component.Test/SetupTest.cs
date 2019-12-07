@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ using Xunit.Abstractions;
 
 namespace Blazui.Component.Test
 {
-    public class SetupTest
+    public class SetupTest : IDisposable
     {
         System.Threading.SemaphoreSlim SemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
+        IDictionary<string, Dictionary<string, Type>> demoTesterTypes;
         private bool initilized = false;
         public SetupTest(ITestOutputHelper output)
         {
@@ -41,14 +43,34 @@ namespace Blazui.Component.Test
                 }
                 Output.WriteLine("启动服务器");
                 _ = Task.Factory.StartNew(() =>
-                  {
-                      Program.Main(new string[0]);
-                  });
+                    {
+                        Program.Main(new string[0]);
+                    });
+                demoTesterTypes = AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(x => !x.IsDynamic)
+                    .SelectMany(x => x.ExportedTypes)
+                    .Where(x => x.GetInterface(nameof(IDemoTester)) != null)
+                    .Select(x =>
+                    {
+                        var testNameAttribute = x.GetCustomAttributes(false).OfType<TestNameAttribute>().FirstOrDefault();
+                        return new
+                        {
+                            Menu = testNameAttribute.MenuName,
+                            testNameAttribute.Name,
+                            Type = x
+                        };
+                    })
+                    .GroupBy(x => x.Menu)
+                    .ToDictionary(x => x.Key, x => x.ToDictionary(y => y.Name, y => y.Type));
                 Output.WriteLine("下载浏览器");
                 var fetcher = new BrowserFetcher();
                 if (!File.Exists(fetcher.DownloadsFolder))
                 {
                     await fetcher.DownloadAsync(BrowserFetcher.DefaultRevision);
+                }
+                else
+                {
+                    await Task.Delay(1000);
                 }
                 Browser = await Puppeteer.LaunchAsync(new LaunchOptions
                 {
@@ -80,8 +102,15 @@ namespace Blazui.Component.Test
                     var text = await menu.EvaluateFunctionAsync<string>("(m)=>m.innerText");
                     if (text?.Trim() == menuText)
                     {
-                        await menu.ClickAsync();
-                        return;
+                        try
+                        {
+                            await menu.ClickAsync();
+                            return;
+                        }
+                        catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
+                        {
+                            await Task.Delay(50);
+                        }
                     }
                 }
             }
@@ -100,10 +129,25 @@ namespace Blazui.Component.Test
                 demoCards.Add(new DemoCard()
                 {
                     Title = text,
-                    Body = await card.QuerySelectorAsync("el-card__body")
+                    Body = await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content")
                 });
             }
             return demoCards;
+        }
+
+        protected async Task TestAsync(string menuName, DemoCard demoCard)
+        {
+            demoTesterTypes.TryGetValue(menuName, out var menuDemos);
+            Assert.NotNull(menuDemos);
+            menuDemos.TryGetValue(demoCard.Title, out var testType);
+            Assert.True(testType != null, $"Demo \"{demoCard.Title}\" 对应的单元测试未找到");
+            var tester = (IDemoTester)Activator.CreateInstance(testType);
+            await tester.TestAsync(demoCard);
+        }
+
+        public void Dispose()
+        {
+            _ = Browser.CloseAsync();
         }
     }
 }
