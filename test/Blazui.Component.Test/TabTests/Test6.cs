@@ -8,8 +8,8 @@ using Xunit;
 
 namespace Blazui.Component.Test.TabTests
 {
-    [TestName("Tabs 标签页", "调用事件API实现可编辑的标签页")]
-    public class Test5 : TestBase, IDemoTester
+    [TestName("Tabs 标签页", "双向绑定实现可编辑的标签页")]
+    public class Test6 : TestBase, IDemoTester
     {
         async Task<List<(string Title, ElementHandle Header)>> GetHeadersAsync(DemoCard card)
         {
@@ -59,8 +59,8 @@ namespace Blazui.Component.Test.TabTests
             tabs.Add("卡3");
             tabs.Add("Component");
             var originTabs = tabs.ToList();
-            var headers = await AssertTabAsync(card, tabs, 0);
-
+            await Task.Delay(200);
+            var headers = await GetHeadersAsync(card);
             await headers[0].Header.ClickAsync();
             await Task.Delay(200);
             while (true)
@@ -77,34 +77,10 @@ namespace Blazui.Component.Test.TabTests
                 await closeIcon.ClickAsync();
                 await Task.Delay(200);
                 tabs.RemoveAt(0);
-                headers = await AssertTabAsync(card, tabs, 0);
+                headers = await GetHeadersAsync(card);
             }
             await AssertEmptyBody(card);
-            await card.Page.ReloadAsync();
-            var cards = await WaitForDemoCardsAsync(card.Page);
-            card = cards.FirstOrDefault(x => x.Title == card.Title);
-            headers = await GetHeadersAsync(card);
-            await headers[3].Header.ClickAsync();
-            await Task.Delay(200);
-            tabs = originTabs.ToList();
-            while (true)
-            {
-                var headerItem = headers.LastOrDefault();
-                if (headerItem.Header == null)
-                {
-                    break;
-                }
-                await headerItem.Header.ClickAsync();
-                await Task.Delay(200);
-                var closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
-                Assert.NotNull(closeIcon);
-                await closeIcon.ClickAsync();
-                await Task.Delay(200);
-                tabs.RemoveAt(tabs.Count - 1);
-                headers = await AssertTabAsync(card, tabs, tabs.Count - 1);
-            }
-            await AssertEmptyBody(card);
-            var newTab = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__header.is-top > span.el-tabs__new-tab");
+            var newTab = await card.Body.QuerySelectorAsync("button");
             tabs.Add("标题0");
             tabs.Add("标题1");
             tabs.Add("标题2");
@@ -115,7 +91,6 @@ namespace Blazui.Component.Test.TabTests
                 await Task.Delay(200);
             }
             headers = await GetHeadersAsync(card);
-            originTabs = tabs.ToList();
             while (true)
             {
                 var headerItem = headers.LastOrDefault();
@@ -132,6 +107,7 @@ namespace Blazui.Component.Test.TabTests
                 tabs.RemoveAt(tabs.Count - 1);
                 headers = await AssertTabAsync(card, tabs, tabs.Count - 1);
             }
+            await AssertEmptyBody(card);
         }
 
         private static async Task AssertEmptyBody(DemoCard card)

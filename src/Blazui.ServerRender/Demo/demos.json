@@ -19,10 +19,19 @@
         "name": "LeftTab"
       },
       {
-        "title": "可编辑的标签页",
+        "title": "调用事件API实现可编辑的标签页",
         "name": "EditableTab",
         "files": [
           "EditableTab.razor",
+          "TestCheckBoxInTab.razor"
+        ]
+      },
+      {
+        "title": "双向绑定实现可编辑的标签页",
+        "name": "EditableTab",
+        "files": [
+          "BindingEditableTab.razor",
+          "BindingEditableTabBase.cs",
           "TestCheckBoxInTab.razor"
         ]
       }

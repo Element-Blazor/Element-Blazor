@@ -78,14 +78,6 @@ namespace Blazui.Component.Container
             }).ToList();
         }
 
-        //protected async Task OnRenderCompletedInternalAsync(ITab tab)
-        //{
-        //    if (OnRenderCompleted.HasDelegate)
-        //    {
-        //        await OnRenderCompleted.InvokeAsync(tab);
-        //    }
-        //}
-
         [Parameter]
         public Func<ITab, Task<bool>> OnTabClosingAsync { get; set; }
 

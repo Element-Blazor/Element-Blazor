@@ -20,7 +20,8 @@ namespace Blazui.Component.Test
         [InlineData("选项卡样式的标签页")]
         [InlineData("卡片化的标签页")]
         [InlineData("在左边的标签页")]
-        [InlineData("可编辑的标签页")]
+        [InlineData("调用事件API实现可编辑的标签页")]
+        [InlineData("双向绑定实现可编辑的标签页")]
         public async Task TestTabAsync(string title)
         {
             await InitilizeAsync();
