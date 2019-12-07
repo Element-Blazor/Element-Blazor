@@ -205,11 +205,11 @@ namespace Blazui.Component.Container
                     return;
                 }
             }
-            if (ActiveTab != null && ActiveTab.Name == tab.Name)
+            if (ActiveTab != null && ActiveTab.Name == tab?.Name)
             {
                 return;
             }
-            ActiveTabName = tab.Name;
+            ActiveTabName = tab?.Name;
             var eventArgs = new BChangeEventArgs<ITab>();
             eventArgs.OldValue = ActiveTab;
             eventArgs.NewValue = tab;

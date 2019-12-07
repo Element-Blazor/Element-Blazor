@@ -9,34 +9,38 @@ using Xunit;
 namespace Blazui.Component.Test.TabTests
 {
     [TestName("Tabs 标签页", "可编辑的标签页")]
-    public class Test5 : IDemoTester
+    public class Test5 : TestBase, IDemoTester
     {
-        public async Task TestAsync(DemoCard card)
+        async Task<List<(string Title, ElementHandle Header)>> GetHeadersAsync(DemoCard card)
         {
             var header = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__header.is-top");
-            var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
             Assert.NotNull(header);
-            Assert.NotNull(body);
             var tabHeaders = await header.QuerySelectorAllAsync("div.el-tabs__nav-wrap.is-top > div.el-tabs__nav-scroll > div.el-tabs__nav.is-top > div.el-tabs__item.is-top.is-closable");
-            var tasks = tabHeaders.Select(async x => new
-            {
-                Title = (await x.EvaluateFunctionAsync<string>("m=>m.innerText")).Trim(),
-                Header = x
-            });
-            var headers = (await Task.WhenAll(tasks)).ToList();
-            Assert.Equal(4, headers.Count);
-            Assert.Equal("选项卡1", headers[0].Title);
-            Assert.Equal("卡2", headers[1].Title);
-            Assert.Equal("卡3", headers[2].Title);
-            Assert.Equal("Component", headers[3].Title);
+            var tasks = tabHeaders.Select(async x => ((await x.EvaluateFunctionAsync<string>("m=>m.innerText")).Trim(), x));
+            List<(string Title, ElementHandle Header)> headers = (await Task.WhenAll(tasks)).ToList();
+            return headers;
+        }
+        async Task<List<(string Title, ElementHandle Header)>> AssertTabAsync(DemoCard card, List<string> tabs, int activeIndex)
+        {
+            var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
+            Assert.NotNull(body);
+            var headers = await GetHeadersAsync(card);
+            var tabHeaders = headers.Select(x => x.Header).ToArray();
+            Assert.Equal(tabs.Count, headers.Count);
 
-            await AssertHeaderAsync(tabHeaders, 0);
-            await AssertBodyAsync(body, @"<!--!-->
-<!--!-->
-        <!--!--><!--!-->内容1<!--!-->
-            ");
-            await AssertHoverAsync(tabHeaders, 0);
-            foreach (var tabHeader in headers.Skip(1))
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                Assert.Equal(tabs[i], headers[i].Title);
+            }
+
+            if (!tabs.Any())
+            {
+                return headers;
+            }
+            await AssertHeaderAsync(tabHeaders, activeIndex);
+            await AssertBodyAsync(body, tabs[activeIndex]);
+            await AssertHoverAsync(tabHeaders, activeIndex);
+            foreach (var tabHeader in headers)
             {
                 await tabHeader.Header.ClickAsync();
                 await Task.Delay(100);
@@ -45,11 +49,72 @@ namespace Blazui.Component.Test.TabTests
                 await AssertHeaderAsync(tabHeaders, index);
                 await AssertBodyAsync(body, tabHeader.Title);
             }
+            return headers;
+        }
+        public async Task TestAsync(DemoCard card)
+        {
+            var tabs = new List<string>();
+            tabs.Add("选项卡1");
+            tabs.Add("卡2");
+            tabs.Add("卡3");
+            tabs.Add("Component");
+            var originTabs = tabs.ToList();
+            var headers = await AssertTabAsync(card, tabs, 0);
+
+            await headers[0].Header.ClickAsync();
+            await Task.Delay(200);
+            while (true)
+            {
+                var headerItem = headers.FirstOrDefault();
+                if (headerItem.Header == null)
+                {
+                    break;
+                }
+                await headerItem.Header.ClickAsync();
+                await Task.Delay(200);
+                var closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
+                Assert.NotNull(closeIcon);
+                await closeIcon.ClickAsync();
+                await Task.Delay(200);
+                tabs.RemoveAt(0);
+                headers = await AssertTabAsync(card, tabs, 0);
+            }
+            await AssertEmptyBody(card);
+            await card.Page.ReloadAsync();
+            var cards = await WaitForDemoCardsAsync(card.Page);
+            card = cards.FirstOrDefault(x => x.Title == card.Title);
+            headers = await GetHeadersAsync(card);
+            await headers[3].Header.ClickAsync();
+            await Task.Delay(200);
+            tabs = originTabs.ToList();
+            while (true)
+            {
+                var headerItem = headers.LastOrDefault();
+                if (headerItem.Header == null)
+                {
+                    break;
+                }
+                await headerItem.Header.ClickAsync();
+                await Task.Delay(200);
+                var closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
+                Assert.NotNull(closeIcon);
+                await closeIcon.ClickAsync();
+                await Task.Delay(200);
+                tabs.RemoveAt(tabs.Count - 1);
+                headers = await AssertTabAsync(card, tabs, tabs.Count - 1);
+            }
+            await AssertEmptyBody(card);
+        }
+
+        private static async Task AssertEmptyBody(DemoCard card)
+        {
+            var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
+            var bodyContent = await body.EvaluateFunctionAsync<string>("x=>x.innerText");
+            Assert.True(string.IsNullOrWhiteSpace(bodyContent));
         }
 
         private async Task AssertHoverAsync(ElementHandle[] tabHeaders, int activeIndex)
         {
-            var activeHeader = tabHeaders[activeIndex];
             foreach (var header in tabHeaders)
             {
                 await header.HoverAsync();
@@ -63,26 +128,27 @@ namespace Blazui.Component.Test.TabTests
 
         private async Task AssertBodyAsync(ElementHandle body, string text)
         {
-            var bodyText = await body.EvaluateFunctionAsync<string>("x=>x.innerHTML");
-            if (text == "卡2")
+            if (text != "Component")
             {
-                Assert.Equal(@$"<!--!-->{Environment.NewLine}<!--!-->{Environment.NewLine}        <!--!--><!--!-->内容2<!--!-->{Environment.NewLine}            ", bodyText);
+
+                var bodyText = (await body.EvaluateFunctionAsync<string>("x=>x.innerText")).Trim();
+                if (text == "选项1")
+                {
+                    Assert.Equal("内容1", bodyText);
+                }
+                else if (text == "卡2")
+                {
+                    Assert.Equal("内容2", bodyText);
+                }
+                else if (text == "卡3")
+                {
+                    Assert.Equal("内容3", bodyText);
+                }
             }
-            else if (text == "卡3")
+            else
             {
-                Assert.Equal(@$"<!--!-->{Environment.NewLine}<!--!-->{Environment.NewLine}        <!--!--><!--!-->内容3<!--!-->{Environment.NewLine}            ", bodyText);
-            }
-            else if (text == "Component")
-            {
-                Assert.Equal(@$"<!--!-->{Environment.NewLine}<!--!-->{Environment.NewLine}        <!--!--><!--!--><!--!-->    <label role=""checkbox"" aria-checked=""true"" class=""el-checkbox  ""><!--!-->{Environment.NewLine}        <span aria-checked=""mixed"" class=""el-checkbox__input   ""><!--!-->{Environment.NewLine}            <span class=""el-checkbox__inner""></span>
-            <input type=""checkbox"" aria-hidden=""true"" class=""el-checkbox__original "" value=""""><!--!-->
-        </span><!--!-->
-        <span class=""el-checkbox__label""><!--!-->
-            a<!--!-->
-        </span><!--!-->
-    </label><!--!-->
-<!--!-->
-            ", bodyText);
+                var input = await body.QuerySelectorAsync("label.el-checkbox > span.el-checkbox__input > input");
+                Assert.NotNull(input);
             }
         }
 

@@ -41,6 +41,10 @@ namespace Blazui.Component
         {
             return await ShowDialogAsync<TResult>(typeof(TComponent), title, width);
         }
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title)
+        {
+            return await ShowDialogAsync<TResult>(typeOrRender, title, 0);
+        }
         public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title, float width)
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();

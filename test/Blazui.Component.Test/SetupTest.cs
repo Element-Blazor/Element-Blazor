@@ -9,17 +9,20 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Blazui.Component.Test
 {
-    public class SetupTest : IDisposable
+    public class SetupTest : TestBase, IDisposable
     {
         System.Threading.SemaphoreSlim SemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
-        IDictionary<string, Dictionary<string, Type>> demoTesterTypes;
         private bool initilized = false;
+        private IHostBuilder host;
+        private CancellationTokenSource source;
+
         public SetupTest(ITestOutputHelper output)
         {
             Output = output;
@@ -42,10 +45,9 @@ namespace Blazui.Component.Test
                     return;
                 }
                 Output.WriteLine("启动服务器");
-                _ = Task.Factory.StartNew(() =>
-                    {
-                        Program.Main(new string[0]);
-                    });
+                host = Program.CreateHostBuilder(new string[0]);
+                source = new System.Threading.CancellationTokenSource();
+                _ = host.RunConsoleAsync(source.Token);
                 demoTesterTypes = AppDomain.CurrentDomain.GetAssemblies()
                     .Where(x => !x.IsDynamic)
                     .SelectMany(x => x.ExportedTypes)
@@ -116,24 +118,6 @@ namespace Blazui.Component.Test
             }
         }
 
-        protected async Task<List<DemoCard>> WaitForDemoCardsAsync(Page page)
-        {
-            await page.WaitForSelectorAsync(".main > .el-card");
-            await Task.Delay(1000);
-            var demoCards = new List<DemoCard>();
-            var cards = await page.QuerySelectorAllAsync(".main > .el-card");
-            foreach (var card in cards)
-            {
-                var header = await card.QuerySelectorAsync(".el-card__header");
-                var text = await header.EvaluateFunctionAsync<string>("(m)=>m.innerText");
-                demoCards.Add(new DemoCard()
-                {
-                    Title = text,
-                    Body = await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content")
-                });
-            }
-            return demoCards;
-        }
 
         protected async Task TestAsync(string menuName, DemoCard demoCard)
         {
@@ -148,6 +132,7 @@ namespace Blazui.Component.Test
         public void Dispose()
         {
             _ = Browser.CloseAsync();
+            source.Cancel();
         }
     }
 }

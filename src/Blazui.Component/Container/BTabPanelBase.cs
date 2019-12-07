@@ -108,22 +108,30 @@ namespace Blazui.Component.Container
             {
                 DataSource.Remove(removingTabModel);
             }
-
-            var removingTab = tab.TabContainer.TabPanels.FirstOrDefault(x => x.Name == tab.Name);
-            //tab.TabContainer.TabPanels.Remove(removingTab);
-            if (removingTab.Name == tab.TabContainer.activeTabName)
+            if (DataSource.Any())
             {
-                var activeIndex = removingIndex++;
-                if (removingIndex > DataSource.Count - 1)
+                var removingTab = tab.TabContainer.TabPanels.FirstOrDefault(x => x.Name == tab.Name);
+                //tab.TabContainer.TabPanels.Remove(removingTab);
+                if (removingTab.Name == tab.TabContainer.activeTabName)
                 {
-                    activeIndex = DataSource.Count - 1;
+                    var activeIndex = removingIndex;
+                    if (removingIndex > DataSource.Count - 1)
+                    {
+                        activeIndex = DataSource.Count - 1;
+                    }
+                    else
+                    {
+                        activeIndex = removingIndex;
+                    }
+
+                    var activeModel = DataSource.ElementAt(activeIndex);
+                    await tab.TabContainer.SetActivateTabAsync(Name(activeModel));
+                    tab.TabContainer.Refresh();
                 }
-                else
-                {
-                    activeIndex = removingIndex;
-                }
-                var activeModel = DataSource.ElementAt(activeIndex);
-                await tab.TabContainer.SetActivateTabAsync(Name(activeModel));
+            }
+            else
+            {
+                await tab.TabContainer.SetActivateTabAsync(string.Empty);
                 tab.TabContainer.Refresh();
             }
             if (OnTabClose.HasDelegate)

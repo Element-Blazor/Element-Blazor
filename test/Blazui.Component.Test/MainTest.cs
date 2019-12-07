@@ -9,9 +9,9 @@ using Xunit.Abstractions;
 
 namespace Blazui.Component.Test
 {
-    public class BTabTest : SetupTest
+    public class MainTest : SetupTest
     {
-        public BTabTest(ITestOutputHelper output) : base(output)
+        public MainTest(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -21,7 +21,7 @@ namespace Blazui.Component.Test
         [InlineData("卡片化的标签页")]
         [InlineData("在左边的标签页")]
         [InlineData("可编辑的标签页")]
-        public async Task Test1Async(string title)
+        public async Task TestTabAsync(string title)
         {
             await InitilizeAsync();
             Page page = await Browser.NewPageAsync();

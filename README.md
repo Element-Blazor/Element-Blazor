@@ -9,6 +9,8 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 
 Blazui 演示地址：http://blazui.com:9000
 
+主要更新仓库：https://github.com/wzxinchen/Blazui
+
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
 目前演示服务器配置较低，点击过快可能会有问题
@@ -112,7 +114,7 @@ services.AddBlazuiServices();
 
 #### 计划
 
-###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin [ ]
+###### 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin [ ]
 ###### nuget 包 [√]
 ###### 开发文档 [ ]
 ###### 树形表格 [ ]
