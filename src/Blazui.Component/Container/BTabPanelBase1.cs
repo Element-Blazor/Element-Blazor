@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Container
 {
-    public class BTabPanelBase<T> : ComponentBase
+    public class BTabPanelBase1<T> : ComponentBase
     {
         [Parameter]
         public ObservableCollection<T> DataSource { get; set; }
@@ -84,53 +84,6 @@ namespace Blazui.Component.Container
         [Parameter]
         public EventCallback<ITab> OnTabClose { get; set; }
 
-        protected async Task RemoveTabCloseAsync(ITab tab)
-        {
-            if (OnTabClosingAsync != null)
-            {
-                if (!await OnTabClosingAsync(tab))
-                {
-                    return;
-                }
-            }
-
-            var removingTabModel = DataSource.FirstOrDefault(x => Name(x) == tab.Name);
-            var removingIndex = DataSource.IndexOf(removingTabModel);
-            if (removingTabModel != null)
-            {
-                DataSource.Remove(removingTabModel);
-            }
-            if (DataSource.Any())
-            {
-                var removingTab = tab.TabContainer.TabPanels.FirstOrDefault(x => x.Name == tab.Name);
-                //tab.TabContainer.TabPanels.Remove(removingTab);
-                if (removingTab.Name == tab.TabContainer.activeTabName)
-                {
-                    var activeIndex = removingIndex;
-                    if (removingIndex > DataSource.Count - 1)
-                    {
-                        activeIndex = DataSource.Count - 1;
-                    }
-                    else
-                    {
-                        activeIndex = removingIndex;
-                    }
-
-                    var activeModel = DataSource.ElementAt(activeIndex);
-                    await tab.TabContainer.SetActivateTabAsync(Name(activeModel));
-                    tab.TabContainer.Refresh();
-                }
-            }
-            else
-            {
-                await tab.TabContainer.SetActivateTabAsync(string.Empty);
-                tab.TabContainer.Refresh();
-            }
-            if (OnTabClose.HasDelegate)
-            {
-                _ = OnTabClose.InvokeAsync(tab);
-            }
-        }
 
         [Parameter]
         public EventCallback<ITab> OnRenderCompleted { get; set; }
@@ -150,7 +103,7 @@ namespace Blazui.Component.Container
         }
 
         [Parameter]
-        public EventCallback<BTabPanelBase<T>> OnAllTabRenderCompleted { get; set; }
+        public EventCallback<BTabPanelBase1<T>> OnAllTabRenderCompleted { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {

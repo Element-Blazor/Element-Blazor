@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.EditableTab
 {
-    public class BindingEditableTabBase : ComponentBase
+    public class EditableTabBase : ComponentBase
     {
         protected BSimpleTab tab;
         protected ObservableCollection<TabOption> models = new ObservableCollection<TabOption>()
@@ -44,24 +44,18 @@ namespace Blazui.ServerRender.Demo.EditableTab
     };
         protected void OnAddingTabAsync()
         {
-            foreach (var item in models)
-            {
-                item.IsActive = false;
-            }
             models.Add(new TabOption()
             {
                 Content = "内容" + models.Count,
                 IsClosable = true,
-                Name = "name" + models.Count,
                 Title = "标题" + models.Count,
                 IsActive = true
             });
-            tab.Refresh();
         }
-
         protected void RemoveTabCloseAsync(BSimpleTabPanelBase tab)
         {
             models.Remove(models.FirstOrDefault(x => x.Title == tab.Title));
+
         }
     }
 }

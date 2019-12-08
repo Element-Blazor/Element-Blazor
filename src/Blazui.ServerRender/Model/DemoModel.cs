@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.Container;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ namespace Blazui.ServerRender.Model
     {
         public string Title { get; set; }
         public ObservableCollection<CodeModel> Codes { get; set; } = new ObservableCollection<CodeModel>();
+        public ObservableCollection<TabOption> Options { get; set; } = new ObservableCollection<TabOption>();
         public Type Demo { get; set; }
 
         /// <summary>

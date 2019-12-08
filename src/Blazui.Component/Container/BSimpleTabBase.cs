@@ -12,12 +12,13 @@ using Microsoft.JSInterop;
 
 namespace Blazui.Component.Container
 {
-    public class BSimpleTabBase : ComponentBase, IDisposable
+    public class BSimpleTabBase : BComponentBase, IDisposable
     {
         [Parameter]
-        public bool? IsClosable { get; set; }
+        public ObservableCollection<TabOption> DataSource { get; set; }
+        private bool requireRerender = true;
         [Parameter]
-        public bool? IsAddable { get; set; }
+        public bool IsAddable { get; set; }
         /// <summary>
         /// 渲染后的内容区域
         /// </summary>
@@ -30,78 +31,139 @@ namespace Blazui.Component.Container
 
         [Parameter]
         public TabPosition TabPosition { get; set; }
-        public ObservableCollection<ITab> TabPanels { get; private set; } = new ObservableCollection<ITab>();
+        private List<BSimpleTabPanelBase> tabPanels { get; set; } = new List<BSimpleTabPanelBase>();
 
         [Inject]
         private IJSRuntime JSRuntime { get; set; }
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// Tab 页被切换后触发
+        /// </summary>
         [Parameter]
-        public EventCallback<BChangeEventArgs<ITab>> OnActiveTabChanged { get; set; }
+        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnActiveTabChanged { get; set; }
 
+        /// <summary>
+        /// Tab 页被切换前触发
+        /// </summary>
         [Parameter]
-        public Func<ITab, Task<bool>> OnActiveTabChangingAsync { get; set; }
+        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnActiveTabChanging { get; set; }
 
-        internal string activeTabName;
+        /// <summary>
+        /// Tab 页被关闭后触发
+        /// </summary>
         [Parameter]
-        public string ActiveTabName
+        public EventCallback<BSimpleTabPanelBase> OnTabClose { get; set; }
+
+        /// <summary>
+        /// Tab 页被关闭时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<BClosingEventArgs<BSimpleTabPanelBase>> OnTabClosing { get; set; }
+        internal async Task CloseTabAsync(BSimpleTabPanelBase tab)
         {
-            get
+            if (OnTabClosing.HasDelegate)
             {
-                return activeTabName;
-            }
-            set
-            {
-                activeTabName = value;
-                if (TabPanels.Any())
+                var arg = new BClosingEventArgs<BSimpleTabPanelBase>();
+                arg.Target = tab;
+                await OnTabClosing.InvokeAsync(arg);
+                if (arg.Cancel)
                 {
-                    ActiveTab = TabPanels.FirstOrDefault(x => x.Name == activeTabName);
+                    return;
                 }
             }
-        }
 
-
-        [Parameter]
-        public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
-
-        public ITab ActiveTab { get; internal set; }
-        private int barOffsetLeft;
-
-        public int BarOffsetLeft
-        {
-            get
+            requireRerender = true;
+            ResetActiveTab(tab);
+            if (OnTabClose.HasDelegate)
             {
-                return barOffsetLeft;
-            }
-            set
-            {
-                barOffsetLeft = value;
+                _ = OnTabClose.InvokeAsync(tab);
             }
         }
-        private int barWidth;
-        public int BarWidth
+
+        private void ResetActiveTab(BSimpleTabPanelBase tab)
         {
-            get
-            {
-                return barWidth;
-            }
-            set
-            {
-                barWidth = value;
-            }
-        }
-        internal async Task AddTabAsync(ITab tab)
-        {
-            if (TabPanels.Any(x => x.Name == tab.Name))
+            if (DataSource == null)
             {
                 return;
             }
-            TabPanels.Add(tab);
-            if (ActiveTab == null)
+            if (DataSource.Count <= 1)
             {
-                await SetActivateTabAsync(tab);
+                return;
             }
+            var activeOption = DataSource.FirstOrDefault(x => x.IsActive);
+            if (activeOption.Title != tab.Title)
+            {
+                return;
+            }
+            var activeIndex = DataSource.IndexOf(activeOption);
+            var newActiveIndex = activeIndex;
+            if (activeIndex == DataSource.Count - 1)
+            {
+                newActiveIndex = DataSource.Count - 2;
+            }
+            DataSource.RemoveAt(activeIndex);
+            activeOption = DataSource.ElementAt(newActiveIndex);
+            activeOption.IsActive = true;
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            if (IsEditable || IsAddable)
+            {
+                if (DataSource == null)
+                {
+                    throw new BlazuiException("标签页组件启用可编辑模式时必须指定 DataSource 属性，硬编码无效");
+                }
+                var activeTab = DataSource.FirstOrDefault(x => x.IsActive);
+                if (activeTab == null)
+                {
+                    activeTab = DataSource.FirstOrDefault();
+                    activeTab.IsActive = true;
+                }
+                DataSource.CollectionChanged -= DataSource_CollectionChanged;
+                DataSource.CollectionChanged += DataSource_CollectionChanged;
+            }
+        }
+
+        private void DataSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1);
+        }
+
+        /// <summary>
+        /// 点击加号按钮增加 Tab 页时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
+
+        internal BSimpleTabPanelBase ActiveTab { get; private set; }
+
+        internal int BarOffsetLeft { get; set; }
+        internal int BarWidth { get; set; }
+        internal void AddTab(BSimpleTabPanelBase tab)
+        {
+            if (Exists(tab.Name))
+            {
+                return;
+            }
+            tabPanels.Add(tab);
+        }
+
+        internal void RemoveTab(string name)
+        {
+            tabPanels.Remove(tabPanels.FirstOrDefault(x => x.Name == name));
+        }
+
+        internal bool Exists(string name)
+        {
+            if (tabPanels.Any(x => x.Name == name))
+            {
+                return true;
+            }
+            return false;
         }
 
         internal (string headerPosition, string tabPosition) GetPosition()
@@ -129,100 +191,113 @@ namespace Blazui.Component.Container
             }
             return (headerPosition, tabPosition);
         }
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!TabPanels.Any())
+            if (requireRerender)
             {
-                return;
-            }
-            var oldActiveTab = ActiveTab;
-            if (!string.IsNullOrWhiteSpace(ActiveTabName))
-            {
-                ActiveTab = TabPanels.FirstOrDefault(x => x.Name == ActiveTabName);
-            }
-            if (ActiveTab == null)
-            {
-                return;
-            }
-            ActiveTab.OnRenderCompletedAsync += AcitveTabOnRenderCompletedAsync;
-            if (oldActiveTab == null || oldActiveTab.Name != ActiveTab.Name)
-            {
-                StateHasChanged();
-            }
-        }
-
-        private async Task AcitveTabOnRenderCompletedAsync(ITab arg)
-        {
-            arg.OnRenderCompletedAsync -= AcitveTabOnRenderCompletedAsync;
-
-            if (Type == TabType.Normal)
-            {
-                var dom = arg.Element.Dom(JSRuntime);
-                var width = await dom.GetClientWidthAsync();
-                var paddingLeft = await dom.Style.GetPaddingLeftAsync();
-                var offsetLeft = await dom.GetOffsetLeftAsync();
-                var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
-                var barWidth = width - padding;
-                var barOffsetLeft = offsetLeft + paddingLeft;
-                if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
+                requireRerender = false;
+                if (DataSource == null)
                 {
-                    if (OnTabRenderComplete.HasDelegate)
+                    var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
+                    if (activeTab == null)
                     {
-                        await OnTabRenderComplete.InvokeAsync(arg);
+                        activeTab = tabPanels.FirstOrDefault();
+                        activeTab.Activate();
                     }
+                    await SetActivateTabAsync(activeTab);
                     return;
                 }
-                BarWidth = barWidth;
-                BarOffsetLeft = barOffsetLeft;
-                StateHasChanged();
-            }
-            else
-            {
-                if (OnTabRenderComplete.HasDelegate)
-                {
-                    await OnTabRenderComplete.InvokeAsync(arg);
-                }
             }
         }
+
 
         public void Refresh()
         {
             StateHasChanged();
         }
 
-        public async Task SetActivateTabAsync(string name)
+        internal async Task UpdateHeaderSizeAsync(BSimpleTabPanelBase tabPanel, int barWidth, int barOffsetLeft)
         {
-            var tab = TabPanels.FirstOrDefault(x => x.Name == name);
-            await SetActivateTabAsync(tab);
-        }
-        public async Task SetActivateTabAsync(ITab tab)
-        {
-            if (OnActiveTabChangingAsync != null)
+            if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
             {
-                var allowSwitching = await OnActiveTabChangingAsync(tab);
-                if (!allowSwitching)
-                {
-                    return;
-                }
-            }
-            if (ActiveTab != null && ActiveTab.Name == tab?.Name)
-            {
+                await TabRenderCompletedAsync(tabPanel);
                 return;
             }
-            ActiveTabName = tab?.Name;
-            var eventArgs = new BChangeEventArgs<ITab>();
+            BarWidth = barWidth;
+            BarOffsetLeft = barOffsetLeft;
+            StateHasChanged();
+        }
+        internal async Task TabRenderCompletedAsync(BSimpleTabPanelBase tabPanel)
+        {
+            if (OnTabRenderComplete.HasDelegate)
+            {
+                await OnTabRenderComplete.InvokeAsync(tabPanel);
+            }
+        }
+
+        public async Task SetActivateTabAsync(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ActiveTab = null;
+                return;
+            }
+            var tab = tabPanels.FirstOrDefault(x => x.Name == name);
+            if (tab == null)
+            {
+                throw new BlazuiException($"Name 为 {name} 的 Tab 不存在");
+            }
+            await SetActivateTabAsync(tab);
+        }
+        internal async Task<bool> SetActivateTabAsync(BSimpleTabPanelBase tab)
+        {
+            if (OnActiveTabChanging.HasDelegate)
+            {
+                var arg = new BChangeEventArgs<BSimpleTabPanelBase>();
+                arg.NewValue = tab;
+                arg.OldValue = ActiveTab;
+                await OnActiveTabChanging.InvokeAsync(arg);
+                if (arg.DisallowChange)
+                {
+                    return false;
+                }
+            }
+            if (DataSource == null)
+            {
+                foreach (var tabPanel in tabPanels)
+                {
+                    if (tabPanel == tab)
+                    {
+                        tabPanel.Activate();
+                        continue;
+                    }
+                    tabPanel.DeActivate();
+                }
+            }
+            else
+            {
+                foreach (var item in DataSource)
+                {
+                    item.IsActive = item.Name == tab.Name;
+                }
+            }
+            ActiveTab = tab;
+            var eventArgs = new BChangeEventArgs<BSimpleTabPanelBase>();
             eventArgs.OldValue = ActiveTab;
             eventArgs.NewValue = tab;
-            ActiveTab = tab;
-            StateHasChanged();
             if (OnActiveTabChanged.HasDelegate)
             {
                 await OnActiveTabChanged.InvokeAsync(eventArgs);
             }
+            else
+            {
+                StateHasChanged();
+            }
+            return true;
         }
 
         [Parameter]
-        public EventCallback<ITab> OnTabRenderComplete { get; set; }
+        public EventCallback<BSimpleTabPanelBase> OnTabRenderComplete { get; set; }
 
         protected override void OnParametersSet()
         {

@@ -1,46 +1,7 @@
-﻿<BTab Type="@TabType.Card" IsEditable="@true" OnAddingTab="@OnAddingTabAsync">
-    <BTabPanel DataSource="@models" @ref="tabPanel" Title="@(item=>item.Title)" Name="@(item=>item.Name)" Content="@(item=>item.Content)">
-    </BTabPanel>
-</BTab>
-@using System.Collections.ObjectModel;
-@functions{
-    private BTabPanel<TabOption> tabPanel;
-    private ObservableCollection<TabOption> models = new ObservableCollection<TabOption>()
-{
-        new TabOption
-        {
-            Name="tab1",
-             Title="选项卡1",
-             Content="内容1"
-        },
-        new TabOption
-        {
-            Name="tab2",
-            Title="卡2",
-             Content="内容2"
-        },
-        new TabOption
-        {
-            Name="tab3",
-            Title="卡3",
-             Content="内容3",
-             IsClosable=true
-        },
-        new TabOption
-        {
-            Name="tab4",
-            Title="Component",
-             Content=typeof(TestCheckBoxInTab)
-        }
-    };
-    private void OnAddingTabAsync(MouseEventArgs e)
-    {
-        models.Add(new TabOption()
-        {
-            Content = "内容" + models.Count,
-            IsClosable = true,
-            Name = "name" + models.Count,
-            Title = "标题" + models.Count
-        });
-    }
-}
+﻿@inherits EditableTabBase
+@*<BTab Type="@TabType.Card" IsEditable="@true" OnAddingTab="@OnAddingTabAsync">
+        <BTabPanel DataSource="@models" @ref="tabPanel" Title="@(item=>item.Title)" Name="@(item=>item.Name)" Content="@(item=>item.Content)">
+        </BTabPanel>
+    </BTab>*@
+<BSimpleTab Type="@TabType.Card" IsEditable="@true" DataSource="models" @ref="tab" OnTabClose="RemoveTabCloseAsync" OnAddingTab="@OnAddingTabAsync">
+</BSimpleTab>

@@ -11,13 +11,12 @@ else
         </Header>
         <Body>
             <BSimpleTab Type="@TabType.BorderCard">
-                <BSimpleTabPanel Title="运行效果">
+                <BSimpleTabPanel Title="运行效果" IsActive="true" Name="display">
                     <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
                 </BSimpleTabPanel>
                 <BSimpleTabPanel Title="示例代码">
-                    <BTab OnActiveTabChangingAsync="@ActiveTabChangingAsync">
-                        <BTabPanel DataSource="@context.Codes" Content="@(code => GetCode(code.Code, code.Language))" Title="@(code => code.FileName)" Name="@(code=>GetName(code.FileName))"></BTabPanel>
-                    </BTab>
+                    <BSimpleTab DataSource="context.Options">
+                    </BSimpleTab>
                 </BSimpleTabPanel>
             </BSimpleTab>
         </Body>

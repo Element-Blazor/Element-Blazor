@@ -36,11 +36,12 @@ namespace Blazui.ServerRender.Pages
                 if (System.IO.File.Exists(razorPath))
                 {
                     var code = System.IO.File.ReadAllText(razorPath);
-                    demoModel.Codes.Add(new CodeModel()
+                    demoModel.Options.Add(new TabOption()
                     {
-                        Code = WebUtility.HtmlEncode(code),
-                        FileName = item.Name + ".razor",
-                        Language = "razor"
+                        Content = GetCode(WebUtility.HtmlEncode(code), "razor"),
+                        Name = item.Name,
+                        Title = item.Name + ".razor",
+                        OnRenderCompleted = EventCallback.Factory.Create<BSimpleTabPanelBase>(this, TabCode_OnRenderComplete)
                     });
                     demos.Add(demoModel);
                     continue;
@@ -104,15 +105,9 @@ namespace Blazui.ServerRender.Pages
             }
         }
 
-        protected async Task<bool> ActiveTabChangingAsync(ITab tab)
+        protected void TabCode_OnRenderComplete(object tab)
         {
-            tab.OnRenderCompletedAsync += TabCode_OnRenderCompleteAsync;
-            return await Task.FromResult(true);
-        }
-        protected async Task TabCode_OnRenderCompleteAsync(ITab tab)
-        {
-            tab.OnRenderCompletedAsync -= TabCode_OnRenderCompleteAsync;
-            await jSRuntime.InvokeAsync<object>("renderHightlight", tab.TabContainer.Content);
+            _ = jSRuntime.InvokeAsync<object>("renderHightlight", ((BSimpleTabPanelBase)tab).TabContainer.Content);
         }
     }
 }

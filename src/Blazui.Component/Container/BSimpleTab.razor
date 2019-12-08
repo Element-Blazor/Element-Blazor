@@ -16,17 +16,21 @@
     var position = GetPosition();
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
-    Console.WriteLine(ActiveTab?.ToString() ?? "no");
+    object activeContent = ActiveTab?.ChildContent;
+    if (DataSource != null)
+    {
+        activeContent = DataSource.FirstOrDefault(x => x.IsActive)?.Content;
+    }
 }
 <div class="el-tabs @tabType @tabPosition">
     @if (TabPosition == TabPosition.Bottom)
     {
         <div class="el-tabs__content" @ref="Content">
-            @ActiveTab?.ChildContent
+            <BDynamicComponent Component="activeContent"></BDynamicComponent>
         </div>
     }
     <div class="el-tabs__header @headerPosition">
-        @if (IsEditable || (IsAddable.HasValue && IsAddable.Value))
+        @if (IsEditable && IsAddable)
         {
             <span tabindex="0" class="el-tabs__new-tab" @onclick="OnAddingTab"><i class="el-icon-plus"></i></span>
         }
@@ -38,7 +42,19 @@
                         <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
                     }
                     <CascadingValue Value=this>
-                        @ChildContent
+                        @if (IsEditable || IsAddable)
+                        {
+                            @foreach (var item in DataSource)
+                            {
+                                <BSimpleTabPanel IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompleted" OnTabPanelChanging="item.OnTabPanelChanging">
+                                    <BDynamicComponent Component="@item.Content"></BDynamicComponent>
+                                </BSimpleTabPanel>
+                            }
+                        }
+                        else
+                        {
+                            @ChildContent
+                        }
                     </CascadingValue>
                 </div>
             </div>
@@ -47,10 +63,7 @@
     @if (TabPosition != TabPosition.Bottom)
     {
         <div class="el-tabs__content" @ref="Content">
-            @if (ActiveTab != null)
-            {
-                @ActiveTab.ChildContent
-            }
+            <BDynamicComponent Component="activeContent"></BDynamicComponent>
         </div>
     }
 </div>

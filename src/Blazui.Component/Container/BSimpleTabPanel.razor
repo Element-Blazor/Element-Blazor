@@ -2,26 +2,28 @@
 @{
     var isActive = string.Empty;
     var ariaSelected = string.Empty;
-    if (TabContainer.ActiveTab.Name == this.Name && TabContainer.Type != TabType.Normal)
+
+    var isActiveTab = TabContainer.ActiveTab?.Name == this.Name;
+    if (TabContainer.DataSource != null)
+    {
+        isActiveTab = TabContainer.DataSource.Any(x => x.Name == this.Name && x.IsActive);
+    }
+    if (isActiveTab && TabContainer.Type != TabType.Normal)
     {
         isActive = "is-active";
         ariaSelected = "true";
     }
 
     var name = Name;
-    if (string.IsNullOrWhiteSpace(name))
-    {
-        name = Index.ToString();
-    }
     var position = TabContainer.GetPosition();
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
-    var isClosableCls = isClosable ? "is-closable" : string.Empty;
+    var isClosableCls = IsClosable ? "is-closable" : string.Empty;
 }
-<div @ref="Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
+<div @ref="Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
     @Title
-    @if (isClosable)
+    @if (IsClosable)
     {
-        <span class="el-icon-close" @onclick="OnInternalTabCloseAsync"></span>
+        <span class="el-icon-close" @onclick="OnInternalTabCloseAsync" @onclick:stopPropagation></span>
     }
 </div>

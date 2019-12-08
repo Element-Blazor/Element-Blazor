@@ -10,47 +10,25 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Container
 {
-    public class BSimpleTabPanelBase : ComponentBase, ITab, IDisposable
+    public class BSimpleTabPanelBase : BComponentBase, IDisposable
     {
         [Parameter]
-        public EventCallback<BChangeEventArgs<ITab>> OnTabPanelChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnTabPanelChanging { get; set; }
         private static int tabIndex = 0;
-        protected bool isClosable
-        {
-            get
-            {
-                if (IsClosable.HasValue)
-                {
-                    return IsClosable.Value;
-                }
-                if (TabContainer.IsClosable.HasValue)
-                {
-                    return TabContainer.IsClosable.Value;
-                }
-                return TabContainer.IsEditable;
-            }
-        }
 
-        private bool isCloseClicked = false;
 
         public override string ToString()
         {
             return Name;
         }
 
-        [Parameter]
-        public EventCallback<ITab> OnTabClose { get; set; }
 
         protected async Task OnInternalTabCloseAsync(MouseEventArgs e)
         {
-            isCloseClicked = true;
-            if (!OnTabClose.HasDelegate)
-            {
-                return;
-            }
-            await OnTabClose.InvokeAsync(this);
+            await TabContainer.CloseTabAsync(this);
         }
 
+        [Parameter]
         public bool IsActive { get; set; }
         public ElementReference Element { get; set; }
 
@@ -59,33 +37,16 @@ namespace Blazui.Component.Container
 
         protected async Task Activate(MouseEventArgs e)
         {
-            if (isCloseClicked)
-            {
-                isCloseClicked = false;
-                return;
-            }
-            if (!TabContainer.TabPanels.Any(x => x.Name == this.Name))
-            {
-                return;
-            }
-            if (OnTabPanelChanging.HasDelegate)
-            {
-                var arg = new BChangeEventArgs<ITab>();
-                arg.OldValue = TabContainer.ActiveTab;
-                arg.NewValue = this;
-                await OnTabPanelChanging.InvokeAsync(arg);
-                if (arg.DisallowChange)
-                {
-                    return;
-                }
-            }
-            await TabContainer.SetActivateTabAsync(this);
+            IsActive = await TabContainer.SetActivateTabAsync(this);
+        }
+
+        public void Activate()
+        {
+            IsActive = true;
         }
 
         [Parameter]
         public string Name { get; set; }
-
-        public int Index { get; set; }
 
         [Parameter]
         public string Title { get; set; }
@@ -94,13 +55,7 @@ namespace Blazui.Component.Container
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        public bool? IsClosable { get; set; }
-
-        protected override async Task OnInitializedAsync()
-        {
-            Index = TabContainer.TabPanels.Count;
-            await TabContainer.AddTabAsync(this);
-        }
+        public bool IsClosable { get; set; }
 
         protected override async Task OnParametersSetAsync()
         {
@@ -114,26 +69,56 @@ namespace Blazui.Component.Container
 
 
         [Parameter]
-        public Func<ITab, Task> OnRenderCompleted { get; set; }
+        public EventCallback<BSimpleTabPanelBase> OnRenderCompleted { get; set; }
 
-        public event Func<ITab, Task> OnRenderCompletedAsync;
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            if (!TabContainer.Exists(Name))
+            {
+                TabContainer.AddTab(this);
+            }
+        }
 
+        private async Task AcitveTabOnRenderCompletedAsync()
+        {
+            if (TabContainer.Type == TabType.Normal)
+            {
+                var dom = Element.Dom(JSRuntime);
+                var width = await dom.GetClientWidthAsync();
+                var paddingLeft = await dom.Style.GetPaddingLeftAsync();
+                var offsetLeft = await dom.GetOffsetLeftAsync();
+                var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
+                var barWidth = width - padding;
+                var barOffsetLeft = offsetLeft + paddingLeft;
+                await TabContainer.UpdateHeaderSizeAsync(this, barWidth, barOffsetLeft);
+            }
+            else
+            {
+                await TabContainer.TabRenderCompletedAsync(this);
+            }
+        }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (OnRenderCompletedAsync != null)
+            if (OnRenderCompleted.HasDelegate)
             {
-                await OnRenderCompletedAsync(this);
+                await OnRenderCompleted.InvokeAsync(this);
             }
-            if (OnRenderCompleted != null)
+            if (IsActive)
             {
-                await OnRenderCompleted(this);
+                await AcitveTabOnRenderCompletedAsync();
             }
             await base.OnAfterRenderAsync(firstRender);
         }
 
         public void Dispose()
         {
-            TabContainer.TabPanels.Remove(this);
+            TabContainer.RemoveTab(this.Name);
+        }
+
+        internal void DeActivate()
+        {
+            IsActive = false;
         }
     }
 }

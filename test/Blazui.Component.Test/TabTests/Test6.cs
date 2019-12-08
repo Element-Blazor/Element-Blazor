@@ -63,6 +63,7 @@ namespace Blazui.Component.Test.TabTests
             var headers = await GetHeadersAsync(card);
             await headers[0].Header.ClickAsync();
             await Task.Delay(200);
+            ElementHandle closeIcon = null;
             while (true)
             {
                 var headerItem = headers.FirstOrDefault();
@@ -72,7 +73,7 @@ namespace Blazui.Component.Test.TabTests
                 }
                 await headerItem.Header.ClickAsync();
                 await Task.Delay(200);
-                var closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
+                closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
                 Assert.NotNull(closeIcon);
                 await closeIcon.ClickAsync();
                 await Task.Delay(200);
@@ -100,7 +101,7 @@ namespace Blazui.Component.Test.TabTests
                 }
                 await headerItem.Header.ClickAsync();
                 await Task.Delay(200);
-                var closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
+                closeIcon = await headerItem.Header.QuerySelectorAsync("span.el-icon-close");
                 Assert.NotNull(closeIcon);
                 await closeIcon.ClickAsync();
                 await Task.Delay(200);
@@ -108,6 +109,29 @@ namespace Blazui.Component.Test.TabTests
                 headers = await AssertTabAsync(card, tabs, tabs.Count - 1);
             }
             await AssertEmptyBody(card);
+            var count = 5;
+            await newTab.ClickAsync();
+            await Task.Delay(200);
+            while (count-- > 0)
+            {
+                await newTab.ClickAsync();
+                await Task.Delay(200);
+                headers = await GetHeadersAsync(card);
+                tabs = headers.Select(x => x.Title).ToList();
+                var tabHeaders = headers.Select(x => x.Header).ToArray();
+                await headers[0].Header.ClickAsync();
+                await Task.Delay(200);
+                await AssertHeaderAsync(tabHeaders, 0);
+                closeIcon = await headers[0].Header.QuerySelectorAsync("span.el-icon-close");
+                await closeIcon.ClickAsync();
+                tabs.RemoveAt(0);
+                await Task.Delay(200);
+                headers = await GetHeadersAsync(card);
+                tabHeaders = headers.Select(x => x.Header).ToArray();
+                await AssertHeaderAsync(tabHeaders, 0);
+                var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
+                await AssertBodyAsync(body, headers[0].Title);
+            }
         }
 
         private static async Task AssertEmptyBody(DemoCard card)
@@ -163,6 +187,18 @@ namespace Blazui.Component.Test.TabTests
                 else if (text == "标题3")
                 {
                     Assert.Equal("内容3", bodyText);
+                }
+                else if (text == "标题3")
+                {
+                    Assert.Equal("内容3", bodyText);
+                }
+                else if (text == "标题4")
+                {
+                    Assert.Equal("内容4", bodyText);
+                }
+                else if (text == "标题5")
+                {
+                    Assert.Equal("内容5", bodyText);
                 }
             }
             else
