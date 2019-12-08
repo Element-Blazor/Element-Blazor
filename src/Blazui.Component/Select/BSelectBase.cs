@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
-    public class BSimpleSelectBase<TValue> : BFieldComponentBase<OptionModel<TValue>>, IDisposable
+    public class BSelectBase<TValue> : BFieldComponentBase<OptionModel<TValue>>, IDisposable
     {
 
         protected ElementReference elementSelect;
@@ -23,7 +23,7 @@ namespace Blazui.Component.Select
         internal bool IsClearButtonClick { get; set; }
 
         internal string Label { get; set; }
-        internal ObservableCollection<BSimpleOptionBase<TValue>> Options { get; set; } = new ObservableCollection<BSimpleOptionBase<TValue>>();
+        internal ObservableCollection<BSelectOptionBase<TValue>> Options { get; set; } = new ObservableCollection<BSelectOptionBase<TValue>>();
 
         [Parameter]
         public TValue InitialValue { get; set; }
@@ -62,12 +62,12 @@ namespace Blazui.Component.Select
         public TValue Value { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnChange { get; set; }
+        public EventCallback<BChangeEventArgs<BSelectOptionBase<TValue>>> OnChange { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleOptionBase<TValue>>> OnChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BSelectOptionBase<TValue>>> OnChanging { get; set; }
 
-        internal BSimpleOptionBase<TValue> SelectedOption
+        internal BSelectOptionBase<TValue> SelectedOption
         {
             get
             {
@@ -94,7 +94,7 @@ namespace Blazui.Component.Select
             }
         }
 
-        private BSimpleOptionBase<TValue> selectedOption;
+        private BSelectOptionBase<TValue> selectedOption;
         protected DropDownOption DropDownOption;
 
         internal void Refresh()
@@ -102,9 +102,9 @@ namespace Blazui.Component.Select
             StateHasChanged();
         }
 
-        internal async Task OnInternalSelectAsync(BSimpleOptionBase<TValue> item)
+        internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {
-            var args = new BChangeEventArgs<BSimpleOptionBase<TValue>>();
+            var args = new BChangeEventArgs<BSelectOptionBase<TValue>>();
             args.NewValue = item;
             args.OldValue = SelectedOption;
             if (OnChanging.HasDelegate)

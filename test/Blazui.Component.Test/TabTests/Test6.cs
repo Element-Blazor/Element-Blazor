@@ -117,6 +117,7 @@ namespace Blazui.Component.Test.TabTests
                 await newTab.ClickAsync();
                 await Task.Delay(200);
                 headers = await GetHeadersAsync(card);
+                Assert.Equal(2, headers.Count);
                 tabs = headers.Select(x => x.Title).ToList();
                 var tabHeaders = headers.Select(x => x.Header).ToArray();
                 await headers[0].Header.ClickAsync();
@@ -127,8 +128,7 @@ namespace Blazui.Component.Test.TabTests
                 tabs.RemoveAt(0);
                 await Task.Delay(200);
                 headers = await GetHeadersAsync(card);
-                tabHeaders = headers.Select(x => x.Header).ToArray();
-                await AssertHeaderAsync(tabHeaders, 0);
+                Assert.Single(headers);
                 var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
                 await AssertBodyAsync(body, headers[0].Title);
             }

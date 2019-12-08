@@ -11,7 +11,6 @@ namespace Blazui.ServerRender.Model
     public class DemoModel
     {
         public string Title { get; set; }
-        public ObservableCollection<CodeModel> Codes { get; set; } = new ObservableCollection<CodeModel>();
         public ObservableCollection<TabOption> Options { get; set; } = new ObservableCollection<TabOption>();
         public Type Demo { get; set; }
 

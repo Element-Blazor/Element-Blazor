@@ -10,15 +10,15 @@ else
             @context.Title
         </Header>
         <Body>
-            <BSimpleTab Type="@TabType.BorderCard">
-                <BSimpleTabPanel Title="运行效果" IsActive="true" Name="display">
+            <BTab Type="@TabType.BorderCard">
+                <BTabPanel Title="运行效果" IsActive="true" Name="display">
                     <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
-                </BSimpleTabPanel>
-                <BSimpleTabPanel Title="示例代码">
-                    <BSimpleTab DataSource="context.Options">
-                    </BSimpleTab>
-                </BSimpleTabPanel>
-            </BSimpleTab>
+                </BTabPanel>
+                <BTabPanel Title="示例代码">
+                    <BTab DataSource="context.Options">
+                    </BTab>
+                </BTabPanel>
+            </BTab>
         </Body>
     </BCard>
     <style>

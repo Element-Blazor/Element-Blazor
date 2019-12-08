@@ -14,7 +14,7 @@
             动画结束
             </summary>
         </member>
-        <member name="P:Blazui.Component.Container.BSimpleTabBase.Content">
+        <member name="P:Blazui.Component.Container.BTabBase.Content">
             <summary>
             渲染后的内容区域
             </summary>

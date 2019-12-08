@@ -7,6 +7,10 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningsAsErrors>NU1605;RZ10012</WarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="Demo\BasicButton\BasicButton.razor" />
     <None Include="Demo\BasicInput\BasicInput.razor" />

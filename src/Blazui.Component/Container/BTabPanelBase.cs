@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Container
 {
-    public class BSimpleTabPanelBase : BComponentBase, IDisposable
+    public class BTabPanelBase : BComponentBase, IDisposable
     {
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnTabPanelChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BTabPanelBase>> OnTabPanelChanging { get; set; }
         private static int tabIndex = 0;
 
 
@@ -21,7 +21,6 @@ namespace Blazui.Component.Container
         {
             return Name;
         }
-
 
         protected async Task OnInternalTabCloseAsync(MouseEventArgs e)
         {
@@ -33,7 +32,7 @@ namespace Blazui.Component.Container
         public ElementReference Element { get; set; }
 
         [CascadingParameter]
-        public BSimpleTab TabContainer { get; set; }
+        public BTab TabContainer { get; set; }
 
         protected async Task Activate(MouseEventArgs e)
         {
@@ -69,7 +68,7 @@ namespace Blazui.Component.Container
 
 
         [Parameter]
-        public EventCallback<BSimpleTabPanelBase> OnRenderCompleted { get; set; }
+        public Func<BTabPanelBase, Task> OnRenderCompleted { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -100,13 +99,13 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (OnRenderCompleted.HasDelegate)
-            {
-                await OnRenderCompleted.InvokeAsync(this);
-            }
             if (IsActive)
             {
                 await AcitveTabOnRenderCompletedAsync();
+            }
+            else if (OnRenderCompleted != null)
+            {
+                await OnRenderCompleted(this);
             }
             await base.OnAfterRenderAsync(firstRender);
         }

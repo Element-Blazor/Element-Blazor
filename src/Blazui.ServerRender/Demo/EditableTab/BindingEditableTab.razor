@@ -1,4 +1,4 @@
 ﻿@inherits BindingEditableTabBase
 <BButton OnClick="OnAddingTabAsync">增加Tab</BButton>
-<BSimpleTab Type="@TabType.Card" IsEditable="@true" DataSource="models" @ref="tab" OnTabClose="RemoveTabCloseAsync">
-</BSimpleTab>
+<BTab Type="@TabType.Card" IsEditable="@true" DataSource="models" @ref="tab">
+</BTab>

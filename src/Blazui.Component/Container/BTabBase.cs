@@ -12,8 +12,11 @@ using Microsoft.JSInterop;
 
 namespace Blazui.Component.Container
 {
-    public class BSimpleTabBase : BComponentBase, IDisposable
+    public class BTabBase : BComponentBase, IDisposable
     {
+        /// <summary>
+        /// 数据源
+        /// </summary>
         [Parameter]
         public ObservableCollection<TabOption> DataSource { get; set; }
         private bool requireRerender = true;
@@ -31,10 +34,8 @@ namespace Blazui.Component.Container
 
         [Parameter]
         public TabPosition TabPosition { get; set; }
-        private List<BSimpleTabPanelBase> tabPanels { get; set; } = new List<BSimpleTabPanelBase>();
+        private List<BTabPanelBase> tabPanels { get; set; } = new List<BTabPanelBase>();
 
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -42,30 +43,30 @@ namespace Blazui.Component.Container
         /// Tab 页被切换后触发
         /// </summary>
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnActiveTabChanged { get; set; }
+        public EventCallback<BChangeEventArgs<BTabPanelBase>> OnActiveTabChanged { get; set; }
 
         /// <summary>
         /// Tab 页被切换前触发
         /// </summary>
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnActiveTabChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BTabPanelBase>> OnActiveTabChanging { get; set; }
 
         /// <summary>
         /// Tab 页被关闭后触发
         /// </summary>
         [Parameter]
-        public EventCallback<BSimpleTabPanelBase> OnTabClose { get; set; }
+        public EventCallback<BTabPanelBase> OnTabClose { get; set; }
 
         /// <summary>
         /// Tab 页被关闭时触发
         /// </summary>
         [Parameter]
-        public EventCallback<BClosingEventArgs<BSimpleTabPanelBase>> OnTabClosing { get; set; }
-        internal async Task CloseTabAsync(BSimpleTabPanelBase tab)
+        public EventCallback<BClosingEventArgs<BTabPanelBase>> OnTabClosing { get; set; }
+        internal async Task CloseTabAsync(BTabPanelBase tab)
         {
             if (OnTabClosing.HasDelegate)
             {
-                var arg = new BClosingEventArgs<BSimpleTabPanelBase>();
+                var arg = new BClosingEventArgs<BTabPanelBase>();
                 arg.Target = tab;
                 await OnTabClosing.InvokeAsync(arg);
                 if (arg.Cancel)
@@ -80,15 +81,19 @@ namespace Blazui.Component.Container
             {
                 _ = OnTabClose.InvokeAsync(tab);
             }
+            else
+            {
+                StateHasChanged();
+            }
         }
 
-        private void ResetActiveTab(BSimpleTabPanelBase tab)
+        private void ResetActiveTab(BTabPanelBase tab)
         {
             if (DataSource == null)
             {
                 return;
             }
-            if (DataSource.Count <= 1)
+            if (DataSource.Count <= 0)
             {
                 return;
             }
@@ -98,12 +103,16 @@ namespace Blazui.Component.Container
                 return;
             }
             var activeIndex = DataSource.IndexOf(activeOption);
-            var newActiveIndex = activeIndex;
-            if (activeIndex == DataSource.Count - 1)
-            {
-                newActiveIndex = DataSource.Count - 2;
-            }
             DataSource.RemoveAt(activeIndex);
+            var newActiveIndex = activeIndex;
+            if (newActiveIndex >= DataSource.Count - 1)
+            {
+                newActiveIndex = DataSource.Count - 1;
+            }
+            if (newActiveIndex == -1)
+            {
+                return;
+            }
             activeOption = DataSource.ElementAt(newActiveIndex);
             activeOption.IsActive = true;
         }
@@ -111,17 +120,23 @@ namespace Blazui.Component.Container
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            if (IsEditable || IsAddable)
+            if (DataSource == null)
             {
-                if (DataSource == null)
+                if (IsEditable || IsAddable)
                 {
                     throw new BlazuiException("标签页组件启用可编辑模式时必须指定 DataSource 属性，硬编码无效");
                 }
+            }
+            else
+            {
                 var activeTab = DataSource.FirstOrDefault(x => x.IsActive);
                 if (activeTab == null)
                 {
                     activeTab = DataSource.FirstOrDefault();
-                    activeTab.IsActive = true;
+                    if (activeTab != null)
+                    {
+                        activeTab.IsActive = true;
+                    }
                 }
                 DataSource.CollectionChanged -= DataSource_CollectionChanged;
                 DataSource.CollectionChanged += DataSource_CollectionChanged;
@@ -130,7 +145,15 @@ namespace Blazui.Component.Container
 
         private void DataSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1);
+            if (e.Action != NotifyCollectionChangedAction.Add)
+            {
+                return;
+            }
+            var repeatKeys = DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
+            if (repeatKeys.Any())
+            {
+                throw new BlazuiException($"Tab 页以下 Name 重复 {string.Join(",", repeatKeys)}");
+            }
         }
 
         /// <summary>
@@ -139,11 +162,11 @@ namespace Blazui.Component.Container
         [Parameter]
         public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
 
-        internal BSimpleTabPanelBase ActiveTab { get; private set; }
+        internal BTabPanelBase ActiveTab { get; private set; }
 
         internal int BarOffsetLeft { get; set; }
         internal int BarWidth { get; set; }
-        internal void AddTab(BSimpleTabPanelBase tab)
+        internal void AddTab(BTabPanelBase tab)
         {
             if (Exists(tab.Name))
             {
@@ -216,7 +239,7 @@ namespace Blazui.Component.Container
             StateHasChanged();
         }
 
-        internal async Task UpdateHeaderSizeAsync(BSimpleTabPanelBase tabPanel, int barWidth, int barOffsetLeft)
+        internal async Task UpdateHeaderSizeAsync(BTabPanelBase tabPanel, int barWidth, int barOffsetLeft)
         {
             if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
             {
@@ -227,7 +250,7 @@ namespace Blazui.Component.Container
             BarOffsetLeft = barOffsetLeft;
             StateHasChanged();
         }
-        internal async Task TabRenderCompletedAsync(BSimpleTabPanelBase tabPanel)
+        internal async Task TabRenderCompletedAsync(BTabPanelBase tabPanel)
         {
             if (OnTabRenderComplete.HasDelegate)
             {
@@ -249,11 +272,11 @@ namespace Blazui.Component.Container
             }
             await SetActivateTabAsync(tab);
         }
-        internal async Task<bool> SetActivateTabAsync(BSimpleTabPanelBase tab)
+        internal async Task<bool> SetActivateTabAsync(BTabPanelBase tab)
         {
             if (OnActiveTabChanging.HasDelegate)
             {
-                var arg = new BChangeEventArgs<BSimpleTabPanelBase>();
+                var arg = new BChangeEventArgs<BTabPanelBase>();
                 arg.NewValue = tab;
                 arg.OldValue = ActiveTab;
                 await OnActiveTabChanging.InvokeAsync(arg);
@@ -282,7 +305,7 @@ namespace Blazui.Component.Container
                 }
             }
             ActiveTab = tab;
-            var eventArgs = new BChangeEventArgs<BSimpleTabPanelBase>();
+            var eventArgs = new BChangeEventArgs<BTabPanelBase>();
             eventArgs.OldValue = ActiveTab;
             eventArgs.NewValue = tab;
             if (OnActiveTabChanged.HasDelegate)
@@ -297,7 +320,7 @@ namespace Blazui.Component.Container
         }
 
         [Parameter]
-        public EventCallback<BSimpleTabPanelBase> OnTabRenderComplete { get; set; }
+        public EventCallback<BTabPanelBase> OnTabRenderComplete { get; set; }
 
         protected override void OnParametersSet()
         {

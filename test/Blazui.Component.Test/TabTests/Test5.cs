@@ -105,6 +105,7 @@ namespace Blazui.Component.Test.TabTests
             }
             await AssertEmptyBody(card);
             var newTab = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__header.is-top > span.el-tabs__new-tab");
+            Assert.NotNull(newTab);
             tabs.Add("标题0");
             tabs.Add("标题1");
             tabs.Add("标题2");

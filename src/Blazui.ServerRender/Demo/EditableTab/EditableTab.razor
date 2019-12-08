@@ -1,7 +1,3 @@
 ﻿@inherits EditableTabBase
-@*<BTab Type="@TabType.Card" IsEditable="@true" OnAddingTab="@OnAddingTabAsync">
-        <BTabPanel DataSource="@models" @ref="tabPanel" Title="@(item=>item.Title)" Name="@(item=>item.Name)" Content="@(item=>item.Content)">
-        </BTabPanel>
-    </BTab>*@
-<BSimpleTab Type="@TabType.Card" IsEditable="@true" DataSource="models" @ref="tab" OnTabClose="RemoveTabCloseAsync" OnAddingTab="@OnAddingTabAsync">
-</BSimpleTab>
+<BTab Type="@TabType.Card" IsEditable="true" IsAddable="true" DataSource="models" @ref="tab" OnTabClose="RemoveTabCloseAsync" OnAddingTab="@OnAddingTabAsync">
+</BTab>

@@ -41,7 +41,7 @@ namespace Blazui.ServerRender.Pages
                         Content = GetCode(WebUtility.HtmlEncode(code), "razor"),
                         Name = item.Name,
                         Title = item.Name + ".razor",
-                        OnRenderCompleted = EventCallback.Factory.Create<BSimpleTabPanelBase>(this, TabCode_OnRenderComplete)
+                        OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
                     });
                     demos.Add(demoModel);
                     continue;
@@ -65,11 +65,12 @@ namespace Blazui.ServerRender.Pages
                             language = "csharp";
                             break;
                     }
-                    demoModel.Codes.Add(new CodeModel()
+                    demoModel.Options.Add(new TabOption()
                     {
-                        Code = WebUtility.HtmlEncode(code),
-                        FileName = Path.GetFileName(codeFile),
-                        Language = language
+                        Content = GetCode(WebUtility.HtmlEncode(code), language),
+                        Title = Path.GetFileName(codeFile),
+                        Name = language,
+                        OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
                     });
                 }
                 demos.Add(demoModel);
@@ -105,9 +106,9 @@ namespace Blazui.ServerRender.Pages
             }
         }
 
-        protected void TabCode_OnRenderComplete(object tab)
+        protected async Task TabCode_OnRenderCompleteAsync(object tab)
         {
-            _ = jSRuntime.InvokeAsync<object>("renderHightlight", ((BSimpleTabPanelBase)tab).TabContainer.Content);
+            await jSRuntime.InvokeVoidAsync("renderHightlight", ((BTabPanelBase)tab).TabContainer.Content);
         }
     }
 }

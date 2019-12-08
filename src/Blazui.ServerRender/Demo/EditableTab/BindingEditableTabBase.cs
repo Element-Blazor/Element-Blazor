@@ -10,7 +10,7 @@ namespace Blazui.ServerRender.Demo.EditableTab
 {
     public class BindingEditableTabBase : ComponentBase
     {
-        protected BSimpleTab tab;
+        protected BTab tab;
         protected ObservableCollection<TabOption> models = new ObservableCollection<TabOption>()
 {
         new TabOption
@@ -52,16 +52,10 @@ namespace Blazui.ServerRender.Demo.EditableTab
             {
                 Content = "内容" + models.Count,
                 IsClosable = true,
-                Name = "name" + models.Count,
                 Title = "标题" + models.Count,
                 IsActive = true
             });
             tab.Refresh();
-        }
-
-        protected void RemoveTabCloseAsync(BSimpleTabPanelBase tab)
-        {
-            models.Remove(models.FirstOrDefault(x => x.Title == tab.Title));
         }
     }
 }

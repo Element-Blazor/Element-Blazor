@@ -4,10 +4,10 @@
         <BInput TValue="string"></BInput>
     </BFormItem>
     <BFormItem TValue="OptionModel<string>" Label="活动区域" Name="@nameof(Activity.Area)" IsRequired="true">
-        <BSimpleSelect TValue="string" Placeholder="请选择活动区域">
-            <BSimpleOption Text="区域1" Value="@("shanghai")"></BSimpleOption>
-            <BSimpleOption Text="区域2" Value="@("beijing")"></BSimpleOption>
-        </BSimpleSelect>
+        <BSelect TValue="string" Placeholder="请选择活动区域">
+            <BSelectOption Text="区域1" Value="@("shanghai")"></BSelectOption>
+            <BSelectOption Text="区域2" Value="@("beijing")"></BSelectOption>
+        </BSelect>
     </BFormItem>
     <BFormItem TValue="DateTime?" Label="活动时间" IsRequired="true" Name="@nameof(Activity.Time)">
         <BDatePicker></BDatePicker>

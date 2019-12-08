@@ -33,9 +33,14 @@ namespace Blazui.Component.Container
         public string Title { get; set; }
 
         /// <summary>
-        /// Tag 内容，可以是一串字符串、RenderFragment 以及一个组件的 Type
+        /// Tag 内容，可以是一串字符串、<seealso cref="RenderFragment"/>  以及一个组件的 <seealso cref="Type"/>
         /// </summary>
         public object Content { get; set; }
+
+        /// <summary>
+        /// Tab Body 区附加样式
+        /// </summary>
+        public string BodyStyle { get; set; }
 
         /// <summary>
         /// 是否活动
@@ -45,11 +50,11 @@ namespace Blazui.Component.Container
         /// <summary>
         /// Tab 页渲染完成时触发
         /// </summary>
-        public EventCallback<BSimpleTabPanelBase> OnRenderCompleted { get; set; }
+        public Func<BTabPanelBase, Task> OnRenderCompletedAsync { get; set; } = p => Task.CompletedTask;
 
         /// <summary>
         /// Tab 页切换时触发
         /// </summary>
-        public EventCallback<BChangeEventArgs<BSimpleTabPanelBase>> OnTabPanelChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BTabPanelBase>> OnTabPanelChanging { get; set; }
     }
 }

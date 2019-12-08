@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
-    public class BSimpleOptionBase<TValue> : ComponentBase
+    public class BSelectOptionBase<TValue> : ComponentBase
     {
         [CascadingParameter]
         public DropDownOption Option { get; set; }
@@ -26,7 +26,7 @@ namespace Blazui.Component.Select
 
         protected override void OnInitialized()
         {
-            ((BSimpleSelect<TValue>)Option.Select).Options.Add(this);
+            ((BSelect<TValue>)Option.Select).Options.Add(this);
         }
 
         public async Task SelectItemAsync(MouseEventArgs e)
@@ -35,7 +35,7 @@ namespace Blazui.Component.Select
             {
                 return;
             }
-            await ((BSimpleSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
+            await ((BSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
         }
     }
 }
