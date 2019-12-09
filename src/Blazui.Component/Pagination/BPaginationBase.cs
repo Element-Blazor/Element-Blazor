@@ -37,7 +37,7 @@ namespace Blazui.Component.Pagination
         /// 最大显示的页码数
         /// </summary>
         [Parameter]
-        public int PageCount { get; set; } = 7;
+        public int ShowPageCount { get; set; } = 7;
 
         /// <summary>
         /// 当前页码变化时触发

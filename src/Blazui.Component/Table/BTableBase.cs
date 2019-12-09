@@ -53,13 +53,13 @@ namespace Blazui.Component.Table
         /// 最大显示的页码数
         /// </summary>
         [Parameter]
-        public int PageCount { get; set; } = 7;
+        public int ShowPageCount { get; set; } = 7;
 
         /// <summary>
         /// 当前最大显示的页码数变化时触发
         /// </summary>
         [Parameter]
-        public EventCallback<int> PageCountChanged { get; set; }
+        public EventCallback<int> ShowPageCountChanged { get; set; }
 
         internal List<TRow> DataSource { get; set; } = new List<TRow>();
 
@@ -129,6 +129,8 @@ namespace Blazui.Component.Table
             var pagerResult = await OnLoadDataSource(currentPage);
             Total = pagerResult.Total;
             DataSource = pagerResult.Rows;
+            SelectedRows.Clear();
+            RefreshSelectAllStatus();
         }
         protected override void OnAfterRender(bool firstRender)
         {
