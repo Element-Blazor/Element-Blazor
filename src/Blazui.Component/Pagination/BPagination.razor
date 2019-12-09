@@ -13,13 +13,34 @@
         @for (int i = 1; i <= pageCount; i++)
         {
             var clsList = new List<string>();
-            clsList.Add("number");
-            var page = i;
-            if (page == CurrentPage)
+
+            if (i < 7)
             {
-                clsList.Add("active");
+                clsList.Add("number");
+                var page = i;
+                if (page == CurrentPage)
+                {
+                    clsList.Add("active");
+                }
+                <li class="@string.Join(" ", clsList)" @onclick="(e => Jump(page))">@(@page)</li>
             }
-            <li class="@string.Join(" ",clsList)" @onclick="(e=>Jump(page))">@(@page)</li>
+            else
+            {
+                clsList.Add("el-icon");
+                clsList.Add("more");
+                clsList.Add("btn-quicknext");
+                clsList.Add("el-icon-more");
+                <li class="@string.Join(" ", clsList)"></li>
+                clsList.Clear();
+                clsList.Add("number");
+                var page = pageCount;
+                if (page == CurrentPage)
+                {
+                    clsList.Add("active");
+                }
+                <li class="@string.Join(" ", clsList)" @onclick="(e => Jump(page))">@(@page)</li>
+                break;
+            }
         }
     </ul>
     <BButton Icon="el-icon-arrow-right" IsDisabled="nextDisabled" OnClick="(e=>Jump(CurrentPage+1))"></BButton>

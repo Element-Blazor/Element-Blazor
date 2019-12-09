@@ -1,0 +1,15 @@
+﻿@inherits PaginationTableBase
+
+<br />
+默认启用分页，数据足够多自动分页
+<br />
+<CascadingValue Value="CurrentPage" Name="CurrentPage">
+    <BTable DataSource="Datas" PageSize="pageSize" @ref="table" Total="AllDatas.Count">
+        <BTableColumns TRow="AutoGenerateColumnTestData">
+            <BTableTemplateColumn TRow="AutoGenerateColumnTestData" Text="操作">
+                <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
+                <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e=> Del(context))">删除</BButton>
+            </BTableTemplateColumn>
+        </BTableColumns>
+    </BTable>
+</CascadingValue>

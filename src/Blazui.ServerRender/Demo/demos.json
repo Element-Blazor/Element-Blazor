@@ -213,6 +213,15 @@
           "AutoGenerateColumnTableBase.cs",
           "AutoGenerateColumnTestData.cs"
         ]
+      },
+      {
+        "title": "分页",
+        "name": "Table",
+        "files": [
+          "PaginationTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
       }
     ]
   },

@@ -1,6 +1,7 @@
 ﻿using Blazui.Component.CheckBox;
 using Blazui.Component.Dom;
 using Blazui.Component.EventArgs;
+using Blazui.Component.Pagination;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
@@ -15,17 +16,30 @@ namespace Blazui.Component.Table
 {
     public class BTableBase<TRow> : ComponentBase, IContainerComponent
     {
+        internal BPagination Pagination { get; set; }
         protected ElementReference headerElement;
         internal List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
         private bool requireRender = true;
         protected int headerHeight = 49;
 
+        /// <summary>
+        /// 是否自动生成列
+        /// </summary>
         [Parameter]
         public bool AutoGenerateColumns { get; set; } = true;
+
+        /// <summary>
+        /// 是否在第一列显示复选框列
+        /// </summary>
         [Parameter]
         public bool HasSelectionColumn { get; set; } = true;
+
+        /// <summary>
+        /// 当表格渲染结束触发
+        /// </summary>
         [Parameter]
         public EventCallback RenderCompleted { get; set; }
+
         /// <summary>
         /// 总记录数
         /// </summary>
@@ -36,31 +50,96 @@ namespace Blazui.Component.Table
         /// 每页条数
         /// </summary>
         [Parameter]
-        public int PageSize { get; set; } = 50;
+        public int PageSize { get; set; } = 20;
+
+        private int currentPage = 1;
+
         /// <summary>
         /// 当前页码，从1开始
         /// </summary>
         [Parameter]
-        public int CurrentPage { get; set; } = 1;
+        public int CurrentPage
+        {
+            get
+            {
+                return currentPage;
+            }
+            set
+            {
+                currentPage = value;
+
+                if (CurrentPageChanged.HasDelegate)
+                {
+                    _ = CurrentPageChanged.InvokeAsync(value);
+                }
+                if (OnDataSourceReceving.HasDelegate)
+                {
+                    _ = OnDataSourceReceving.InvokeAsync(currentPage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 当获取数据时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<int> OnDataSourceReceving { get; set; }
+
+        /// <summary>
+        /// 最大显示的页码数
+        /// </summary>
+        [Parameter]
+        public int PageCount { get; set; } = 7;
+
+        /// <summary>
+        /// 当前页码变化时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<int> CurrentPageChanged { get; set; }
+
+        /// <summary>
+        /// 当前最大显示的页码数变化时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<int> PageCountChanged { get; set; }
+
+        /// <summary>
+        /// 数据源
+        /// </summary>
         [Parameter]
         public List<TRow> DataSource { get; set; } = new List<TRow>();
 
+        /// <summary>
+        /// 当只有一页时，不显示分页
+        /// </summary>
+        [Parameter]
+        public bool NoPaginationOnSinglePage { get; set; } = true;
+
+        /// <summary>
+        /// 选中的记录
+        /// </summary>
         [Parameter]
         public HashSet<TRow> SelectedRows { get; set; } = new HashSet<TRow>();
 
+        /// <summary>
+        /// 选中的记录变化时触发
+        /// </summary>
         [Parameter]
         public EventCallback<HashSet<TRow>> SelectedRowsChanged { get; set; }
-        protected Status selectAllStatus;
-
-        [Inject]
-        private IJSRuntime jsRunTime { get; set; }
+        internal Status selectAllStatus;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// 启用分页
+        /// </summary>
         [Parameter]
         public bool EnablePagination { get; set; } = true;
 
+        /// <summary>
+        /// 表格高度
+        /// </summary>
         [Parameter]
         public int Height { get; set; }
 
@@ -79,7 +158,7 @@ namespace Blazui.Component.Table
 
         protected override void OnInitialized()
         {
-            Total = DataSource.Count;
+            Total = Total <= 0 ? DataSource.Count : Total;
         }
         protected override void OnAfterRender(bool firstRender)
         {

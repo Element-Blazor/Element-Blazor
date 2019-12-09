@@ -142,9 +142,12 @@
         <div class="el-table__column-resize-proxy" style="display: none;"></div>
         @if (EnablePagination)
         {
-            <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
-                <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
-            </div>
+            if (Math.Ceiling((float)Total / PageSize) > 1 || !NoPaginationOnSinglePage)
+            {
+                <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
+                    <BPagination Total="Total" @ref="Pagination" PageCount="PageCount" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
+                </div>
+            }
         }
     </div>
 }

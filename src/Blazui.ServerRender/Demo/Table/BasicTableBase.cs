@@ -9,6 +9,7 @@ namespace Blazui.ServerRender.Demo.Table
 {
     public class BasicTableBase : ComponentBase
     {
+        protected int currentPage;
         protected List<TestData> Datas = new List<TestData>();
         protected List<TestData> LargeDatas = new List<TestData>();
 
