@@ -72,18 +72,8 @@ namespace Blazui.Component.Table
                 {
                     _ = CurrentPageChanged.InvokeAsync(value);
                 }
-                if (OnDataSourceReceving.HasDelegate)
-                {
-                    _ = OnDataSourceReceving.InvokeAsync(currentPage);
-                }
             }
         }
-
-        /// <summary>
-        /// 当获取数据时触发
-        /// </summary>
-        [Parameter]
-        public EventCallback<int> OnDataSourceReceving { get; set; }
 
         /// <summary>
         /// 最大显示的页码数
