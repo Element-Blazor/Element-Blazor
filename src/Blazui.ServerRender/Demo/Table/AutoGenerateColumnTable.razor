@@ -1,6 +1,6 @@
 ﻿@inherits AutoGenerateColumnTableBase
 
-<BTable DataSource="Datas">
+<BTable OnLoadDataSource="LoadDataSource" TRow="AutoGenerateColumnTestData">
     <BTableColumns TRow="AutoGenerateColumnTestData">
         <BTableTemplateColumn TRow="AutoGenerateColumnTestData" Text="操作">
             <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>

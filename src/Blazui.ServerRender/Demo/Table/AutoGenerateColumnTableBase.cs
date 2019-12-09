@@ -1,4 +1,5 @@
 ﻿using Blazui.Component;
+using Blazui.Component.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,15 @@ namespace Blazui.ServerRender.Demo.Table
             });
         }
 
+        internal async Task<PagerResult<AutoGenerateColumnTestData>> LoadDataSource(int currentPage)
+        {
+            var result= new PagerResult<AutoGenerateColumnTestData>()
+            {
+                Rows = Datas,
+                Total = Datas.Count
+            };
+            return await Task.FromResult(result);
+        }
         public void Edit(AutoGenerateColumnTestData testData)
         {
             MessageService.Show($"正在编辑 " + testData.Name);

@@ -16,10 +16,10 @@ namespace Blazui.Component.Table
 {
     public class BTableBase<TRow> : ComponentBase, IContainerComponent
     {
-        protected ElementReference headerElement;
+        internal ElementReference headerElement;
         internal List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
         private bool requireRender = true;
-        protected int headerHeight = 49;
+        internal int headerHeight = 49;
 
         /// <summary>
         /// 是否自动生成列
@@ -39,11 +39,7 @@ namespace Blazui.Component.Table
         [Parameter]
         public EventCallback RenderCompleted { get; set; }
 
-        /// <summary>
-        /// 总记录数
-        /// </summary>
-        [Parameter]
-        public int Total { get; set; }
+        internal int Total { get; set; }
 
         /// <summary>
         /// 每页条数
@@ -54,37 +50,10 @@ namespace Blazui.Component.Table
         private int currentPage = 1;
 
         /// <summary>
-        /// 当前页码，从1开始
-        /// </summary>
-        [Parameter]
-        public int CurrentPage
-        {
-            get
-            {
-                return currentPage;
-            }
-            set
-            {
-                currentPage = value;
-
-                if (CurrentPageChanged.HasDelegate)
-                {
-                    _ = CurrentPageChanged.InvokeAsync(value);
-                }
-            }
-        }
-
-        /// <summary>
         /// 最大显示的页码数
         /// </summary>
         [Parameter]
         public int PageCount { get; set; } = 7;
-
-        /// <summary>
-        /// 当前页码变化时触发
-        /// </summary>
-        [Parameter]
-        public EventCallback<int> CurrentPageChanged { get; set; }
 
         /// <summary>
         /// 当前最大显示的页码数变化时触发
@@ -92,11 +61,7 @@ namespace Blazui.Component.Table
         [Parameter]
         public EventCallback<int> PageCountChanged { get; set; }
 
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        [Parameter]
-        public List<TRow> DataSource { get; set; } = new List<TRow>();
+        internal List<TRow> DataSource { get; set; } = new List<TRow>();
 
         /// <summary>
         /// 当只有一页时，不显示分页
@@ -139,15 +104,31 @@ namespace Blazui.Component.Table
         public bool IsStripe { get; set; }
 
         /// <summary>
+        /// 当加载数据源时触发，传入参数为当前页
+        /// </summary>
+        [Parameter]
+        public Func<int, Task<PagerResult<TRow>>> OnLoadDataSource { get; set; }
+        /// <summary>
         /// 启用边框
         /// </summary>
         [Parameter]
         public bool IsBordered { get; set; }
         public ElementReference Container { get; set; }
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            Total = Total <= 0 ? DataSource.Count : Total;
+            if (OnLoadDataSource != null)
+            {
+                await ChangeCurrentPageAsync(currentPage);
+            }
+
+        }
+
+        internal async Task ChangeCurrentPageAsync(int currentPage)
+        {
+            var pagerResult = await OnLoadDataSource(currentPage);
+            Total = pagerResult.Total;
+            DataSource = pagerResult.Rows;
         }
         protected override void OnAfterRender(bool firstRender)
         {

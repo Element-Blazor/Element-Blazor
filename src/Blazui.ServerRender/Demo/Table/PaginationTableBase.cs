@@ -11,24 +11,11 @@ namespace Blazui.ServerRender.Demo.Table
     public class PaginationTableBase : ComponentBase
     {
         protected List<AutoGenerateColumnTestData> AllDatas = new List<AutoGenerateColumnTestData>();
-        protected List<AutoGenerateColumnTestData> Datas = new List<AutoGenerateColumnTestData>();
 
         protected BTable<AutoGenerateColumnTestData> table;
         protected int currentPage = 1;
 
         protected int pageSize = 5;
-        internal int CurrentPage
-        {
-            get
-            {
-                return currentPage;
-            }
-            set
-            {
-                currentPage = value;
-                Datas = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
-            }
-        }
         [Inject]
         MessageService MessageService { get; set; }
 
@@ -43,9 +30,17 @@ namespace Blazui.ServerRender.Demo.Table
                     Time = DateTime.Now
                 });
             }
-            Datas = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
         }
 
+        internal async Task<PagerResult<AutoGenerateColumnTestData>> LoadDataSource(int currentPage)
+        {
+            var result= new PagerResult<AutoGenerateColumnTestData>()
+            {
+                Rows = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(),
+                Total = AllDatas.Count
+            };
+            return await Task.FromResult(result);
+        }
         public void Edit(AutoGenerateColumnTestData testData)
         {
             MessageService.Show($"正在编辑 " + testData.Name);

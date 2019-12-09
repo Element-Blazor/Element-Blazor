@@ -1,4 +1,5 @@
 ﻿using Blazui.Component;
+using Blazui.Component.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,24 @@ namespace Blazui.ServerRender.Demo.Table
             LargeDatas.AddRange(Datas);
         }
 
+        internal async Task<PagerResult<TestData>> LoadDataSource1(int currentPage)
+        {
+            var result = new PagerResult<TestData>()
+            {
+                Rows = Datas,
+                Total = Datas.Count
+            };
+            return await Task.FromResult(result);
+        }
+        internal async Task<PagerResult<TestData>> LoadDataSource2(int currentPage)
+        {
+            var result = new PagerResult<TestData>()
+            {
+                Rows = LargeDatas,
+                Total = LargeDatas.Count
+            };
+            return await Task.FromResult(result);
+        }
         public void Edit(TestData testData)
         {
             MessageService.Show($"正在编辑 " + testData.Name);

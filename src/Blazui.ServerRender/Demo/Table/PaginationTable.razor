@@ -3,7 +3,7 @@
 <br />
 默认启用分页，数据足够多自动分页
 <br />
-<BTable DataSource="Datas" PageSize="pageSize" @bind-CurrentPage="CurrentPage" @ref="table" Total="AllDatas.Count">
+<BTable TRow="AutoGenerateColumnTestData" OnLoadDataSource="LoadDataSource" PageSize="pageSize" @ref="table">
     <BTableColumns TRow="AutoGenerateColumnTestData">
         <BTableTemplateColumn TRow="AutoGenerateColumnTestData" Text="操作">
             <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
