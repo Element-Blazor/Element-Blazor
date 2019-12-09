@@ -16,7 +16,6 @@ namespace Blazui.Component.Table
 {
     public class BTableBase<TRow> : ComponentBase, IContainerComponent
     {
-        internal BPagination Pagination { get; set; }
         protected ElementReference headerElement;
         internal List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
         private bool requireRender = true;

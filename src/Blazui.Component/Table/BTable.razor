@@ -145,7 +145,7 @@
             if (Math.Ceiling((float)Total / PageSize) > 1 || !NoPaginationOnSinglePage)
             {
                 <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
-                    <BPagination Total="Total" @ref="Pagination" PageCount="PageCount" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
+                    <BPagination Total="Total" PageCount="PageCount" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
                 </div>
             }
         }
