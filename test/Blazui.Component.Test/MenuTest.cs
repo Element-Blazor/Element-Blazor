@@ -15,8 +15,7 @@ namespace Blazui.Component.Test
         {
         }
 
-        [Fact]
-        private async Task TestShowAsync()
+        async Task StartTestAsync(Func<Task> action)
         {
             await InitilizeAsync();
             await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
@@ -24,13 +23,7 @@ namespace Blazui.Component.Test
             {
                 try
                 {
-                    var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                    Assert.True(menus.Count() == 17);
-                    foreach (var menu in menus)
-                    {
-                        var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                        Assert.True(string.IsNullOrWhiteSpace(backgroundColor));
-                    }
+                    await action();
                     break;
                 }
                 catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
@@ -40,73 +33,80 @@ namespace Blazui.Component.Test
             }
         }
 
+
+        [Fact]
+        private async Task TestShowAsync()
+        {
+            await StartTestAsync(async () =>
+            {
+                var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
+                Assert.True(menus.Count() == 17);
+                foreach (var menu in menus)
+                {
+                    var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                    Assert.True(string.IsNullOrWhiteSpace(backgroundColor));
+                }
+            });
+        }
+
         [Fact]
         public async Task TestHoverAsync()
         {
-            await InitilizeAsync();
-            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
-            while (true)
-            {
-                try
-                {
-                    var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                    Assert.True(menus.Count() == 17);
-                    foreach (var menu in menus)
-                    {
-                        await menu.HoverAsync();
-                        await Task.Delay(50);
-                        foreach (var otherMenu in menus)
-                        {
-                            if (menu == otherMenu)
-                            {
-                                continue;
-                            }
-                            var otherBackgroundColor = await otherMenu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                            Assert.True(string.IsNullOrWhiteSpace(otherBackgroundColor));
-                        }
-                        var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                        Assert.Equal("rgb(236, 245, 255)", backgroundColor);
-                    }
-                    break;
-                }
-                catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
-                {
-                    await Task.Delay(50);
-                }
-            }
+            await StartTestAsync(async () =>
+             {
+                 var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
+                 Assert.True(menus.Count() == 17);
+                 foreach (var menu in menus)
+                 {
+                     await menu.HoverAsync();
+                     await Task.Delay(50);
+                     foreach (var otherMenu in menus)
+                     {
+                         if (menu == otherMenu)
+                         {
+                             continue;
+                         }
+                         var otherBackgroundColor = await otherMenu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                         Assert.True(string.IsNullOrWhiteSpace(otherBackgroundColor));
+                     }
+                     var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                     Assert.Equal("rgb(236, 245, 255)", backgroundColor);
+                 }
+             });
         }
         [Fact]
         public async Task TestClickAsync()
         {
-            await InitilizeAsync();
-            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
             while (true)
             {
                 try
                 {
-                    var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                    Assert.True(menus.Count() == 17);
-                    foreach (var menu in menus)
+                    await StartTestAsync(async () =>
                     {
-                        await menu.ClickAsync();
-                        await Task.Delay(100);
-                        foreach (var otherMenu in menus)
+                        var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
+                        Assert.True(menus.Count() == 17);
+                        foreach (var menu in menus)
                         {
-                            if (menu == otherMenu)
+                            await menu.ClickAsync();
+                            await Task.Delay(200);
+                            foreach (var otherMenu in menus)
                             {
-                                continue;
+                                if (menu == otherMenu)
+                                {
+                                    continue;
+                                }
+                                var otherBackgroundColor = await otherMenu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                                Assert.True(string.IsNullOrWhiteSpace(otherBackgroundColor));
                             }
-                            var otherBackgroundColor = await otherMenu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                            Assert.True(string.IsNullOrWhiteSpace(otherBackgroundColor));
+                            var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                            Assert.Equal("rgb(236, 245, 255)", backgroundColor);
                         }
-                        var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                        Assert.Equal("rgb(236, 245, 255)", backgroundColor);
-                    }
+                    });
                     break;
                 }
-                catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
+                catch
                 {
-                    await Task.Delay(50);
+                    await Page.ReloadAsync();
                 }
             }
         }
