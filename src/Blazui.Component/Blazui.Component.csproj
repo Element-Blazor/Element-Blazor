@@ -21,8 +21,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="CheckBox\BCheckBox.razor" />
+    <Content Remove="CheckBox\BCheckBoxButton.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\js\dom.js" />
     <None Include="wwwroot\css\fix.css" />
+    <None Include="wwwroot\css\index.css" />
+    <None Include="wwwroot\css\fonts\element-icons.ttf" />
+    <None Include="wwwroot\css\fonts\element-icons.woff" />
   </ItemGroup>
 
   <ItemGroup>

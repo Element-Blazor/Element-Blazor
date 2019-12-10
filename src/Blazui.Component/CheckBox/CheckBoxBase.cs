@@ -56,6 +56,7 @@ namespace Blazui.Component.CheckBox
                     SelectedItems.Remove(model);
                 }
             }
+            StateHasChanged();
         }
 
         protected bool ModelItemIsSimpleType { get; set; }

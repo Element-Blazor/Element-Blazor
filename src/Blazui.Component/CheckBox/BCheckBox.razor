@@ -1,8 +1,0 @@
-﻿@using  Blazui.Component.EventArgs
-@inherits CheckBoxBase<TModel,TValue>
-@typeparam TModel
-@typeparam TValue
-@foreach (var item in models)
-{
-    <BSimpleCheckBox TValue="TValue" StatusChanged="status=>OnInnerStatusChanged(status,item.Model)" Status="item.Status" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
-}

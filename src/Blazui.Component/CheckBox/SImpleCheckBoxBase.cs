@@ -52,14 +52,6 @@ namespace Blazui.Component.CheckBox
             }
         }
 
-        //private void CheckBoxGroup_FormItem_OnReset(object value, bool requireRerender)
-        //{
-        //    if (CheckBoxGroup.SelectedItems.Contains(Value))
-        //    {
-        //        Status = Status.Checked;
-        //        return;
-        //    }
-
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (CheckBoxGroup != null)
