@@ -23,6 +23,12 @@ namespace Blazui.Component.Table
         internal int headerHeight = 49;
 
         /// <summary>
+        /// 不显示的字段名称
+        /// </summary>
+        [Parameter]
+        public string[] IgnoreProperties { get; set; } =   { };
+
+        /// <summary>
         /// 要显示的实体类型
         /// </summary>
         [Parameter]
@@ -148,7 +154,7 @@ namespace Blazui.Component.Table
         {
             if (AutoGenerateColumns)
             {
-                DataType.GetProperties().Reverse().ToList().ForEach(property =>
+                DataType.GetProperties().Where(p=>!IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
                  {
                      if (Headers.Any(x => x.Property?.Name == property.Name))
                      {
@@ -172,7 +178,8 @@ namespace Blazui.Component.Table
                          Text = text ?? property.Name,
                          Width = width
                      });
-                 });
+                 }
+                 );
 
             }
             if (requireRender)
