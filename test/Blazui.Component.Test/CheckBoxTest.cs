@@ -21,7 +21,19 @@ namespace Blazui.Component.Test
         [Fact]
         public async Task Test1Async()
         {
-            await TestCaseAsync("动态渲染");
+            await TestCaseAsync("硬编码");
+        }
+
+        [Fact]
+        public async Task Test2Async()
+        {
+            await TestCaseAsync("复选框组");
+        }
+
+        [Fact]
+        public async Task Test3Async()
+        {
+            await TestCaseAsync("按钮复选框组");
         }
     }
 }

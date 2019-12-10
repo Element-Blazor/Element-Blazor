@@ -50,7 +50,7 @@
                         {
                             <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
                                 <div class="cell">
-                                    <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
+                                    <BCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
                                 </div>
                             </th>
                         }
@@ -109,7 +109,7 @@
                             {
                                 <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                     <div class="cell">
-                                        <BSimpleCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BSimpleCheckBox>
+                                        <BCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
                                     </div>
                                 </td>
                             }
@@ -120,7 +120,7 @@
                                     <div class="cell">
                                         @if (header.IsCheckBox)
                                         {
-                                            <BSimpleCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BSimpleCheckBox>
+                                            <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
                                         }
                                         else if (header.Template != null)
                                         {

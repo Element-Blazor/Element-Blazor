@@ -17,8 +17,8 @@
     </BFormItem>
     <BFormItem TValue="IEnumerable<string>" Label="活动性质" IsRequired="true" Name="@nameof(Activity.Type)">
         <BCheckBoxGroup TValue="string">
-            <BSimpleCheckBox Value="@("Online")">美食线上活动</BSimpleCheckBox>
-            <BSimpleCheckBox Value="@("Offline")">地推活动</BSimpleCheckBox>
+            <BCheckBox Value="@("Online")">美食线上活动</BCheckBox>
+            <BCheckBox Value="@("Offline")">地推活动</BCheckBox>
         </BCheckBoxGroup>
     </BFormItem>
     <BFormItem TValue="string" Label="特殊资源" IsRequired="true" Name="@nameof(Activity.Resource)">

@@ -59,9 +59,6 @@
     <Compile Update="Demo\CheckBox\CheckBoxGroupBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\CheckBox\DynamicRenderBase.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="Demo\CheckBox\HardCodeBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -186,9 +183,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\CheckBox\CheckBoxGroup.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\CheckBox\DynamicRender.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\CheckBox\HardCode.razor">

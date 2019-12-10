@@ -461,14 +461,6 @@
     "name": "checkbox",
     "demos": [
       {
-        "title": "动态渲染",
-        "name": "CheckBox",
-        "files": [
-          "DynamicRender.razor",
-          "DynamicRenderBase.cs"
-        ]
-      },
-      {
         "title": "硬编码",
         "name": "CheckBox",
         "files": [
