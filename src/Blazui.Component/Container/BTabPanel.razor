@@ -1,9 +1,29 @@
-﻿@inherits BTabPanelBase<TModel>
-@typeparam TModel
-@using Blazui.Component.Dynamic
-@foreach (var item in models)
-{
-    <BSimpleTabPanel IsClosable="@item.IsClosable" Name="@item.Name" OnRenderCompleted="@OnInternalEachTabRenderCompleted" OnTabClose="RemoveTabCloseAsync" Title="@item.Title">
-        <BDynamicComponent Component="@item.Content"></BDynamicComponent>
-    </BSimpleTabPanel>
+﻿@inherits BTabPanelBase
+@{
+    var isActive = string.Empty;
+    var ariaSelected = string.Empty;
+
+    var isActiveTab = TabContainer.ActiveTab?.Name == this.Name;
+    if (TabContainer.DataSource != null)
+    {
+        isActiveTab = TabContainer.DataSource.Any(x => x.Name == this.Name && x.IsActive);
+    }
+    if (isActiveTab && TabContainer.Type != TabType.Normal)
+    {
+        isActive = "is-active";
+        ariaSelected = "true";
+    }
+
+    var name = Name;
+    var position = TabContainer.GetPosition();
+    var headerPosition = position.headerPosition;
+    var tabPosition = position.tabPosition;
+    var isClosableCls = IsClosable ? "is-closable" : string.Empty;
 }
+<div @ref="Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
+    @Title
+    @if (IsClosable)
+    {
+        <span class="el-icon-close" @onclick="OnInternalTabCloseAsync" @onclick:stopPropagation></span>
+    }
+</div>

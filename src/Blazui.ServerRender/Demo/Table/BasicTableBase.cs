@@ -1,4 +1,5 @@
 ﻿using Blazui.Component;
+using Blazui.Component.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace Blazui.ServerRender.Demo.Table
 {
     public class BasicTableBase : ComponentBase
     {
+        protected int currentPage;
         protected List<TestData> Datas = new List<TestData>();
         protected List<TestData> LargeDatas = new List<TestData>();
 
@@ -42,13 +44,31 @@ namespace Blazui.ServerRender.Demo.Table
             LargeDatas.AddRange(Datas);
         }
 
-        public void Edit(TestData testData)
+        internal async Task<PagerResult> LoadDataSource1(int currentPage)
         {
-            MessageService.Show($"正在编辑 " + testData.Name);
+            var result = new PagerResult()
+            {
+                Rows = Datas,
+                Total = Datas.Count
+            };
+            return await Task.FromResult(result);
         }
-        public void Del(TestData testData)
+        internal async Task<PagerResult> LoadDataSource2(int currentPage)
         {
-            MessageService.Show($"正在删除 " + testData.Name, MessageType.Warning);
+            var result = new PagerResult()
+            {
+                Rows = LargeDatas,
+                Total = LargeDatas.Count
+            };
+            return await Task.FromResult(result);
+        }
+        public void Edit(object testData)
+        {
+            MessageService.Show($"正在编辑 " + ((TestData)testData).Name);
+        }
+        public void Del(object testData)
+        {
+            MessageService.Show($"正在删除 " + ((TestData)testData).Name, MessageType.Warning);
         }
     }
 }

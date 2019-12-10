@@ -41,7 +41,7 @@
         cls = Cls;
     }
 }
-<button type="button" @onclick="OnButtonClickedAsync" class="@cls">
+<button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cls">
     @if (string.IsNullOrWhiteSpace(icon))
     {
         <span>@ChildContent</span>

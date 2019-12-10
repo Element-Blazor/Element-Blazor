@@ -1,7 +1,10 @@
 ﻿@inherits CheckBoxGroupBase
 已选中数据：@string.Join(",", SelectedValues)
 <br />
-<BSimpleCheckBox Value="true" Status="@Status" StatusChanged="status=>SelectAll(status)">全选</BSimpleCheckBox>
+<BCheckBox Value="true" Status="@Status" StatusChanged="status=>SelectAll(status)">全选</BCheckBox>
 <BCheckBoxGroup TValue="List<int>">
-    <BCheckBox Label="x=>x" Value="x=>x.Length" TValue="int" TModel="string" DataSource="@Values" SelectedItems="SelectedValues"></BCheckBox>
+    @foreach (var item in Values)
+    {
+        <BCheckBox Value="item" Status="SelectedValues.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=> ChangeStatus(status,item)">@item</BCheckBox>
+    }
 </BCheckBoxGroup>

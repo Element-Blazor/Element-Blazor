@@ -7,6 +7,7 @@ namespace Blazui.Component.NavMenu
 {
     public interface IMenuItem
     {
+        string Icon { get; set; }
         BMenuContainer Menu { get; set; }
 
         object Model { get; set; }

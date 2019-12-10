@@ -1,5 +1,4 @@
-﻿@inherits BTableBase<TRow>
-@typeparam TRow
+﻿@inherits BTableBase
 @if (Headers.Any())
 {
     var styles = new List<string>();
@@ -24,17 +23,22 @@
         styles.Add("height:" + Height + "px");
     }
 
+    var validColumnCount = Headers.Count();
     <div style="@string.Join(";",styles)" @ref="Container" class="@string.Join(" ",tableClsList)">
         <div class="el-table__header-wrapper" @ref="headerElement">
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
                 <colgroup>
+                    @if (HasSelectionColumn)
+                    {
+                        <col name="el-table_1_column_0" width="55" />
+                    }
                     @for (int i = 1; i <= Headers.Count; i++)
                     {
                         var header = Headers.ElementAt(i - 1);
-                        var width = header.Width;
-                        if (header.IsCheckBox)
+                        var width = header.Width.ToString();
+                        if (!header.Width.HasValue || header.Width.Value <= 0)
                         {
-                            width = 55;
+                            width = (100d / validColumnCount).ToString() + "%";
                         }
                         <col name="el-table_1_column_@i" width="@width" />
                     }
@@ -42,19 +46,20 @@
                 </colgroup>
                 <thead class="has-gutter">
                     <tr class="">
+                        @if (HasSelectionColumn)
+                        {
+                            <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
+                                <div class="cell">
+                                    <BCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
+                                </div>
+                            </th>
+                        }
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
                             <th colspan="1" rowspan="1" class="el-table_1_column_@i     is-leaf">
                                 <div class="cell">
-                                    @if (header.IsCheckBox)
-                                    {
-                                        <BSimpleCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BSimpleCheckBox>
-                                    }
-                                    else
-                                    {
-                                        @header.Text
-                                    }
+                                    @header.Text
                                 </div>
                             </th>
                         }
@@ -74,13 +79,17 @@
         <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
             <table cellspacing="0" cellpadding="0" border="0" class="el-table__body">
                 <colgroup>
+                    @if (HasSelectionColumn)
+                    {
+                        <col name="el-table_1_column_0" width="55" />
+                    }
                     @for (int i = 1; i <= Headers.Count; i++)
                     {
                         var header = Headers.ElementAt(i - 1);
-                        var width = header.Width;
-                        if (header.IsCheckBox)
+                        var width = header.Width.ToString();
+                        if (!header.Width.HasValue || header.Width.Value <= 0)
                         {
-                            width = 55;
+                            width = (100d / validColumnCount).ToString() + "%";
                         }
                         <col name="el-table_1_column_@i" width="@width" />
                     }
@@ -96,6 +105,14 @@
                         }
                         var row = DataSource.ElementAt(i);
                         <tr class="@string.Join(" ",clsList)">
+                            @if (HasSelectionColumn)
+                            {
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+                                        <BCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
+                                    </div>
+                                </td>
+                            }
                             @for (int j = 1; j <= Headers.Count; j++)
                             {
                                 var header = Headers.ElementAt(j - 1);
@@ -103,7 +120,7 @@
                                     <div class="cell">
                                         @if (header.IsCheckBox)
                                         {
-                                            <BSimpleCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked: Status.UnChecked" StatusChanged="(status=>ChangeRowStatus(status,row))"></BSimpleCheckBox>
+                                            <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
                                         }
                                         else if (header.Template != null)
                                         {
@@ -122,9 +139,15 @@
             </table>
         </div>
         <div class="el-table__column-resize-proxy" style="display: none;"></div>
-        <div style="margin-top:20px;margin-bottom:20px;">
-            <BPagination Total="Total" PageSize="PageSize" @bind-CurrentPage="CurrentPage"></BPagination>
-        </div>
+        @if (EnablePagination)
+        {
+            if (Math.Ceiling((float)Total / PageSize) > 1 || !NoPaginationOnSinglePage)
+            {
+                <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
+                    <BPagination Total="Total" ShowPageCount="ShowPageCount" PageSize="PageSize" CurrentPageChanged="ChangeCurrentPageAsync"></BPagination>
+                </div>
+            }
+        }
     </div>
 }
 else

@@ -16,7 +16,7 @@ namespace Blazui.Component.Input
         Number,
         Tel,
         Url,
-        Week
-
+        Week,
+        Password
     }
 }

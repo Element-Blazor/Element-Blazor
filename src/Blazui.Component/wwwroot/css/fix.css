@@ -34,6 +34,7 @@
             flex: 1;
             margin-left: 5px;
             display: flex;
+            flex-direction: column;
         }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--card.el-tabs--top {
@@ -50,6 +51,10 @@
                     flex: 1;
                     border: 1px solid #EBEEF5;
                     border-top: none;
+                    overflow: auto;
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
                 }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--border-card.el-tabs--top {
@@ -66,6 +71,10 @@
                     flex: 1;
                     border: 1px solid #EBEEF5;
                     border-top: none;
+                    overflow: auto;
+                    padding: 10px;
+                    display: flex;
+                    flex-direction: column;
                 }
 
         .blaz-layout > .blaz-layout-container > .blaz-layout-east {
@@ -78,7 +87,7 @@
         min-height: 50px;
         margin-top: 5px;
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
     }
 
     .blaz-layout > .blaz-layout-north > .el-card {
@@ -87,3 +96,21 @@
         display: flex;
         flex-direction: column;
     }
+
+.el-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.el-table__body-wrapper {
+    flex: 1;
+    display: flex;
+}
+
+.el-table__body, .el-table__footer, .el-table__header {
+    flex: 1;
+}
+
+.el-table__header-wrapper {
+    display: flex;
+}

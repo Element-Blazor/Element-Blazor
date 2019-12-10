@@ -10,22 +10,22 @@ namespace Blazui.Component
     {
         public static bool Equal<TValue>(TValue value1, TValue value2)
         {
-            if (value1 == default && value2 != default)
+            if (value1 == null && value2 != null)
             {
                 return false;
             }
-            if (value1 != default && value2 == default)
+            if (value1 != null && value2 == null)
             {
                 return false;
             }
-            if (value1 == default && value2 == default)
+            if (value1 == null && value2 == null)
             {
                 return true;
             }
             var valueType = typeof(TValue);
             if (valueType == typeof(string))
             {
-                if (value1.ToString() == value2.ToString())
+                if (value1?.ToString() == value2?.ToString())
                 {
                     return true;
                 }
@@ -52,6 +52,11 @@ namespace Blazui.Component
             return ReferenceEquals(value1, value2);
         }
 
+        public static TValue ChangeType<TValue>(object value)
+        {
+            return (TValue)ChangeType(value, typeof(TValue));
+        }
+
         public static object ChangeType(object value, Type type)
         {
             object destValue = null;
@@ -62,7 +67,7 @@ namespace Blazui.Component
                     var nulltype = Nullable.GetUnderlyingType(type);
                     if (value != null && !string.IsNullOrWhiteSpace(value.ToString()))
                     {
-                        destValue = Convert.ChangeType(value, type);
+                        destValue = Convert.ChangeType(value, nulltype);
                     }
                 }
                 else

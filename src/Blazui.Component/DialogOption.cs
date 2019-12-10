@@ -12,7 +12,11 @@ namespace Blazui.Component
         public string Title { get; set; }
         public object Content { get; set; }
         public bool IsDialog { get; set; }
+        public float Width { get; set; }
+        public bool IsShow { get; set; }
         public IList<RenderFragment> Buttons { get; set; } = new List<RenderFragment>();
+        internal int ZIndex { get; set; }
+        internal int ShadowZIndex { get; set; }
         internal TaskCompletionSource<DialogResult> TaskCompletionSource { get; set; }
         internal BPopupBase Instance { get; set; }
         internal ElementReference Element { get; set; }

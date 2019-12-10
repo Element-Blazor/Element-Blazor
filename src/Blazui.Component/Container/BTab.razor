@@ -1,6 +1,72 @@
 ﻿@inherits BTabBase
-<CascadingValue Value="this">
-    <BSimpleTab IsAddable="@IsAddable" IsClosable="@IsClosable" IsEditable="@IsEditable" ActiveTabName="@ActiveTabName" TabPosition="@TabPosition" Type="@Type" OnActiveTabChangingAsync="@OnInternalActiveTabChangingAsync" OnActiveTabChanged="OnActiveTabChanged" OnAddingTab="@OnAddingTab">
-        @ChildContent
-    </BSimpleTab>
-</CascadingValue>
+@{
+    var tabType = string.Empty;
+    switch (Type)
+    {
+        case TabType.Normal:
+            tabType = string.Empty;
+            break;
+        case TabType.BorderCard:
+            tabType = "el-tabs--border-card";
+            break;
+        case TabType.Card:
+            tabType = "el-tabs--card";
+            break;
+    }
+    var position = GetPosition();
+    var headerPosition = position.headerPosition;
+    var tabPosition = position.tabPosition;
+    object activeContent = ActiveTab?.ChildContent;
+    var bodyStyle = ActiveTab?.Style;
+    if (DataSource != null)
+    {
+        var activeOption = DataSource.FirstOrDefault(x => x.IsActive);
+        activeContent = activeOption?.Content;
+        bodyStyle = activeOption?.BodyStyle;
+    }
+}
+<div class="el-tabs @tabType @tabPosition">
+    @if (TabPosition == TabPosition.Bottom)
+    {
+        <div class="el-tabs__content" style="@bodyStyle" @ref="Content">
+            <BDynamicComponent Component="activeContent"></BDynamicComponent>
+        </div>
+    }
+    <div class="el-tabs__header @headerPosition">
+        @if (IsEditable && IsAddable)
+        {
+            <span tabindex="0" class="el-tabs__new-tab" @onclick="OnAddingTab"><i class="el-icon-plus"></i></span>
+        }
+        <div class="el-tabs__nav-wrap @headerPosition">
+            <div class="el-tabs__nav-scroll">
+                <div role="tablist" class="el-tabs__nav @headerPosition" style="transform: translateX(0px);">
+                    @if (Type == TabType.Normal)
+                    {
+                        <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
+                    }
+                    <CascadingValue Value=this>
+                        @if (DataSource != null)
+                        {
+                            @foreach (var item in DataSource)
+                            {
+                                <BTabPanel IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
+                                    <BDynamicComponent Component="@item.Content"></BDynamicComponent>
+                                </BTabPanel>
+                            }
+                        }
+                        else
+                        {
+                            @ChildContent
+                        }
+                    </CascadingValue>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (TabPosition != TabPosition.Bottom)
+    {
+        <div class="el-tabs__content" style="@bodyStyle" @ref="Content">
+            <BDynamicComponent Component="activeContent"></BDynamicComponent>
+        </div>
+    }
+</div>

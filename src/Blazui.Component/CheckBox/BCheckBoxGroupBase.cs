@@ -22,16 +22,34 @@ namespace Blazui.Component.CheckBox
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
         }
 
-        private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public void Refresh()
         {
-            SetFieldValue(SelectedItems.ToList());
+            StateHasChanged();
         }
 
-        protected override void FormItem_OnReset()
+        private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            SetFieldValue(SelectedItems.ToList(), true);
+        }
+
+        protected override void FormItem_OnReset(object value, bool requireRerender)
+        {
+            //if (OnSetValue == null)
+            //{
+            //    return;
+            //}
             SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
-            SelectedItems = new ObservableCollection<TValue>();
+            //OnSetValue((List<TValue>)value);
+            if (value != null)
+            {
+                SelectedItems = new ObservableCollection<TValue>(((List<TValue>)value));
+            }
+            else
+            {
+                SelectedItems = new ObservableCollection<TValue>();
+            }
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+            SetFieldValue(SelectedItems.ToList(), false);
         }
     }
 }

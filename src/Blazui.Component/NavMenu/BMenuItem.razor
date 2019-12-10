@@ -4,6 +4,7 @@
     @onmouseover="OnOver"
     @onmouseout="OnOut"
     class="el-menu-item @(isActive?"is-active":"")"
-    style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+    style="background-color:@BackgroundColor;color:@textColor; border-bottom-color:@borderColor;">
+    <i class="@(Icon ?? "el-icon-menu")"></i>
     @ChildContent
 </li>

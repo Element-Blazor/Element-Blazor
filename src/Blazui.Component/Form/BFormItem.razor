@@ -19,14 +19,17 @@
     {
         labelStyles.Add("width:100px");
 
-        if (Form.LabelAlign != LabelAlign.Top)
+        if (Form.LabelAlign != LabelAlign.Top && !string.IsNullOrWhiteSpace(Label))
         {
             bodyStyles.Add("margin-left:100px");
         }
     }
 }
 <div class="@string.Join(" ",clsList)">
-    <label for="name" class="el-form-item__label" style="@string.Join(";",labelStyles)">@Label</label>
+    @if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">@Label</label>
+    }
     <div class="el-form-item__content" style="@string.Join(";",bodyStyles)">
         <CascadingValue Value="this">
             @ChildContent

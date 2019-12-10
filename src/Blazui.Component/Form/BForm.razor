@@ -19,7 +19,7 @@
     }
     clsList.Add("el-form");
 }
-<form class="@string.Join(" ",clsList)" style="@Style">
+<form class="@string.Join(" ",clsList)" style="@Style" @ref="Container">
     <CascadingValue Value="this">
         @ChildContent
     </CascadingValue>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Container
 {
-    public class BSimpleCardBase : ComponentBase
+    public class BSimpleCardBase : BComponentBase
     {
         [Parameter]
         public string Cls { get; set; }
@@ -21,6 +21,7 @@ namespace Blazui.Component.Container
 
         protected override Task OnParametersSetAsync()
         {
+            titles.Clear();
             titles.Add(Title);
             return base.OnParametersSetAsync();
         }

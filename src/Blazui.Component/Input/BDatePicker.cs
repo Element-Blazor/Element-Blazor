@@ -25,6 +25,13 @@ namespace Blazui.Component.Input
         [Parameter]
         public EventCallback<DateTime?> DateChanged { get; set; }
 
+        public override Func<DateTime?, string> Formatter { get; set; }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            Formatter = dt => dt?.ToString(Format);
+        }
         [Inject]
         PopupService PopupService { get; set; }
         protected override async Task OnFocusAsync()
@@ -58,7 +65,7 @@ namespace Blazui.Component.Input
             {
                 _ = DateChanged.InvokeAsync(Date);
             }
-            SetFieldValue(Date);
+            SetFieldValue(Date, true);
         }
     }
 }

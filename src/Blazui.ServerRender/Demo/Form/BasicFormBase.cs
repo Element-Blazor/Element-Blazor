@@ -25,6 +25,8 @@ namespace Blazui.ServerRender.Demo.Form
             _ = MessageBox.AlertAsync(activity.ToString());
         }
 
+        
+
         protected void Reset()
         {
             demoForm.Reset();

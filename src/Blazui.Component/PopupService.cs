@@ -9,7 +9,8 @@ namespace Blazui.Component
     public class PopupService
     {
         internal ObservableCollection<DateTimePickerOption> DateTimePickerOptions = new ObservableCollection<DateTimePickerOption>();
-        internal ObservableCollection<DropDownOption> DropDownOptions = new ObservableCollection<DropDownOption>();
+        internal ObservableCollection<DropDownOption> SelectDropDownOptions = new ObservableCollection<DropDownOption>();
+        internal ObservableCollection<DropDownOption> DropDownMenuOptions = new ObservableCollection<DropDownOption>();
         internal ObservableCollection<SubMenuOption> SubMenuOptions = new ObservableCollection<SubMenuOption>();
     }
 }

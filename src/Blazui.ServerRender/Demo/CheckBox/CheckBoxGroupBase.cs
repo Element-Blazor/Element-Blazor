@@ -42,5 +42,30 @@ namespace Blazui.ServerRender.Demo.CheckBox
                 SelectedValues = new ObservableCollection<string>();
             }
         }
+
+        public void ChangeStatus(Status status, string item)
+        {
+            if (status == Status.UnChecked)
+            {
+                SelectedValues.Remove(item);
+            }
+            else
+            {
+                SelectedValues.Add(item);
+            }
+
+            if (Values.All(SelectedValues.Contains))
+            {
+                Status = Status.Checked;
+            }
+            else if (SelectedValues.Any())
+            {
+                Status = Status.Indeterminate;
+            }
+            else
+            {
+                Status = Status.UnChecked;
+            }
+        }
     }
 }

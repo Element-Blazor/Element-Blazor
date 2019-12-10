@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace Blazui.Component.Table
 {
-    public class TableHeader<TRow>
+    public class TableHeader
     {
         public string Text { get; set; }
-        public int? Width { get; set; }
-        public string Property { get; set; }
-        public Func<TRow, object> Eval { get; set; }
+        public float? Width { get; set; }
+        public PropertyInfo Property { get; set; }
+        public Func<object, object> Eval { get; set; }
         public bool IsCheckBox { get; set; }
-        public RenderFragment<TRow> Template { get; set; }
+        public RenderFragment<object> Template { get; set; }
     }
 }

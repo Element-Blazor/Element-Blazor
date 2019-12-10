@@ -18,12 +18,13 @@ namespace Blazui.Component.Form
         [Parameter]
         public bool IsRequired { get; set; }
 
+        [Parameter]
+        public string RequiredMessage { get; set; }
         internal bool IsShowing { get; set; } = true;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        public event Action OnReset;
         [CascadingParameter]
         public BForm Form { get; set; }
 
@@ -41,20 +42,25 @@ namespace Blazui.Component.Form
             if (IsRequired && !Rules.OfType<RequiredRule>().Any())
             {
                 var requiredRule = new RequiredRule();
-                requiredRule.ErrorMessage = $"请确认{Label}";
+                requiredRule.ErrorMessage = RequiredMessage ?? $"请确认{Label}";
                 Rules.Add(requiredRule);
             }
         }
 
-        internal void Reset()
+        internal void ShowErrorMessage()
         {
-            if (OnReset != null)
+            if (ValidationResult == null || ValidationResult.IsValid)
             {
-                OnReset();
+                return;
             }
-            ValidationResult = null;
+            IsShowing = true;
+            _ = Task.Delay(10).ContinueWith((task) =>
+            {
+                IsShowing = false;
+                InvokeAsync(StateHasChanged);
+            });
         }
-
-        internal abstract void Validate();
+        public abstract void Validate();
+        public abstract void Reset();
     }
 }

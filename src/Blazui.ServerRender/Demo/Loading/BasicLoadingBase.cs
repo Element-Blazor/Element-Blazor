@@ -38,6 +38,15 @@ namespace Blazui.ServerRender.Demo.Loading
             });
         }
 
+        internal async Task<PagerResult> LoadDataSource(int currentPage)
+        {
+            var result = new PagerResult()
+            {
+                Rows = Datas,
+                Total = Datas.Count
+            };
+            return await Task.FromResult(result);
+        }
         protected void RenderCompleted()
         {
             table.Loading(LoadingService);

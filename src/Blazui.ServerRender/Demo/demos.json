@@ -19,10 +19,19 @@
         "name": "LeftTab"
       },
       {
-        "title": "可编辑的标签页",
+        "title": "调用事件API实现可编辑的标签页",
         "name": "EditableTab",
         "files": [
           "EditableTab.razor",
+          "TestCheckBoxInTab.razor"
+        ]
+      },
+      {
+        "title": "双向绑定实现可编辑的标签页",
+        "name": "EditableTab",
+        "files": [
+          "BindingEditableTab.razor",
+          "BindingEditableTabBase.cs",
           "TestCheckBoxInTab.razor"
         ]
       }
@@ -111,6 +120,14 @@
           "AlignForm.razor",
           "BasicFormBase.cs"
         ]
+      },
+      {
+        "title": "表单双向绑定",
+        "name": "Form",
+        "files": [
+          "InitilizeForm.razor",
+          "InitilizeFormBase.cs"
+        ]
       }
     ]
   },
@@ -186,6 +203,33 @@
           "CustomColumnTable.razor",
           "BasicTableBase.cs",
           "TestData.cs"
+        ]
+      },
+      {
+        "title": "自动生成列，宽度自适应",
+        "name": "Table",
+        "files": [
+          "AutoGenerateColumnTable.razor",
+          "AutoGenerateColumnTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "分页",
+        "name": "Table",
+        "files": [
+          "PaginationTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "过滤显示字段",
+        "name": "Table",
+        "files": [
+          "IgnoreColumnTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
         ]
       }
     ]
@@ -270,7 +314,7 @@
         ]
       },
       {
-        "title": "带背景",
+        "title": "无背景",
         "name": "Pagination",
         "files": [
           "BackgroundPagination.razor"
@@ -416,14 +460,6 @@
   {
     "name": "checkbox",
     "demos": [
-      {
-        "title": "动态渲染",
-        "name": "CheckBox",
-        "files": [
-          "DynamicRender.razor",
-          "DynamicRenderBase.cs"
-        ]
-      },
       {
         "title": "硬编码",
         "name": "CheckBox",

@@ -9,15 +9,21 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 
 Blazui 演示地址：http://blazui.com:9000
 
+主要更新仓库：https://github.com/wzxinchen/Blazui
+
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
 目前演示服务器配置较低，点击过快可能会有问题
 
+#### 关注与讨论
+
+加入QQ群：74522853
+
 #### 使用前提
 参考Blazor使用的前提条件
 
-1. 安装 .Net Core 3.0
-2. 安装 VS2019
+1. 安装 .Net Core 3.1
+2. 安装 VS2019，更新到最新版
 
 #### 贡献说明
 
@@ -44,7 +50,7 @@ Blazui 演示地址：http://blazui.com:9000
     <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
     <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
 </head>
 <body>
@@ -108,10 +114,11 @@ services.AddBlazuiServices();
 
 #### 计划
 
-###### 类似于LayAdmin的后台管理模板 https://gitee.com/wzxinchen/BlazAdmin [ ]
+###### 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin [ ]
 ###### nuget 包 [√]
 ###### 开发文档 [ ]
 ###### 树形表格 [ ]
+###### 表格自动生成列，宽度高度自适应 [√]
 ###### 文件上传 [ ]
 ###### 图片上传 [ ]
 ###### 类似于EasyUI的布局面板 [√]
@@ -134,7 +141,3 @@ services.AddBlazuiServices();
 ###### 分页组件 [√] 
 ###### 消息框组件 [√] 
 ###### 日期选择器组件 [√] 
-
-#### 关注与讨论
-
-加入QQ群：74522853

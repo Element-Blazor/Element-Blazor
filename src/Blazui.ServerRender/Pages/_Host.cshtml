@@ -10,8 +10,8 @@
     <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
     <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
 </head>
 <body>
     <app>
@@ -21,9 +21,12 @@
     <script src="/_content/Blazui.Component/js/dom.js"></script>
     <script src="https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs/loader.js"></script>
     <script>
-        require.config({ paths: { 'vs': 'https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs' }});
+        require.config({ paths: { 'vs': 'https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs' } });
         require(['vs/editor/editor.main'], function () {
             window.renderHightlight = function (el) {
+                if (el.children[0].getAttribute("class")) {
+                    return;
+                }
                 monaco.editor.colorizeElement(el.children[0], {
                     theme: "vs"
                 });

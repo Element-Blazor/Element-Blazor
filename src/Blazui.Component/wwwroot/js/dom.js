@@ -6,13 +6,22 @@
 };
 window.getClientHeight = function (el) {
     if (!el) {
-        return 0;
+        return this.document.body.clientHeight;
     }
     return el.clientHeight || 0;
 };
+window.submitForm = function (el, url) {
+    if (!el) {
+        return;
+    }
+
+    el.method = "post";
+    el.action = url;
+    el.submit();
+};
 window.getClientWidth = function (el) {
     if (!el) {
-        return 0;
+        return this.document.body.clientWidth;
     }
     return el.clientWidth || 0;
 };

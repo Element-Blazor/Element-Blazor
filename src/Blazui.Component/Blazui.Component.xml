@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blazui.Component</name>
+    </assembly>
+    <members>
+        <member name="F:Blazui.Component.AnimationStatus.Begin">
+            <summary>
+            动画开始
+            </summary>
+        </member>
+        <member name="F:Blazui.Component.AnimationStatus.End">
+            <summary>
+            动画结束
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Container.BTabBase.Content">
+            <summary>
+            渲染后的内容区域
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Form.BFormBase.Validations">
+            <summary>
+            设置验证规则
+            </summary>
+        </member>
+        <member name="M:Blazui.Component.Form.BFormBase.SubmitAsync(System.String)">
+            <summary>
+            触发浏览器提交
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Form.BFormBase.Value">
+            <summary>
+            该属性仅用于设置表单初始值，获取表单输入值请使用 <seealso cref="M:Blazui.Component.Form.BFormBase.GetValue``1"/> 方法
+            </summary>
+        </member>
+        <member name="M:Blazui.Component.Form.BFormBase.GetValue``1">
+            <summary>
+            获取表单输入值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:Blazui.Component.Form.BFormItemBase`1.OriginValueRendered">
+            <summary>
+            初始值是否已渲染
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Pagination.BPaginationBase.Total">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Pagination.BPaginationBase.PageSize">
+            <summary>
+            每页条数
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Pagination.BPaginationBase.CurrentPage">
+            <summary>
+            当前页码，从1开始
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.Instance">
+            <summary>
+            关联到的 BPopupBase 组件实例
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.Element">
+            <summary>
+            弹出层元素本身
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.ShadowElement">
+            <summary>
+            遮罩层元素
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.Target">
+            <summary>
+            要将弹出层显示到哪个元素下方
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.HideStatus">
+            <summary>
+            隐藏动画状态
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.PopupOption.ShowStatus">
+            <summary>
+            显示动画状态
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Radio.BRadioBase`1.Value">
+            <summary>
+            每个单选组件自己的值
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Radio.BRadioBase`1.SelectedValue">
+            <summary>
+            多个单选组件选择的值
+            </summary>
+        </member>
+        <member name="T:Blazui.Component.Select.OptionModel`1">
+            <summary>
+            下拉组件专用 Model 类，使用该类的属性将强制渲染成下拉框
+            </summary>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="P:Blazui.Component.Table.BTableBase`1.Total">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Table.BTableBase`1.PageSize">
+            <summary>
+            每页条数
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Table.BTableBase`1.CurrentPage">
+            <summary>
+            当前页码，从1开始
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Table.BTableBase`1.IsStripe">
+            <summary>
+            启用斑马纹
+            </summary>
+        </member>
+        <member name="P:Blazui.Component.Table.BTableBase`1.IsBordered">
+            <summary>
+            启用边框
+            </summary>
+        </member>
+    </members>
+</doc>

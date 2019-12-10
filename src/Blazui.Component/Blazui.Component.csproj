@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -12,26 +12,20 @@
     <Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Container\BCenterBase.cs" />
-    <Compile Remove="Container\BEastBase.cs" />
-    <Compile Remove="Container\BNorthBase.cs" />
-    <Compile Remove="Container\BSouthBase.cs" />
-    <Compile Remove="Container\BWestBase.cs" />
-    <Compile Remove="Container\LayoutModel.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Component.xml</DocumentationFile>
+  </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Container\BCenter.razor" />
-    <Content Remove="Container\BEast.razor" />
-    <Content Remove="Container\BNorth.razor" />
-    <Content Remove="Container\BSouth.razor" />
-    <Content Remove="Container\BWest.razor" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Component.xml</DocumentationFile>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Include="wwwroot\js\dom.js" />
     <None Include="wwwroot\css\fix.css" />
+    <None Include="wwwroot\css\index.css" />
+    <None Include="wwwroot\css\fonts\element-icons.ttf" />
+    <None Include="wwwroot\css\fonts\element-icons.woff" />
   </ItemGroup>
 
   <ItemGroup>

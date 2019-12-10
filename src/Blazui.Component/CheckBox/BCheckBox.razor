@@ -1,8 +1,29 @@
-﻿@using  Blazui.Component.EventArgs
-@inherits CheckBoxBase<TModel,TValue>
-@typeparam TModel
+﻿@inherits BCheckBoxBase<TValue>
 @typeparam TValue
-@foreach (var item in models)
-{
-    <BSimpleCheckBox TValue="TValue" StatusChanged="status=>OnInnerStatusChanged(status,item.Model)" Status="item.Status" IsDisabled="item.IsDisabled">@item.Label</BSimpleCheckBox>
+@using  Blazui.Component.EventArgs
+@{
+    switch (Status)
+    {
+        case Status.UnChecked:
+            _isChecked = string.Empty;
+            _isIndeterminate = string.Empty;
+            break;
+        case Status.Checked:
+            _isChecked = "is-checked";
+            _isIndeterminate = string.Empty;
+            break;
+        case Status.Indeterminate:
+            _isChecked = string.Empty;
+            _isIndeterminate = "is-indeterminate";
+            break;
+    }
+    <label role="checkbox" aria-checked="true" class="el-checkbox @_isChecked @isDisabled">
+        <span aria-checked="mixed" class="el-checkbox__input @_isChecked @isDisabled @_isIndeterminate">
+            <span class="el-checkbox__inner"></span>
+            <input type="checkbox" aria-hidden="true" @onchange="ChangeStatus" class="el-checkbox__original @isDisabled" name="@Name" value="@Value" />
+        </span>
+        <span class="el-checkbox__label">
+            @ChildContent
+        </span>
+    </label>
 }

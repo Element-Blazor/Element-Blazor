@@ -8,13 +8,34 @@ namespace Blazui.Component.Pagination
 {
     public class BPaginationBase : ComponentBase
     {
-        protected bool previousDisabled = false;
-        protected bool nextDisabled = false;
+        internal bool previousDisabled = false;
+        internal bool nextDisabled = false;
+        internal bool nextArrow = false;
+        internal bool prevArrow = false;
         /// <summary>
         /// 总记录数
         /// </summary>
         [Parameter]
         public int Total { get; set; } = 100;
+
+        internal void ShowNext()
+        {
+            nextArrow = true;
+            prevArrow = false;
+        }
+        internal void HideNext()
+        {
+            nextArrow = false;
+        }
+
+        internal void ShowPrev()
+        {
+            prevArrow = true;
+        }
+        internal void HidePrev()
+        {
+            prevArrow = false;
+        }
 
         /// <summary>
         /// 每页条数
@@ -27,25 +48,51 @@ namespace Blazui.Component.Pagination
         [Parameter]
         public int CurrentPage { get; set; } = 1;
 
+        /// <summary>
+        /// 是否显示背景颜色
+        /// </summary>
         [Parameter]
         public bool Background { get; set; } = true;
 
+        /// <summary>
+        /// 最大显示的页码数
+        /// </summary>
+        [Parameter]
+        public int ShowPageCount { get; set; } = 7;
+
+        /// <summary>
+        /// 当前页码变化时触发
+        /// </summary>
         [Parameter]
         public EventCallback<int> CurrentPageChanged { get; set; }
-        protected int pageCount;
+
+        internal void SetCurrentPageChanged(EventCallback<int> currentPageChanged)
+        {
+            CurrentPageChanged = currentPageChanged;
+        }
+        /// <summary>
+        /// 当前最大显示的页码数变化时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<int> PageCountChanged { get; set; }
+        internal int pageCount;
         protected override void OnInitialized()
         {
             pageCount = Convert.ToInt32(Math.Ceiling((float)Total / PageSize));
-            Calculate();
+            SwitchButtonStatus();
         }
 
-        protected void Jump(int page)
+        internal void Jump(int page)
         {
             CurrentPage = page;
-            Calculate();
+            if (CurrentPageChanged.HasDelegate)
+            {
+                _ = CurrentPageChanged.InvokeAsync(page);
+            }
+            SwitchButtonStatus();
         }
 
-        private void Calculate()
+        private void SwitchButtonStatus()
         {
             if (pageCount <= 1)
             {

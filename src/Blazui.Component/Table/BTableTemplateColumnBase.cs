@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableTemplateColumnBase<TRow> : BTableColumn<TRow>
+    public class BTableTemplateColumnBase : BTableColumn
     {
         [Parameter]
-        public override RenderFragment<TRow> ChildContent { get; set; }
+        public override RenderFragment<object> ChildContent { get; set; }
     }
 }

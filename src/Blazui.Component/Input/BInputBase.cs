@@ -14,13 +14,11 @@ namespace Blazui.Component.Input
 {
     public class BInputBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
-        [Inject]
-        private IJSRuntime JSRuntime { get; set; }
         [Parameter]
         public InputType Type { get; set; } = InputType.Text;
 
         [Parameter]
-        public Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
+        public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
 
         [Parameter]
         public bool IsClearButtonClick { get; set; }
@@ -75,9 +73,8 @@ namespace Blazui.Component.Input
             {
                 _ = ValueChanged.InvokeAsync(Value);
             }
-            SetFieldValue(Value);
+            SetFieldValue(Value, true);
         }
-
 
         protected virtual Task OnFocusAsync()
         {
@@ -96,7 +93,7 @@ namespace Blazui.Component.Input
             {
                 _ = ValueChanged.InvokeAsync(Value);
             }
-            SetFieldValue(Value);
+            SetFieldValue(Value, true);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -105,19 +102,25 @@ namespace Blazui.Component.Input
             {
                 await InputElement.Dom(JSRuntime).SetDisabledAsync(IsDisabled);
             }
-
-            if (FormItem != null)
-            {
-                FormItem.OnReset += FormItem_OnReset;
-            }
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            this.Value = default;
+            if (value == null)
+            {
+                Value = default;
+            }
+            else
+            {
+                Value = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
+            }
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
+            }
+            else
+            {
+                StateHasChanged();
             }
         }
     }

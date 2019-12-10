@@ -4,7 +4,7 @@
     for (int i = 0; i < Messages.Count; i++)
     {
         var message = Messages[i];
-        var index = ZIndex++;
+        var index = message.ZIndex;
         <div role="alert" class="el-message el-message--@(message.Type.ToString().ToLower())" @ref="message.Element" style="top: @(message.BeginTop)px;opacity:0;transition:top 0.5s,opacity 0.5s;z-index:@index;">
             <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
             <p class="el-message__content">@message.Message</p>
@@ -13,7 +13,7 @@
     for (int i = 0; i < LoadingOptions.Count; i++)
     {
         var option = LoadingOptions[i];
-        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(ZIndex++)" @ref="option.Element">
+        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(option.ZIndex)" @ref="option.Element">
             <div class="el-loading-spinner">
                 @if (string.IsNullOrWhiteSpace(option.IconClass))
                 {
@@ -33,12 +33,17 @@
     for (int i = 0; i < DialogOptions.Count; i++)
     {
         var option = DialogOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         if (option.IsDialog)
         {
+            var width = string.Empty;
+            if (option.Width > 0)
+            {
+                width = $"width:{option.Width}px;";
+            }
             <div class="el-dialog__wrapper" style="z-index: @index;">
-                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;">
+                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;@width">
                     <div class="el-dialog__header">
                         <span class="el-dialog__title">@option.Title</span>
                         <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" Click="(e=>CloseDialogAsync(option,
@@ -102,9 +107,9 @@
 
     for (int i = 0; i < DateTimePickerOptions.Count; i++)
     {
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
         var option = DateTimePickerOptions[i];
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var year = option.CurrentMonth.Year;
         var month = option.CurrentMonth.Month;
         var calendar = CultureInfo.InvariantCulture.Calendar;
@@ -303,11 +308,11 @@
         <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;opacity:0;position:fixed;" @ref="@option.ShadowElement" @onclick="e=>CloseDateTimePicker(option)"></div>
     }
 
-    for (int i = 0; i < DropDownOptions.Count; i++)
+    for (int i = 0; i < SelectDropDownOptions.Count; i++)
     {
-        var option = DropDownOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var option = SelectDropDownOptions[i];
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var transform = "scaleY(0)";
         if (option.IsShow)
         {
@@ -325,8 +330,8 @@
         {
             style = "";
         }
-        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@index" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(BPopupBase.ZIndex++);" x-placement="bottom-start">
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(index);" x-placement="bottom-start">
             <div class="el-scrollbar" style="">
                 <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
                     <ul class="el-scrollbar__view el-select-dropdown__list">
@@ -345,11 +350,49 @@
             <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
         </div>
     }
+    for (int i = 0; i < DropDownMenuOptions.Count; i++)
+    {
+        var option = DropDownMenuOptions[i];
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
+        var transform = "scaleY(0)";
+        if (option.IsShow)
+        {
+            if (option.ShowStatus == AnimationStatus.Begin)
+            {
+                transform = "scaleY(0)";
+            }
+            else
+            {
+                transform = "scaleY(1)";
+            }
+        }
+        var style = "display:none";
+        if (option.IsShow)
+        {
+            style = "";
+        }
+        var dropDownStyles = new List<string>();
+        dropDownStyles.Add($"left:{option.Left}px");
+        dropDownStyles.Add($"top:{option.Top}px");
+        dropDownStyles.Add("transition:transform 0.2s linear 0s");
+        dropDownStyles.Add($"transform:{transform}");
+        dropDownStyles.Add("position:absolute");
+        dropDownStyles.Add("transform-origin: center top 0px");
+        dropDownStyles.Add($"z-index:{index}");
+        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="bottom-start">
+            <CascadingValue Value="option">
+                @option.OptionContent
+            </CascadingValue>
+            <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
+        </ul>
+    }
     for (int i = 0; i < SubMenuOptions.Count; i++)
     {
         var option = SubMenuOptions[i];
-        var shadowIndex = ZIndex++;
-        var index = ZIndex++;
+        var shadowIndex = option.ShadowZIndex;
+        var index = option.ZIndex;
         var transform = "transform:scaleY(1);";
         var opacity = "1";
         if (option.IsShow)
@@ -370,7 +413,7 @@
             transform = "transform:scaleY(0);";
             opacity = "0";
         }
-        <div class="el-menu--horizontal" @onmouseover="e=>ShowSubMenu(option)" @onmouseout="e=>ReadyCloseSubMenu(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
+        <div class="el-menu--horizontal" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
             <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
                 <CascadingValue Value="option.SubMenu">
                     <CascadingValue Value="option.Options">

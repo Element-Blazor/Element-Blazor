@@ -25,12 +25,19 @@ namespace Blazui.Component.Radio
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            SetFieldValue(SelectedValue);
+            SetFieldValue(SelectedValue, false);
         }
 
-        protected override void FormItem_OnReset()
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            SelectedValue = default;
+            if (value == null)
+            {
+                SelectedValue = default;
+            }
+            else
+            {
+                SelectedValue = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
+            }
         }
 
         internal async Task<bool> TrySetValueAsync(TValue value, bool requireRefresh)
@@ -49,7 +56,7 @@ namespace Blazui.Component.Radio
                 }
             }
             SelectedValue = value;
-            SetFieldValue(SelectedValue);
+            SetFieldValue(SelectedValue, true);
             if (SelectedValueChanged.HasDelegate)
             {
                 await SelectedValueChanged.InvokeAsync(value);
