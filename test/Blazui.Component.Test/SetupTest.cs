@@ -42,6 +42,8 @@ namespace Blazui.Component.Test
         {
             if (initilized)
             {
+                Page = await Browser.NewPageAsync();
+                await Page.GoToAsync("https://localhost:5001");
                 return;
             }
             await SemaphoreSlim.WaitAsync();
@@ -91,8 +93,7 @@ namespace Blazui.Component.Test
                         Width = 1024
                     }
                 });
-
-                Page = (await Browser.PagesAsync())[0];
+                Page = await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 Output.WriteLine("初始化完成");
                 initilized = true;

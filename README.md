@@ -50,7 +50,7 @@ Blazui 演示地址：http://blazui.com:9000
     <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
     <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
 </head>
 <body>

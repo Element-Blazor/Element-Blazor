@@ -59,11 +59,38 @@ namespace Blazui.Component.CheckBox
                 if (CheckBoxGroup.SelectedItems.Contains(TypeHelper.ChangeType<TValue>(value)))
                 {
                     Status = Status.Checked;
-                    return;
                 }
+                else
+                {
+                    Status = Status.UnChecked;
+                }
+                if (StatusChanged.HasDelegate)
+                {
+                    _ = StatusChanged.InvokeAsync(Status);
+                }
+                else
+                {
+                    CheckBoxGroup.Refresh();
+                }
+                return;
             }
-            CheckBoxGroup?.SelectedItems?.Remove(Value);
-            Status = Status.UnChecked;
+
+            if (TypeHelper.Equal(Value, TypeHelper.ChangeType<TValue>(value)))
+            {
+                Status = Status.Checked;
+            }
+            else
+            {
+                Status = Status.UnChecked;
+            }
+            if (StatusChanged.HasDelegate)
+            {
+                _ = StatusChanged.InvokeAsync(Status);
+            }
+            else
+            {
+                StateHasChanged();
+            }
         }
 
         protected void ChangeStatus(ChangeEventArgs uIMouseEvent)

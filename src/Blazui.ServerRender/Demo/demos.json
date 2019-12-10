@@ -314,7 +314,7 @@
         ]
       },
       {
-        "title": "带背景",
+        "title": "无背景",
         "name": "Pagination",
         "files": [
           "BackgroundPagination.razor"

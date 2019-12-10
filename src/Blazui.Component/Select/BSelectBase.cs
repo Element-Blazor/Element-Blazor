@@ -168,6 +168,14 @@ namespace Blazui.Component.Select
                 Label = optionModel.Text;
                 Value = optionModel.Value;
             }
+            if (ValueChanged.HasDelegate)
+            {
+                _ = ValueChanged.InvokeAsync(Value);
+            }
+            else
+            {
+                StateHasChanged();
+            }
         }
     }
 }

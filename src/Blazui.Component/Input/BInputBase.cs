@@ -114,9 +114,13 @@ namespace Blazui.Component.Input
             {
                 Value = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
             }
-            if (requireRerender && ValueChanged.HasDelegate)
+            if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
+            }
+            else
+            {
+                StateHasChanged();
             }
         }
     }

@@ -38,5 +38,10 @@ namespace Blazui.Component
         {
             return await MessageBox.AlertAsync(text);
         }
+
+        public void Refresh()
+        {
+            StateHasChanged();
+        }
     }
 }
