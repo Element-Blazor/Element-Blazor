@@ -10,12 +10,32 @@ namespace Blazui.Component.Pagination
     {
         internal bool previousDisabled = false;
         internal bool nextDisabled = false;
+        internal bool nextArrow = false;
+        internal bool prevArrow = false;
         /// <summary>
         /// 总记录数
         /// </summary>
         [Parameter]
         public int Total { get; set; } = 100;
 
+        internal void ShowNext()
+        {
+            nextArrow = true;
+            prevArrow = false;
+        }
+        internal void HideNext()
+        {
+            nextArrow = false;
+        }
+
+        internal void ShowPrev()
+        {
+            prevArrow = true;
+        }
+        internal void HidePrev()
+        {
+            prevArrow = false;
+        }
         /// <summary>
         /// 每页条数
         /// </summary>

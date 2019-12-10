@@ -7,7 +7,6 @@
         pageClsList.Add("is-background");
     }
     var renderedPrefix = false;
-    var renderedSufix = false;
 }
 <div class="@string.Join(" ",pageClsList)">
     <BButton Icon="el-icon-arrow-left" IsDisabled="previousDisabled" OnClick="(e=>Jump(CurrentPage-1))"></BButton>
@@ -25,8 +24,15 @@
                 clsList.Add("el-icon");
                 clsList.Add("more");
                 clsList.Add("btn-quickprev");
-                clsList.Add("el-icon-more");
-                <li class="@string.Join(" ", clsList)" @onclick="e => Jump(CurrentPage-ShowPageCount+2)"></li>
+                if (prevArrow)
+                {
+                    clsList.Add("el-icon-d-arrow-left");
+                }
+                else
+                {
+                    clsList.Add("el-icon-more");
+                }
+                <li class="@string.Join(" ", clsList)" @onclick="e => Jump(CurrentPage-ShowPageCount+2)"  @onmouseover="ShowPrev" @onmouseout="HidePrev"></li>
                 if (CurrentPage + ShowPageCount - 2 > pageCount)
                 {
                     for (var j = pageCount - ShowPageCount + 2; j <= pageCount; j++)
@@ -57,8 +63,15 @@
                 clsList.Add("el-icon");
                 clsList.Add("more");
                 clsList.Add("btn-quicknext");
-                clsList.Add("el-icon-more");
-                <li class="@string.Join(" ", clsList)" @onclick="e => Jump(CurrentPage+ShowPageCount-2)"></li>
+                if (nextArrow)
+                {
+                    clsList.Add("el-icon-d-arrow-right");
+                }
+                else
+                {
+                    clsList.Add("el-icon-more");
+                }
+                <li class="@string.Join(" ", clsList)" @onclick="e => Jump(CurrentPage+ShowPageCount-2)" @onmouseover="ShowNext" @onmouseout="HideNext"></li>
                 clsList.Clear();
                 clsList.Add("number");
                 <li class="@string.Join(" ", clsList)" @onclick="(e => Jump(pageCount))">@pageCount</li>
@@ -94,8 +107,15 @@
                 clsList.Add("el-icon");
                 clsList.Add("more");
                 clsList.Add("btn-quicknext");
-                clsList.Add("el-icon-more");
-                <li class="@string.Join(" ", clsList)" @onclick="e=>Jump(CurrentPage+5)"></li>
+                if (nextArrow)
+                {
+                    clsList.Add("el-icon-d-arrow-right");
+                }
+                else
+                {
+                    clsList.Add("el-icon-more");
+                }
+                <li class="@string.Join(" ", clsList)" @onclick="e=>Jump(CurrentPage+5)" @onmouseover="ShowNext" @onmouseout="HideNext"></li>
                 clsList.Clear();
                 clsList.Add("number");
                 page = pageCount;
