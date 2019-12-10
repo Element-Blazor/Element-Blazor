@@ -31,6 +31,13 @@ namespace Blazui.Component.Test
         public ITestOutputHelper Output { get; }
         public Browser Browser { get; private set; }
 
+        protected async Task TestCaseAsync(string tabName, string caseName)
+        {
+            await InitilizeAsync();
+            await NavigateToMenuAsync(tabName);
+            var demoCards = await WaitForDemoCardsAsync();
+            await TestAsync(tabName, demoCards.FirstOrDefault(x => x.Title == caseName));
+        }
         protected async Task InitilizeAsync()
         {
             if (initilized)

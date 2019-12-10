@@ -77,7 +77,8 @@ namespace Blazui.Component.Test
         [Fact]
         public async Task TestClickAsync()
         {
-            while (true)
+            var count = 5;
+            while (count-- >= 0)
             {
                 try
                 {

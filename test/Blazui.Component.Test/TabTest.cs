@@ -33,10 +33,7 @@ namespace Blazui.Component.Test
 
         private async Task TestCaseAsync(string name)
         {
-            await InitilizeAsync();
-            await NavigateToMenuAsync("Tabs ±Í«©“≥");
-            var demoCards = await WaitForDemoCardsAsync();
-            await TestAsync("Tabs ±Í«©“≥", demoCards.FirstOrDefault(x => x.Title == name));
+            await TestCaseAsync("Tabs ±Í«©“≥", name); 
         }
 
         [Fact]

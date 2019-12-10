@@ -58,6 +58,10 @@ namespace Blazui.Component.Radio
                     Status = RadioStatus.Selected;
                     SetFieldValue(RadioGroup.SelectedValue, false);
                 }
+                else
+                {
+                    Status = RadioStatus.UnSelected;
+                }
             }
             else
             {
@@ -65,6 +69,10 @@ namespace Blazui.Component.Radio
                 {
                     Status = RadioStatus.Selected;
                     SetFieldValue(SelectedValue, false);
+                }
+                else
+                {
+                    Status = RadioStatus.UnSelected;
                 }
             }
         }
@@ -115,6 +123,26 @@ namespace Blazui.Component.Radio
             if (SelectedValueChanged.HasDelegate)
             {
                 _ = SelectedValueChanged.InvokeAsync(SelectedValue);
+            }
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            var oldStatus = Status;
+            if (TypeHelper.Equal(SelectedValue, Value))
+            {
+                Status = RadioStatus.Selected;
+            }
+            else
+            {
+                Status = RadioStatus.UnSelected;
+            }
+            if (oldStatus != Status)
+            {
+                if (StatusChanged.HasDelegate)
+                {
+                    _ = StatusChanged.InvokeAsync(Status);
+                }
             }
         }
     }
