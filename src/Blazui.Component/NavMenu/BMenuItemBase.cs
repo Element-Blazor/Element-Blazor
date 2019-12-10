@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.NavMenu
 {
-    public class BMenuItemBase : ComponentBase, IMenuItem
+    public class BMenuItemBase : BComponentBase, IMenuItem
     {
-        [Inject]
-        NavigationManager navigationManager { get; set; }
         [Parameter]
         public string Index { get; set; }
 
@@ -40,7 +38,6 @@ namespace Blazui.Component.NavMenu
         public MenuOptions Options { get; set; }
 
         protected string textColor;
-        protected string backgroundColor;
         protected string borderColor;
 
         protected bool isActive { get; set; }
@@ -51,7 +48,7 @@ namespace Blazui.Component.NavMenu
             isActive = true;
             textColor = Options.ActiveTextColor;
             borderColor = Options.ActiveTextColor;
-            backgroundColor = Options.HoverColor;
+            BackgroundColor = Options.HoverColor;
 
         }
         public void DeActivate()
@@ -59,15 +56,16 @@ namespace Blazui.Component.NavMenu
             isActive = false;
             textColor = Options.TextColor;
             borderColor = "transparent";
-            backgroundColor = Options.BackgroundColor;
+            BackgroundColor = Options.BackgroundColor;
         }
 
         [Parameter]
         public EventCallback<BChangeEventArgs<string>> OnRouteChanging { get; set; }
+        protected string BackgroundColor { get; set; }
 
         protected override void OnInitialized()
         {
-            backgroundColor = Options.BackgroundColor;
+            BackgroundColor = Options.BackgroundColor;
             textColor = Options.TextColor;
 
             if (Options.DefaultActiveIndex == Index)
@@ -88,17 +86,17 @@ namespace Blazui.Component.NavMenu
             {
                 return;
             }
-            backgroundColor = Options.HoverColor;
+            BackgroundColor = Options.HoverColor;
         }
 
         public void OnOut()
         {
             if (Options.Mode == MenuMode.Horizontal)
             {
-                backgroundColor = Options.BackgroundColor;
+                BackgroundColor = Options.BackgroundColor;
                 return;
             }
-            backgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
+            BackgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
         }
 
         public async Task OnClickAsync()
@@ -121,7 +119,7 @@ namespace Blazui.Component.NavMenu
                         return;
                     }
                 }
-                navigationManager.NavigateTo(Route);
+                NavigationManager.NavigateTo(Route);
             }
         }
     }

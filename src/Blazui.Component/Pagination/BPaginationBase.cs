@@ -36,6 +36,7 @@ namespace Blazui.Component.Pagination
         {
             prevArrow = false;
         }
+
         /// <summary>
         /// 每页条数
         /// </summary>

@@ -59,7 +59,10 @@ namespace Blazui.Component.NavMenu
             {
                 ActiveItemChanged.InvokeAsync(activeItem);
             }
-            // StateHasChanged();
+            else
+            {
+                StateHasChanged();
+            }
         }
 
         public void DeActive()

@@ -3,7 +3,7 @@
 
 <BButton OnClick="ShowLoading">显示Loading</BButton>
 <BButton OnClick="CloseLoading">隐藏Loading</BButton>
-<BTable OnLoadDataSource="LoadDataSource" @ref="table">
+<BTable OnLoadDataSource="LoadDataSource" DataType="typeof(TestData)" @ref="table">
     <BTableColumns>
         <BTableColumn Width="100" Property="@nameof(TestData.Name)" Text="姓名"></BTableColumn>
         <BTableDateTimeColumn Width="200" Format="yyyy-MM-dd" Property="@nameof(TestData.Time)" Text="时间"></BTableDateTimeColumn>

@@ -81,7 +81,7 @@ namespace Blazui.Component.Test.TabTests
             }
             await AssertEmptyBody(card);
             await card.Page.ReloadAsync();
-            var cards = await WaitForDemoCardsAsync(card.Page);
+            var cards = await WaitForDemoCardsAsync();
             card = cards.FirstOrDefault(x => x.Title == card.Title);
             headers = await GetHeadersAsync(card);
             await headers[3].Header.ClickAsync();

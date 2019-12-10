@@ -84,6 +84,9 @@ namespace Blazui.Component.Test
                         Width = 1024
                     }
                 });
+
+                Page = (await Browser.PagesAsync())[0];
+                await Page.GoToAsync("https://localhost:5001");
                 Output.WriteLine("初始化完成");
                 initilized = true;
             }
@@ -93,12 +96,12 @@ namespace Blazui.Component.Test
             }
         }
 
-        protected async Task NavigateToMenuAsync(Page page, string menuText)
+        protected async Task NavigateToMenuAsync(string menuText)
         {
-            await page.WaitForSelectorAsync(".sidebar > .el-menu > li");
+            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
             while (true)
             {
-                var menus = await page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
+                var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
                 foreach (var menu in menus)
                 {
                     var text = await menu.EvaluateFunctionAsync<string>("(m)=>m.innerText");
@@ -118,6 +121,33 @@ namespace Blazui.Component.Test
             }
         }
 
+        protected async Task NavigateToAllMenuAsync()
+        {
+            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
+            while (true)
+            {
+                try
+                {
+                    var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
+                    Assert.True(menus.Count() == 17);
+                    foreach (var menu in menus)
+                    {
+                        var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
+                        Assert.True(string.IsNullOrWhiteSpace(backgroundColor));
+                    }
+                    //foreach (var menu in menus)
+                    //{
+                    //    await menu.HoverAsync();
+                    //    await menu.ClickAsync();
+                    //}
+                    break;
+                }
+                catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
+                {
+                    await Task.Delay(50);
+                }
+            }
+        }
 
         protected async Task TestAsync(string menuName, DemoCard demoCard)
         {
