@@ -148,20 +148,12 @@ namespace Blazui.Component.Table
         {
             if (AutoGenerateColumns)
             {
-                if (Headers == null)
-                {
-                    Headers = new List<TableHeader>();
-                }
                 DataType.GetProperties().Reverse().ToList().ForEach(property =>
                  {
                      if (Headers.Any(x => x.Property?.Name == property.Name))
                      {
                          return;
                      }
-                     Func<object, object> getMethod = row =>
-                       {
-                           return property.GetValue(row);
-                       };
                      var attrs = property.GetCustomAttributes(true);
                      var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
                      if (string.IsNullOrWhiteSpace(text))
@@ -171,7 +163,10 @@ namespace Blazui.Component.Table
                      var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
                      Headers.Insert(0, new TableHeader()
                      {
-                         Eval = getMethod,
+                         Eval = row =>
+                         {
+                             return property.GetValue(row);
+                         },
                          IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
                          Property = property,
                          Text = text ?? property.Name,

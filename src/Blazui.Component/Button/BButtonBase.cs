@@ -11,6 +11,10 @@ namespace Blazui.Component.Button
     {
         protected async Task OnButtonClickedAsync(MouseEventArgs e)
         {
+            if (IsDisabled)
+            {
+                return;
+            }
             if (OnClick.HasDelegate)
             {
                 await OnClick.InvokeAsync(e);
