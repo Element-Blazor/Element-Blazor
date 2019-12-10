@@ -10,10 +10,13 @@ namespace Blazui.Component.CheckBox
 {
     public class SimpleCheckBoxBase<TValue> : BFieldComponentBase<TValue>
     {
-        protected string _isChecked = string.Empty;
-        protected string _isIndeterminate = string.Empty;
-        protected string isDisabled;
+        internal string _isChecked = string.Empty;
+        internal string _isIndeterminate = string.Empty;
+        internal string isDisabled;
 
+        /// <summary>
+        /// 如果该 <seealso cref="SimpleCheckBoxBase{TValue}"/> 在 <seealso cref="BCheckBoxGroup{TValue}"/> 中，则此属性获取 <seealso cref="BCheckBoxGroup{TValue}"/> 的值
+        /// </summary>
         [CascadingParameter]
         public BCheckBoxGroup<TValue> CheckBoxGroup { get; set; }
 

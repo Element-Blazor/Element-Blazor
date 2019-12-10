@@ -12,7 +12,7 @@ namespace Blazui.ServerRender.Demo.Table
     {
         protected List<AutoGenerateColumnTestData> AllDatas = new List<AutoGenerateColumnTestData>();
 
-        protected BTable<AutoGenerateColumnTestData> table;
+        protected BTable table;
         protected int currentPage = 1;
 
         protected int pageSize = 5;
@@ -32,22 +32,22 @@ namespace Blazui.ServerRender.Demo.Table
             }
         }
 
-        internal async Task<PagerResult<AutoGenerateColumnTestData>> LoadDataSource(int currentPage)
+        internal async Task<PagerResult> LoadDataSource(int currentPage)
         {
-            var result= new PagerResult<AutoGenerateColumnTestData>()
+            var result= new PagerResult()
             {
                 Rows = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(),
                 Total = AllDatas.Count
             };
             return await Task.FromResult(result);
         }
-        public void Edit(AutoGenerateColumnTestData testData)
+        public void Edit(object testData)
         {
-            MessageService.Show($"正在编辑 " + testData.Name);
+            MessageService.Show($"正在编辑 " + ((AutoGenerateColumnTestData)testData).Name);
         }
-        public void Del(AutoGenerateColumnTestData testData)
+        public void Del(object testData)
         {
-            MessageService.Show($"正在删除 " + testData.Name, MessageType.Warning);
+            MessageService.Show($"正在删除 " + ((AutoGenerateColumnTestData)testData).Name, MessageType.Warning);
         }
     }
 }

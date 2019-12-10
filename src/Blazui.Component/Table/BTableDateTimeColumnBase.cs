@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableDateTimeColumnBase<TRow> : BTableColumn<TRow>
+    public class BTableDateTimeColumnBase : BTableColumn
     {
         [Parameter]
         public string Format { get; set; }

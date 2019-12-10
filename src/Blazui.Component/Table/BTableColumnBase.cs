@@ -7,20 +7,23 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableColumnBase<TRow> : ComponentBase
+    public class BTableColumnBase : BComponentBase
     {
         internal virtual bool IsCheckBox { get; set; }
         [Parameter]
         public virtual int? Width { get; set; }
 
+        /// <summary>
+        /// 当前列关联的属性名
+        /// </summary>
         [Parameter]
-        public Expression<Func<TRow, object>> Property { get; set; }
+        public string Property { get; set; }
 
         [CascadingParameter]
-        public BTableColumns<TRow> Columns { get; set; }
+        public BTableColumns Columns { get; set; }
 
         [Parameter]
-        public virtual RenderFragment<TRow> ChildContent { get; set; }
+        public virtual RenderFragment<object> ChildContent { get; set; }
 
         [Parameter]
         public string Text { get; set; }

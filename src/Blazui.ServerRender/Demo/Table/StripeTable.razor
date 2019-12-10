@@ -1,9 +1,9 @@
 ﻿@inherits BasicTableBase
 
-<BTable OnLoadDataSource="LoadDataSource1" TRow="TestData" IsStripe="true" AutoGenerateColumns="false">
-    <BTableColumns TRow="TestData">
-        <BTableColumn TRow="TestData" Width="100" Property="@(x=>x.Name)" Text="姓名"></BTableColumn>
-        <BTableDateTimeColumn TRow="TestData" Width="200" Format="yyyy-MM-dd" Property="@(x=>x.Time)" Text="时间"></BTableDateTimeColumn>
-        <BTableColumn TRow="TestData" Width="300" Property="@(x=>x.Address)" Text="地址"></BTableColumn>
+<BTable DataType="typeof(TestData)" OnLoadDataSource="LoadDataSource1" IsStripe="true" AutoGenerateColumns="false">
+    <BTableColumns>
+        <BTableColumn Width="100" Property="@nameof(TestData.Name)" Text="姓名"></BTableColumn>
+        <BTableDateTimeColumn Width="200" Format="yyyy-MM-dd" Property="@nameof(TestData.Time)" Text="时间"></BTableDateTimeColumn>
+        <BTableColumn Width="300" Property="@nameof(TestData.Address)" Text="地址"></BTableColumn>
     </BTableColumns>
 </BTable>

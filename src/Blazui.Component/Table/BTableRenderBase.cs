@@ -11,13 +11,14 @@ namespace Blazui.Component.Table
         [Parameter]
         public BTable<TRow> Table { get; set; }
 
-        public List<TableHeader<TRow>> Headers
+        public List<TableHeader> Headers
         {
             get
             {
                 return Table.Headers;
             }
         }
+
         public List<TRow> Rows
         {
             get

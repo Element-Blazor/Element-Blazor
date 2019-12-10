@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -14,12 +15,18 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableBase<TRow> : ComponentBase, IContainerComponent
+    public class BTableBase : ComponentBase, IContainerComponent
     {
         internal ElementReference headerElement;
-        internal List<TableHeader<TRow>> Headers { get; set; } = new List<TableHeader<TRow>>();
+        internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
         private bool requireRender = true;
         internal int headerHeight = 49;
+
+        /// <summary>
+        /// 要显示的实体类型
+        /// </summary>
+        [Parameter]
+        public Type DataType { get; set; }
 
         /// <summary>
         /// 是否自动生成列
@@ -61,7 +68,7 @@ namespace Blazui.Component.Table
         [Parameter]
         public EventCallback<int> ShowPageCountChanged { get; set; }
 
-        internal List<TRow> DataSource { get; set; } = new List<TRow>();
+        internal List<object> DataSource { get; set; } = new List<object>();
 
         /// <summary>
         /// 当只有一页时，不显示分页
@@ -73,13 +80,13 @@ namespace Blazui.Component.Table
         /// 选中的记录
         /// </summary>
         [Parameter]
-        public HashSet<TRow> SelectedRows { get; set; } = new HashSet<TRow>();
+        public HashSet<object> SelectedRows { get; set; } = new HashSet<object>();
 
         /// <summary>
         /// 选中的记录变化时触发
         /// </summary>
         [Parameter]
-        public EventCallback<HashSet<TRow>> SelectedRowsChanged { get; set; }
+        public EventCallback<HashSet<object>> SelectedRowsChanged { get; set; }
         internal Status selectAllStatus;
 
         [Parameter]
@@ -107,7 +114,7 @@ namespace Blazui.Component.Table
         /// 当加载数据源时触发，传入参数为当前页
         /// </summary>
         [Parameter]
-        public Func<int, Task<PagerResult<TRow>>> OnLoadDataSource { get; set; }
+        public Func<int, Task<PagerResult>> OnLoadDataSource { get; set; }
         /// <summary>
         /// 启用边框
         /// </summary>
@@ -128,7 +135,12 @@ namespace Blazui.Component.Table
         {
             var pagerResult = await OnLoadDataSource(currentPage);
             Total = pagerResult.Total;
-            DataSource = pagerResult.Rows;
+            var dataSource = pagerResult.Rows as IEnumerable;
+            DataSource.Clear();
+            foreach (var item in dataSource)
+            {
+                DataSource.Add(item);
+            }
             SelectedRows.Clear();
             RefreshSelectAllStatus();
         }
@@ -136,32 +148,36 @@ namespace Blazui.Component.Table
         {
             if (AutoGenerateColumns)
             {
-                typeof(TRow).GetProperties().Reverse().ToList().ForEach(property =>
+                if (Headers == null)
                 {
-                    if (Headers.Any(x => x.Property == property.Name))
-                    {
-                        return;
-                    }
-                    Func<TRow, object> getMethod = row =>
-                      {
-                          return property.GetValue(row);
-                      };
-                    var attrs = property.GetCustomAttributes(true);
-                    var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
-                    if (string.IsNullOrWhiteSpace(text))
-                    {
-                        text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
-                    }
-                    var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
-                    Headers.Insert(0, new TableHeader<TRow>()
-                    {
-                        Eval = getMethod,
-                        IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
-                        Property = property.Name,
-                        Text = text ?? property.Name,
-                        Width = width
-                    });
-                });
+                    Headers = new List<TableHeader>();
+                }
+                DataType.GetProperties().Reverse().ToList().ForEach(property =>
+                 {
+                     if (Headers.Any(x => x.Property?.Name == property.Name))
+                     {
+                         return;
+                     }
+                     Func<object, object> getMethod = row =>
+                       {
+                           return property.GetValue(row);
+                       };
+                     var attrs = property.GetCustomAttributes(true);
+                     var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
+                     if (string.IsNullOrWhiteSpace(text))
+                     {
+                         text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
+                     }
+                     var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
+                     Headers.Insert(0, new TableHeader()
+                     {
+                         Eval = getMethod,
+                         IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
+                         Property = property,
+                         Text = text ?? property.Name,
+                         Width = width
+                     });
+                 });
 
             }
             if (requireRender)
@@ -201,11 +217,11 @@ namespace Blazui.Component.Table
         {
             if (status == Status.Checked)
             {
-                SelectedRows = new HashSet<TRow>(DataSource);
+                SelectedRows = new HashSet<object>(DataSource);
             }
             else
             {
-                SelectedRows = new HashSet<TRow>();
+                SelectedRows = new HashSet<object>();
             }
 
             if (SelectedRowsChanged.HasDelegate)
@@ -215,7 +231,7 @@ namespace Blazui.Component.Table
             RefreshSelectAllStatus();
         }
 
-        protected void ChangeRowStatus(Status status, TRow row)
+        protected void ChangeRowStatus(Status status, object row)
         {
             if (status == Status.Checked)
             {

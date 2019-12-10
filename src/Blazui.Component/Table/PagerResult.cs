@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class PagerResult<T>
+    public class PagerResult
     {
-        public List<T> Rows { get; set; }
+        public object Rows { get; set; }
         public int Total { get; set; }
     }
 }

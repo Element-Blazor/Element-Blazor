@@ -1,8 +1,8 @@
 ﻿@inherits PaginationTableBase
 
-<BTable TRow="AutoGenerateColumnTestData" OnLoadDataSource="LoadDataSource" PageSize="pageSize" @ref="table">
-    <BTableColumns TRow="AutoGenerateColumnTestData">
-        <BTableTemplateColumn TRow="AutoGenerateColumnTestData" Text="操作">
+<BTable DataType="typeof(AutoGenerateColumnTestData)" OnLoadDataSource="LoadDataSource" PageSize="pageSize" @ref="table">
+    <BTableColumns>
+        <BTableTemplateColumn Text="操作">
             <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
             <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e=> Del(context))">删除</BButton>
         </BTableTemplateColumn>

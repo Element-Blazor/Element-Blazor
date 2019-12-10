@@ -29,6 +29,7 @@
     <Compile Remove="Container\BTabPanelBase1.cs" />
     <Compile Remove="Container\BWestBase.cs" />
     <Compile Remove="Container\LayoutModel.cs" />
+    <Compile Remove="Table\BTableRenderBase.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,7 @@
     <Content Remove="Container\BTab1.razor" />
     <Content Remove="Container\BTabPanel1.razor" />
     <Content Remove="Container\BWest.razor" />
+    <Content Remove="Table\BTableRender.razor" />
   </ItemGroup>
 
   <ItemGroup>
