@@ -26,7 +26,7 @@ namespace Blazui.Component.Table
         /// 不显示的字段名称
         /// </summary>
         [Parameter]
-        public string[] IgnoreProperties { get; set; } = { };
+        public string[] IgnoreProperties { get; set; } =   { };
 
         /// <summary>
         /// 要显示的实体类型
