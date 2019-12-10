@@ -9,12 +9,15 @@ namespace Blazui.Component.Test
     public class TestBase
     {
         protected IDictionary<string, Dictionary<string, Type>> demoTesterTypes;
-        protected async Task<List<DemoCard>> WaitForDemoCardsAsync(Page page)
+
+        public Page Page { get; set; }
+
+        protected async Task<List<DemoCard>> WaitForDemoCardsAsync()
         {
-            await page.WaitForSelectorAsync(".main > .el-card");
+            await Page.WaitForSelectorAsync(".main > .el-card");
             await Task.Delay(1000);
             var demoCards = new List<DemoCard>();
-            var cards = await page.QuerySelectorAllAsync(".main > .el-card");
+            var cards = await Page.QuerySelectorAllAsync(".main > .el-card");
             foreach (var card in cards)
             {
                 var header = await card.QuerySelectorAsync(".el-card__header");
@@ -23,7 +26,7 @@ namespace Blazui.Component.Test
                 {
                     Title = text,
                     Body = await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content"),
-                    Page = page
+                    Page = Page
                 });
             }
             return demoCards;
