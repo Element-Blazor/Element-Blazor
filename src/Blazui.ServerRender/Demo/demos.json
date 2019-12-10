@@ -222,6 +222,15 @@
           "PaginationTableBase.cs",
           "AutoGenerateColumnTestData.cs"
         ]
+      },
+      {
+        "title": "过滤显示字段",
+        "name": "Table",
+        "files": [
+          "IgnoreColumnTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
       }
     ]
   },
