@@ -485,5 +485,17 @@
         ]
       }
     ]
+  },
+  {
+    "name": "upload",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Upload",
+        "files": [
+          "BasicUpload.razor"
+        ]
+      }
+    ]
   }
 ]

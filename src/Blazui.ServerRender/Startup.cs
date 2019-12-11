@@ -32,6 +32,7 @@ namespace Blazui.ServerRender
             services.AddHttpClient();
             services.AddBlazuiServices();
             services.AddSingleton<WeatherForecastService>();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,11 +51,11 @@ namespace Blazui.ServerRender
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("default","api/{controller}/{action}");
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

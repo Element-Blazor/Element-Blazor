@@ -19,6 +19,71 @@ window.submitForm = function (el, url) {
     el.action = url;
     el.submit();
 };
+window.upload = function (el) {
+    if (!el) {
+        return;
+    }
+    return el.children[1].click();
+}
+window.readFile = function (el, url) {
+    return new Promise((resolver, reject) => {
+        let file = el.files[0];
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.onreadystatechange = function () {
+            if (this.readyState != 4) {
+                return;
+            }
+            if (this.status < 200 || this.status >= 300) {
+                return;
+            }
+            resolver(["success"]);
+        };
+        let formData = new this.FormData();
+        formData.append("fileContent", file);
+        xhr.send(formData);
+    });
+    //const temporaryFileReader = new FileReader();
+    //return new Promise((resolve, reject) => {
+    //    temporaryFileReader.onerror = () => {
+    //        temporaryFileReader.abort();
+    //        reject(new DOMException("Problem parsing input file."));
+    //    };
+    //    temporaryFileReader.addEventListener("load", function () {
+    //        var data = [el.value, temporaryFileReader.result.split(',')[1]];
+    //        resolve(data);
+    //    }, false);
+    //    temporaryFileReader.readAsDataURL(el.files[0]);
+    //});
+}
+window.trigger = function (el, eventName) {
+    var eventClass = "";
+
+    // Different events have different event classes.
+    // If this switch statement can't map an eventName to an eventClass,
+    // the event firing is going to fail.
+    switch (eventName) {
+        case "click": // Dispatching of 'click' appears to not work correctly in Safari. Use 'mousedown' or 'mouseup' instead.
+        case "mousedown":
+        case "mouseup":
+            eventClass = "MouseEvents";
+            break;
+
+        case "focus":
+        case "change":
+        case "blur":
+        case "select":
+            eventClass = "HTMLEvents";
+            break;
+
+        default:
+            throw "fireEvent: Couldn't find an event class for event '" + eventName + "'.";
+            break;
+    }
+    let event = this.document.createEvent(eventClass);
+    event.initEvent(eventName);
+    el.dispatchEvent(event);
+}
 window.getClientWidth = function (el) {
     if (!el) {
         return this.document.body.clientWidth;
