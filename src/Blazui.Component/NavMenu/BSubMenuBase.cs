@@ -162,7 +162,7 @@ namespace Blazui.Component.NavMenu
             isActive = false;
         }
 
-        void CancelTokenSource(CancellationTokenSource cancellationTokenSource)
+        void DisposeTokenSource(CancellationTokenSource cancellationTokenSource)
         {
             if (cancellationTokenSource == null)
             {
@@ -174,7 +174,7 @@ namespace Blazui.Component.NavMenu
                 {
                     return;
                 }
-                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
             }
             catch (ObjectDisposedException)
             {
@@ -196,10 +196,10 @@ namespace Blazui.Component.NavMenu
                          {
                              if (task.IsCanceled)
                              {
-                                 CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                                 DisposeTokenSource(option.ClosingTaskCancellationTokenSource);
                                  return;
                              }
-                             CancelTokenSource(option.ClosingTaskCancellationTokenSource);
+                             DisposeTokenSource(option.ClosingTaskCancellationTokenSource);
                              isOpened = false;
                              isActive = false;
                              if (option.Close == null)
