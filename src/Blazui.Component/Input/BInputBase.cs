@@ -86,16 +86,9 @@ namespace Blazui.Component.Input
             return Task.CompletedTask;
         }
 
-        protected void OnChangeEventArgs(ChangeEventArgs input)
+        protected virtual void OnChangeEventArgs(ChangeEventArgs input)
         {
-            try
-            {
-                Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
-            }
-            catch (FormatException)
-            {
-                Value = default;
-            }
+            Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);

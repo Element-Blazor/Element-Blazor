@@ -89,5 +89,22 @@ namespace Blazui.Component.Input
             }
             SetFieldValue(Date, true);
         }
+
+        protected override void OnChangeEventArgs(ChangeEventArgs input)
+        {
+            try
+            {
+                base.OnChangeEventArgs(input);
+            }
+            catch (FormatException)
+            {
+                Value = DateTime.Today;
+                if (ValueChanged.HasDelegate)
+                {
+                    _ = ValueChanged.InvokeAsync(Value);
+                }
+                SetFieldValue(Value, true);
+            }
+        }
     }
 }
