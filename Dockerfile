@@ -1,9 +1,9 @@
-FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/aspnet:3.0-buster-slim AS base
+FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/sdk:3.0-buster AS build
+FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/sdk:3.1-buster AS build
 COPY . .
 RUN dotnet restore "src/Blazui.ServerRender/Blazui.ServerRender.csproj"
 WORKDIR "/src/Blazui.ServerRender"
