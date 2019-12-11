@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,12 @@ namespace Blazui.ServerRender
         [HttpPost]
         public async Task<IActionResult> UploadAsync([FromForm]IFormFile fileContent)
         {
-            await Task.Delay(1000);
-            return Content("ok");
+            await Task.Delay(new Random().Next(1000));
+            return Content(JsonConvert.SerializeObject(new
+            {
+                code = 0,
+                message = Guid.NewGuid().ToString()
+            }), "application/json");
         }
     }
 }

@@ -3,28 +3,29 @@
     <BButton Size="@ButtonSize.Small" Type="ButtonType.Primary">
         点击上传
     </BButton>
-    <input type="file" name="file" @ref="Input" multiple="multiple" @onchange="ReadFileAsync" class="el-upload__input" />
+    <input type="file" name="file" @ref="Input" multiple="multiple" @onchange="ScanFileAsync" class="el-upload__input" />
 </div>
-<div class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+<div class="el-upload__tip">
+    @if (Tip != null)
+    {
+        @Tip
+    }
+</div>
 <ul class="el-upload-list el-upload-list--text">
-    <li tabindex="0" class="el-upload-list__item is-success">
-        <a class="el-upload-list__item-name">
-            <i class="el-icon-document"></i>food.jpeg
-        </a>
-        <label class="el-upload-list__item-status-label">
-            <i class="el-icon-upload-success el-icon-circle-check"></i>
-        </label>
-        <i class="el-icon-close"></i>
-        <i class="el-icon-close-tip"></i>
-    </li>
-    <li tabindex="0" class="el-upload-list__item is-success">
-        <a class="el-upload-list__item-name">
-            <i class="el-icon-document"></i>food1.jpeg
-        </a>
-        <label class="el-upload-list__item-status-label">
-            <i class="el-icon-upload-success el-icon-circle-check"></i>
-        </label>
-        <i class="el-icon-close"></i>
-        <i class="el-icon-close-tip"></i>
-    </li>
+    @foreach (var file in Files)
+    {
+        <li tabindex="0" class="el-upload-list__item is-success">
+            <a class="el-upload-list__item-name">
+                <i class="el-icon-document"></i>@file.FileName
+            </a>
+            @if (file.Status == UploadStatus.Success)
+            {
+                <label class="el-upload-list__item-status-label">
+                    <i class="el-icon-upload-success el-icon-circle-check"></i>
+                </label>
+            }
+            <i class="el-icon-close" @onclick="e=>DeleteFile(file)"></i>
+            <i class="el-icon-close-tip"></i>
+        </li>
+    }
 </ul>

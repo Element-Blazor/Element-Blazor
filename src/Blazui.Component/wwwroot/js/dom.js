@@ -24,10 +24,28 @@ window.upload = function (el) {
         return;
     }
     return el.children[1].click();
-}
-window.readFile = function (el, url) {
+};
+
+window.scanFiles = function (el) {
+    if (!el) {
+        return [];
+    }
+    let files = [];
+    for (var i = 0; i < el.files.length; i++) {
+        files.push(el.files.item(i).name);
+    }
+    return files;
+};
+
+window.uploadFile = function (el, fileName, url) {
     return new Promise((resolver, reject) => {
-        let file = el.files[0];
+        let file = null;
+        for (var i = 0; i < el.files.length; i++) {
+            file = el.files[i];
+            if (file.name == fileName) {
+                break;
+            }
+        }
         let xhr = new XMLHttpRequest();
         xhr.open("POST", url);
         xhr.onreadystatechange = function () {
@@ -37,7 +55,8 @@ window.readFile = function (el, url) {
             if (this.status < 200 || this.status >= 300) {
                 return;
             }
-            resolver(["success"]);
+            let response = JSON.parse(this.responseText);
+            resolver([response.code.toString(), response.message]);
         };
         let formData = new this.FormData();
         formData.append("fileContent", file);
