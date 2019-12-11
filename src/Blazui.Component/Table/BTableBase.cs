@@ -146,7 +146,20 @@ namespace Blazui.Component.Table
 
         internal async Task ChangeCurrentPageAsync(int currentPage)
         {
+            if (OnLoadDataSource == null)
+            {
+                return;
+            }
+            var option = new LoadingOption()
+            {
+                Background = LoadingBackground,
+                Target = Container,
+                IconClass = LoadingIconClass,
+                Text = LoadingText
+            };
+            LoadingService.LoadingOptions.Add(option);
             var pagerResult = await OnLoadDataSource(currentPage);
+            LoadingService.LoadingOptions.Remove(option);
             Total = pagerResult.Total;
             var dataSource = pagerResult.Rows as IEnumerable;
             DataSource.Clear();
@@ -191,19 +204,7 @@ namespace Blazui.Component.Table
             }
             if (requireRender)
             {
-                if (OnLoadDataSource != null)
-                {
-                    var option = new LoadingOption()
-                    {
-                        Background = LoadingBackground,
-                        Target = Container,
-                        IconClass = LoadingIconClass,
-                        Text = LoadingText
-                    };
-                    LoadingService.LoadingOptions.Add(option);
-                    await ChangeCurrentPageAsync(currentPage);
-                    LoadingService.LoadingOptions.Remove(option);
-                }
+                await ChangeCurrentPageAsync(currentPage);
                 StateHasChanged();
                 requireRender = false;
                 return;
