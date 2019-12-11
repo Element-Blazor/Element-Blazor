@@ -23,6 +23,8 @@ namespace Blazui.Component
 
         [Inject]
         MessageService MessageService { get; set; }
+        [Inject]
+        public LoadingService LoadingService { get; set; }
         [Parameter]
         public string Style { get; set; } = string.Empty;
 

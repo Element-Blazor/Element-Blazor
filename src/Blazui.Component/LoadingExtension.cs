@@ -48,9 +48,13 @@ namespace Blazui.Component
         }
         static void EnsureComponentStatus(IContainerComponent container)
         {
+            if (container == null)
+            {
+                throw new BlazuiException("要置为 Loading 状态的组件尚未渲染完成");
+            }
             if (string.IsNullOrWhiteSpace(container.Container.Id))
             {
-                throw new Exception("要置为 Loading 状态的组件尚未加载完成，IContainerComponent.Container 的 Id 为 null");
+                throw new BlazuiException("要置为 Loading 状态的组件尚未渲染完成，IContainerComponent.Container 的 Id 为 null");
             }
         }
     }

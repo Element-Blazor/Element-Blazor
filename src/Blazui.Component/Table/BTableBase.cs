@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableBase : ComponentBase, IContainerComponent
+    public class BTableBase : BComponentBase, IContainerComponent
     {
         internal ElementReference headerElement;
         internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
@@ -26,7 +26,7 @@ namespace Blazui.Component.Table
         /// 不显示的字段名称
         /// </summary>
         [Parameter]
-        public string[] IgnoreProperties { get; set; } =   { };
+        public string[] IgnoreProperties { get; set; } = { };
 
         /// <summary>
         /// 要显示的实体类型
@@ -117,6 +117,22 @@ namespace Blazui.Component.Table
         public bool IsStripe { get; set; }
 
         /// <summary>
+        /// 加载中状态背景颜色
+        /// </summary>
+        [Parameter]
+        public string LoadingBackground { get; set; }
+
+        /// <summary>
+        /// 加载中状态样式类
+        /// </summary>
+        [Parameter]
+        public string LoadingIconClass { get; set; }
+
+        /// <summary>
+        /// 加载中状态文字
+        /// </summary>
+        public string LoadingText { get; set; }
+        /// <summary>
         /// 当加载数据源时触发，传入参数为当前页
         /// </summary>
         [Parameter]
@@ -127,15 +143,6 @@ namespace Blazui.Component.Table
         [Parameter]
         public bool IsBordered { get; set; }
         public ElementReference Container { get; set; }
-
-        protected override async Task OnInitializedAsync()
-        {
-            if (OnLoadDataSource != null)
-            {
-                await ChangeCurrentPageAsync(currentPage);
-            }
-
-        }
 
         internal async Task ChangeCurrentPageAsync(int currentPage)
         {
@@ -150,47 +157,60 @@ namespace Blazui.Component.Table
             SelectedRows.Clear();
             RefreshSelectAllStatus();
         }
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (AutoGenerateColumns)
             {
-                DataType.GetProperties().Where(p=>!IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
-                 {
-                     if (Headers.Any(x => x.Property?.Name == property.Name))
-                     {
-                         return;
-                     }
-                     var attrs = property.GetCustomAttributes(true);
-                     var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
-                     if (string.IsNullOrWhiteSpace(text))
-                     {
-                         text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
-                     }
-                     var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
-                     Headers.Insert(0, new TableHeader()
-                     {
-                         Eval = row =>
-                         {
-                             return property.GetValue(row);
-                         },
-                         IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
-                         Property = property,
-                         Text = text ?? property.Name,
-                         Width = width
-                     });
-                 }
+                DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
+                   {
+                       if (Headers.Any(x => x.Property?.Name == property.Name))
+                       {
+                           return;
+                       }
+                       var attrs = property.GetCustomAttributes(true);
+                       var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
+                       if (string.IsNullOrWhiteSpace(text))
+                       {
+                           text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
+                       }
+                       var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
+                       Headers.Insert(0, new TableHeader()
+                       {
+                           Eval = row =>
+                           {
+                               return property.GetValue(row);
+                           },
+                           IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
+                           Property = property,
+                           Text = text ?? property.Name,
+                           Width = width
+                       });
+                   }
                  );
 
             }
             if (requireRender)
             {
+                if (OnLoadDataSource != null)
+                {
+                    var option = new LoadingOption()
+                    {
+                        Background = LoadingBackground,
+                        Target = Container,
+                        IconClass = LoadingIconClass,
+                        Text = LoadingText
+                    };
+                    LoadingService.LoadingOptions.Add(option);
+                    await ChangeCurrentPageAsync(currentPage);
+                    LoadingService.LoadingOptions.Remove(option);
+                }
                 StateHasChanged();
                 requireRender = false;
                 return;
             }
             if (RenderCompleted.HasDelegate)
             {
-                RenderCompleted.InvokeAsync(null);
+                await RenderCompleted.InvokeAsync(null);
             }
         }
 

@@ -88,7 +88,14 @@ namespace Blazui.Component.Input
 
         protected void OnChangeEventArgs(ChangeEventArgs input)
         {
-            Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
+            try
+            {
+                Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
+            }
+            catch (FormatException)
+            {
+                Value = default;
+            }
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
