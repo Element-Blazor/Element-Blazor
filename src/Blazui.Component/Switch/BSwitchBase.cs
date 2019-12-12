@@ -85,5 +85,9 @@ namespace Blazui.Component.Switch
                 }
             }
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

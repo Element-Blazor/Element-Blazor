@@ -16,7 +16,6 @@ namespace Blazui.Component.Container
         public EventCallback<BChangeEventArgs<BTabPanelBase>> OnTabPanelChanging { get; set; }
         private static int tabIndex = 0;
 
-        private bool requireRender = false;
         public override string ToString()
         {
             return Name;
@@ -24,6 +23,7 @@ namespace Blazui.Component.Container
 
         protected async Task OnInternalTabCloseAsync(MouseEventArgs e)
         {
+            RequireRender = true;
             await TabContainer.CloseTabAsync(this);
         }
 
@@ -36,7 +36,7 @@ namespace Blazui.Component.Container
 
         protected async Task Activate(MouseEventArgs e)
         {
-            requireRender = true;
+            RequireRender = true;
             IsActive = await TabContainer.SetActivateTabAsync(this);
         }
 
@@ -102,11 +102,10 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!firstRender && !requireRender)
+            if (!firstRender && !RequireRender)
             {
                 return;
             }
-            requireRender = false;
             if (IsActive)
             {
                 await AcitveTabOnRenderCompletedAsync();
@@ -125,6 +124,11 @@ namespace Blazui.Component.Container
         internal void DeActivate()
         {
             IsActive = false;
+        }
+
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

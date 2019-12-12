@@ -60,5 +60,10 @@ namespace Blazui.Component.Button
 
         [Parameter]
         public bool IsLoading { get; set; }
+
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

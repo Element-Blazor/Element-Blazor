@@ -21,6 +21,7 @@ namespace Blazui.Component.Table
         internal ElementReference headerElement;
         internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
         internal bool headerInitilized = false;
+        internal bool headerRendered = false;
         private IDictionary<BCheckBoxBase<bool>, object> rowCheckBoxses = new Dictionary<BCheckBoxBase<bool>, object>();
         internal int headerHeight = 49;
 
@@ -98,7 +99,6 @@ namespace Blazui.Component.Table
         [Parameter]
         public EventCallback<int> CurrentPageChanged { get; set; }
 
-        //internal List<object> DataSource { get; set; } = new List<object>();
 
         /// <summary>
         /// 当只有一页时，不显示分页
@@ -197,7 +197,7 @@ namespace Blazui.Component.Table
             {
                 return;
             }
-            headerInitilized = true;
+            headerRendered = true;
             RequireRender = true;
             StateHasChanged();
         }

@@ -21,5 +21,12 @@ namespace Blazui.ServerRender.Demo.Dialog
             var result = await DialogService.ShowDialogAsync<BasicTable>("测试窗口");
             MessageService.Show(result.ToString());
         }
+        public async Task ShowPassParameterDialog(MouseEventArgs eventArgs)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("Name", "我是传过来的参数");
+            var result = await DialogService.ShowDialogAsync<TestContent>("测试窗口", parameters);
+            MessageService.Show(result.ToString());
+        }
     }
 }

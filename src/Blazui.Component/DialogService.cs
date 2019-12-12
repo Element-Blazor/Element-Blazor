@@ -11,12 +11,15 @@ namespace Blazui.Component
     {
         internal ObservableCollection<DialogOption> Dialogs = new ObservableCollection<DialogOption>();
 
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TComponent, TResult>(string title)
-            where TComponent : ComponentBase
-        {
-            return await ShowDialogAsync<TComponent, TResult>(title, 0);
-        }
 
+        /// <summary>
+        /// 关闭对话框
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public async Task CloseDialogAsync<TComponent, TResult>(TComponent instance, TResult result)
             where TComponent : ComponentBase
         {
@@ -31,21 +34,84 @@ namespace Blazui.Component
             });
         }
 
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(RenderFragment render, string title, float width)
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="parameters">组件所需要的参数</param>
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TComponent, TResult>(string title, IDictionary<string, object> parameters)
+            where TComponent : ComponentBase
         {
-            return await ShowDialogAsync<TResult>((object)render, title, width);
+            return await ShowDialogAsync<TComponent, TResult>(title, 0, parameters);
         }
 
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="render">要显示的内容，一个组件的 <seealso cref="RenderFragment"/></param>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <returns></returns>
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(RenderFragment render, string title, float width)
+        {
+            return await ShowDialogAsync<TResult>((object)render, title, width, new Dictionary<string, object>());
+        }
+
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent">要显示的组件</typeparam>
+        /// <typeparam name="TResult">容器的返回值</typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <returns></returns>
         public async Task<DialogResult<TResult>> ShowDialogAsync<TComponent, TResult>(string title, float width)
             where TComponent : ComponentBase
         {
-            return await ShowDialogAsync<TResult>(typeof(TComponent), title, width);
+            return await ShowDialogAsync<TResult>(typeof(TComponent), title, width, new Dictionary<string, object>());
         }
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent">要显示的组件</typeparam>
+        /// <typeparam name="TResult">容器的返回值</typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <param name="parameters">窗口组件所需要的参数</param>
+        /// <returns></returns>
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TComponent, TResult>(string title, float width, IDictionary<string, object> parameters)
+            where TComponent : ComponentBase
+        {
+            return await ShowDialogAsync<TResult>(typeof(TComponent), title, width, parameters);
+        }
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="typeOrRender">要显示的内容，可以是一个组件的 <seealso cref="Type"/>，也可以是一个组件的 <seealso cref="RenderFragment"/></param>
+        /// <param name="title">标题</param>
+        /// <returns></returns>
         public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title)
         {
-            return await ShowDialogAsync<TResult>(typeOrRender, title, 0);
+            return await ShowDialogAsync<TResult>(typeOrRender, title, 0, new Dictionary<string, object>());
         }
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title, float width)
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="typeOrRender">要显示的内容，可以是一个组件的 <seealso cref="Type"/>，也可以是一个组件的 <seealso cref="RenderFragment"/></param>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <param name="parameters">显示该组件所需要的参数</param>
+        /// <returns></returns>
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title, float width, IDictionary<string, object> parameters)
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
             var option = new DialogOption()
@@ -54,6 +120,7 @@ namespace Blazui.Component
                 IsDialog = true,
                 Width = width,
                 Title = title,
+                Parameters = parameters,
                 TaskCompletionSource = taskCompletionSource
             };
             ShowDialog(option);
@@ -64,12 +131,40 @@ namespace Blazui.Component
             };
         }
 
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <param name="title">标题</param>
+        /// <returns></returns>
         public async Task<DialogResult> ShowDialogAsync<TComponent>(string title)
             where TComponent : ComponentBase
         {
-            return await ShowDialogAsync<TComponent>(title, 0);
+            return await ShowDialogAsync<TComponent>(title, 0, new Dictionary<string, object>());
         }
-        public async Task<DialogResult> ShowDialogAsync<TComponent>(string title, float width)
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="parameters">显示该组件所需要的参数</param>
+        /// <returns></returns>
+        public async Task<DialogResult> ShowDialogAsync<TComponent>(string title, IDictionary<string, object> parameters)
+            where TComponent : ComponentBase
+        {
+            return await ShowDialogAsync<TComponent>(title, 0, parameters);
+        }
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <param name="parameters">显示该组件所需要的参数</param>
+        /// <returns></returns>
+        public async Task<DialogResult> ShowDialogAsync<TComponent>(string title, float width, IDictionary<string, object> parameters)
             where TComponent : ComponentBase
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
@@ -79,6 +174,7 @@ namespace Blazui.Component
                 IsDialog = true,
                 Title = title,
                 Width = width,
+                Parameters = parameters,
                 TaskCompletionSource = taskCompletionSource
             };
             ShowDialog(option);

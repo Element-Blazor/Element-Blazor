@@ -123,5 +123,9 @@ namespace Blazui.Component.Input
                 StateHasChanged();
             }
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

@@ -12,7 +12,11 @@ namespace Blazui.Component.NavMenu
 
         [CascadingParameter]
         public BMenu TopMenu { get; set; }
-    
 
+
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

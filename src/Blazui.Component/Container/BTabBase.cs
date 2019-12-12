@@ -87,8 +87,8 @@ namespace Blazui.Component.Container
                 }
             }
 
-            RequireRender = true;
             ResetActiveTab(tab);
+            RequireRender = true;
             if (OnTabClose.HasDelegate)
             {
                 _ = OnTabClose.InvokeAsync(tab);
@@ -99,20 +99,20 @@ namespace Blazui.Component.Container
             }
         }
 
-        private void ResetActiveTab(BTabPanelBase tab)
+        private TabOption ResetActiveTab(BTabPanelBase tab)
         {
             if (DataSource == null)
             {
-                return;
+                return null;
             }
             if (DataSource.Count <= 0)
             {
-                return;
+                return null;
             }
             var activeOption = DataSource.FirstOrDefault(x => x.IsActive);
             if (activeOption.Title != tab.Title)
             {
-                return;
+                return null;
             }
             var activeIndex = DataSource.IndexOf(activeOption);
             DataSource.RemoveAt(activeIndex);
@@ -123,10 +123,11 @@ namespace Blazui.Component.Container
             }
             if (newActiveIndex == -1)
             {
-                return;
+                return null;
             }
             activeOption = DataSource.ElementAt(newActiveIndex);
             activeOption.IsActive = true;
+            return activeOption;
         }
 
         protected override void OnInitialized()
@@ -160,6 +161,10 @@ namespace Blazui.Component.Container
             if (e.Action != NotifyCollectionChangedAction.Add)
             {
                 return;
+            }
+            foreach (var item in DataSource.Take(DataSource.Count - 1))
+            {
+                item.IsActive = false;
             }
             var repeatKeys = DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
             if (repeatKeys.Any())
@@ -228,15 +233,25 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!firstRender)
+            if (DataSource != null)
+            {
+                var tabOption = DataSource.FirstOrDefault(x => x.IsActive);
+                foreach (var item in tabPanels)
+                {
+                    if (item.Name != tabOption.Name)
+                    {
+                        continue;
+                    }
+                    item.MarkAsRequireRender();
+                    item.Refresh();
+                }
+                return;
+            }
+            if (!firstRender && !RequireRender)
             {
                 return;
             }
             await base.OnAfterRenderAsync(firstRender);
-            if (DataSource != null)
-            {
-                return;
-            }
             var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
             if (activeTab == null)
             {
@@ -260,9 +275,9 @@ namespace Blazui.Component.Container
         }
         internal async Task TabRenderCompletedAsync(BTabPanelBase tabPanel)
         {
-            if (OnTabRenderComplete.HasDelegate)
+            if (OnRenderCompleted != null)
             {
-                await OnTabRenderComplete.InvokeAsync(tabPanel);
+                await OnRenderCompleted(tabPanel);
             }
         }
 
@@ -327,9 +342,6 @@ namespace Blazui.Component.Container
             }
             return true;
         }
-
-        [Parameter]
-        public EventCallback<BTabPanelBase> OnTabRenderComplete { get; set; }
 
         protected override void OnParametersSet()
         {

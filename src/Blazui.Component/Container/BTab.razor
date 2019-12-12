@@ -49,7 +49,7 @@
                         {
                             @foreach (var item in DataSource)
                             {
-                                <BTabPanel IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
+                                <BTabPanel @key="item.Name" IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
                                     <BDynamicComponent Component="@item.Content"></BDynamicComponent>
                                 </BTabPanel>
                             }

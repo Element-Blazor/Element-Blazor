@@ -11,6 +11,11 @@ namespace Blazui.Component
     {
         public string Title { get; set; }
         public object Content { get; set; }
+
+        /// <summary>
+        /// 窗口要显示的组件所需要的参数
+        /// </summary>
+        public IDictionary<string,object> Parameters { get; set; }
         public bool IsDialog { get; set; }
         public float Width { get; set; }
         public bool IsShow { get; set; }

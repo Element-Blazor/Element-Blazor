@@ -122,5 +122,9 @@ namespace Blazui.Component.NavMenu
                 NavigationManager.NavigateTo(Route);
             }
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

@@ -227,5 +227,9 @@ namespace Blazui.Component.NavMenu
                 isOpened = !isOpened;
             }
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

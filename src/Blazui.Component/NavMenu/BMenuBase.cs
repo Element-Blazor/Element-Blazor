@@ -92,5 +92,9 @@ namespace Blazui.Component.NavMenu
 
             base.OnInitialized();
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

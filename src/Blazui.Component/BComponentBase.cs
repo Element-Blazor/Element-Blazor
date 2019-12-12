@@ -58,7 +58,7 @@ namespace Blazui.Component
         }
 
         /// <summary>
-        /// 默认情况下所有组件都只进行一次渲染，该方法将组件置为需要再次渲染
+        /// 默认情况下所有复杂组件都只进行一次渲染，该方法将组件置为需要再次渲染
         /// </summary>
         public void MarkAsRequireRender()
         {

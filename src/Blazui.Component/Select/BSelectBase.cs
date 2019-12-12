@@ -177,5 +177,9 @@ namespace Blazui.Component.Select
                 StateHasChanged();
             }
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

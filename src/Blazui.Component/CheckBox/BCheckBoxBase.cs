@@ -163,5 +163,10 @@ namespace Blazui.Component.CheckBox
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }
