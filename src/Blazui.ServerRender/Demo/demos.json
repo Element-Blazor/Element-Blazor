@@ -231,6 +231,15 @@
           "PaginationTableBase.cs",
           "AutoGenerateColumnTestData.cs"
         ]
+      },
+      {
+        "title": "搜索",
+        "name": "Table",
+        "files": [
+          "SearchTable.razor",
+          "SearchTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
       }
     ]
   },

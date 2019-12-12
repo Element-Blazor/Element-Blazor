@@ -1,0 +1,12 @@
+﻿@inherits SearchTableBase
+
+<BForm Inline="true" @ref="searchForm">
+    <BFormItem TValue="string" Label="名称" Name="@nameof(SearchCondition.Name)" IsRequired="true">
+        <BInput TValue="string"></BInput>
+    </BFormItem>
+    <BFormActionItem>
+        <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">搜索</BButton>
+    </BFormActionItem>
+</BForm>
+<BTable DataType="typeof(AutoGenerateColumnTestData)" OnLoadDataSource="LoadDataSource" @ref="table">
+</BTable>

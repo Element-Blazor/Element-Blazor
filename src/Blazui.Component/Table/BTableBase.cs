@@ -215,6 +215,12 @@ namespace Blazui.Component.Table
             }
         }
 
+        public void Bind()
+        {
+            requireRender = true;
+            StateHasChanged();
+        }
+
         protected override void OnParametersSet()
         {
             RefreshSelectAllStatus();
