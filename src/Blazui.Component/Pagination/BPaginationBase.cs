@@ -64,17 +64,14 @@ namespace Blazui.Component.Pagination
         /// 当前页码变化时触发
         /// </summary>
         [Parameter]
-        public EventCallback<int> CurrentPageChanged { get; set; }
+        public Func<int, Task> CurrentPageChanged { get; set; }
 
-        internal void SetCurrentPageChanged(EventCallback<int> currentPageChanged)
-        {
-            CurrentPageChanged = currentPageChanged;
-        }
         /// <summary>
         /// 当前最大显示的页码数变化时触发
         /// </summary>
         [Parameter]
         public EventCallback<int> PageCountChanged { get; set; }
+
         internal int pageCount;
         protected override void OnInitialized()
         {
@@ -85,9 +82,9 @@ namespace Blazui.Component.Pagination
         internal void Jump(int page)
         {
             CurrentPage = page;
-            if (CurrentPageChanged.HasDelegate)
+            if (CurrentPageChanged != null)
             {
-                _ = CurrentPageChanged.InvokeAsync(page);
+                _ = CurrentPageChanged(page);
             }
             SwitchButtonStatus();
         }

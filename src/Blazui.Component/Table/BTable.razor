@@ -1,5 +1,5 @@
 ﻿@inherits BTableBase
-@if (Headers.Any())
+@if (headerInitilized)
 {
     var styles = new List<string>();
     var tableClsList = new List<string>();
@@ -50,7 +50,7 @@
                         {
                             <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
                                 <div class="cell">
-                                    <BCheckBox TValue="Boolean" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
+                                    <BCheckBox TValue="Boolean" @ref="chkAll" Name="selectAll" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
                                 </div>
                             </th>
                         }
@@ -95,7 +95,7 @@
                     }
                 </colgroup>
                 <tbody>
-                    @for (int i = 0; i < DataSource.Count; i++)
+                    @for (int i = 0; i < rows.Count; i++)
                     {
                         var clsList = new List<string>();
                         clsList.Add("el-table__row");
@@ -103,13 +103,13 @@
                         {
                             clsList.Add("el-table__row--striped");
                         }
-                        var row = DataSource.ElementAt(i);
+                        var row = rows.ElementAt(i);
                         <tr class="@string.Join(" ",clsList)">
                             @if (HasSelectionColumn)
                             {
                                 <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                     <div class="cell">
-                                        <BCheckBox TValue="Boolean" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
+                                        <BCheckBox TValue="Boolean" OnRenderCompleted="chk=>OnRowCheckBoxRenderCompleted(row,(BCheckBoxBase<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
                                     </div>
                                 </td>
                             }
@@ -144,7 +144,7 @@
             if (Math.Ceiling((float)Total / PageSize) > 1 || !NoPaginationOnSinglePage)
             {
                 <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
-                    <BPagination Total="Total" ShowPageCount="ShowPageCount" PageSize="PageSize" CurrentPageChanged="ChangeCurrentPageAsync"></BPagination>
+                    <BPagination Total="Total" ShowPageCount="ShowPageCount" PageSize="PageSize" CurrentPageChanged="CurrentPageChangedAsync"></BPagination>
                 </div>
             }
         }

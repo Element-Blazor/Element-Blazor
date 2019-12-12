@@ -151,60 +151,60 @@
   {
     "name": "table",
     "demos": [
-      {
-        "title": "基础用法",
-        "name": "Table",
-        "files": [
-          "BasicTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
-        "title": "斑马条纹用法",
-        "name": "Table",
-        "files": [
-          "StripeTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
-        "title": "边框表格",
-        "name": "Table",
-        "files": [
-          "BorderedTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
-        "title": "固定表头",
-        "name": "Table",
-        "files": [
-          "FixHeaderTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
-        "title": "复选框表格",
-        "name": "Table",
-        "files": [
-          "CheckBoxTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
-        "title": "带操作列的表格",
-        "name": "Table",
-        "files": [
-          "CustomColumnTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
+      //{
+      //  "title": "基础用法",
+      //  "name": "Table",
+      //  "files": [
+      //    "BasicTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "斑马条纹用法",
+      //  "name": "Table",
+      //  "files": [
+      //    "StripeTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "边框表格",
+      //  "name": "Table",
+      //  "files": [
+      //    "BorderedTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "固定表头",
+      //  "name": "Table",
+      //  "files": [
+      //    "FixHeaderTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "复选框表格",
+      //  "name": "Table",
+      //  "files": [
+      //    "CheckBoxTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "带操作列的表格",
+      //  "name": "Table",
+      //  "files": [
+      //    "CustomColumnTable.razor",
+      //    "BasicTableBase.cs",
+      //    "TestData.cs"
+      //  ]
+      //},
       {
         "title": "自动生成列，宽度自适应",
         "name": "Table",
@@ -214,33 +214,33 @@
           "AutoGenerateColumnTestData.cs"
         ]
       },
-      {
-        "title": "分页",
-        "name": "Table",
-        "files": [
-          "PaginationTable.razor",
-          "PaginationTableBase.cs",
-          "AutoGenerateColumnTestData.cs"
-        ]
-      },
-      {
-        "title": "过滤显示字段",
-        "name": "Table",
-        "files": [
-          "IgnoreColumnTable.razor",
-          "PaginationTableBase.cs",
-          "AutoGenerateColumnTestData.cs"
-        ]
-      },
-      {
-        "title": "搜索",
-        "name": "Table",
-        "files": [
-          "SearchTable.razor",
-          "SearchTableBase.cs",
-          "AutoGenerateColumnTestData.cs"
-        ]
-      }
+      //{
+      //  "title": "分页",
+      //  "name": "Table",
+      //  "files": [
+      //    "PaginationTable.razor",
+      //    "PaginationTableBase.cs",
+      //    "AutoGenerateColumnTestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "过滤显示字段",
+      //  "name": "Table",
+      //  "files": [
+      //    "IgnoreColumnTable.razor",
+      //    "PaginationTableBase.cs",
+      //    "AutoGenerateColumnTestData.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "搜索",
+      //  "name": "Table",
+      //  "files": [
+      //    "SearchTable.razor",
+      //    "SearchTableBase.cs",
+      //    "AutoGenerateColumnTestData.cs"
+      //  ]
+      //}
     ]
   },
   {

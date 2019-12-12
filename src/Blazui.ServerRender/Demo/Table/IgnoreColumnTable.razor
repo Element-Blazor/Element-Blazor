@@ -6,7 +6,7 @@
     /// </summary>
     string[] ignoreProps = { "Address","Yes"};
 }
-<BTable IgnoreProperties=ignoreProps  DataType="typeof(AutoGenerateColumnTestData)" OnLoadDataSource="LoadDataSource" PageSize="pageSize" @ref="table">
+<BTable IgnoreProperties=ignoreProps  DataSource="Datas" PageSize="pageSize" Total="AllDatas.Count" @bind-CurrentPage="CurrentPage" @ref="table">
     <BTableColumns>
         <BTableTemplateColumn Text="操作">
             <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>

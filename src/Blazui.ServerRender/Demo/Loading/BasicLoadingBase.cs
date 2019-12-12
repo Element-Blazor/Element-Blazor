@@ -38,22 +38,15 @@ namespace Blazui.ServerRender.Demo.Loading
             });
         }
 
-        internal async Task<PagerResult> LoadDataSource(int currentPage)
-        {
-            var result = new PagerResult()
-            {
-                Rows = Datas,
-                Total = Datas.Count
-            };
-            return await Task.FromResult(result);
-        }
-        protected void RenderCompleted()
+        protected Task RenderCompleted()
         {
             table.Loading(LoadingService);
+            return Task.CompletedTask;
         }
-        protected void CustomRenderCompleted()
+        protected Task CustomRenderCompleted()
         {
             table.Loading(LoadingService, "拼命加载中", "el-icon-loading", "rgba(0, 0, 0, 0.8)");
+            return Task.CompletedTask;
         }
 
         protected void ShowLoading()

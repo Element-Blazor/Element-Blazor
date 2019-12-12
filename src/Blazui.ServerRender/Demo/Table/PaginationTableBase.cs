@@ -11,10 +11,25 @@ namespace Blazui.ServerRender.Demo.Table
     public class PaginationTableBase : ComponentBase
     {
         protected List<AutoGenerateColumnTestData> AllDatas = new List<AutoGenerateColumnTestData>();
+        protected List<AutoGenerateColumnTestData> Datas = new List<AutoGenerateColumnTestData>();
 
+        internal bool requireRender = false;
         protected BTable table;
         protected int currentPage = 1;
 
+        internal int CurrentPage
+        {
+            get
+            {
+                return currentPage;
+            }
+            set
+            {
+                currentPage = value;
+                requireRender = true;
+                Datas = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            }
+        }
         protected int pageSize = 5;
         [Inject]
         MessageService MessageService { get; set; }
@@ -30,17 +45,9 @@ namespace Blazui.ServerRender.Demo.Table
                     Time = DateTime.Now
                 });
             }
+            Datas = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
         }
 
-        internal async Task<PagerResult> LoadDataSource(int currentPage)
-        {
-            var result= new PagerResult()
-            {
-                Rows = AllDatas.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList(),
-                Total = AllDatas.Count
-            };
-            return await Task.FromResult(result);
-        }
         public void Edit(object testData)
         {
             MessageService.Show($"正在编辑 " + ((AutoGenerateColumnTestData)testData).Name);
@@ -48,6 +55,11 @@ namespace Blazui.ServerRender.Demo.Table
         public void Del(object testData)
         {
             MessageService.Show($"正在删除 " + ((AutoGenerateColumnTestData)testData).Name, MessageType.Warning);
+        }
+
+        protected override bool ShouldRender()
+        {
+            return requireRender;
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Blazui.Component.CheckBox
         private TValue rawValue;
         [Parameter]
         public TValue Value { get; set; }
-
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
         [Parameter]
@@ -54,6 +53,7 @@ namespace Blazui.Component.CheckBox
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
+            RequireRender = true;
             if (CheckBoxGroup != null)
             {
                 if (CheckBoxGroup.SelectedItems.Contains(TypeHelper.ChangeType<TValue>(value)))
@@ -130,6 +130,7 @@ namespace Blazui.Component.CheckBox
             {
                 SetFieldValue(checkBoxValue, true);
             }
+            RequireRender = true;
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(checkBoxValue);

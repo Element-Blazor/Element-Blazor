@@ -37,16 +37,6 @@ namespace Blazui.ServerRender.Demo.Table
                 Yes = true
             });
         }
-
-        internal async Task<PagerResult> LoadDataSource(int currentPage)
-        {
-            var result= new PagerResult()
-            {
-                Rows = Datas,
-                Total = Datas.Count
-            };
-            return await Task.FromResult(result);
-        }
         public void Edit(object testData)
         {
             MessageService.Show($"正在编辑 " + ((AutoGenerateColumnTestData)testData).Name);

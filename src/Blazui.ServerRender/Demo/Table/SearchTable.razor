@@ -8,5 +8,5 @@
         <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">搜索</BButton>
     </BFormActionItem>
 </BForm>
-<BTable DataType="typeof(AutoGenerateColumnTestData)" OnLoadDataSource="LoadDataSource" @ref="table">
+<BTable DataSource="Datas" @ref="table">
 </BTable>

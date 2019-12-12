@@ -14,40 +14,28 @@ namespace Blazui.ServerRender.Demo.Table
         internal BTable table;
         protected int currentPage;
         private SearchCondition condition;
+        protected List<AutoGenerateColumnTestData> AllDatas = new List<AutoGenerateColumnTestData>();
         protected List<AutoGenerateColumnTestData> Datas = new List<AutoGenerateColumnTestData>();
 
         protected override void OnInitialized()
         {
             for (int i = 0; i < 10; i++)
             {
-                Datas.Add(new AutoGenerateColumnTestData()
+                AllDatas.Add(new AutoGenerateColumnTestData()
                 {
                     Address = "地址" + i,
                     Name = "张三" + i,
                     Time = DateTime.Now
                 });
             }
+            Datas = AllDatas;
         }
 
         internal async Task Submit()
         {
             condition = searchForm.GetValue<SearchCondition>();
-            table.Bind();
-        }
-
-        internal async Task<PagerResult> LoadDataSource(int currentPage)
-        {
-            var rows = Datas;
-            if (condition != null)
-            {
-                rows = rows.Where(x => x.Name.Contains(condition.Name)).ToList();
-            }
-            var result = new PagerResult()
-            {
-                Rows = rows,
-                Total = rows.Count
-            };
-            return await Task.FromResult(result);
+            Datas = AllDatas.Where(x => x.Name.Contains(condition.Name)).ToList();
+            table.MarkAsRequireRender();
         }
     }
 }

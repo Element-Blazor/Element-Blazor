@@ -43,25 +43,6 @@ namespace Blazui.ServerRender.Demo.Table
             LargeDatas.AddRange(Datas);
             LargeDatas.AddRange(Datas);
         }
-
-        internal async Task<PagerResult> LoadDataSource1(int currentPage)
-        {
-            var result = new PagerResult()
-            {
-                Rows = Datas,
-                Total = Datas.Count
-            };
-            return await Task.FromResult(result);
-        }
-        internal async Task<PagerResult> LoadDataSource2(int currentPage)
-        {
-            var result = new PagerResult()
-            {
-                Rows = LargeDatas,
-                Total = LargeDatas.Count
-            };
-            return await Task.FromResult(result);
-        }
         public void Edit(object testData)
         {
             MessageService.Show($"正在编辑 " + ((TestData)testData).Name);
