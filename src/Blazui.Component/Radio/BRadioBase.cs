@@ -116,7 +116,6 @@ namespace Blazui.Component.Radio
             {
                 SetFieldValue(SelectedValue, true);
             }
-            RequireRender = true;
             if (StatusChanged.HasDelegate)
             {
                 _ = StatusChanged.InvokeAsync(newStatus);

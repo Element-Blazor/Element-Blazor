@@ -61,6 +61,8 @@ namespace Blazui.Component.Form
             {
                 FormItem.OriginValueRendered = true;
                 FormItem_OnReset(FormItem.OriginValue, false);
+                RequireRender = true;
+                StateHasChanged();
             }
         }
     }
