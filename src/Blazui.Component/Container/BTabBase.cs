@@ -233,32 +233,31 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (DataSource != null)
+            var tabOption = DataSource?.FirstOrDefault(x => x.IsActive);
+            var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
+            if (activeTab == null)
             {
-                var tabOption = DataSource.FirstOrDefault(x => x.IsActive);
-                foreach (var item in tabPanels)
+                activeTab = tabPanels.FirstOrDefault();
+                if (activeTab != null)
                 {
-                    if (item.Name != tabOption.Name)
-                    {
-                        continue;
-                    }
-                    item.MarkAsRequireRender();
-                    item.Refresh();
+                    activeTab.Activate();
                 }
-                return;
+            }
+            foreach (var item in tabPanels)
+            {
+                if (tabOption != null && item.Name != tabOption.Name)
+                {
+                    continue;
+                }
+                item.MarkAsRequireRender();
+                item.Refresh();
             }
             if (!firstRender && !RequireRender)
             {
                 return;
             }
-            await base.OnAfterRenderAsync(firstRender);
-            var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
-            if (activeTab == null)
-            {
-                activeTab = tabPanels.FirstOrDefault();
-                activeTab.Activate();
-            }
             await SetActivateTabAsync(activeTab);
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         internal async Task UpdateHeaderSizeAsync(BTabPanelBase tabPanel, int barWidth, int barOffsetLeft)

@@ -84,7 +84,7 @@ namespace Blazui.Component.Container
 
         private async Task AcitveTabOnRenderCompletedAsync()
         {
-            if (TabContainer.Type == TabType.Normal)
+            if (IsActive && TabContainer.Type == TabType.Normal)
             {
                 var dom = Element.Dom(JSRuntime);
                 var width = await dom.GetClientWidthAsync();
@@ -102,18 +102,12 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (!firstRender && !RequireRender)
+            await AcitveTabOnRenderCompletedAsync();
+            if (!firstRender)
             {
                 return;
             }
-            if (IsActive)
-            {
-                await AcitveTabOnRenderCompletedAsync();
-            }
-            else
-            {
-                await base.OnAfterRenderAsync(firstRender);
-            }
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         public void Dispose()
