@@ -9,5 +9,7 @@ namespace Blazui.ServerRender.Demo.BasicSelect
     public class BasicSelectBase : ComponentBase
     {
         protected int Value;
+
+        protected Option Option;
     }
 }
