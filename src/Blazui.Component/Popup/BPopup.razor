@@ -46,7 +46,7 @@
                 <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;@width">
                     <div class="el-dialog__header">
                         <span class="el-dialog__title">@option.Title</span>
-                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" Click="(e=>CloseDialogAsync(option,
+                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" OnClick="(e=>CloseDialogAsync(option,
                                         new DialogResult() {
                                          Result= MessageBoxResult.Close
                               }))">
@@ -75,7 +75,7 @@
                             <!---->
                             <span>@option.Title</span>
                         </div>
-                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" Click="(e=>CloseDialogAsync(option, new DialogResult() {
+                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" OnClick="(e=>CloseDialogAsync(option, new DialogResult() {
                                          Result= MessageBoxResult.Close
                               }))">
                         </BButton>
