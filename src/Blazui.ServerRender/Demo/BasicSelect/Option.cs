@@ -10,7 +10,7 @@ namespace Blazui.ServerRender.Demo.BasicSelect
     {
         [Description("选项1")]
         Option1 = 0,
-        [Description("选项1")]
+        [Description("选项2")]
         Option2 = 1
     }
 }

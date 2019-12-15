@@ -24,5 +24,10 @@ namespace Blazui.Component.Select
         {
             return $"{Value}:{Text}";
         }
+
+        public static implicit operator TValue(OptionModel<TValue> value)
+        {
+            return value.Value;
+        }
     }
 }

@@ -9,17 +9,20 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
-    public class BSelectBase<TValue> : BFieldComponentBase<OptionModel<TValue>>, IDisposable
+    public class BSelectBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
 
-        protected ElementReference elementSelect;
-
+        internal ElementReference elementSelect;
+        private Type valueType;
+        private Type nullable;
+        internal bool isClearable = true;
         internal bool IsClearButtonClick { get; set; }
 
         internal string Label { get; set; }
@@ -32,33 +35,67 @@ namespace Blazui.Component.Select
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
 
-        protected override void OnInitialized()
+        /// <summary>
+        /// 当绑定为枚举时，指定哪些枚举名需要忽略
+        /// </summary>
+        [Parameter]
+        public string[] IgnoreEnumNames { get; set; } = new string[0];
+
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
-            base.OnInitialized();
-            var valueType = typeof(TValue);
-            var nullable = Nullable.GetUnderlyingType(valueType);
+            await base.SetParametersAsync(parameters);
+            if (valueType != null)
+            {
+                return;
+            }
+            valueType = typeof(TValue);
+            nullable = Nullable.GetUnderlyingType(valueType);
             valueType = nullable ?? valueType;
             if (valueType.IsEnum)
             {
                 var names = Enum.GetNames(valueType);
                 var values = Enum.GetValues(valueType);
+                var valueInitilized = false;
+                var dict = new Dictionary<string, TValue>();
+                for (int i = 0; i < names.Length; i++)
+                {
+                    var name = names[i];
+                    if (IgnoreEnumNames.Contains(name, StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+                    var value = values.GetValue(i);
+                    var field = valueType.GetField(name);
+                    var text = field.GetCustomAttributes(typeof(DescriptionAttribute), true)
+                        .Cast<DescriptionAttribute>()
+                        .FirstOrDefault()?.Description ?? name;
+                    if (!valueInitilized)
+                    {
+                        valueInitilized = true;
+                        if (nullable == null)
+                        {
+                            Value = (TValue)value;
+                            InitialValue = Value;
+                            SetFieldValue(Value, false);
+                            Label = text;
+                            isClearable = false;
+                        }
+                    }
+                    dict.Add(text, (TValue)value);
+                }
                 ChildContent = builder =>
                 {
                     int seq = 0;
-                    for (int i = 0; i < names.Length; i++)
+                    foreach (var label in dict.Keys)
                     {
-                        var name = names[i];
-                        var value = values.GetValue(i);
-                        var field = valueType.GetField(name);
                         builder.OpenComponent<BSelectOption<TValue>>(seq++);
-                        builder.AddAttribute(seq++, "Text", name);
-                        builder.AddAttribute(seq++, "Value", value);
+                        builder.AddAttribute(seq++, "Text", label);
+                        builder.AddAttribute(seq++, "Value", dict[label]);
                         builder.CloseComponent();
                     }
                 };
             }
         }
-
 
         internal void UpdateValue(string text)
         {
@@ -86,6 +123,9 @@ namespace Blazui.Component.Select
         [Inject]
         internal PopupService PopupService { get; set; }
 
+        /// <summary>
+        /// 当前选中值
+        /// </summary>
         [Parameter]
         public TValue Value { get; set; }
 
@@ -124,7 +164,7 @@ namespace Blazui.Component.Select
 
         private BSelectOptionBase<TValue> selectedOption;
         protected DropDownOption DropDownOption;
-        
+
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {
             var args = new BChangeEventArgs<BSelectOptionBase<TValue>>();

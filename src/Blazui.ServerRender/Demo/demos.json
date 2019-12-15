@@ -429,6 +429,15 @@
           "Option.cs",
           "BasicSelectBase.cs"
         ]
+      },
+      {
+        "title": "绑定可空枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindNullableEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
       }
     ]
   },

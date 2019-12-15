@@ -11,5 +11,6 @@ namespace Blazui.ServerRender.Demo.BasicSelect
         protected int Value;
 
         protected Option Option;
+        protected Option? NullableOption;
     }
 }
