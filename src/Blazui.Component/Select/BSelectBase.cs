@@ -41,9 +41,8 @@ namespace Blazui.Component.Select
         [Parameter]
         public string[] IgnoreEnumNames { get; set; } = new string[0];
 
-        public override async Task SetParametersAsync(ParameterView parameters)
+        protected override void OnParametersSet()
         {
-            await base.SetParametersAsync(parameters);
             if (valueType != null)
             {
                 return;
@@ -56,7 +55,7 @@ namespace Blazui.Component.Select
                 var names = Enum.GetNames(valueType);
                 var values = Enum.GetValues(valueType);
                 var valueInitilized = false;
-                var dict = new Dictionary<string, TValue>();
+                dict = new Dictionary<TValue, string>();
                 for (int i = 0; i < names.Length; i++)
                 {
                     var name = names[i];
@@ -81,7 +80,7 @@ namespace Blazui.Component.Select
                             isClearable = false;
                         }
                     }
-                    dict.Add(text, (TValue)value);
+                    dict.Add((TValue)value, text);
                 }
                 ChildContent = builder =>
                 {
@@ -95,6 +94,7 @@ namespace Blazui.Component.Select
                     }
                 };
             }
+            base.OnParametersSet();
         }
 
         internal void UpdateValue(string text)
@@ -164,6 +164,7 @@ namespace Blazui.Component.Select
 
         private BSelectOptionBase<TValue> selectedOption;
         protected DropDownOption DropDownOption;
+        private Dictionary<TValue, string> dict;
 
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {
@@ -181,7 +182,7 @@ namespace Blazui.Component.Select
 
             await DropDownOption.Instance.CloseDropDownAsync(DropDownOption);
             SelectedOption = item;
-            SetFieldValue(new OptionModel<TValue>(item.Text, item.Value), true);
+            SetFieldValue(item.Value, true);
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
@@ -221,15 +222,15 @@ namespace Blazui.Component.Select
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            var optionModel = (OptionModel<TValue>)value;
-            if (optionModel == null)
+            var enumValue = (TValue)value;
+            if (nullable != null && value == null)
             {
                 SelectedOption = null;
             }
             else
             {
-                Label = optionModel.Text;
-                Value = optionModel.Value;
+                Label = dict[enumValue];
+                Value = enumValue;
             }
             if (ValueChanged.HasDelegate)
             {

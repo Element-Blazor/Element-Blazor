@@ -123,6 +123,16 @@ namespace Blazui.Component.Input
                 StateHasChanged();
             }
         }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem != null)
+            {
+                Value = FormItem.OriginValue;
+            }
+        }
+
         protected override bool ShouldRender()
         {
             return true;

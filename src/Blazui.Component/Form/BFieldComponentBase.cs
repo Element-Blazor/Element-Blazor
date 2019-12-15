@@ -51,19 +51,21 @@ namespace Blazui.Component.Form
             }
         }
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            if (FormItem == null)
-            {
-                return;
-            }
-            if (!FormItem.OriginValueRendered)
-            {
-                FormItem.OriginValueRendered = true;
-                FormItem_OnReset(FormItem.OriginValue, false);
-                RequireRender = true;
-                StateHasChanged();
-            }
-        }
+        //protected override void OnAfterRender(bool firstRender)
+        //{
+        //    if (FormItem == null)
+        //    {
+        //        return;
+        //    }
+        //    if (!FormItem.OriginValueHasSet)
+        //    {
+        //        FormItem.OriginValueHasSet = true;
+        //        FormItem_OnReset(FormItem.OriginValue, false);
+        //        FormItem.MarkAsRequireRender();
+        //        RequireRender = true;
+        //        return;
+        //    }
+        //}
+
     }
 }

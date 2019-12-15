@@ -27,11 +27,12 @@ namespace Blazui.ServerRender.Demo.Form
             _ = MessageBox.AlertAsync(activity.ToString());
         }
 
-        protected override void OnInitialized()
+        protected override void OnParametersSet()
         {
+            base.OnParametersSet();
             value = new Activity()
             {
-                Area = new OptionModel<string>("区域1", "shanghai"),
+                Area = Area.Shanghai,
                 Delivery = true,
                 Description = "详情",
                 Name = "测试",

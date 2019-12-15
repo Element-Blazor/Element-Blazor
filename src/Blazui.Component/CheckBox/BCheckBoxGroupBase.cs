@@ -46,5 +46,10 @@ namespace Blazui.Component.CheckBox
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
             SetFieldValue(SelectedItems.ToList(), false);
         }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+        }
     }
 }

@@ -3,8 +3,8 @@
     <BFormItem TValue="string" Label="活动名称" Name="@nameof(Activity.Name)" IsRequired="true">
         <BInput TValue="string"></BInput>
     </BFormItem>
-    <BFormItem TValue="OptionModel<string>" Label="活动区域" Name="@nameof(Activity.Area)" IsRequired="true">
-        <BSelect TValue="string" Placeholder="请选择活动区域">
+    <BFormItem TValue="Area" Label="活动区域" Name="@nameof(Activity.Area)" IsRequired="true">
+        <BSelect TValue="Area" Placeholder="请选择活动区域">
             <BSelectOption Text="区域1" Value="@("shanghai")"></BSelectOption>
             <BSelectOption Text="区域2" Value="@("beijing")"></BSelectOption>
         </BSelect>

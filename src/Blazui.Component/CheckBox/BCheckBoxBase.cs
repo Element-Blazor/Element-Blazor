@@ -70,7 +70,7 @@ namespace Blazui.Component.CheckBox
                 }
                 else
                 {
-                    CheckBoxGroup.Refresh();
+                    CheckBoxGroup.MarkAsRequireRender();
                 }
                 return;
             }
@@ -86,10 +86,6 @@ namespace Blazui.Component.CheckBox
             if (StatusChanged.HasDelegate)
             {
                 _ = StatusChanged.InvokeAsync(Status);
-            }
-            else
-            {
-                StateHasChanged();
             }
         }
 

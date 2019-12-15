@@ -14,7 +14,7 @@ namespace Blazui.ServerRender.Demo.Form
         [Display(Name = "名称")]
         public string Name { get; set; }
         [Display(Name = "区域")]
-        public OptionModel<string> Area { get; set; }
+        public Area Area { get; set; }
         [Display(Name = "日期")]
         public DateTime? Time { get; set; }
         [Display(Name = "即时配送")]

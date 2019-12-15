@@ -128,6 +128,7 @@ namespace Blazui.Component.Radio
 
         protected override void OnAfterRender(bool firstRender)
         {
+            base.OnAfterRender(firstRender);
             var oldStatus = Status;
             if (TypeHelper.Equal(SelectedValue, Value))
             {

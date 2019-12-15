@@ -9,6 +9,10 @@ namespace Blazui.Component.Form
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {
+        /// <summary>
+        /// 初始值是否已渲染
+        /// </summary>
+        internal bool OriginValueRendered { get; set; } = true;
         private bool requireRefresh = true;
         public ElementReference Container { get; set; }
 
@@ -43,6 +47,7 @@ namespace Blazui.Component.Form
         [Parameter]
         public object Value { get; set; }
 
+        public IDictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
         /// <summary>
         /// 获取表单输入值
         /// </summary>
@@ -83,22 +88,32 @@ namespace Blazui.Component.Form
             {
                 return;
             }
-            var properties = Value.GetType().GetProperties();
-            foreach (var property in properties)
-            {
-                var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
-                if (formItem == null)
-                {
-                    continue;
-                }
-                var propertyValue = property.GetValue(Value);
-                var formItemType = formItem.GetType();
-                formItemType.GetProperty("OriginValue").SetValue(formItem, propertyValue);
-                formItemType.GetProperty("Value").SetValue(formItem, propertyValue);
-                formItem.Validate();
-                formItem.ShowErrorMessage();
-            }
+            Values = Value.GetType().GetProperties().ToDictionary(x=>x.Name,x=>x.GetValue(Value));
+            //OriginValueRendered = false;
+            //foreach (var property in properties)
+            //{
+            //    var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
+            //    if (formItem == null)
+            //    {
+            //        continue;
+            //    }
+            //    var propertyValue = property.GetValue(Value);
+            //    var formItemType = formItem.GetType();
+            //    formItem.OriginValueRendered = false;
+            //    formItem.OriginValueHasSet = false;
+            //    formItemType.GetProperty("OriginValue").SetValue(formItem, propertyValue);
+            //    formItemType.GetProperty("Value").SetValue(formItem, propertyValue);
+            //    formItem.Validate();
+            //    formItem.ShowErrorMessage();
+            //}
         }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            SetValues();
+        }
+
         internal void ShowErrorMessage()
         {
             _ = Task.Delay(10).ContinueWith((task) =>
@@ -110,13 +125,15 @@ namespace Blazui.Component.Form
                 InvokeAsync(StateHasChanged);
             });
         }
+
         protected override void OnAfterRender(bool firstRender)
         {
             if (requireRefresh)
             {
                 requireRefresh = false;
-                SetValues();
+                RequireRender = true;
                 StateHasChanged();
+                return;
             }
         }
 

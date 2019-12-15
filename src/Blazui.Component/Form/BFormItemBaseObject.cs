@@ -9,6 +9,14 @@ namespace Blazui.Component.Form
 {
     public abstract class BFormItemBaseObject : BComponentBase
     {
+        /// <summary>
+        /// 初始值是否已设置
+        /// </summary>
+        internal bool OriginValueHasSet { get; set; } = true;
+        /// <summary>
+        /// 初始值是否已渲染
+        /// </summary>
+        internal bool OriginValueRendered { get; set; } = true;
         [Parameter]
         public string Label { get; set; }
 

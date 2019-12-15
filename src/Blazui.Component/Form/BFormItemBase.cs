@@ -10,12 +10,23 @@ namespace Blazui.Component.Form
     public class BFormItemBase<TValue> : BFormItemBaseObject
     {
         public TValue OriginValue { get; set; }
-
-        /// <summary>
-        /// 初始值是否已渲染
-        /// </summary>
-        public bool OriginValueRendered { get; set; }
         public TValue Value { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (!Form.Values.Any())
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                return;
+            }
+            Form.Values.TryGetValue(Name, out var value);
+            OriginValue = (TValue)value;
+            Value = (TValue)value;
+        }
 
         public override void Validate()
         {
