@@ -96,12 +96,7 @@ namespace Blazui.Component.Select
 
         private BSelectOptionBase<TValue> selectedOption;
         protected DropDownOption DropDownOption;
-
-        internal void Refresh()
-        {
-            StateHasChanged();
-        }
-
+        
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {
             var args = new BChangeEventArgs<BSelectOptionBase<TValue>>();

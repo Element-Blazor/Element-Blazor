@@ -451,6 +451,13 @@
         "files": [
           "VerticalMenu.razor"
         ]
+      },
+      {
+        "title": "自定义背景",
+        "name": "Menu",
+        "files": [
+          "CustomBackgroundMenu.razor"
+        ]
       }
     ]
   },

@@ -22,11 +22,6 @@ namespace Blazui.Component.CheckBox
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
         }
 
-        public void Refresh()
-        {
-            StateHasChanged();
-        }
-
         private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             SetFieldValue(SelectedItems.ToList(), true);

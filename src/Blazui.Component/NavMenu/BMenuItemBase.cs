@@ -65,6 +65,7 @@ namespace Blazui.Component.NavMenu
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
             BackgroundColor = Options.BackgroundColor;
             textColor = Options.TextColor;
 
@@ -73,7 +74,6 @@ namespace Blazui.Component.NavMenu
                 TopMenu.ActivateItem(this);
             }
 
-            base.OnInitialized();
         }
 
         public void OnOver()
@@ -105,9 +105,9 @@ namespace Blazui.Component.NavMenu
             {
                 await ParentMenu.CloseAsync();
             }
+            TopMenu.ActivateItem(this);
             if (!string.IsNullOrEmpty(Route))
             {
-                TopMenu.ActivateItem(this);
                 if (OnRouteChanging.HasDelegate)
                 {
                     var arg = new BChangeEventArgs<string>();

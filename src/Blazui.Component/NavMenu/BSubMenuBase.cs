@@ -43,7 +43,6 @@ namespace Blazui.Component.NavMenu
         protected string borderColor;
 
         protected bool isActive = false;
-        protected bool isOpened = false;
         private SubMenuOption subMenuOption;
 
         protected bool IsVertical
@@ -54,17 +53,19 @@ namespace Blazui.Component.NavMenu
             }
         }
 
+        protected bool IsOpened { get; set; } = false;
+
         public void Activate()
         {
             isActive = true;
-            isOpened = true;
+            IsOpened = true;
         }
         public void DeActivate()
         {
             isActive = false;
             if (TopMenu.Mode == MenuMode.Horizontal)
             {
-                isOpened = false;
+                IsOpened = false;
             }
             borderColor = "transparent";
 
@@ -88,7 +89,7 @@ namespace Blazui.Component.NavMenu
                 await SemaphoreSlim.WaitAsync();
                 try
                 {
-                    if (isOpened)
+                    if (IsOpened)
                     {
                         try
                         {
@@ -120,7 +121,7 @@ namespace Blazui.Component.NavMenu
                         await Task.Delay(50);
                     }
                     PopupService.SubMenuOptions.Add(subMenuOption);
-                    isOpened = true;
+                    IsOpened = true;
                 }
                 finally
                 {
@@ -129,7 +130,7 @@ namespace Blazui.Component.NavMenu
                 await subMenuOption.TaskCompletionSource.Task;
                 borderColor = "transparent";
 
-                isOpened = false;
+                IsOpened = false;
                 await OnOutAsync();
             }
             else
@@ -158,7 +159,7 @@ namespace Blazui.Component.NavMenu
         internal async Task CloseAsync()
         {
             await subMenuOption.Close(subMenuOption);
-            isOpened = false;
+            IsOpened = false;
             isActive = false;
         }
 
@@ -184,7 +185,7 @@ namespace Blazui.Component.NavMenu
 
         protected async Task OnOutAsync()
         {
-            if (isActive || isOpened)
+            if (isActive || IsOpened)
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
@@ -200,7 +201,7 @@ namespace Blazui.Component.NavMenu
                                  return;
                              }
                              DisposeTokenSource(option.ClosingTaskCancellationTokenSource);
-                             isOpened = false;
+                             IsOpened = false;
                              isActive = false;
                              if (option.Close == null)
                              {
@@ -224,7 +225,7 @@ namespace Blazui.Component.NavMenu
         {
             if (IsVertical)
             {
-                isOpened = !isOpened;
+                IsOpened = !IsOpened;
             }
         }
         protected override bool ShouldRender()
