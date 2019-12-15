@@ -32,6 +32,34 @@ namespace Blazui.Component.Select
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            var valueType = typeof(TValue);
+            var nullable = Nullable.GetUnderlyingType(valueType);
+            valueType = nullable ?? valueType;
+            if (valueType.IsEnum)
+            {
+                var names = Enum.GetNames(valueType);
+                var values = Enum.GetValues(valueType);
+                ChildContent = builder =>
+                {
+                    int seq = 0;
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        var name = names[i];
+                        var value = values.GetValue(i);
+                        var field = valueType.GetField(name);
+                        builder.OpenComponent<BSelectOption<TValue>>(seq++);
+                        builder.AddAttribute(seq++, "Text", name);
+                        builder.AddAttribute(seq++, "Value", value);
+                        builder.CloseComponent();
+                    }
+                };
+            }
+        }
+
+
         internal void UpdateValue(string text)
         {
             var option = Options.FirstOrDefault(x => x.Text == text);
@@ -96,11 +124,6 @@ namespace Blazui.Component.Select
 
         private BSelectOptionBase<TValue> selectedOption;
         protected DropDownOption DropDownOption;
-
-        internal void Refresh()
-        {
-            StateHasChanged();
-        }
 
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {

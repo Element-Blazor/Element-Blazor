@@ -19,11 +19,6 @@ namespace Blazui.Component.Button
             {
                 await OnClick.InvokeAsync(e);
             }
-            var task = Click?.Invoke(e);
-            if (task != null)
-            {
-                await task;
-            }
         }
 
         [Parameter]
@@ -31,8 +26,6 @@ namespace Blazui.Component.Button
 
         [Parameter]
         public EventCallback<MouseEventArgs> OnClick { get; set; }
-        [Parameter]
-        public Func<MouseEventArgs, Task> Click { get; set; }
 
         [Parameter]
         public ButtonType Type { get; set; } = ButtonType.Default;

@@ -420,6 +420,15 @@
       {
         "title": "带禁用选项",
         "name": "ItemDisabledSelect"
+      },
+      {
+        "title": "绑定枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
       }
     ]
   },
