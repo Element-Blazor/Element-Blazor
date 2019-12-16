@@ -113,7 +113,7 @@ services.AddBlazuiServices();
 
 #### 计划
 
-###### 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin [ ]
+###### [x] 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
 ###### 开发文档 [ ]
 
 #### 组件列表
