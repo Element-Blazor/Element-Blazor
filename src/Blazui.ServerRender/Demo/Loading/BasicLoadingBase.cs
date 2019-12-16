@@ -38,18 +38,18 @@ namespace Blazui.ServerRender.Demo.Loading
             });
         }
 
-        protected Task RenderCompleted()
+        protected Task RenderCompleted(object arg)
         {
             table.Loading(LoadingService);
             return Task.CompletedTask;
         }
-        protected Task CustomRenderCompleted()
+        protected Task CustomRenderCompleted(object arg)
         {
             table.Loading(LoadingService, "拼命加载中", "el-icon-loading", "rgba(0, 0, 0, 0.8)");
             return Task.CompletedTask;
         }
 
-        protected void ShowLoading()
+        protected void ShowLoading(object arg)
         {
             table.Loading(LoadingService);
         }

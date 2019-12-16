@@ -190,11 +190,11 @@ namespace Blazui.Component.Table
             }
         }
 
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            base.OnAfterRender(firstRender);
-            if (!firstRender)
+            if (headerRendered)
             {
+                await (OnRenderCompleted?.Invoke(this) ?? Task.CompletedTask);
                 return;
             }
             headerRendered = true;

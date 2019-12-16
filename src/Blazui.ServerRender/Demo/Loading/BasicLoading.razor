@@ -1,7 +1,7 @@
 ﻿@inherits BasicLoadingBase
 @using Blazui.ServerRender.Demo.Table
 
-<BTable DataSource="Datas" @ref="table">
+<BTable DataSource="Datas" @ref="table" OnRenderCompleted="RenderCompleted">
     <BTableColumns>
         <BTableColumn Width="100" Property="@nameof(TestData.Name)" Text="姓名"></BTableColumn>
         <BTableDateTimeColumn Width="200" Format="yyyy-MM-dd" Property="@nameof(TestData.Time)" Text="时间"></BTableDateTimeColumn>

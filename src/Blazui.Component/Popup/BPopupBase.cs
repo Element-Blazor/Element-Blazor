@@ -277,6 +277,10 @@ namespace Blazui.Component.Popup
             {
                 var loadingOption = e.OldItems.OfType<LoadingOption>().FirstOrDefault();
                 LoadingOptions.Remove(loadingOption);
+                if (string.IsNullOrWhiteSpace(loadingOption.Target.Id))
+                {
+                    _ = CloseFullScreenLoadingAsync(loadingOption);
+                }
                 InvokeAsync(() =>
                 {
                     StateHasChanged();
@@ -590,6 +594,11 @@ namespace Blazui.Component.Popup
             await style.SetAsync("display", "block");
         }
 
+
+        async Task CloseFullScreenLoadingAsync(LoadingOption option)
+        {
+            await Document.EnableYScrollAsync();
+        }
         async Task RenderLoadingAsync()
         {
             var option = LoadingOptions.FirstOrDefault(x => x.IsNew);
