@@ -30,6 +30,10 @@ namespace Blazui.Component.Dom
         {
             await jSRuntime.InvokeAsync<object>("disableYScroll");
         }
+        public async Task EnableYScrollAsync()
+        {
+            await jSRuntime.InvokeAsync<object>("enableYScroll");
+        }
 
         public async Task DisableScrollAsync()
         {

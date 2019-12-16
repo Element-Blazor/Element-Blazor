@@ -50,7 +50,7 @@ namespace Blazui.Component.Container
         /// <summary>
         /// Tab 页渲染完成时触发
         /// </summary>
-        public Func<BTabPanelBase, Task> OnRenderCompletedAsync { get; set; } = p => Task.CompletedTask;
+        public Func<object, Task> OnRenderCompletedAsync { get; set; } = p => Task.CompletedTask;
 
         /// <summary>
         /// Tab 页切换时触发

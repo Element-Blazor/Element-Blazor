@@ -28,12 +28,9 @@ namespace Blazui.Component.Table
         [Parameter]
         public string Text { get; set; }
 
-        protected override void OnParametersSet()
+        protected override void OnInitialized()
         {
-            if (Columns == null)
-            {
-                return;
-            }
+            base.OnInitialized();
             Columns.AddColumn(this);
         }
     }

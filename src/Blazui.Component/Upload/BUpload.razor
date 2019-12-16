@@ -1,0 +1,31 @@
+﻿@inherits BUploadBase
+<div class="el-upload el-upload--text" onclick="window.upload(this)">
+    <BButton Size="@ButtonSize.Small" Type="ButtonType.Primary">
+        点击上传
+    </BButton>
+    <input type="file" name="file" @ref="Input" multiple="multiple" @onchange="ScanFileAsync" class="el-upload__input" />
+</div>
+<div class="el-upload__tip">
+    @if (Tip != null)
+    {
+        @Tip
+    }
+</div>
+<ul class="el-upload-list el-upload-list--text">
+    @foreach (var file in Files)
+    {
+        <li tabindex="0" class="el-upload-list__item is-success">
+            <a class="el-upload-list__item-name">
+                <i class="el-icon-document"></i>@file.FileName
+            </a>
+            @if (file.Status == UploadStatus.Success)
+            {
+                <label class="el-upload-list__item-status-label">
+                    <i class="el-icon-upload-success el-icon-circle-check"></i>
+                </label>
+            }
+            <i class="el-icon-close" @onclick="e=>DeleteFile(file)"></i>
+            <i class="el-icon-close-tip"></i>
+        </li>
+    }
+</ul>

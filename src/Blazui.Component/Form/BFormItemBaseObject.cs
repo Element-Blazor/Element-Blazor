@@ -9,6 +9,14 @@ namespace Blazui.Component.Form
 {
     public abstract class BFormItemBaseObject : BComponentBase
     {
+        /// <summary>
+        /// 初始值是否已渲染
+        /// </summary>
+        internal bool OriginValueHasRendered { get; set; } = true;
+        /// <summary>
+        /// 初始值是否已设置
+        /// </summary>
+        internal bool OriginValueHasSet { get; set; } = false;
         [Parameter]
         public string Label { get; set; }
 
@@ -54,9 +62,10 @@ namespace Blazui.Component.Form
                 return;
             }
             IsShowing = true;
-            _ = Task.Delay(10).ContinueWith((task) =>
+            _ = Task.Delay(100).ContinueWith((task) =>
             {
                 IsShowing = false;
+                MarkAsRequireRender();
                 InvokeAsync(StateHasChanged);
             });
         }

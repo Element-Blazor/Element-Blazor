@@ -8,7 +8,8 @@ namespace Blazui.Component.Form
 {
     public class BFieldComponentBase<TValue> : BComponentBase, IDisposable
     {
-        protected string Name { get; set; }
+        [Parameter]
+        public string Name { get; set; }
         [CascadingParameter]
         public BFormItemBase<TValue> FormItem { get; set; }
 
@@ -24,6 +25,8 @@ namespace Blazui.Component.Form
             {
                 return;
             }
+
+            FormItem.MarkAsRequireRender();
             FormItem.Validate();
             FormItem.ShowErrorMessage();
         }
@@ -50,17 +53,5 @@ namespace Blazui.Component.Form
             }
         }
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            if (FormItem == null)
-            {
-                return;
-            }
-            if (!FormItem.OriginValueRendered)
-            {
-                FormItem.OriginValueRendered = true;
-                FormItem_OnReset(FormItem.OriginValue, false);
-            }
-        }
     }
 }

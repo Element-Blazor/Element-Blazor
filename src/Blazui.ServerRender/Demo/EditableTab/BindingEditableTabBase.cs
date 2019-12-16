@@ -44,10 +44,6 @@ namespace Blazui.ServerRender.Demo.EditableTab
     };
         protected void OnAddingTabAsync()
         {
-            foreach (var item in models)
-            {
-                item.IsActive = false;
-            }
             models.Add(new TabOption()
             {
                 Content = "内容" + models.Count,
@@ -55,7 +51,7 @@ namespace Blazui.ServerRender.Demo.EditableTab
                 Title = "标题" + models.Count,
                 IsActive = true
             });
-            tab.Refresh();
+            tab.MarkAsRequireRender();
         }
     }
 }

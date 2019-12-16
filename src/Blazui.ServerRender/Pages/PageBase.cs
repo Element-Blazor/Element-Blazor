@@ -69,7 +69,7 @@ namespace Blazui.ServerRender.Pages
                     {
                         Content = GetCode(WebUtility.HtmlEncode(code), language),
                         Title = Path.GetFileName(codeFile),
-                        Name = language,
+                        Name = Path.GetFileName(codeFile),
                         OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
                     });
                 }

@@ -9,17 +9,21 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Select
 {
-    public class BSelectBase<TValue> : BFieldComponentBase<OptionModel<TValue>>, IDisposable
+    public class BSelectBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
 
-        protected ElementReference elementSelect;
-
+        internal ElementReference elementSelect;
+        private Type valueType;
+        private Type nullable;
+        internal bool isClearable = true;
+        private bool valueInitilized = false;
         internal bool IsClearButtonClick { get; set; }
 
         internal string Label { get; set; }
@@ -31,6 +35,89 @@ namespace Blazui.Component.Select
         public string Placeholder { get; set; } = "请选择";
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
+
+        /// <summary>
+        /// 当绑定为枚举时，指定哪些枚举名需要忽略
+        /// </summary>
+        [Parameter]
+        public string[] IgnoreEnumNames { get; set; } = new string[0];
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (valueType == null)
+            {
+                InitilizeEnumValues(FormItem != null);
+            }
+            if (FormItem == null)
+            {
+                return;
+            }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            Label = dict[Value];
+            SetFieldValue(Value, false);
+        }
+
+        private void InitilizeEnumValues(bool firstItemAsValue)
+        {
+            valueType = typeof(TValue);
+            nullable = Nullable.GetUnderlyingType(valueType);
+            isClearable = false;
+            valueType = nullable ?? valueType;
+            var valueSet = false;
+            if (valueType.IsEnum)
+            {
+                var names = Enum.GetNames(valueType);
+                var values = Enum.GetValues(valueType);
+                //var valueInitilized = false;
+                dict = new Dictionary<TValue, string>();
+                for (int i = 0; i < names.Length; i++)
+                {
+                    var name = names[i];
+                    if (IgnoreEnumNames.Contains(name, StringComparer.CurrentCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+                    var value = values.GetValue(i);
+                    var field = valueType.GetField(name);
+                    var text = field.GetCustomAttributes(typeof(DescriptionAttribute), true)
+                        .Cast<DescriptionAttribute>()
+                        .FirstOrDefault()?.Description ?? name;
+                    if (!valueSet && firstItemAsValue)
+                    {
+                        valueSet = true;
+                        if (nullable == null)
+                        {
+                            if (!TypeHelper.Equal(Value, (TValue)value))
+                            {
+                                Value = (TValue)value;
+                                InitialValue = Value;
+                                SetFieldValue(Value, false);
+                            }
+                            Label = text;
+                        }
+                    }
+                    dict.Add((TValue)value, text);
+                }
+                ChildContent = builder =>
+                {
+                    int seq = 0;
+                    foreach (var itemValue in dict.Keys)
+                    {
+                        builder.OpenComponent<BSelectOption<TValue>>(seq++);
+                        builder.AddAttribute(seq++, "Text", dict[itemValue]);
+                        builder.AddAttribute(seq++, "Value", itemValue);
+                        builder.CloseComponent();
+                    }
+                };
+            }
+        }
 
         internal void UpdateValue(string text)
         {
@@ -58,6 +145,9 @@ namespace Blazui.Component.Select
         [Inject]
         internal PopupService PopupService { get; set; }
 
+        /// <summary>
+        /// 当前选中值
+        /// </summary>
         [Parameter]
         public TValue Value { get; set; }
 
@@ -95,12 +185,8 @@ namespace Blazui.Component.Select
         }
 
         private BSelectOptionBase<TValue> selectedOption;
-        protected DropDownOption DropDownOption;
-
-        internal void Refresh()
-        {
-            StateHasChanged();
-        }
+        internal DropDownOption dropDownOption;
+        private Dictionary<TValue, string> dict;
 
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
         {
@@ -116,9 +202,12 @@ namespace Blazui.Component.Select
                 }
             }
 
-            await DropDownOption.Instance.CloseDropDownAsync(DropDownOption);
+            await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
             SelectedOption = item;
-            SetFieldValue(new OptionModel<TValue>(item.Text, item.Value), true);
+            SetFieldValue(item.Value, true);
+            Value = item.Value;
+            dict.TryGetValue(Value, out var label);
+            Label = label;
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
@@ -127,10 +216,7 @@ namespace Blazui.Component.Select
             StateHasChanged();
         }
 
-        [Parameter]
-        public EventCallback<MouseEventArgs> OnClick { get; set; }
-
-        protected void OnSelectClick(MouseEventArgs e)
+        internal void OnSelectClick(MouseEventArgs e)
         {
             if (IsClearButtonClick)
             {
@@ -142,7 +228,7 @@ namespace Blazui.Component.Select
                 return;
             }
 
-            DropDownOption = new DropDownOption()
+            dropDownOption = new DropDownOption()
             {
                 Select = this,
                 Target = elementSelect,
@@ -153,20 +239,20 @@ namespace Blazui.Component.Select
                 },
                 IsShow = true
             };
-            PopupService.SelectDropDownOptions.Add(DropDownOption);
+            PopupService.SelectDropDownOptions.Add(dropDownOption);
         }
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            var optionModel = (OptionModel<TValue>)value;
-            if (optionModel == null)
+            var enumValue = (TValue)value;
+            if (nullable != null && value == null)
             {
                 SelectedOption = null;
             }
             else
             {
-                Label = optionModel.Text;
-                Value = optionModel.Value;
+                Label = dict[enumValue];
+                Value = enumValue;
             }
             if (ValueChanged.HasDelegate)
             {
@@ -176,6 +262,10 @@ namespace Blazui.Component.Select
             {
                 StateHasChanged();
             }
+        }
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

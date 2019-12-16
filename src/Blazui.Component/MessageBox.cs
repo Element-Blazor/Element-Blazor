@@ -43,7 +43,7 @@ namespace Blazui.Component
             return builder =>
             {
                 builder.OpenComponent<BButton>(0);
-                builder.AddAttribute(1, "Click", new Func<MouseEventArgs, Task>(async (MouseEventArgs e) =>
+                builder.AddAttribute(1, nameof(BButton.OnClick), EventCallback.Factory.Create(option.Instance, async (MouseEventArgs e) =>
                 {
                     await option.Instance.CloseDialogAsync(option, new DialogResult()
                     {

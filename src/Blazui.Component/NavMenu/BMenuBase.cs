@@ -59,13 +59,10 @@ namespace Blazui.Component.NavMenu
             {
                 ActiveItemChanged.InvokeAsync(activeItem);
             }
-            else
-            {
-                StateHasChanged();
-            }
+            StateHasChanged();
         }
 
-        public void DeActive()
+        public void DeActiveItem()
         {
             if (activeItem == null)
             {
@@ -91,6 +88,10 @@ namespace Blazui.Component.NavMenu
             };
 
             base.OnInitialized();
+        }
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

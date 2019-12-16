@@ -1,0 +1,9 @@
+﻿@inherits BBadgeBase
+<div class="el-badge">
+    <CascadingValue Value="this">
+        @ChildContent
+        <sup class="el-badge__content el-badge__content--@(Type.ToString().ToLower()) is-fixed">
+            <BHtml @ref="html"></BHtml>
+        </sup>
+    </CascadingValue>
+</div>

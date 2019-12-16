@@ -20,6 +20,26 @@ namespace Blazui.Component.Dom
             this.Style = new Style(elementReference, jSRuntime);
         }
 
+        public async Task<string[]> UploadFileAsync(string fileName, string url)
+        {
+            return await jSRuntime.InvokeAsync<string[]>("uploadFile", elementReference, fileName, url);
+        }
+
+        public async Task<string[]> ScanFilesAsync()
+        {
+            return await jSRuntime.InvokeAsync<string[]>("scanFiles", elementReference);
+        }
+
+        public async Task ClickAsync()
+        {
+            await jSRuntime.InvokeVoidAsync("click", elementReference);
+        }
+
+        public async Task TriggerAsync(string eventName)
+        {
+            await jSRuntime.InvokeVoidAsync("trigger", elementReference, eventName);
+        }
+
         public async Task<int> GetClientWidthAsync()
         {
             return await jSRuntime.InvokeAsync<int>("getClientWidth", elementReference);

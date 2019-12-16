@@ -66,6 +66,39 @@ namespace Blazui.Component.Switch
             }
         }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem == null)
+            {
+                return;
+            }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+
+            FormItem.OriginValueHasRendered = true;
+            if (TypeHelper.Equal(FormItem.OriginValue, default))
+            {
+                Value = InactiveValue;
+            }
+            else
+            {
+                var boolValue = Convert.ToBoolean(FormItem.OriginValue);
+                if (boolValue)
+                {
+                    Value = ActiveValue;
+                }
+                else
+                {
+                    Value = InactiveValue;
+                }
+            }
+            SetFieldValue(Value, false);
+        }
+
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (value == null)
@@ -84,6 +117,10 @@ namespace Blazui.Component.Switch
                     Value = InactiveValue;
                 }
             }
+        }
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

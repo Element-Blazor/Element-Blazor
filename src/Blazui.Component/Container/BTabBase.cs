@@ -12,20 +12,32 @@ using Microsoft.JSInterop;
 
 namespace Blazui.Component.Container
 {
-    public class BTabBase : BComponentBase, IDisposable
+    public class BTabBase : BComponentBase
     {
         /// <summary>
         /// 数据源
         /// </summary>
         [Parameter]
         public ObservableCollection<TabOption> DataSource { get; set; }
-        private bool requireRerender = true;
+
+        /// <summary>
+        /// 是否显示增加图标
+        /// </summary>
         [Parameter]
         public bool IsAddable { get; set; }
+
+        /// <summary>
+        /// 是否可关闭
+        /// </summary>
+        public bool IsRemovable { get; set; }
         /// <summary>
         /// 渲染后的内容区域
         /// </summary>
         public ElementReference Content { get; set; }
+
+        /// <summary>
+        /// Tab 类型
+        /// </summary>
         [Parameter]
         public TabType Type { get; set; }
 
@@ -75,8 +87,8 @@ namespace Blazui.Component.Container
                 }
             }
 
-            requireRerender = true;
             ResetActiveTab(tab);
+            RequireRender = true;
             if (OnTabClose.HasDelegate)
             {
                 _ = OnTabClose.InvokeAsync(tab);
@@ -87,20 +99,20 @@ namespace Blazui.Component.Container
             }
         }
 
-        private void ResetActiveTab(BTabPanelBase tab)
+        private TabOption ResetActiveTab(BTabPanelBase tab)
         {
             if (DataSource == null)
             {
-                return;
+                return null;
             }
             if (DataSource.Count <= 0)
             {
-                return;
+                return null;
             }
             var activeOption = DataSource.FirstOrDefault(x => x.IsActive);
             if (activeOption.Title != tab.Title)
             {
-                return;
+                return null;
             }
             var activeIndex = DataSource.IndexOf(activeOption);
             DataSource.RemoveAt(activeIndex);
@@ -111,10 +123,11 @@ namespace Blazui.Component.Container
             }
             if (newActiveIndex == -1)
             {
-                return;
+                return null;
             }
             activeOption = DataSource.ElementAt(newActiveIndex);
             activeOption.IsActive = true;
+            return activeOption;
         }
 
         protected override void OnInitialized()
@@ -122,7 +135,7 @@ namespace Blazui.Component.Container
             base.OnInitialized();
             if (DataSource == null)
             {
-                if (IsEditable || IsAddable)
+                if (IsAddable)
                 {
                     throw new BlazuiException("标签页组件启用可编辑模式时必须指定 DataSource 属性，硬编码无效");
                 }
@@ -148,6 +161,10 @@ namespace Blazui.Component.Container
             if (e.Action != NotifyCollectionChangedAction.Add)
             {
                 return;
+            }
+            foreach (var item in DataSource.Take(DataSource.Count - 1))
+            {
+                item.IsActive = false;
             }
             var repeatKeys = DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
             if (repeatKeys.Any())
@@ -216,27 +233,31 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (requireRerender)
+            var tabOption = DataSource?.FirstOrDefault(x => x.IsActive);
+            var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
+            if (activeTab == null)
             {
-                requireRerender = false;
-                if (DataSource == null)
+                activeTab = tabPanels.FirstOrDefault();
+                if (activeTab != null)
                 {
-                    var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
-                    if (activeTab == null)
-                    {
-                        activeTab = tabPanels.FirstOrDefault();
-                        activeTab.Activate();
-                    }
-                    await SetActivateTabAsync(activeTab);
-                    return;
+                    activeTab.Activate();
                 }
             }
-        }
-
-
-        public void Refresh()
-        {
-            StateHasChanged();
+            foreach (var item in tabPanels)
+            {
+                if (tabOption != null && item.Name != tabOption.Name)
+                {
+                    continue;
+                }
+                item.MarkAsRequireRender();
+                item.Refresh();
+            }
+            if (!firstRender && !RequireRender)
+            {
+                return;
+            }
+            await SetActivateTabAsync(activeTab);
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         internal async Task UpdateHeaderSizeAsync(BTabPanelBase tabPanel, int barWidth, int barOffsetLeft)
@@ -248,13 +269,14 @@ namespace Blazui.Component.Container
             }
             BarWidth = barWidth;
             BarOffsetLeft = barOffsetLeft;
+            RequireRender = true;
             StateHasChanged();
         }
         internal async Task TabRenderCompletedAsync(BTabPanelBase tabPanel)
         {
-            if (OnTabRenderComplete.HasDelegate)
+            if (OnRenderCompleted != null)
             {
-                await OnTabRenderComplete.InvokeAsync(tabPanel);
+                await OnRenderCompleted(tabPanel);
             }
         }
 
@@ -308,6 +330,7 @@ namespace Blazui.Component.Container
             var eventArgs = new BChangeEventArgs<BTabPanelBase>();
             eventArgs.OldValue = ActiveTab;
             eventArgs.NewValue = tab;
+            RequireRender = true;
             if (OnActiveTabChanged.HasDelegate)
             {
                 await OnActiveTabChanged.InvokeAsync(eventArgs);
@@ -319,20 +342,13 @@ namespace Blazui.Component.Container
             return true;
         }
 
-        [Parameter]
-        public EventCallback<BTabPanelBase> OnTabRenderComplete { get; set; }
-
         protected override void OnParametersSet()
         {
-            if (Type == TabType.Normal && IsEditable)
+            if (Type == TabType.Normal && IsRemovable)
             {
-                throw new NotSupportedException("TabType为Card的情况下才能进行编辑");
+                throw new NotSupportedException("TabType为Card的情况下才能进行移除");
             }
             base.OnParametersSet();
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

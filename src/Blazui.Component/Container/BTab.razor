@@ -33,7 +33,7 @@
         </div>
     }
     <div class="el-tabs__header @headerPosition">
-        @if (IsEditable && IsAddable)
+        @if (IsAddable)
         {
             <span tabindex="0" class="el-tabs__new-tab" @onclick="OnAddingTab"><i class="el-icon-plus"></i></span>
         }
@@ -49,7 +49,7 @@
                         {
                             @foreach (var item in DataSource)
                             {
-                                <BTabPanel IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
+                                <BTabPanel @key="item.Name" IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
                                     <BDynamicComponent Component="@item.Content"></BDynamicComponent>
                                 </BTabPanel>
                             }

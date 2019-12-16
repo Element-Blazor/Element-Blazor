@@ -115,6 +115,11 @@ namespace Blazui.Component.Radio
             if (RadioGroup == null)
             {
                 SetFieldValue(SelectedValue, true);
+                if (FormItem != null)
+                {
+                    FormItem.MarkAsRequireRender();
+                    FormItem.Refresh();
+                }
             }
             if (StatusChanged.HasDelegate)
             {
@@ -128,6 +133,7 @@ namespace Blazui.Component.Radio
 
         protected override void OnAfterRender(bool firstRender)
         {
+            base.OnAfterRender(firstRender);
             var oldStatus = Status;
             if (TypeHelper.Equal(SelectedValue, Value))
             {
@@ -141,9 +147,15 @@ namespace Blazui.Component.Radio
             {
                 if (StatusChanged.HasDelegate)
                 {
+                    RequireRender = true;
                     _ = StatusChanged.InvokeAsync(Status);
                 }
             }
+        }
+
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

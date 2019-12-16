@@ -15,24 +15,29 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Table
 {
-    public class BTableBase : ComponentBase, IContainerComponent
+    public class BTableBase : BComponentBase, IContainerComponent
     {
+        internal BCheckBoxBase<bool> chkAll;
         internal ElementReference headerElement;
         internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
-        private bool requireRender = true;
+        internal bool headerInitilized = false;
+        internal bool headerRendered = false;
+        private IDictionary<BCheckBoxBase<bool>, object> rowCheckBoxses = new Dictionary<BCheckBoxBase<bool>, object>();
         internal int headerHeight = 49;
 
+        internal List<object> rows = new List<object>();
         /// <summary>
-        /// 不显示的字段名称
+        /// 忽略的字段名称
         /// </summary>
         [Parameter]
-        public string[] IgnoreProperties { get; set; } =   { };
+        public string[] IgnoreProperties { get; set; } = { };
 
         /// <summary>
-        /// 要显示的实体类型
+        /// 数据源
         /// </summary>
         [Parameter]
-        public Type DataType { get; set; }
+        public object DataSource { get; set; }
+        internal Type DataType { get; set; }
 
         /// <summary>
         /// 是否自动生成列
@@ -47,18 +52,32 @@ namespace Blazui.Component.Table
         public bool HasSelectionColumn { get; set; } = true;
 
         /// <summary>
-        /// 当表格渲染结束触发
+        /// 总数据条数
         /// </summary>
         [Parameter]
-        public EventCallback RenderCompleted { get; set; }
-
-        internal int Total { get; set; }
+        public int Total { get; set; }
 
         /// <summary>
         /// 每页条数
         /// </summary>
         [Parameter]
         public int PageSize { get; set; } = 20;
+
+        /// <summary>
+        /// 当前页数
+        /// </summary>
+        [Parameter]
+        public int CurrentPage
+        {
+            get
+            {
+                return currentPage;
+            }
+            set
+            {
+                currentPage = value;
+            }
+        }
 
         private int currentPage = 1;
 
@@ -74,7 +93,12 @@ namespace Blazui.Component.Table
         [Parameter]
         public EventCallback<int> ShowPageCountChanged { get; set; }
 
-        internal List<object> DataSource { get; set; } = new List<object>();
+        /// <summary>
+        /// 当页码变化时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<int> CurrentPageChanged { get; set; }
+
 
         /// <summary>
         /// 当只有一页时，不显示分页
@@ -117,6 +141,22 @@ namespace Blazui.Component.Table
         public bool IsStripe { get; set; }
 
         /// <summary>
+        /// 加载中状态背景颜色
+        /// </summary>
+        [Parameter]
+        public string LoadingBackground { get; set; }
+
+        /// <summary>
+        /// 加载中状态样式类
+        /// </summary>
+        [Parameter]
+        public string LoadingIconClass { get; set; }
+
+        /// <summary>
+        /// 加载中状态文字
+        /// </summary>
+        public string LoadingText { get; set; }
+        /// <summary>
         /// 当加载数据源时触发，传入参数为当前页
         /// </summary>
         [Parameter]
@@ -128,84 +168,109 @@ namespace Blazui.Component.Table
         public bool IsBordered { get; set; }
         public ElementReference Container { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        internal Task OnRowCheckBoxRenderCompleted(object row, BCheckBoxBase<bool> chk)
         {
-            if (OnLoadDataSource != null)
+            lock (rowCheckBoxses)
             {
-                await ChangeCurrentPageAsync(currentPage);
+                rowCheckBoxses.Add(chk, row);
             }
-
+            return Task.CompletedTask;
         }
 
-        internal async Task ChangeCurrentPageAsync(int currentPage)
+        protected override void OnInitialized()
         {
-            var pagerResult = await OnLoadDataSource(currentPage);
-            Total = pagerResult.Total;
-            var dataSource = pagerResult.Rows as IEnumerable;
-            DataSource.Clear();
-            foreach (var item in dataSource)
+            base.OnInitialized();
+            if (!AutoGenerateColumns)
             {
-                DataSource.Add(item);
-            }
-            SelectedRows.Clear();
-            RefreshSelectAllStatus();
-        }
-        protected override void OnAfterRender(bool firstRender)
-        {
-            if (AutoGenerateColumns)
-            {
-                DataType.GetProperties().Where(p=>!IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
-                 {
-                     if (Headers.Any(x => x.Property?.Name == property.Name))
-                     {
-                         return;
-                     }
-                     var attrs = property.GetCustomAttributes(true);
-                     var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
-                     if (string.IsNullOrWhiteSpace(text))
-                     {
-                         text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
-                     }
-                     var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
-                     Headers.Insert(0, new TableHeader()
-                     {
-                         Eval = row =>
-                         {
-                             return property.GetValue(row);
-                         },
-                         IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
-                         Property = property,
-                         Text = text ?? property.Name,
-                         Width = width
-                     });
-                 }
-                 );
-
-            }
-            if (requireRender)
-            {
-                StateHasChanged();
-                requireRender = false;
                 return;
             }
-            if (RenderCompleted.HasDelegate)
+            if (DataSource == null)
             {
-                RenderCompleted.InvokeAsync(null);
+                return;
             }
         }
 
-        protected override void OnParametersSet()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            RefreshSelectAllStatus();
+            if (headerRendered)
+            {
+                await (OnRenderCompleted?.Invoke(this) ?? Task.CompletedTask);
+                return;
+            }
+            headerRendered = true;
+            RequireRender = true;
+            StateHasChanged();
         }
 
-        void RefreshSelectAllStatus()
+        public override async Task SetParametersAsync(ParameterView parameters)
         {
-            if (DataSource.Count == 0 || SelectedRows.Count == 0)
+            await base.SetParametersAsync(parameters);
+            if (parameters.GetValueOrDefault<object>(nameof(DataSource)) != null)
+            {
+                rows = (DataSource as IEnumerable).Cast<object>().ToList();
+                DataType = DataSource.GetType().GetGenericArguments()[0];
+                if (AutoGenerateColumns && !headerInitilized)
+                {
+                    headerInitilized = true;
+                    DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
+                    {
+                        if (Headers.Any(x => x.Property?.Name == property.Name))
+                        {
+                            return;
+                        }
+                        var attrs = property.GetCustomAttributes(true);
+                        var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
+                        if (string.IsNullOrWhiteSpace(text))
+                        {
+                            text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
+                        }
+                        var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
+                        Headers.Insert(0, new TableHeader()
+                        {
+                            Eval = row =>
+                            {
+                                return property.GetValue(row);
+                            },
+                            IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
+                            Property = property,
+                            Text = text ?? property.Name,
+                            Width = width
+                        });
+                    }
+                     );
+                }
+                chkAll?.MarkAsRequireRender();
+                ResetSelectAllStatus();
+            }
+        }
+
+        internal async Task CurrentPageChangedAsync(int page)
+        {
+            CurrentPage = page;
+            if (CurrentPageChanged.HasDelegate)
+            {
+                RequireRender = true;
+                var option = new LoadingOption()
+                {
+                    Background = LoadingBackground,
+                    Target = Container,
+                    IconClass = LoadingIconClass,
+                    Text = LoadingText
+                };
+                LoadingService.LoadingOptions.Add(option);
+                SelectedRows.Clear();
+                await CurrentPageChanged.InvokeAsync(page);
+                LoadingService.LoadingOptions.Remove(option);
+            }
+        }
+
+        void ResetSelectAllStatus()
+        {
+            if (rows.Count == 0 || SelectedRows.Count == 0)
             {
                 selectAllStatus = Status.UnChecked;
             }
-            else if (DataSource.Count > SelectedRows.Count)
+            else if (rows.Count > SelectedRows.Count)
             {
                 selectAllStatus = Status.Indeterminate;
             }
@@ -217,24 +282,31 @@ namespace Blazui.Component.Table
 
         protected void ChangeAllStatus(Status status)
         {
+            RequireRender = true;
             if (status == Status.Checked)
             {
-                SelectedRows = new HashSet<object>(DataSource);
+                SelectedRows = new HashSet<object>(rows);
             }
             else
             {
                 SelectedRows = new HashSet<object>();
             }
 
+            foreach (var item in rowCheckBoxses.Keys)
+            {
+                item.MarkAsRequireRender();
+            }
             if (SelectedRowsChanged.HasDelegate)
             {
                 _ = SelectedRowsChanged.InvokeAsync(SelectedRows);
             }
-            RefreshSelectAllStatus();
+            ResetSelectAllStatus();
         }
 
         protected void ChangeRowStatus(Status status, object row)
         {
+            RequireRender = true;
+            chkAll.MarkAsRequireRender();
             if (status == Status.Checked)
             {
                 SelectedRows.Add(row);
@@ -247,7 +319,7 @@ namespace Blazui.Component.Table
             {
                 _ = SelectedRowsChanged.InvokeAsync(SelectedRows);
             }
-            RefreshSelectAllStatus();
+            ResetSelectAllStatus();
         }
     }
 }

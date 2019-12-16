@@ -86,7 +86,7 @@ namespace Blazui.Component.Input
             return Task.CompletedTask;
         }
 
-        protected void OnChangeEventArgs(ChangeEventArgs input)
+        protected virtual void OnChangeEventArgs(ChangeEventArgs input)
         {
             Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
             if (ValueChanged.HasDelegate)
@@ -122,6 +122,27 @@ namespace Blazui.Component.Input
             {
                 StateHasChanged();
             }
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem == null)
+            {
+                return;
+            }
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            SetFieldValue(Value, false);
+        }
+
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

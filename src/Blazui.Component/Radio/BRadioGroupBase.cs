@@ -57,6 +57,7 @@ namespace Blazui.Component.Radio
             }
             SelectedValue = value;
             SetFieldValue(SelectedValue, true);
+            RequireRender = true;
             if (SelectedValueChanged.HasDelegate)
             {
                 await SelectedValueChanged.InvokeAsync(value);

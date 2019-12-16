@@ -1,7 +1,7 @@
 ﻿@inherits BSubMenuBase
 <li role="menuitem" tabindex="0" aria-haspopup="true"
-    class="el-submenu @(isActive?"is-active":"") @(isOpened?"is-opened":"")"
-    aria-expanded="@(isOpened?"true":"")">
+    class="el-submenu @(isActive?"is-active":"") @(IsOpened?"is-opened":"")"
+    aria-expanded="@(IsOpened?"true":"")">
     <div @onmouseover="OnOverAsync"
          @onmouseout="OnOutAsync"
          @onclick="OnClick"
@@ -14,7 +14,7 @@
     </div>
     @if (IsVertical)
     {
-        <ul role="menu" class="el-menu el-menu--inline" style="@(isOpened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
+        <ul role="menu" class="el-menu el-menu--inline" style="@(IsOpened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
             <CascadingValue Value="this">
                 @ChildContent
             </CascadingValue>

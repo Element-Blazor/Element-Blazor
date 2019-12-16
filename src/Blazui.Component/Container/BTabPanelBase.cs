@@ -16,7 +16,6 @@ namespace Blazui.Component.Container
         public EventCallback<BChangeEventArgs<BTabPanelBase>> OnTabPanelChanging { get; set; }
         private static int tabIndex = 0;
 
-
         public override string ToString()
         {
             return Name;
@@ -24,6 +23,7 @@ namespace Blazui.Component.Container
 
         protected async Task OnInternalTabCloseAsync(MouseEventArgs e)
         {
+            RequireRender = true;
             await TabContainer.CloseTabAsync(this);
         }
 
@@ -36,12 +36,19 @@ namespace Blazui.Component.Container
 
         protected async Task Activate(MouseEventArgs e)
         {
+            RequireRender = true;
             IsActive = await TabContainer.SetActivateTabAsync(this);
         }
 
         public void Activate()
         {
             IsActive = true;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            RequireRender = TabContainer?.ActiveTab != null;
         }
 
         [Parameter]
@@ -66,10 +73,6 @@ namespace Blazui.Component.Container
             await Task.CompletedTask;
         }
 
-
-        [Parameter]
-        public Func<BTabPanelBase, Task> OnRenderCompleted { get; set; }
-
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -81,7 +84,7 @@ namespace Blazui.Component.Container
 
         private async Task AcitveTabOnRenderCompletedAsync()
         {
-            if (TabContainer.Type == TabType.Normal)
+            if (IsActive && TabContainer.Type == TabType.Normal)
             {
                 var dom = Element.Dom(JSRuntime);
                 var width = await dom.GetClientWidthAsync();
@@ -99,25 +102,27 @@ namespace Blazui.Component.Container
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (IsActive)
+            await AcitveTabOnRenderCompletedAsync();
+            if (!firstRender)
             {
-                await AcitveTabOnRenderCompletedAsync();
-            }
-            else if (OnRenderCompleted != null)
-            {
-                await OnRenderCompleted(this);
+                return;
             }
             await base.OnAfterRenderAsync(firstRender);
         }
 
         public void Dispose()
         {
-            TabContainer.RemoveTab(this.Name);
+            TabContainer?.RemoveTab(this.Name);
         }
 
         internal void DeActivate()
         {
             IsActive = false;
+        }
+
+        protected override bool ShouldRender()
+        {
+            return true;
         }
     }
 }

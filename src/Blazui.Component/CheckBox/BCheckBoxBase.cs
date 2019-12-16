@@ -26,7 +26,6 @@ namespace Blazui.Component.CheckBox
         private TValue rawValue;
         [Parameter]
         public TValue Value { get; set; }
-
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
         [Parameter]
@@ -49,11 +48,33 @@ namespace Blazui.Component.CheckBox
                     return;
                 }
                 Status = Status.UnChecked;
+                return;
+            }
+
+            if (FormItem == null)
+            {
+                return;
+            }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            if (TypeHelper.Equal(Value, default))
+            {
+                Status = Status.Checked;
+            }
+            else
+            {
+                Status = Status.UnChecked;
             }
         }
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
+            RequireRender = true;
             if (CheckBoxGroup != null)
             {
                 if (CheckBoxGroup.SelectedItems.Contains(TypeHelper.ChangeType<TValue>(value)))
@@ -70,7 +91,7 @@ namespace Blazui.Component.CheckBox
                 }
                 else
                 {
-                    CheckBoxGroup.Refresh();
+                    CheckBoxGroup.MarkAsRequireRender();
                 }
                 return;
             }
@@ -86,10 +107,6 @@ namespace Blazui.Component.CheckBox
             if (StatusChanged.HasDelegate)
             {
                 _ = StatusChanged.InvokeAsync(Status);
-            }
-            else
-            {
-                StateHasChanged();
             }
         }
 
@@ -130,6 +147,7 @@ namespace Blazui.Component.CheckBox
             {
                 SetFieldValue(checkBoxValue, true);
             }
+            RequireRender = true;
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(checkBoxValue);
@@ -162,5 +180,10 @@ namespace Blazui.Component.CheckBox
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }

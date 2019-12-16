@@ -78,6 +78,15 @@
           "ExampleDialog.razor",
           "ExmapleDialogBase.cs"
         ]
+      },
+      {
+        "title": "向窗口内传参",
+        "name": "Dialog",
+        "files": [
+          "PassParameter.razor",
+          "BasicDialogBase.cs",
+          "TestContent.razor"
+        ]
       }
     ]
   },
@@ -229,6 +238,15 @@
         "files": [
           "IgnoreColumnTable.razor",
           "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "搜索",
+        "name": "Table",
+        "files": [
+          "SearchTable.razor",
+          "SearchTableBase.cs",
           "AutoGenerateColumnTestData.cs"
         ]
       }
@@ -402,6 +420,24 @@
       {
         "title": "带禁用选项",
         "name": "ItemDisabledSelect"
+      },
+      {
+        "title": "绑定枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
+      },
+      {
+        "title": "绑定可空枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindNullableEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
       }
     ]
   },
@@ -432,6 +468,13 @@
         "name": "Menu",
         "files": [
           "VerticalMenu.razor"
+        ]
+      },
+      {
+        "title": "自定义背景",
+        "name": "Menu",
+        "files": [
+          "CustomBackgroundMenu.razor"
         ]
       }
     ]
@@ -482,6 +525,25 @@
         "files": [
           "CheckBoxButtonGroup.razor",
           "CheckBoxGroupBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "upload",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Upload",
+        "files": [
+          "BasicUpload.razor"
+        ]
+      },
+      {
+        "title": "限制上传",
+        "name": "Upload",
+        "files": [
+          "BUploadLimit.razor"
         ]
       }
     ]

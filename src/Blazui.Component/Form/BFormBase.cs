@@ -3,13 +3,19 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Form
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {
+        /// <summary>
+        /// 是否有初始值需要渲染
+        /// </summary>
+        internal bool OriginValueHasSet { get; set; } = false;
         private bool requireRefresh = true;
+        private Task showMessageTask;
         public ElementReference Container { get; set; }
 
         internal List<BFormItemBaseObject> Items { get; set; } = new List<BFormItemBaseObject>();
@@ -43,6 +49,7 @@ namespace Blazui.Component.Form
         [Parameter]
         public object Value { get; set; }
 
+        public IDictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
         /// <summary>
         /// 获取表单输入值
         /// </summary>
@@ -83,40 +90,43 @@ namespace Blazui.Component.Form
             {
                 return;
             }
-            var properties = Value.GetType().GetProperties();
-            foreach (var property in properties)
-            {
-                var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
-                if (formItem == null)
-                {
-                    continue;
-                }
-                var propertyValue = property.GetValue(Value);
-                var formItemType = formItem.GetType();
-                formItemType.GetProperty("OriginValue").SetValue(formItem, propertyValue);
-                formItemType.GetProperty("Value").SetValue(formItem, propertyValue);
-                formItem.Validate();
-                formItem.ShowErrorMessage();
-            }
+            Values = Value.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(Value));
         }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            SetValues();
+        }
+
         internal void ShowErrorMessage()
         {
-            _ = Task.Delay(10).ContinueWith((task) =>
+            if (showMessageTask != null)
+            {
+                return;
+            }
+
+            showMessageTask = Task.Delay(100).ContinueWith((task) =>
             {
                 foreach (var item in Items)
                 {
+                    item.MarkAsRequireRender();
                     item.IsShowing = false;
                 }
+                RequireRender = true;
                 InvokeAsync(StateHasChanged);
+                showMessageTask = null;
             });
         }
+
         protected override void OnAfterRender(bool firstRender)
         {
             if (requireRefresh)
             {
                 requireRefresh = false;
-                SetValues();
+                RequireRender = true;
                 StateHasChanged();
+                return;
             }
         }
 
@@ -124,14 +134,19 @@ namespace Blazui.Component.Form
         {
             foreach (var item in Items)
             {
+                item.MarkAsRequireRender();
                 item.Reset();
             }
+            RequireRender = true;
+            StateHasChanged();
         }
 
         public bool IsValid()
         {
+            RequireRender = true;
             foreach (var item in Items)
             {
+                item.MarkAsRequireRender();
                 item.Validate();
                 item.IsShowing = true;
             }

@@ -37,5 +37,9 @@ namespace Blazui.Component.Select
             }
             await ((BSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
         }
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }
