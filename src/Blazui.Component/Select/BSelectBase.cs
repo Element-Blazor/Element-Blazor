@@ -68,14 +68,13 @@ namespace Blazui.Component.Select
         {
             valueType = typeof(TValue);
             nullable = Nullable.GetUnderlyingType(valueType);
-            isClearable = false;
+            isClearable = nullable != null;
             valueType = nullable ?? valueType;
             var valueSet = false;
             if (valueType.IsEnum)
             {
                 var names = Enum.GetNames(valueType);
                 var values = Enum.GetValues(valueType);
-                //var valueInitilized = false;
                 dict = new Dictionary<TValue, string>();
                 for (int i = 0; i < names.Length; i++)
                 {
