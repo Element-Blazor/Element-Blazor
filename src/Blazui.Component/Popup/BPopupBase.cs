@@ -115,7 +115,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                option.ShadowZIndex++;
+                option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 DropDownMenuOptions.Add(option);
                 InvokeAsync(() =>
@@ -165,7 +165,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                option.ShadowZIndex++;
+                option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 SelectDropDownOptions.Add(option);
                 InvokeAsync(() =>
@@ -191,7 +191,7 @@ namespace Blazui.Component.Popup
                 var option = e.NewItems.OfType<DateTimePickerOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
-                option.ShadowZIndex++;
+                option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 DateTimePickerOptions.Add(option);
                 InvokeAsync(() =>
