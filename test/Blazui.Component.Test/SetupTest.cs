@@ -85,7 +85,7 @@ namespace Blazui.Component.Test
                 }
                 Browser = await Puppeteer.LaunchAsync(new LaunchOptions
                 {
-                    Headless = !Debugger.IsAttached,
+                    Headless = false,
                     DefaultViewport = new ViewPortOptions()
                     {
                         DeviceScaleFactor = 1,

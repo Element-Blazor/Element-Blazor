@@ -48,6 +48,27 @@ namespace Blazui.Component.CheckBox
                     return;
                 }
                 Status = Status.UnChecked;
+                return;
+            }
+
+            if (FormItem == null)
+            {
+                return;
+            }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            if (TypeHelper.Equal(Value, default))
+            {
+                Status = Status.Checked;
+            }
+            else
+            {
+                Status = Status.UnChecked;
             }
         }
 

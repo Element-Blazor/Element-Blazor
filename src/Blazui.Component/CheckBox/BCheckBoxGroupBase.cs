@@ -19,7 +19,36 @@ namespace Blazui.Component.CheckBox
         protected override void OnInitialized()
         {
             base.OnInitialized();
+            SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
+            SelectedItems = new ObservableCollection<TValue>();
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem == null)
+            {
+                return;
+            }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+
+            FormItem.OriginValueHasRendered = true;
+            SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
+            if (FormItem.Value == null)
+            {
+                SelectedItems = new ObservableCollection<TValue>();
+            }
+            else
+            {
+                SelectedItems = new ObservableCollection<TValue>(((List<TValue>)FormItem.OriginValue));
+            }
+            SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+            SetFieldValue(SelectedItems.ToList(), false);
         }
 
         private void SelectedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -29,12 +58,7 @@ namespace Blazui.Component.CheckBox
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
-            //if (OnSetValue == null)
-            //{
-            //    return;
-            //}
             SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
-            //OnSetValue((List<TValue>)value);
             if (value != null)
             {
                 SelectedItems = new ObservableCollection<TValue>(((List<TValue>)value));
@@ -45,11 +69,8 @@ namespace Blazui.Component.CheckBox
             }
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
             SetFieldValue(SelectedItems.ToList(), false);
-        }
-
-        protected override void OnAfterRender(bool firstRender)
-        {
-            base.OnAfterRender(firstRender);
+            RequireRender = true;
+            StateHasChanged();
         }
     }
 }

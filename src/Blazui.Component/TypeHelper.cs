@@ -42,10 +42,14 @@ namespace Blazui.Component
                         var nullType = Nullable.GetUnderlyingType(valueType);
                         result = equalsMethod.MakeGenericMethod(nullType).Invoke(null, new object[] { value1, value2 });
                     }
+                    else
+                    {
+                        throw new BlazuiException("非预期的数据类型：" + valueType.FullName);
+                    }
                 }
                 else
                 {
-                    result = equalsMethod.MakeGenericMethod(valueType).Invoke(null, new object[] { value1, value2 });
+                    result = ValueType.Equals(value1, value2);
                 }
                 return Convert.ToBoolean(result);
             }

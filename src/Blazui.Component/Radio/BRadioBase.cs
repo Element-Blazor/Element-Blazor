@@ -115,6 +115,11 @@ namespace Blazui.Component.Radio
             if (RadioGroup == null)
             {
                 SetFieldValue(SelectedValue, true);
+                if (FormItem != null)
+                {
+                    FormItem.MarkAsRequireRender();
+                    FormItem.Refresh();
+                }
             }
             if (StatusChanged.HasDelegate)
             {

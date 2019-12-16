@@ -23,6 +23,7 @@ namespace Blazui.Component.Select
         private Type valueType;
         private Type nullable;
         internal bool isClearable = true;
+        private bool valueInitilized = false;
         internal bool IsClearButtonClick { get; set; }
 
         internal string Label { get; set; }
@@ -43,18 +44,38 @@ namespace Blazui.Component.Select
 
         protected override void OnParametersSet()
         {
-            if (valueType != null)
+            base.OnParametersSet();
+            if (valueType == null)
+            {
+                InitilizeEnumValues(FormItem != null);
+            }
+            if (FormItem == null)
             {
                 return;
             }
+
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            Label = dict[Value];
+            SetFieldValue(Value, false);
+        }
+
+        private void InitilizeEnumValues(bool firstItemAsValue)
+        {
             valueType = typeof(TValue);
             nullable = Nullable.GetUnderlyingType(valueType);
+            isClearable = false;
             valueType = nullable ?? valueType;
+            var valueSet = false;
             if (valueType.IsEnum)
             {
                 var names = Enum.GetNames(valueType);
                 var values = Enum.GetValues(valueType);
-                var valueInitilized = false;
+                //var valueInitilized = false;
                 dict = new Dictionary<TValue, string>();
                 for (int i = 0; i < names.Length; i++)
                 {
@@ -68,16 +89,18 @@ namespace Blazui.Component.Select
                     var text = field.GetCustomAttributes(typeof(DescriptionAttribute), true)
                         .Cast<DescriptionAttribute>()
                         .FirstOrDefault()?.Description ?? name;
-                    if (!valueInitilized)
+                    if (!valueSet && firstItemAsValue)
                     {
-                        valueInitilized = true;
+                        valueSet = true;
                         if (nullable == null)
                         {
-                            Value = (TValue)value;
-                            InitialValue = Value;
-                            SetFieldValue(Value, false);
+                            if (!TypeHelper.Equal(Value, (TValue)value))
+                            {
+                                Value = (TValue)value;
+                                InitialValue = Value;
+                                SetFieldValue(Value, false);
+                            }
                             Label = text;
-                            isClearable = false;
                         }
                     }
                     dict.Add((TValue)value, text);
@@ -85,16 +108,15 @@ namespace Blazui.Component.Select
                 ChildContent = builder =>
                 {
                     int seq = 0;
-                    foreach (var label in dict.Keys)
+                    foreach (var itemValue in dict.Keys)
                     {
                         builder.OpenComponent<BSelectOption<TValue>>(seq++);
-                        builder.AddAttribute(seq++, "Text", label);
-                        builder.AddAttribute(seq++, "Value", dict[label]);
+                        builder.AddAttribute(seq++, "Text", dict[itemValue]);
+                        builder.AddAttribute(seq++, "Value", itemValue);
                         builder.CloseComponent();
                     }
                 };
             }
-            base.OnParametersSet();
         }
 
         internal void UpdateValue(string text)
@@ -163,7 +185,7 @@ namespace Blazui.Component.Select
         }
 
         private BSelectOptionBase<TValue> selectedOption;
-        protected DropDownOption DropDownOption;
+        internal DropDownOption dropDownOption;
         private Dictionary<TValue, string> dict;
 
         internal async Task OnInternalSelectAsync(BSelectOptionBase<TValue> item)
@@ -180,9 +202,12 @@ namespace Blazui.Component.Select
                 }
             }
 
-            await DropDownOption.Instance.CloseDropDownAsync(DropDownOption);
+            await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
             SelectedOption = item;
             SetFieldValue(item.Value, true);
+            Value = item.Value;
+            dict.TryGetValue(Value, out var label);
+            Label = label;
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
@@ -191,10 +216,7 @@ namespace Blazui.Component.Select
             StateHasChanged();
         }
 
-        [Parameter]
-        public EventCallback<MouseEventArgs> OnClick { get; set; }
-
-        protected void OnSelectClick(MouseEventArgs e)
+        internal void OnSelectClick(MouseEventArgs e)
         {
             if (IsClearButtonClick)
             {
@@ -206,7 +228,7 @@ namespace Blazui.Component.Select
                 return;
             }
 
-            DropDownOption = new DropDownOption()
+            dropDownOption = new DropDownOption()
             {
                 Select = this,
                 Target = elementSelect,
@@ -217,7 +239,7 @@ namespace Blazui.Component.Select
                 },
                 IsShow = true
             };
-            PopupService.SelectDropDownOptions.Add(DropDownOption);
+            PopupService.SelectDropDownOptions.Add(dropDownOption);
         }
 
         protected override void FormItem_OnReset(object value, bool requireRerender)

@@ -25,6 +25,8 @@ namespace Blazui.Component.Form
             {
                 return;
             }
+
+            FormItem.MarkAsRequireRender();
             FormItem.Validate();
             FormItem.ShowErrorMessage();
         }
@@ -50,22 +52,6 @@ namespace Blazui.Component.Form
                 FormItem.OnReset -= FormItem_OnReset;
             }
         }
-
-        //protected override void OnAfterRender(bool firstRender)
-        //{
-        //    if (FormItem == null)
-        //    {
-        //        return;
-        //    }
-        //    if (!FormItem.OriginValueHasSet)
-        //    {
-        //        FormItem.OriginValueHasSet = true;
-        //        FormItem_OnReset(FormItem.OriginValue, false);
-        //        FormItem.MarkAsRequireRender();
-        //        RequireRender = true;
-        //        return;
-        //    }
-        //}
 
     }
 }

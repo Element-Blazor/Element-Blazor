@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Form
@@ -10,10 +11,11 @@ namespace Blazui.Component.Form
     public class BFormBase : BComponentBase, IContainerComponent
     {
         /// <summary>
-        /// 初始值是否已渲染
+        /// 是否有初始值需要渲染
         /// </summary>
-        internal bool OriginValueRendered { get; set; } = true;
+        internal bool OriginValueHasSet { get; set; } = false;
         private bool requireRefresh = true;
+        private Task showMessageTask;
         public ElementReference Container { get; set; }
 
         internal List<BFormItemBaseObject> Items { get; set; } = new List<BFormItemBaseObject>();
@@ -88,24 +90,7 @@ namespace Blazui.Component.Form
             {
                 return;
             }
-            Values = Value.GetType().GetProperties().ToDictionary(x=>x.Name,x=>x.GetValue(Value));
-            //OriginValueRendered = false;
-            //foreach (var property in properties)
-            //{
-            //    var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
-            //    if (formItem == null)
-            //    {
-            //        continue;
-            //    }
-            //    var propertyValue = property.GetValue(Value);
-            //    var formItemType = formItem.GetType();
-            //    formItem.OriginValueRendered = false;
-            //    formItem.OriginValueHasSet = false;
-            //    formItemType.GetProperty("OriginValue").SetValue(formItem, propertyValue);
-            //    formItemType.GetProperty("Value").SetValue(formItem, propertyValue);
-            //    formItem.Validate();
-            //    formItem.ShowErrorMessage();
-            //}
+            Values = Value.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(Value));
         }
 
         protected override void OnParametersSet()
@@ -116,13 +101,21 @@ namespace Blazui.Component.Form
 
         internal void ShowErrorMessage()
         {
-            _ = Task.Delay(10).ContinueWith((task) =>
+            if (showMessageTask != null)
+            {
+                return;
+            }
+
+            showMessageTask = Task.Delay(100).ContinueWith((task) =>
             {
                 foreach (var item in Items)
                 {
+                    item.MarkAsRequireRender();
                     item.IsShowing = false;
                 }
+                RequireRender = true;
                 InvokeAsync(StateHasChanged);
+                showMessageTask = null;
             });
         }
 
@@ -141,14 +134,19 @@ namespace Blazui.Component.Form
         {
             foreach (var item in Items)
             {
+                item.MarkAsRequireRender();
                 item.Reset();
             }
+            RequireRender = true;
+            StateHasChanged();
         }
 
         public bool IsValid()
         {
+            RequireRender = true;
             foreach (var item in Items)
             {
+                item.MarkAsRequireRender();
                 item.Validate();
                 item.IsShowing = true;
             }

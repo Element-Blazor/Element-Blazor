@@ -23,9 +23,15 @@ namespace Blazui.Component.Form
             {
                 return;
             }
+            if (OriginValueHasSet)
+            {
+                return;
+            }
+            OriginValueHasSet = true;
             Form.Values.TryGetValue(Name, out var value);
             OriginValue = (TValue)value;
             Value = (TValue)value;
+            OriginValueHasRendered = false;
         }
 
         public override void Validate()
@@ -50,6 +56,7 @@ namespace Blazui.Component.Form
             Value = OriginValue;
             if (OnReset != null)
             {
+                RequireRender = true;
                 OnReset(OriginValue, true);
             }
             ValidationResult = null;

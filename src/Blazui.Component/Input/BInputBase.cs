@@ -127,10 +127,17 @@ namespace Blazui.Component.Input
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            if (FormItem != null)
+            if (FormItem == null)
             {
-                Value = FormItem.OriginValue;
+                return;
             }
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            Value = FormItem.OriginValue;
+            SetFieldValue(Value, false);
         }
 
         protected override bool ShouldRender()
