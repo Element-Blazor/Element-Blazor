@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.Loading
 {
-    public class BasicLoadingBase : ComponentBase
+    public class ManualLoadingBase : ComponentBase
     {
         protected List<TestData> Datas = new List<TestData>();
 
@@ -38,29 +38,15 @@ namespace Blazui.ServerRender.Demo.Loading
             });
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-            await table.WithLoadingAsync(async () =>
-            {
-                await Task.Delay(2000);
-            });
-        }
-
-        protected Task RenderCompleted(object arg)
-        {
-            //table.Loading(LoadingService);
-            return Task.CompletedTask;
-        }
-        protected Task CustomRenderCompleted(object arg)
-        {
-            //table.Loading(LoadingService, "拼命加载中", "el-icon-loading", "rgba(0, 0, 0, 0.8)");
-            return Task.CompletedTask;
-        }
-
+        
         protected void ShowLoading(object arg)
         {
-            //table.Loading(LoadingService);
+            table.Loading();
+        }
+
+        protected void CloseLoading()
+        {
+            table.Close();
         }
     }
 }

@@ -26,9 +26,15 @@ namespace Blazui.Component.Radio
         [Parameter]
         public TValue SelectedValue { get; set; }
 
+        /// <summary>
+        /// 当选择状态发生改变时触发
+        /// </summary>
         [Parameter]
         public EventCallback<RadioStatus> StatusChanged { get; set; }
 
+        /// <summary>
+        /// 当选择的值发生改变时触发
+        /// </summary>
         [Parameter]
         public EventCallback<TValue> SelectedValueChanged { get; set; }
 
