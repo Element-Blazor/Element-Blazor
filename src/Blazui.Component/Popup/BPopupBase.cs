@@ -37,7 +37,7 @@ namespace Blazui.Component.Popup
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
 
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
-        internal protected List<DialogOption> DialogOptions = new List<DialogOption>();
+        internal List<DialogOption> DialogOptions = new List<DialogOption>();
         internal protected List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
         internal protected List<DropDownOption> SelectDropDownOptions = new List<DropDownOption>();
         internal protected List<DropDownOption> DropDownMenuOptions = new List<DropDownOption>();
