@@ -29,17 +29,16 @@ namespace Blazui.Component.Popup
         [Inject]
         private PopupService PopupService { get; set; }
 
-        protected int ShadowCount { get; set; }
+        internal int ShadowCount { get; set; }
         [Inject]
         private Document Document { get; set; }
-        public Action OnDispose { get; internal set; }
         private static int ZIndex { get; set; } = 2000;
-        protected List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
+        internal List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
 
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
-        internal protected List<DialogOption> DialogOptions = new List<DialogOption>();
-        internal protected List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
+        internal List<DialogOption> DialogOptions = new List<DialogOption>();
+        internal List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
         internal protected List<DropDownOption> SelectDropDownOptions = new List<DropDownOption>();
         internal protected List<DropDownOption> DropDownMenuOptions = new List<DropDownOption>();
         internal protected List<SubMenuOption> SubMenuOptions = new List<SubMenuOption>();

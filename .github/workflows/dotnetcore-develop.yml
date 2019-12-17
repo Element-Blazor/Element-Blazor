@@ -1,7 +1,7 @@
 name: Publish Develop
 
 on: 
-  push:
+  pull_request:
     branches: 
       - develop
 
@@ -23,6 +23,6 @@ jobs:
       with: 
         token: ${{secrets.github_token}}
     - name: pack nuget
-      run: dotnet pack src/Blazui.Component/Blazui.Component.csproj /p:PackageVersion=0.0.4.${BUILD_NUMBER} -c Release --no-build --no-restore
+      run: dotnet pack src/Blazui.Component/Blazui.Component.csproj /p:PackageVersion=0.0.4.${BUILD_NUMBER}-develop -c Release --no-build --no-restore
     - name: push nuget
-      run: dotnet nuget push src/Blazui.Component/bin/Release/Blazui.Component.0.0.4.${BUILD_NUMBER}-develop.nupkg -s https://www.myget.org/F/wzxinchen-blazor/api/v2/package
+      run: dotnet nuget push src/Blazui.Component/bin/Release/Blazui.Component.0.0.4.${BUILD_NUMBER}-develop.nupkg -s https://www.myget.org/F/wzxinchen-blazor/api/v2/package -k 2564e20d-4cd4-482e-ba4b-daf05e2effa8

@@ -30,6 +30,7 @@ namespace Blazui.Component
         public static async Task WithLoadingAsync(this IContainerComponent container, Func<Task> action)
         {
             EnsureComponentStatus(container);
+            var id = container.Container.Id;
             container.LoadingService.Show(new LoadingOption()
             {
                 Target = container.Container
@@ -40,7 +41,7 @@ namespace Blazui.Component
             }
             finally
             {
-                container.LoadingService.Close();
+                container.Close();
             }
         }
 
@@ -65,7 +66,7 @@ namespace Blazui.Component
             }
             finally
             {
-                container.LoadingService.Close();
+                container.Close();
             }
         }
         public static async Task WithLoadingAsync(this IContainerComponent container, Func<Task> action, string text, string iconClass, string background)
@@ -84,7 +85,7 @@ namespace Blazui.Component
             }
             finally
             {
-                container.LoadingService.Close();
+                container.Close();
             }
         }
 
