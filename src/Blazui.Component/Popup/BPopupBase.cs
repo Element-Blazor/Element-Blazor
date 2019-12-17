@@ -33,7 +33,7 @@ namespace Blazui.Component.Popup
         [Inject]
         private Document Document { get; set; }
         private static int ZIndex { get; set; } = 2000;
-        protected List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
+        internal List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
 
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
