@@ -15,7 +15,7 @@ namespace Blazui.ServerRender.Demo.Loading
         {
             loadingService.Show();
             await Task.Delay(2000);
-            loadingService.Close();
+            loadingService.CloseFullScreenLoading();
         }
     }
 }

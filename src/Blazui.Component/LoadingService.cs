@@ -27,7 +27,13 @@ namespace Blazui.Component
             });
         }
 
-        public void Close()
+        public void Close(string targetId)
+        {
+            var option = LoadingOptions.FirstOrDefault(x => x.Target.Id == targetId);
+            LoadingOptions.Remove(option);
+        }
+
+        public void CloseFullScreenLoading()
         {
             var option = LoadingOptions.FirstOrDefault(x => string.IsNullOrWhiteSpace(x.Target.Id));
             LoadingOptions.Remove(option);
