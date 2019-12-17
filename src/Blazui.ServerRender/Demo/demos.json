@@ -268,7 +268,7 @@
         "name": "Loading",
         "files": [
           "CustomLoading.razor",
-          "BasicLoadingBase.cs"
+          "CustomLoadingBase.cs"
         ]
       },
       {
@@ -284,7 +284,7 @@
         "name": "Loading",
         "files": [
           "ManualLoading.razor",
-          "BasicLoadingBase.cs"
+          "ManualLoadingBase.cs"
         ]
       }
     ]

@@ -8,6 +8,7 @@ namespace Blazui.Component
 {
     public interface IContainerComponent
     {
+        LoadingService LoadingService { get; set; }
         ElementReference Container { get; set; }
 
     }
