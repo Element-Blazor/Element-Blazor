@@ -38,7 +38,7 @@ namespace Blazui.Component.Popup
 
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
         internal List<DialogOption> DialogOptions = new List<DialogOption>();
-        internal protected List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
+        internal List<DateTimePickerOption> DateTimePickerOptions = new List<DateTimePickerOption>();
         internal protected List<DropDownOption> SelectDropDownOptions = new List<DropDownOption>();
         internal protected List<DropDownOption> DropDownMenuOptions = new List<DropDownOption>();
         internal protected List<SubMenuOption> SubMenuOptions = new List<SubMenuOption>();
