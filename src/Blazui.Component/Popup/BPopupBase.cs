@@ -32,7 +32,6 @@ namespace Blazui.Component.Popup
         protected int ShadowCount { get; set; }
         [Inject]
         private Document Document { get; set; }
-        public Action OnDispose { get; internal set; }
         private static int ZIndex { get; set; } = 2000;
         protected List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
