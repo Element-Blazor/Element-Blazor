@@ -34,6 +34,7 @@ namespace Blazui.Component
 
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }
+
         [CascadingParameter]
         public BBadgeBase Badge { get; set; }
         /// <summary>
