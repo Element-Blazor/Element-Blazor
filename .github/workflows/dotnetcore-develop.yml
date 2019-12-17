@@ -1,4 +1,4 @@
-name: .NET Core
+name: Publish Develop
 
 on: 
   pull_request:
