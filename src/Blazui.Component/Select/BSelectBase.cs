@@ -205,8 +205,11 @@ namespace Blazui.Component.Select
             SelectedOption = item;
             SetFieldValue(item.Value, true);
             Value = item.Value;
-            dict.TryGetValue(Value, out var label);
-            Label = label;
+            if (dict != null)
+            {
+                dict.TryGetValue(Value, out var label);
+                Label = label;
+            }
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
