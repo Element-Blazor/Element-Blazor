@@ -21,10 +21,10 @@ namespace Blazui.Component.Input
         public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
 
         [Parameter]
-        public bool EnableClearButton { get; set; }
+        public bool IsClearButtonClick { get; set; }
 
         [Parameter]
-        public EventCallback<bool> EnableClearButtonChanged { get; set; }
+        public EventCallback<bool> IsClearButtonClickChanged { get; set; }
         [Parameter]
         public TValue Value { get; set; }
 
@@ -63,10 +63,10 @@ namespace Blazui.Component.Input
 
         protected void ClearOnClick()
         {
-            EnableClearButton = true;
-            if (EnableClearButtonChanged.HasDelegate)
+            IsClearButtonClick = true;
+            if (IsClearButtonClickChanged.HasDelegate)
             {
-                _ = EnableClearButtonChanged.InvokeAsync(EnableClearButton);
+                _ = IsClearButtonClickChanged.InvokeAsync(IsClearButtonClick);
             }
             Value = default;
             if (ValueChanged.HasDelegate)
@@ -133,7 +133,6 @@ namespace Blazui.Component.Input
             }
             if (FormItem.OriginValueHasRendered)
             {
-                SetFieldValue(Value, false);
                 return;
             }
             FormItem.OriginValueHasRendered = true;
