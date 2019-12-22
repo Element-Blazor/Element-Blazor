@@ -11,6 +11,7 @@ namespace Blazui.ServerRender.Demo.Form
     {
         public string Name { get; set; }
         public Area Area { get; set; }
+        public Area? Area1 { get; set; }
         public DateTime? Time { get; set; }
         public bool Delivery { get; set; }
         public List<string> Type { get; set; }
@@ -19,7 +20,7 @@ namespace Blazui.ServerRender.Demo.Form
 
         public override string ToString()
         {
-            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，性质：{string.Join(",", Type)}，特殊资源：{Resource}，活动形式：{Description}";
+            return $"名称：{Name},区域：{Area},区域2：{Area1},日期：{Time?.ToString()}，即时配送：{Delivery}，性质：{string.Join(",", Type)}，特殊资源：{Resource}，活动形式：{Description}";
         }
     }
 
