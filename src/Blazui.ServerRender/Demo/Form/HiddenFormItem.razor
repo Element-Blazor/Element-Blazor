@@ -7,9 +7,8 @@
             <BSelect TValue="Area" Placeholder="请选择活动区域">
             </BSelect>
         </BFormItem>
-        <BFormItem TValue="Area?" Label="活动区域2" Name="@nameof(Activity.Area1)">
-            <BSelect TValue="Area?" Placeholder="请选择活动区域">
-            </BSelect>
+        <BFormItem TValue="Area?" Label="活动区域2" Name="@nameof(Activity.Area1)" IsHidden="true">
+            <BInput Value="(Area?)Area.Shanghai"></BInput>
         </BFormItem>
         <BFormItem TValue="DateTime?" Label="活动时间" IsRequired="true" Name="@nameof(Activity.Time)">
             <BDatePicker></BDatePicker>

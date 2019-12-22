@@ -111,7 +111,8 @@
         "name": "Form",
         "files": [
           "BasicForm.razor",
-          "BasicFormBase.cs"
+          "BasicFormBase.cs",
+          "Activity.cs"
         ]
       },
       {
@@ -119,7 +120,8 @@
         "name": "Form",
         "files": [
           "InlineForm.razor",
-          "InlineFormBase.cs"
+          "InlineFormBase.cs",
+          "Activity.cs"
         ]
       },
       {
@@ -127,7 +129,8 @@
         "name": "Form",
         "files": [
           "AlignForm.razor",
-          "BasicFormBase.cs"
+          "BasicFormBase.cs",
+          "Activity.cs"
         ]
       },
       {
@@ -135,7 +138,17 @@
         "name": "Form",
         "files": [
           "InitilizeForm.razor",
-          "InitilizeFormBase.cs"
+          "InitilizeFormBase.cs",
+          "Activity.cs"
+        ]
+      },
+      {
+        "title": "隐藏表单项",
+        "name": "Form",
+        "files": [
+          "HiddenFormItem.razor",
+          "BasicFormBase.cs",
+          "Activity.cs"
         ]
       }
     ]
@@ -247,7 +260,8 @@
         "files": [
           "SearchTable.razor",
           "SearchTableBase.cs",
-          "AutoGenerateColumnTestData.cs"
+          "AutoGenerateColumnTestData.cs",
+          "SearchCondition.cs"
         ]
       }
     ]
