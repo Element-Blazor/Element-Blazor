@@ -32,6 +32,7 @@ namespace Blazui.ServerRender.Demo.Form
             base.OnParametersSet();
             value = new Activity()
             {
+                Resource1 = Resource.Option2,
                 Area = Area.Shanghai,
                 Delivery = true,
                 Description = "详情",

@@ -88,7 +88,28 @@ namespace Blazui.Component.Radio
             SelectedValue = TypeHelper.ChangeType<TValue>(value);
         }
 
-        protected void OnRadioChanged(MouseEventArgs e)
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem == null)
+            {
+                return;
+            }
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            if (FormItem.Form.Values.Any())
+            {
+                SelectedValue = FormItem.OriginValue;
+                SetFieldValue(SelectedValue, false);
+                return;
+            }
+            SetFieldValue(Value, false);
+        }
+
+        protected void ChangeRadio(MouseEventArgs e)
         {
             if (IsDisabled)
             {
@@ -121,11 +142,6 @@ namespace Blazui.Component.Radio
             if (RadioGroup == null)
             {
                 SetFieldValue(SelectedValue, true);
-                if (FormItem != null)
-                {
-                    FormItem.MarkAsRequireRender();
-                    FormItem.Refresh();
-                }
             }
             if (StatusChanged.HasDelegate)
             {
