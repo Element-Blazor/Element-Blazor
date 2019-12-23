@@ -10,10 +10,6 @@ namespace Blazui.Component.Form
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {
-        /// <summary>
-        /// 是否有初始值需要渲染
-        /// </summary>
-        internal bool OriginValueHasSet { get; set; } = false;
         private bool requireRefresh = true;
         private Task showMessageTask;
         public ElementReference Container { get; set; }

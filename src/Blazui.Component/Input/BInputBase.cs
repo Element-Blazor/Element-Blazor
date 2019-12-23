@@ -133,11 +133,13 @@ namespace Blazui.Component.Input
             }
             if (FormItem.OriginValueHasRendered)
             {
-                SetFieldValue(Value, false);
                 return;
             }
             FormItem.OriginValueHasRendered = true;
-            Value = FormItem.OriginValue;
+            if (FormItem.Form.Values.Any())
+            {
+                Value = FormItem.OriginValue;
+            }
             SetFieldValue(Value, false);
         }
 
