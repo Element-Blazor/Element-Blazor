@@ -69,6 +69,7 @@ namespace Blazui.Component.Input
                 _ = EnableClearButtonChanged.InvokeAsync(EnableClearButton);
             }
             Value = default;
+            Console.WriteLine($"ClearOnClick 设置输入框 {Name} 值:" + Value);
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -82,6 +83,7 @@ namespace Blazui.Component.Input
             {
                 Value = default;
             }
+            Console.WriteLine($"OnFocusAsync 设置输入框 {Name} 值:" + Value);
             IsFocus = true;
             return Task.CompletedTask;
         }
@@ -114,6 +116,7 @@ namespace Blazui.Component.Input
             {
                 Value = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
             }
+            Console.WriteLine($"FormItem_OnReset 设置输入框 {Name} 值:" + Value);
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -140,6 +143,7 @@ namespace Blazui.Component.Input
             {
                 Value = FormItem.OriginValue;
             }
+            Console.WriteLine($"OnParametersSet 设置输入框 {Name} 值:" + Value);
             SetFieldValue(Value, false);
         }
 
