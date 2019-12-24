@@ -17,19 +17,26 @@ namespace Blazui.Component.Test
 
         async Task StartTestAsync(Func<Task> action)
         {
-            await InitilizeAsync();
-            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
-            while (true)
+            try
             {
-                try
+                await InitilizeAsync();
+                await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
+                while (true)
                 {
-                    await action();
-                    break;
+                    try
+                    {
+                        await action();
+                        break;
+                    }
+                    catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
+                    {
+                        await Task.Delay(50);
+                    }
                 }
-                catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
-                {
-                    await Task.Delay(50);
-                }
+            }
+            finally
+            {
+                TestSemaphoreSlim.Release();
             }
         }
 

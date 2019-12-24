@@ -13,13 +13,13 @@ namespace Blazui.Component.Test
         {
         }
 
-        private async ValueTask TestCaseAsync(string name)
+        private async Task TestCaseAsync(string name)
         {
             await TestCaseAsync("Form 表单", name);
         }
 
         [Fact]
-        public async ValueTask Test1Async()
+        public async Task Test1Async()
         {
             await TestCaseAsync("基础用法");
         }
