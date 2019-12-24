@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Blazui.Component.Container
 {
-    public class BLayoutBase : BComponentBase
+    public class BLayoutBase : BComponentBase, IContainerComponent
     {
         [Parameter]
         public bool Fit { get; set; } = true;
@@ -38,5 +38,9 @@ namespace Blazui.Component.Container
         [Parameter]
         public RenderFragment South { get; set; }
 
+        /// <summary>
+        /// 用于捕获 DOM 节点以用于展示 Loading
+        /// </summary>
+        public ElementReference Container { get; set; }
     }
 }

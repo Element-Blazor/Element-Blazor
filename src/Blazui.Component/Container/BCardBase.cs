@@ -6,23 +6,42 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component.Container
 {
-    public class BCardBase<TModel> : ComponentBase
+    public class BCardBase : BComponentBase, IContainerComponent
     {
+        internal HtmlPropertyBuilder wrapperClassBuilder;
+        internal HtmlPropertyBuilder bodyClassBuilder;
+
+        /// <summary>
+        /// 最外层的 Class 类
+        /// </summary>
         [Parameter]
-        public Func<TModel, string> Cls { get; set; }
+        public string Cls { get; set; }
+
+        /// <summary>
+        /// Body 上的 Class 类
+        /// </summary>
         [Parameter]
-        public Func<TModel, string> Style { get; set; }
+        public string BodyCls { get; set; }
+
+        /// <summary>
+        /// 阴影类型
+        /// </summary>
         [Parameter]
-        public Func<TModel, string> BodyCls { get; set; }
+        public ShadowShowType Shadow { get; set; } = ShadowShowType.Always;
 
         [Parameter]
-        public Func<TModel, ShadowShowType> Shadow { get; set; }
-        [Parameter]
-        public IEnumerable<TModel> DataSource { get; set; }
-        [Parameter]
-        public RenderFragment<TModel> Header { get; set; }
+        public RenderFragment Header { get; set; }
 
         [Parameter]
-        public RenderFragment<TModel> Body { get; set; }
+        public RenderFragment Body { get; set; }
+
+        public ElementReference Container { get; set; }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            wrapperClassBuilder = HtmlPropertyBuilder.Create().Add("el-card", "box-card", $"is-{Shadow.ToString().ToLower()}-shadow", Cls);
+            bodyClassBuilder = HtmlPropertyBuilder.Create().Add("el-card__body", BodyCls);
+        }
     }
 }

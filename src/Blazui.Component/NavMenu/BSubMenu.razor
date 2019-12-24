@@ -14,7 +14,7 @@
     </div>
     @if (IsVertical)
     {
-        <ul role="menu" class="el-menu el-menu--inline" style="@(IsOpened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="">
+        <ul role="menu" class="el-menu el-menu--inline" style="@(IsOpened?"":"display:none;")" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="" @ref="Container">
             <CascadingValue Value="this">
                 @ChildContent
             </CascadingValue>
