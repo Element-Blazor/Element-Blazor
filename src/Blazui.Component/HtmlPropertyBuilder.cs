@@ -12,12 +12,20 @@ namespace Blazui.Component
     {
         private List<string> properties = new List<string>();
         /// <summary>
-        /// 创建一个 <seealso cref="HtmlPropertyBuilder"/>
+        /// 创建一个 <seealso cref="CssClassBuilder"/>
         /// </summary>
         /// <returns></returns>
-        public static HtmlPropertyBuilder Create()
+        public static HtmlPropertyBuilder CreateCssClassBuilder()
         {
-            return new HtmlPropertyBuilder();
+            return new CssClassBuilder();
+        }
+        /// <summary>
+        /// 创建一个 <seealso cref="CssStyleBuilder"/>
+        /// </summary>
+        /// <returns></returns>
+        public static HtmlPropertyBuilder CreateCssStyleBuilder()
+        {
+            return new CssStyleBuilder();
         }
 
         /// <summary>
@@ -49,6 +57,11 @@ namespace Blazui.Component
         internal string ToString(string sep)
         {
             return string.Join(sep, properties.Where(x => !string.IsNullOrWhiteSpace(x)));
+        }
+
+        public override string ToString()
+        {
+            return ToString("");
         }
     }
 }

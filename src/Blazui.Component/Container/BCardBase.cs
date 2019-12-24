@@ -40,8 +40,8 @@ namespace Blazui.Component.Container
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            wrapperClassBuilder = HtmlPropertyBuilder.Create().Add("el-card", "box-card", $"is-{Shadow.ToString().ToLower()}-shadow", Cls);
-            bodyClassBuilder = HtmlPropertyBuilder.Create().Add("el-card__body", BodyCls);
+            wrapperClassBuilder = CssClassBuilder.CreateCssClassBuilder().Add("el-card", "box-card", $"is-{Shadow.ToString().ToLower()}-shadow", Cls);
+            bodyClassBuilder = CssClassBuilder.CreateCssClassBuilder().Add("el-card__body", BodyCls);
         }
     }
 }
