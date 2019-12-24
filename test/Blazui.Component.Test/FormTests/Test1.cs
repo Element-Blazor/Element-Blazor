@@ -14,6 +14,7 @@ namespace Blazui.Component.Test.FormTests
         private ElementHandle submitButton;
         private ElementHandle resetButton;
         private ElementHandle[] formItems;
+        private string expectedDate;
 
         public async Task TestAsync(DemoCard demoCard)
         {
@@ -48,6 +49,25 @@ namespace Blazui.Component.Test.FormTests
             firstItem = await demoCard.Page.QuerySelectorAsync("div.el-select-dropdown.el-popper > div.el-scrollbar > div.el-select-dropdown__wrap.el-scrollbar__wrap > ul.el-scrollbar__view.el-select-dropdown__list > li.el-select-dropdown__item");
             Assert.Null(firstItem);
             filledIndexes.Add(2);
+            await AssertFormAsync(demoCard, true, filledIndexes);
+
+
+            var formItem4 = formItems.Skip(3).FirstOrDefault();
+            var content4 = await formItem4.QuerySelectorAsync("div.el-form-item__content");
+            var selector4 = await content4.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date");
+            await selector4.ClickAsync();
+            await Task.Delay(500);
+            var firstItem4 = await demoCard.Page.QuerySelectorAsync("div.el-picker-panel.el-date-picker.el-popper > div.el-picker-panel__body-wrapper > div.el-picker-panel__body > div.el-picker-panel__content > table > tbody > tr.el-date-table__row > td.available > div > span");
+            await firstItem4.ClickAsync();
+            var day = await firstItem4.EvaluateFunctionAsync<string>("x=>x.innerText");
+            expectedDate = DateTime.Now.ToString($"yyyy-MM-{day.PadLeft(2, '0')}");
+            await Task.Delay(500);
+            var input4 = await content4.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date > input[type='text'][placeholder='请选择日期'][name='Time'].el-input__inner");
+            var selectedItemText4 = await input4.EvaluateFunctionAsync<string>("x=>x.value");
+            Assert.Equal(expectedDate, selectedItemText4);
+            firstItem4 = await demoCard.Page.QuerySelectorAsync("div.el-picker-panel.el-date-picker.el-popper > div.el-picker-panel__body-wrapper > div.el-picker-panel__body > div.el-picker-panel__content > table > tbody > tr.el-date-table__row > td.available > div > span");
+            Assert.Null(firstItem);
+            filledIndexes.Add(3);
             await AssertFormAsync(demoCard, true, filledIndexes);
         }
 
@@ -150,10 +170,19 @@ namespace Blazui.Component.Test.FormTests
                     var input = await content.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date > input[type='text'][placeholder='请选择日期'][name='Time'].el-input__inner");
                     Assert.NotNull(input);
                     var inputValue = await input.EvaluateFunctionAsync<string>("x=>x.value");
-                    Assert.Equal(string.Empty, inputValue);
                     var icon = await content.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date > span.el-input__prefix > i.el-input__icon.el-icon-date");
                     Assert.NotNull(icon);
-                    await AssertErrorAsync(showRequired, error, "请确认活动时间");
+                    if (filledIndexes.Contains(index))
+                    {
+                        var selectedDay = await input.EvaluateFunctionAsync<string>("x=>x.value");
+                        Assert.Equal(expectedDate, selectedDay);
+                        Assert.Null(error);
+                    }
+                    else
+                    {
+                        Assert.Equal(string.Empty, inputValue);
+                        await AssertErrorAsync(showRequired, error, "请确认活动时间");
+                    }
                     continue;
                 }
 
