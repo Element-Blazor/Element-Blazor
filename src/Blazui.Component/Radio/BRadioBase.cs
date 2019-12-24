@@ -97,12 +97,16 @@ namespace Blazui.Component.Radio
             }
             if (FormItem.OriginValueHasRendered)
             {
-                SetFieldValue(Value, false);
                 return;
             }
             FormItem.OriginValueHasRendered = true;
-            SelectedValue = FormItem.OriginValue;
-            SetFieldValue(SelectedValue, false);
+            if (FormItem.Form.Values.Any())
+            {
+                SelectedValue = FormItem.OriginValue;
+                SetFieldValue(SelectedValue, false);
+                return;
+            }
+            SetFieldValue(Value, false);
         }
 
         protected void ChangeRadio(MouseEventArgs e)

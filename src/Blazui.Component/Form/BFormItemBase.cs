@@ -39,6 +39,7 @@ namespace Blazui.Component.Form
             OriginValueHasSet = true;
             Form.Values.TryGetValue(Name, out var value);
             OriginValue = (TValue)value;
+            Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             Value = (TValue)value;
             OriginValueHasRendered = false;
         }
@@ -62,6 +63,7 @@ namespace Blazui.Component.Form
 
         public override void Reset()
         {
+            Console.WriteLine($"设置 FormItem {Name} 值:" + OriginValue);
             Value = OriginValue;
             if (OnReset != null)
             {
