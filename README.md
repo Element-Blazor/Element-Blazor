@@ -23,93 +23,13 @@ Blazui 演示地址：http://blazui.com:9000
 1. 安装 .Net Core 3.1
 2. 安装 VS2019，更新到最新版
 
-#### 贡献说明
+#### 源码说明
 
 拉取代码，用 VS2019 打开，直接启动 Blazui.ServerRender 项目
 
-#### 使用说明
+#### 使用文档
 
-基本组件已开发完成
-
-1. 新建 Blazor 服务器端渲染应用
-2. 安装 Nuget 包 Blazui.Component
-3. 修改 Pages 文件夹下的 _Host.cshtml 为以下内容
-
-```
-@page "/"
-@namespace Blazui.ServerRender.Pages
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
-    <base href="~/" />
-    <link href="css/site.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
-</head>
-<body>
-    <app>
-        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
-    </app>
-
-    <script src="_content/Blazui.Component/js/dom.js"></script>
-    <script src="_framework/blazor.server.js"></script>
-</body>
-</html>
-
-```
-4. 在 _Imports.razor 文件中添加以下代码
-
-```
-@using Blazui.Component.Container
-@using Blazui.Component.Button
-@using Blazui.Component.Dom
-@using Blazui.Component.Dynamic
-@using Blazui.Component.NavMenu
-@using Blazui.Component.Input
-@using Blazui.Component.Radio
-@using Blazui.Component.Select
-@using Blazui.Component.CheckBox
-@using Blazui.Component.Switch
-@using Blazui.Component.Table
-@using Blazui.Component.Popup
-@using Blazui.Component.Pagination
-@using Blazui.Component.Form
-@using Blazui.Component.Upload
-```
-在 Startup.cs 的 ConfigureServices 方法中添加以下代码
-
-```
-services.AddBlazuiServices();
-```
-为了使弹窗类组件生效，需要将 MainLayout.razor 的内容改为如下
-
-```
-@inherits LayoutComponentBase
-<BPopup></BPopup>
-
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    @Body
-</div>
-```
-
-
-5. 在任意一个页面输入以下代码，运行可看效果
-
-```
-<BButton Type="@ButtonType.Primary">主要按钮</BButton>
-```
-6. 根据演示页面的示例代码写出您想要的效果
-
-7. 有可能会遇到一个由NavigtaionManager抛出的异常，忽略即可
+Blazor 组件库 Blazui 开发第一弹【安装入门】 https://www.cnblogs.com/wzxinchen/p/12096092.html
 
 #### 计划
 
