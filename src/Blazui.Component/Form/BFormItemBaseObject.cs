@@ -12,7 +12,7 @@ namespace Blazui.Component.Form
         /// <summary>
         /// 初始值是否已渲染
         /// </summary>
-        internal bool OriginValueHasRendered { get; set; } = true;
+        internal bool OriginValueHasRendered { get; set; } = false;
         /// <summary>
         /// 初始值是否已设置
         /// </summary>

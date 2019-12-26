@@ -59,8 +59,15 @@ namespace Blazui.Component.Select
                 return;
             }
             FormItem.OriginValueHasRendered = true;
-            Value = FormItem.OriginValue;
-            Label = dict[Value];
+            if (FormItem.Form.Values.Any())
+            {
+                Value = FormItem.OriginValue;
+            }
+
+            if (dict != null && Value != null)
+            {
+                Label = dict[Value];
+            }
             SetFieldValue(Value, false);
         }
 

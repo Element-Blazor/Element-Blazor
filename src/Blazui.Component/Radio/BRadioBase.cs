@@ -104,9 +104,7 @@ namespace Blazui.Component.Radio
             {
                 SelectedValue = FormItem.OriginValue;
                 SetFieldValue(SelectedValue, false);
-                return;
             }
-            SetFieldValue(Value, false);
         }
 
         protected void ChangeRadio(MouseEventArgs e)
