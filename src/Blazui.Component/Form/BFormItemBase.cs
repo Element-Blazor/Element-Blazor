@@ -17,12 +17,12 @@ namespace Blazui.Component.Form
         internal TValue OriginValue { get; set; }
         public TValue Value { get; set; }
 
-        internal CssBuilder formItemCssBuilder;
+        internal HtmlPropertyBuilder formItemCssBuilder;
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            formItemCssBuilder = CssBuilder.Create().AddIf(IsHidden, "display:none");
+            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none");
 
             if (!Form.Values.Any())
             {

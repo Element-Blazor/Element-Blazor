@@ -1,6 +1,6 @@
 ﻿@inherits BMenuBase
 <CascadingValue Value=this>
     <CascadingValue Value="Options">
-        <ul role="menubar" class="@modeClass el-menu" style="overflow:auto" @onmouseout:stopPropagation>@ChildContent</ul>
+        <ul role="menubar" class="@modeClass el-menu" style="overflow:auto" @onmouseout:stopPropagation @ref="Container">@ChildContent</ul>
     </CascadingValue>
 </CascadingValue>
