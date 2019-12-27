@@ -29,7 +29,13 @@ Blazui 演示地址：http://blazui.com:9000
 
 #### 使用文档
 
-Blazor 组件库 Blazui 开发第一弹【安装入门】 https://www.cnblogs.com/wzxinchen/p/12096092.html
+Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/12096092.html
+
+#### 案例展示
+
+地址：http://wandotnet.top/quartz
+用户名密码：blazor,666666
+作者：deathvicky
 
 #### 计划
 
