@@ -480,6 +480,13 @@
         "files": [
           "BasicInput.razor"
         ]
+      },
+      {
+        "title": "按钮尺寸",
+        "name": "BasicInput",
+        "files": [
+          "SizeInput.razor"
+        ]
       }
     ]
   },
