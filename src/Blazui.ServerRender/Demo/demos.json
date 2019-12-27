@@ -300,6 +300,14 @@
           "ManualLoading.razor",
           "ManualLoadingBase.cs"
         ]
+      },
+      {
+        "title": "卡片 Loading",
+        "name": "Loading",
+        "files": [
+          "CardLoading.razor",
+          "CardLoadingBase.cs"
+        ]
       }
     ]
   },
