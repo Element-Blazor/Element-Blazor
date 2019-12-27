@@ -308,6 +308,14 @@
           "CardLoading.razor",
           "CardLoadingBase.cs"
         ]
+      },
+      {
+        "title": "菜单 Loading",
+        "name": "Loading",
+        "files": [
+          "MenuLoading.razor",
+          "MenuLoadingBase.cs"
+        ]
       }
     ]
   },
