@@ -39,10 +39,8 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 作者：deathvicky
 
 ![image.png-58.1kB][1]
-#### 计划
 
-###### [x] 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
-###### 开发文档 [ ]
+类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
 
 #### 组件列表
 
@@ -67,7 +65,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 | Form 表单    | http://blazui.com:9000/form        | [√] 常规支持 <br /> [√] 三种对齐方式 <br /> [√] 单行表单 |       |
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
 | 文件上传     |      | |[√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传
-
+| Markdown 编辑器 |
 #### 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
