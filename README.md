@@ -37,6 +37,8 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 1. 地址：http://wandotnet.top/quartz
 用户名密码：blazor,666666
 作者：deathvicky
+不要改密码！！！
+若发现密码被改可进群告之我们
 
 ![image.png-58.1kB][1]
 
