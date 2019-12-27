@@ -30,6 +30,8 @@ namespace Blazui.Component.Test.FormTests
             await formItem1Input.TypeAsync("测试活动");
             await label1.ClickAsync();
             await Task.Delay(50);
+            var text1 = await formItem1Input.EvaluateFunctionAsync<string>("x=>x.value");
+            Assert.Equal("测试活动", text1.Trim());
             filledIndexes.Add(0);
             await AssertFormAsync(demoCard, true, filledIndexes);
 
@@ -51,7 +53,7 @@ namespace Blazui.Component.Test.FormTests
             filledIndexes.Add(2);
             await AssertFormAsync(demoCard, true, filledIndexes);
 
-
+            //活动时间
             var formItem4 = formItems.Skip(3).FirstOrDefault();
             var content4 = await formItem4.QuerySelectorAsync("div.el-form-item__content");
             var selector4 = await content4.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date");
@@ -68,6 +70,47 @@ namespace Blazui.Component.Test.FormTests
             firstItem4 = await demoCard.Page.QuerySelectorAsync("div.el-picker-panel.el-date-picker.el-popper > div.el-picker-panel__body-wrapper > div.el-picker-panel__body > div.el-picker-panel__content > table > tbody > tr.el-date-table__row > td.available > div > span");
             Assert.Null(firstItem);
             filledIndexes.Add(3);
+            await AssertFormAsync(demoCard, true, filledIndexes);
+
+            //即时配送
+
+            //活动性质
+            var formItem6 = formItems.Skip(5).FirstOrDefault();
+            var content6 = await formItem6.QuerySelectorAsync("div.el-form-item__content");
+            var checkbox6 = (await content6.QuerySelectorAllAsync("div.el-checkbox-group > label.el-checkbox > span.el-checkbox__label"))[1];
+            await checkbox6.ClickAsync();
+            await Task.Delay(50);
+            var checkedCheckbox6 = (await content6.QuerySelectorAsync("div.el-checkbox-group > label.el-checkbox.is-checked > span.el-checkbox__label"));
+            var checkboxLabel = await checkbox6.EvaluateFunctionAsync<string>("x=>x.innerText");
+            var checkedCheckboxLabel = await checkedCheckbox6.EvaluateFunctionAsync<string>("x=>x.innerText");
+            Assert.Equal("地推活动", checkboxLabel.Trim());
+            Assert.Equal("地推活动", checkedCheckboxLabel.Trim());
+            filledIndexes.Add(5);
+            await AssertFormAsync(demoCard, true, filledIndexes);
+            //特殊资源
+            var formItem7 = formItems.Skip(6).FirstOrDefault();
+            var content7 = await formItem7.QuerySelectorAsync("div.el-form-item__content");
+            var radio7 = (await content7.QuerySelectorAllAsync("label.el-radio.el-radio-button--default > span.el-radio__label"))[1];
+            await radio7.ClickAsync();
+            await Task.Delay(50);
+            var checkedRadio7 = (await content7.QuerySelectorAsync("label.el-radio.is-checked.el-radio-button--default > span.el-radio__label"));
+            var radioLabel7 = await radio7.EvaluateFunctionAsync<string>("x=>x.innerText");
+            var checkedRadioLabel7 = await checkedRadio7.EvaluateFunctionAsync<string>("x=>x.innerText");
+            Assert.Equal("线上场地免费", radioLabel7.Trim());
+            Assert.Equal("线上场地免费", checkedRadioLabel7.Trim());
+            filledIndexes.Add(6);
+            await AssertFormAsync(demoCard, true, filledIndexes);
+            //活动形式
+
+            var formItem8 = formItems.Skip(7).FirstOrDefault();
+            var formItem8Input = await formItem8.QuerySelectorAsync("div.el-input > input");
+            var label8 = await formItem1.QuerySelectorAsync("label");
+            await formItem8Input.TypeAsync("测试活动");
+            await label8.ClickAsync();
+            await Task.Delay(50);
+            var text8 = await formItem8Input.EvaluateFunctionAsync<string>("x=>x.value");
+            Assert.Equal("测试活动", text8.Trim());
+            filledIndexes.Add(7);
             await AssertFormAsync(demoCard, true, filledIndexes);
         }
 
@@ -206,7 +249,14 @@ namespace Blazui.Component.Test.FormTests
                     Assert.Equal("活动性质", labelText?.Trim());
                     var checkboxes = await content.QuerySelectorAllAsync("div.el-checkbox-group > label.el-checkbox");
                     Assert.Equal(2, checkboxes.Length);
-                    await AssertErrorAsync(showRequired, error, "请确认活动性质");
+                    if (filledIndexes.Contains(index))
+                    {
+                        Assert.Null(error);
+                    }
+                    else
+                    {
+                        await AssertErrorAsync(showRequired, error, "请确认活动性质");
+                    }
                     continue;
                 }
 
@@ -215,7 +265,14 @@ namespace Blazui.Component.Test.FormTests
                     Assert.Equal("特殊资源", labelText?.Trim());
                     var radios = await content.QuerySelectorAllAsync("label.el-radio.el-radio-button--default");
                     Assert.Equal(2, radios.Length);
-                    await AssertErrorAsync(showRequired, error, "请确认特殊资源");
+                    if (filledIndexes.Contains(index))
+                    {
+                        Assert.Null(error);
+                    }
+                    else
+                    {
+                        await AssertErrorAsync(showRequired, error, "请确认特殊资源");
+                    }
                     continue;
                 }
 
@@ -225,8 +282,16 @@ namespace Blazui.Component.Test.FormTests
                     var input = await content.QuerySelectorAsync("div.el-input > input[type='textarea'][name='Description'][placeholder='请输入内容'].el-input__inner");
                     Assert.NotNull(input);
                     var inputValue = await input.EvaluateFunctionAsync<string>("x=>x.value");
-                    Assert.Equal(string.Empty, inputValue);
-                    await AssertErrorAsync(showRequired, error, "请确认活动形式");
+                    if (filledIndexes.Contains(index))
+                    {
+                        Assert.Equal("测试活动", inputValue);
+                        Assert.Null(error);
+                    }
+                    else
+                    {
+                        Assert.Equal(string.Empty, inputValue);
+                        await AssertErrorAsync(showRequired, error, "请确认活动形式");
+                    }
                     continue;
                 }
                 if (index == 8)
