@@ -1,4 +1,5 @@
-# blazui
+# Blazui
+---
 
 #### 介绍
 Element的blazor版本
@@ -37,6 +38,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 用户名密码：blazor,666666
 作者：deathvicky
 
+![image.png-58.1kB][1]
 #### 计划
 
 ###### [x] 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
@@ -70,3 +72,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
 - 宣传组件库  https://github.com/zaranetCore  @zaranetCore
+
+
+
+  [1]: http://static.zybuluo.com/wzxinchen/wt0rvk0k7eft66kfhu1zv89p/image.png
