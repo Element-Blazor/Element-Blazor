@@ -23,5 +23,11 @@ namespace Blazui.Component.Test
         {
             await TestCaseAsync("基础用法");
         }
+
+        [Fact]
+        public async Task Test2Async()
+        {
+            await TestCaseAsync("表单双向绑定");
+        }
     }
 }
