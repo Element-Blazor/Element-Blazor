@@ -239,6 +239,7 @@ namespace Blazui.Component.Table
                     }
                      );
                 }
+                SelectedRows = new HashSet<object>();
                 chkAll?.MarkAsRequireRender();
                 ResetSelectAllStatus();
             }
