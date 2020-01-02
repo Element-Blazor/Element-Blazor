@@ -68,7 +68,8 @@ namespace Blazui.Component.Button
                 IsDisabled = true;
             }
             cssClassBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-                .Add($"el-button", $"el-button--{Type.ToString().ToLower()}", $"el-button--{Size.ToString().ToLower()}", Cls)
+                .Add($"el-button", $"el-button--{Type.ToString().ToLower()}", Cls)
+                .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
                 .AddIf(IsPlain, "is-plain")
                 .AddIf(IsRound, "is-round")
                 .AddIf(IsDisabled, "is-disabled")

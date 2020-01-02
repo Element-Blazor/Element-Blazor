@@ -22,6 +22,15 @@ namespace Blazui.Component.Input
         public InputType Type { get; set; } = InputType.Text;
 
         /// <summary>
+        /// 是否启用清空按钮
+        /// </summary>
+        [Parameter]
+        public bool EnableClearButton { get; set; }
+
+        [Parameter]
+        public EventCallback<bool> EnableClearButtonChanged { get; set; }
+
+        /// <summary>
         /// 输入框尺寸
         /// </summary>
         [Parameter]
@@ -91,6 +100,11 @@ namespace Blazui.Component.Input
 
         protected void ClearOnClick()
         {
+            EnableClearButton = true;
+            if (EnableClearButtonChanged.HasDelegate)
+            {
+                _ = EnableClearButtonChanged.InvokeAsync(EnableClearButton);
+            }
             Value = default;
             Console.WriteLine($"ClearOnClick 设置输入框 {Name} 值:" + Value);
             if (ValueChanged.HasDelegate)

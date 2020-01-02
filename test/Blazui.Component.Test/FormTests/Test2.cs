@@ -50,7 +50,7 @@ namespace Blazui.Component.Test.FormTests
             await Task.Delay(500);
             var resultEl = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__content > div.el-message-box__message > p");
             var result = await resultEl.EvaluateFunctionAsync<string>("x=>x.innerText");
-            Assert.StartsWith($"名称：测试,区域：Shanghai,区域2：,日期：{DateTime.Today.ToString("yyyy/MM/dd")}", result);
+            Assert.StartsWith($"名称：测试,区域：Shanghai,区域2：,日期：{DateTime.Today.ToString("yyyy/M/d")}", result);
             Assert.EndsWith($"，即时配送：True，性质：Offline,Online，特殊资源：场地，枚举资源：Option2，活动形式：详情", result);
             await AssertCloseMessageBoxAsync(demoCard);
             return;//下面的暂时不搞

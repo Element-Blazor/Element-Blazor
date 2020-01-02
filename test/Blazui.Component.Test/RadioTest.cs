@@ -24,11 +24,6 @@ namespace Blazui.Component.Test
             await TestCaseAsync("基础用法");
         }
         [Fact]
-        public async Task Test2Async()
-        {
-            await TestCaseAsync("禁用状态");
-        }
-        [Fact]
         public async Task Test3Async()
         {
             await TestCaseAsync("Change事件实现不允许切换状态");

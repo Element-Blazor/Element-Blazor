@@ -23,7 +23,7 @@ namespace Blazui.Component.Test.FormTests
             await Task.Delay(500);
             var resultEl = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__content > div.el-message-box__message > p");
             var result = await resultEl.EvaluateFunctionAsync<string>("x=>x.innerText");
-            Assert.Equal($"名称：测试活动,区域：Bejing,区域2：Bejing,日期：{DateTime.Now.ToString("yyyy/MM/1")} 0:00:00，即时配送：False，性质：Offline，特殊资源：场地，枚举资源：Option1，活动形式：测试活动", result);
+            Assert.Equal($"名称：测试活动,区域：Bejing,区域2：Bejing,日期：{DateTime.Now.ToString("yyyy/M/1")} 0:00:00，即时配送：False，性质：Offline，特殊资源：场地，枚举资源：Option1，活动形式：测试活动", result);
             var okButton = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__btns > button");
             Assert.NotNull(okButton);
             await okButton.ClickAsync();
