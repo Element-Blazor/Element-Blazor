@@ -1,53 +1,98 @@
 ﻿<BLayout>
     <West>
-        <BSimpleCard Title="左边" Shadow="@ShadowShowType.Never">
-            左边
-        </BSimpleCard>
+        <BCard Shadow="@ShadowShowType.Never">
+            <Header>
+                左边
+            </Header>
+            <Body>
+                左边
+            </Body>
+        </BCard>
     </West>
     <Center>
-        <BSimpleCard Title="中间" Shadow="@ShadowShowType.Never">
-            <BLayout>
-                <West>
-                    <BSimpleCard Shadow="@ShadowShowType.Never">
-                        左边
-                    </BSimpleCard>
-                </West>
-                <Center>
-                    <BSimpleCard Shadow="@ShadowShowType.Never">
-                        中间
-                    </BSimpleCard>
-                </Center>
-                <East>
-                    <BSimpleCard Shadow="@ShadowShowType.Never">
-                        右边
-                    </BSimpleCard>
-                </East>
-                <South>
-                    <BSimpleCard Shadow="@ShadowShowType.Never">
-                        下边
-                    </BSimpleCard>
-                </South>
-                <North>
-                    <BSimpleCard Shadow="@ShadowShowType.Never">
-                        上边
-                    </BSimpleCard>
-                </North>
-            </BLayout>
-        </BSimpleCard>
+        <BCard Shadow="@ShadowShowType.Never">
+            <Header>
+                中间
+            </Header>
+            <Body>
+                <BLayout>
+                    <West>
+                        <BCard Shadow="@ShadowShowType.Never">
+                            <Header>
+                                左边
+                            </Header>
+                            <Body>
+                                左边
+                            </Body>
+                        </BCard>
+                    </West>
+                    <Center>
+                        <BCard Shadow="@ShadowShowType.Never">
+                            <Header>
+                                中间
+                            </Header>
+                            <Body>
+                                中间
+                            </Body>
+                        </BCard>
+                    </Center>
+                    <East>
+                        <BCard Shadow="@ShadowShowType.Never">
+                            <Header>
+                                右边
+                            </Header>
+                            <Body>
+                                右边
+                            </Body>
+                            
+                        </BCard>
+                    </East>
+                    <South>
+                        <BCard Shadow="@ShadowShowType.Never">
+                            <Header>
+                                下边
+                            </Header>
+                            <Body>
+                                下边
+                            </Body>
+                        </BCard>
+                    </South>
+                    <North>
+                        <BCard Shadow="@ShadowShowType.Never">
+                            <Header>
+                                上边
+                            </Header>
+                            <Body>
+                                上边
+                            </Body>
+                        </BCard>
+                    </North>
+                </BLayout>
+            </Body>
+        </BCard>
     </Center>
     <East>
-        <BSimpleCard Title="右边" Shadow="@ShadowShowType.Never">
-            右边
-        </BSimpleCard>
+        <BCard Shadow="@ShadowShowType.Never">
+            <Header>
+                右边
+            </Header>
+            <Body>
+                右边
+            </Body>
+        </BCard>
     </East>
     <South>
-        <BSimpleCard Shadow="@ShadowShowType.Never">
-            下边
-        </BSimpleCard>
+        <BCard Shadow="@ShadowShowType.Never">
+            <Body>
+                下边
+            </Body>
+        </BCard>
     </South>
     <North>
-        <BSimpleCard Shadow="@ShadowShowType.Never">
-            上边
-        </BSimpleCard>
+        <BCard Shadow="@ShadowShowType.Never">
+            <Body>
+                上边
+            </Body>
+        </BCard>
     </North>
 </BLayout>
