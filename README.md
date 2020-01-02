@@ -1,6 +1,7 @@
-# blazui
+# Blazui
+---
 
-#### 介绍
+## 介绍
 Element的blazor版本
 
 API 模仿 Element，CSS 直接使用 Element的样式，HTML 结构直接使用 Element 的 HTML 结构
@@ -13,110 +14,35 @@ Blazui 演示地址：http://blazui.com:9000
 
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
-#### 关注与讨论
+## 关注与讨论
 
 使用遇到问题请加入QQ群：74522853
 
-#### 使用前提
+## 使用前提
 参考Blazor使用的前提条件
 
 1. 安装 .Net Core 3.1
 2. 安装 VS2019，更新到最新版
 
-#### 贡献说明
+## 源码说明
 
 拉取代码，用 VS2019 打开，直接启动 Blazui.ServerRender 项目
 
-#### 使用说明
+## 使用文档
 
-基本组件已开发完成
+Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/12096092.html
 
-1. 新建 Blazor 服务器端渲染应用
-2. 安装 Nuget 包 Blazui.Component
-3. 修改 Pages 文件夹下的 _Host.cshtml 为以下内容
+## 案例展示
 
-```
-@page "/"
-@namespace Blazui.ServerRender.Pages
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+地址：http://wandotnet.top/quartz
+用户名密码：blazor,666666
+作者：deathvicky
 
-<!DOCTYPE html>
-<html lang="zh-cn">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用</title>
-    <base href="~/" />
-    <link href="css/site.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
-</head>
-<body>
-    <app>
-        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
-    </app>
+![image.png-58.1kB][1]
 
-    <script src="_content/Blazui.Component/js/dom.js"></script>
-    <script src="_framework/blazor.server.js"></script>
-</body>
-</html>
+类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
 
-```
-4. 在 _Imports.razor 文件中添加以下代码
-
-```
-@using Blazui.Component.Container
-@using Blazui.Component.Button
-@using Blazui.Component.Dom
-@using Blazui.Component.Dynamic
-@using Blazui.Component.NavMenu
-@using Blazui.Component.Input
-@using Blazui.Component.Radio
-@using Blazui.Component.Select
-@using Blazui.Component.CheckBox
-@using Blazui.Component.Switch
-@using Blazui.Component.Table
-@using Blazui.Component.Popup
-@using Blazui.Component.Pagination
-@using Blazui.Component.Form
-@using Blazui.Component.Upload
-```
-在 Startup.cs 的 ConfigureServices 方法中添加以下代码
-
-```
-services.AddBlazuiServices();
-```
-为了使弹窗类组件生效，需要将 MainLayout.razor 的内容改为如下
-
-```
-@inherits LayoutComponentBase
-<BPopup></BPopup>
-
-<div class="sidebar">
-    <NavMenu />
-</div>
-
-<div class="main">
-    @Body
-</div>
-```
-
-
-5. 在任意一个页面输入以下代码，运行可看效果
-
-```
-<BButton Type="@ButtonType.Primary">主要按钮</BButton>
-```
-6. 根据演示页面的示例代码写出您想要的效果
-
-7. 有可能会遇到一个由NavigtaionManager抛出的异常，忽略即可
-
-#### 计划
-
-###### [x] 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
-###### 开发文档 [ ]
-
-#### 组件列表
+## 组件列表
 
 
 | 组件名       | 调用Demo                           | 功能支持     | 下一步计划   |
@@ -139,8 +65,44 @@ services.AddBlazuiServices();
 | Form 表单    | http://blazui.com:9000/form        | [√] 常规支持 <br /> [√] 三种对齐方式 <br /> [√] 单行表单 |       |
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
 | 文件上传     |      | |[√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传
+| Markdown 编辑器 |
 | 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
-#### 感谢
+## 更新日志
+
+### 版本 0.0.4.19，2020.01.02发布
+1. 新增 [BDropDown 下拉菜单组件][2]
+2. 修复 [Table控件中 日期的格式化不起作用][3]
+3. 修复 [table 全选][4]
+4. 增加 [Input组件可否添加尺寸（Size）][5]
+5. 修复 [下拉弹出菜单频繁点击会出现多个][6]
+6. 修复 [按钮不支持圆形][7]
+7. 修复 [弹窗组件][8]
+8. 修复 [BButton组件中Cls属性改为追加感觉更合理][9]
+9. 修复 [\[Bug Report\] Checkbox 全选时选项没联动选中][10]
+10. 添加 [about loading][11]
+11. 添加 [是否可以让BMenuItem组件具有匹配路由然后选中的功能][12]
+12. 修复 [表单下拉列表][13]
+13. 添加 [组件可增加一个visible属性，用于隐藏或显示][14]
+14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
+
+## 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
 - 宣传组件库  https://github.com/zaranetCore  @zaranetCore
+
+
+  [1]: http://static.zybuluo.com/wzxinchen/wt0rvk0k7eft66kfhu1zv89p/image.png
+  [2]: http://blazui.com:9000/dropdown
+  [3]: https://github.com/wzxinchen/Blazui/issues/47
+  [4]: https://github.com/wzxinchen/Blazui/issues/46
+  [5]: https://github.com/wzxinchen/Blazui/issues/45
+  [6]: https://github.com/wzxinchen/Blazui/issues/44
+  [7]: https://github.com/wzxinchen/Blazui/issues/42
+  [8]: https://github.com/wzxinchen/Blazui/issues/41
+  [9]: https://github.com/wzxinchen/Blazui/issues/40
+  [10]: https://github.com/wzxinchen/Blazui/issues/38
+  [11]: https://github.com/wzxinchen/Blazui/issues/31
+  [12]: https://github.com/wzxinchen/Blazui/issues/30
+  [13]: https://github.com/wzxinchen/Blazui/issues/28
+  [14]: https://github.com/wzxinchen/Blazui/issues/14
+  [15]: https://github.com/wzxinchen/Blazui/issues/13
