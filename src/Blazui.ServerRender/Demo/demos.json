@@ -300,6 +300,34 @@
           "ManualLoading.razor",
           "ManualLoadingBase.cs"
         ]
+      },
+      {
+        "title": "卡片 Loading",
+        "name": "Loading",
+        "files": [
+          "CardLoading.razor",
+          "CardLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "菜单 Loading",
+        "name": "Loading",
+        "files": [
+          "MenuLoading.razor",
+          "MenuLoadingBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "dropdown",
+    "demos": [
+      {
+        "title": "基本使用",
+        "name": "DropDown",
+        "files": [
+          "BasicDropDown.razor"
+        ]
       }
     ]
   },
@@ -463,6 +491,13 @@
         "name": "BasicInput",
         "files": [
           "BasicInput.razor"
+        ]
+      },
+      {
+        "title": "按钮尺寸",
+        "name": "BasicInput",
+        "files": [
+          "SizeInput.razor"
         ]
       }
     ]

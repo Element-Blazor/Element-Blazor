@@ -47,7 +47,7 @@ namespace Blazui.Component.Test
             await StartTestAsync(async () =>
             {
                 var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                Assert.True(menus.Count() == 18);
+                Assert.True(menus.Count() == 19);
                 foreach (var menu in menus)
                 {
                     var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
@@ -62,7 +62,7 @@ namespace Blazui.Component.Test
             await StartTestAsync(async () =>
              {
                  var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                 Assert.True(menus.Count() == 18);
+                 Assert.True(menus.Count() == 19);
                  foreach (var menu in menus)
                  {
                      await menu.HoverAsync();

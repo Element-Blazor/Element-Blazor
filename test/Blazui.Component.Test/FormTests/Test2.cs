@@ -8,8 +8,8 @@ using Xunit;
 
 namespace Blazui.Component.Test.FormTests
 {
-    [TestName("Form 表单", "基础用法")]
-    public class Test1 : IDemoTester
+    [TestName("Form 表单", "表单双向绑定")]
+    public class Test2 : IDemoTester
     {
         private ElementHandle submitButton;
         private ElementHandle resetButton;
@@ -19,21 +19,27 @@ namespace Blazui.Component.Test.FormTests
         public async Task TestAsync(DemoCard demoCard)
         {
             await AssertFillAsync(demoCard);
+            return;//下面的暂时不搞
             await submitButton.ClickAsync();
             await Task.Delay(500);
             var resultEl = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__content > div.el-message-box__message > p");
             var result = await resultEl.EvaluateFunctionAsync<string>("x=>x.innerText");
-            Assert.Equal($"名称：测试活动,区域：Bejing,区域2：Bejing,日期：{DateTime.Now.ToString("yyyy/M/1")} 0:00:00，即时配送：False，性质：Offline，特殊资源：场地，枚举资源：Option1，活动形式：测试活动", result);
+            Assert.Equal($"名称：测试活动,区域：Bejing,区域2：Bejing,日期：{DateTime.Now.ToString("yyyy/MM/1")} 0:00:00，即时配送：False，性质：Offline，特殊资源：场地，枚举资源：Option1，活动形式：测试活动", result);
+            await AssertCloseMessageBoxAsync(demoCard);
+
+            await resetButton.ClickAsync();
+            await Task.Delay(50);
+            await AssertFormAsync(demoCard, false, new List<int>());
+        }
+
+        private async Task AssertCloseMessageBoxAsync(DemoCard demoCard)
+        {
             var okButton = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__btns > button");
             Assert.NotNull(okButton);
             await okButton.ClickAsync();
             await Task.Delay(500);
             okButton = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__btns > button");
             Assert.Null(okButton);
-
-            await resetButton.ClickAsync();
-            await Task.Delay(50);
-            await AssertFormAsync(demoCard, false, new List<int>());
         }
 
         private async Task AssertFillAsync(DemoCard demoCard)
@@ -41,9 +47,13 @@ namespace Blazui.Component.Test.FormTests
             var filledIndexes = new List<int>();
             await AssertFormAsync(demoCard, false, filledIndexes);
             await submitButton.ClickAsync();
-            await Task.Delay(50);
-            await AssertFormAsync(demoCard, true, filledIndexes);
-
+            await Task.Delay(500);
+            var resultEl = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__content > div.el-message-box__message > p");
+            var result = await resultEl.EvaluateFunctionAsync<string>("x=>x.innerText");
+            Assert.StartsWith($"名称：测试,区域：Shanghai,区域2：,日期：{DateTime.Today.ToString("yyyy/M/d")}", result);
+            Assert.EndsWith($"，即时配送：True，性质：Offline,Online，特殊资源：场地，枚举资源：Option2，活动形式：详情", result);
+            await AssertCloseMessageBoxAsync(demoCard);
+            return;//下面的暂时不搞
             var formItem1 = formItems.FirstOrDefault();
             var formItem1Input = await formItem1.QuerySelectorAsync("div.el-input > input");
             var label1 = await formItem1.QuerySelectorAsync("label");
@@ -159,14 +169,7 @@ namespace Blazui.Component.Test.FormTests
                     labelText = await label.EvaluateFunctionAsync<string>("x=>x.innerText");
                     Assert.Equal("100px", contentMarginLeft);
                     Assert.Equal("100px", labelWidth);
-                    if (index == 2)
-                    {
-                        Assert.DoesNotContain("is-required", clsList);
-                    }
-                    else
-                    {
-                        Assert.Contains("is-required", clsList);
-                    }
+                    Assert.Contains("is-required", clsList);
                 }
                 else
                 {
@@ -189,7 +192,7 @@ namespace Blazui.Component.Test.FormTests
                     else
                     {
                         await AssertErrorAsync(showRequired, error, "请确认活动名称");
-                        Assert.Equal(string.Empty, inputValue);
+                        Assert.Equal("测试", inputValue);
                     }
                     continue;
                 }
@@ -200,7 +203,7 @@ namespace Blazui.Component.Test.FormTests
                     var input = await content.QuerySelectorAsync("div.el-select > div.el-input.el-input--suffix > input[type='text'][placeholder='请选择活动区域'].el-input__inner");
                     Assert.NotNull(input);
                     var inputValue = await input.EvaluateFunctionAsync<string>("x=>x.value");
-                    Assert.Equal("北京", inputValue);
+                    Assert.Equal("上海", inputValue);
                     var icon = await content.QuerySelectorAsync("div.el-select > div.el-input.el-input--suffix > span.el-input__suffix > span.el-input__suffix-inner > i.el-input__icon.el-select__caret.el-icon-arrow-up");
                     Assert.NotNull(icon);
                     Assert.Null(error);
@@ -208,26 +211,6 @@ namespace Blazui.Component.Test.FormTests
                 }
 
                 if (index == 2)
-                {
-                    Assert.Equal("活动区域2", labelText?.Trim());
-                    var input = await content.QuerySelectorAsync("div.el-select > div.el-input.el-input--suffix > input[type='text'][placeholder='请选择活动区域'].el-input__inner");
-                    var inputValue = await input.EvaluateFunctionAsync<string>("x=>x.value");
-                    Assert.NotNull(input);
-                    var icon = await content.QuerySelectorAsync("div.el-select > div.el-input.el-input--suffix > span.el-input__suffix > span.el-input__suffix-inner > i.el-input__icon.el-select__caret.el-icon-arrow-up");
-                    Assert.NotNull(icon);
-                    Assert.Null(error);
-                    if (filledIndexes.Contains(2))
-                    {
-                        Assert.Equal("北京", inputValue);
-                    }
-                    else
-                    {
-                        Assert.Equal(string.Empty, inputValue);
-                    }
-                    continue;
-                }
-
-                if (index == 3)
                 {
                     Assert.Equal("活动时间", labelText?.Trim());
                     var input = await content.QuerySelectorAsync("div.el-input.el-date-editor.el-input--prefix.el-input--suffix.el-date-editor--date > input[type='text'][placeholder='请选择日期'][name='Time'].el-input__inner");
@@ -243,31 +226,31 @@ namespace Blazui.Component.Test.FormTests
                     }
                     else
                     {
-                        Assert.Equal(string.Empty, inputValue);
+                        Assert.Equal(DateTime.Now.ToString("yyyy-MM-dd"), inputValue);
                         await AssertErrorAsync(showRequired, error, "请确认活动时间");
                     }
                     continue;
                 }
 
-                if (index == 4)
+                if (index == 3)
                 {
                     Assert.Equal("即时配送", labelText?.Trim());
-                    var input = await content.QuerySelectorAsync("div.el-switch > input[type='checkbox'].el-switch__input");
+                    var input = await content.QuerySelectorAsync("div.el-switch.is-checked > input[type='checkbox'].el-switch__input");
                     Assert.NotNull(input);
-                    var icon = await content.QuerySelectorAsync("div.el-switch > span.el-switch__core");
+                    var icon = await content.QuerySelectorAsync("div.el-switch.is-checked > span.el-switch__core");
                     Assert.NotNull(icon);
                     var borderColor = await icon.EvaluateFunctionAsync<string>("x=>x.style.borderColor");
                     Assert.Equal("rgb(19, 206, 102)", borderColor);
                     var backgroundColor = await icon.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                    Assert.Equal("rgb(192, 204, 218)", backgroundColor);
+                    Assert.Equal("rgb(64, 158, 255)", backgroundColor);
                     Assert.Null(error);
                     continue;
                 }
 
-                if (index == 5)
+                if (index == 4)
                 {
                     Assert.Equal("活动性质", labelText?.Trim());
-                    var checkboxes = await content.QuerySelectorAllAsync("div.el-checkbox-group > label.el-checkbox");
+                    var checkboxes = await content.QuerySelectorAllAsync("div.el-checkbox-group > label.el-checkbox.is-checked");
                     Assert.Equal(2, checkboxes.Length);
                     if (filledIndexes.Contains(index))
                     {
@@ -280,7 +263,7 @@ namespace Blazui.Component.Test.FormTests
                     continue;
                 }
 
-                if (index == 6)
+                if (index == 5)
                 {
                     Assert.Equal("特殊资源", labelText?.Trim());
                     var radios = await content.QuerySelectorAllAsync("label.el-radio.el-radio-button--default");
@@ -291,7 +274,29 @@ namespace Blazui.Component.Test.FormTests
                     }
                     else
                     {
+                        var radio = await content.QuerySelectorAsync("label.el-radio.el-radio-button--default.is-checked");
+                        var radioLabel = await radio.EvaluateFunctionAsync<string>("x=>x.innerText");
+                        Assert.Equal("线上场地免费", radioLabel.Trim());
                         await AssertErrorAsync(showRequired, error, "请确认特殊资源");
+                    }
+                    continue;
+                }
+
+                if (index == 6)
+                {
+                    Assert.Equal("枚举资源", labelText?.Trim());
+                    var radios = await content.QuerySelectorAllAsync("label.el-radio.el-radio-button--default");
+                    Assert.Equal(2, radios.Length);
+                    if (filledIndexes.Contains(index))
+                    {
+                        Assert.Null(error);
+                    }
+                    else
+                    {
+                        var radio = await content.QuerySelectorAsync("label.el-radio.el-radio-button--default.is-checked");
+                        var radioLabel = await radio.EvaluateFunctionAsync<string>("x=>x.innerText");
+                        Assert.Equal("线上场地免费", radioLabel.Trim());
+                        await AssertErrorAsync(showRequired, error, "请确认枚举资源");
                     }
                     continue;
                 }
@@ -309,7 +314,7 @@ namespace Blazui.Component.Test.FormTests
                     }
                     else
                     {
-                        Assert.Equal(string.Empty, inputValue);
+                        Assert.Equal("详情", inputValue);
                         await AssertErrorAsync(showRequired, error, "请确认活动形式");
                     }
                     continue;

@@ -54,14 +54,17 @@
                     <div class="el-dialog__body">
                         <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
                     </div>
-                    <div class="el-dialog__footer">
-                        <span class="dialog-footer">
-                            @foreach (var button in option.Buttons)
-                            {
-                                @button
-                            }
-                        </span>
-                    </div>
+                    @if (option.Buttons.Any())
+                    {
+                        <div class="el-dialog__footer">
+                            <span class="dialog-footer">
+                                @foreach (var button in option.Buttons)
+                                {
+                                    @button
+                                }
+                            </span>
+                        </div>
+                    }
                 </div>
             </div>
         }

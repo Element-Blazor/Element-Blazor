@@ -18,8 +18,8 @@ namespace Blazui.Component.Test
 {
     public class SetupTest : TestBase, IDisposable
     {
-        System.Threading.SemaphoreSlim InitilizeSemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
-        protected SemaphoreSlim TestSemaphoreSlim = new SemaphoreSlim(1, 1);
+        static System.Threading.SemaphoreSlim InitilizeSemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
+        protected static SemaphoreSlim TestSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool initilized = false;
         private IHostBuilder hostBuilder;
         private CancellationTokenSource source;

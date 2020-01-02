@@ -219,26 +219,43 @@ namespace Blazui.Component.Table
                             return;
                         }
                         var attrs = property.GetCustomAttributes(true);
-                        var text = attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Name;
-                        if (string.IsNullOrWhiteSpace(text))
+                        var columnConfig = attrs.OfType<TableColumnAttribute>().FirstOrDefault() ?? new TableColumnAttribute()
                         {
-                            text = attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description;
-                        }
-                        var width = attrs.OfType<WidthAttribute>().FirstOrDefault()?.Width;
+                            Text = property.Name
+                        };
+
                         Headers.Insert(0, new TableHeader()
                         {
                             Eval = row =>
                             {
-                                return property.GetValue(row);
+                                var value = property.GetValue(row);
+                                if (string.IsNullOrWhiteSpace(columnConfig.Format))
+                                {
+                                    return value;
+                                }
+                                if (value == null)
+                                {
+                                    return null;
+                                }
+
+                                try
+                                {
+                                    return Convert.ToDateTime(value).ToString(columnConfig.Format);
+                                }
+                                catch (InvalidCastException)
+                                {
+                                    throw new BlazuiException("仅日期列支持 Format 参数");
+                                }
                             },
                             IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
                             Property = property,
-                            Text = text ?? property.Name,
-                            Width = width
+                            Text = columnConfig.Text,
+                            Width = columnConfig.Width
                         });
                     }
                      );
                 }
+                SelectedRows = new HashSet<object>();
                 chkAll?.MarkAsRequireRender();
                 ResetSelectAllStatus();
             }

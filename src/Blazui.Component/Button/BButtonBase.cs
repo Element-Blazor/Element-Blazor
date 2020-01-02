@@ -9,6 +9,7 @@ namespace Blazui.Component.Button
 {
     public class BButtonBase : BComponentBase
     {
+        internal HtmlPropertyBuilder cssClassBuilder;
         protected async Task OnButtonClickedAsync(MouseEventArgs e)
         {
             if (IsDisabled)
@@ -57,6 +58,23 @@ namespace Blazui.Component.Button
         protected override bool ShouldRender()
         {
             return true;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (IsLoading)
+            {
+                IsDisabled = true;
+            }
+            cssClassBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add($"el-button", $"el-button--{Type.ToString().ToLower()}", Cls)
+                .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
+                .AddIf(IsPlain, "is-plain")
+                .AddIf(IsRound, "is-round")
+                .AddIf(IsDisabled, "is-disabled")
+                .AddIf(IsLoading, "is-loading")
+                .AddIf(IsCircle, "is-circle");
         }
     }
 }

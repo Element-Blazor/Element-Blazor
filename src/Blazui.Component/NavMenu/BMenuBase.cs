@@ -23,6 +23,12 @@ namespace Blazui.Component.NavMenu
         [Parameter]
         public string BackgroundColor { get; set; }
 
+        /// <summary>
+        /// 菜单匹配方法，参数为当前菜单的路由
+        /// </summary>
+        [Parameter]
+        public Func<string, bool> Match { get; set; }
+
         [Parameter]
         public string TextColor { get; set; }
 
