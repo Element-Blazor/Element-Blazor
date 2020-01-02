@@ -29,7 +29,6 @@ namespace Blazui.ServerRender
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddHttpClient();
             services.AddBlazuiServices();
             services.AddSingleton<WeatherForecastService>();
             services.AddControllers();

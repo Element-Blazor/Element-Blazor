@@ -1,7 +1,7 @@
 # Blazui
 ---
 
-#### 介绍
+## 介绍
 Element的blazor版本
 
 API 模仿 Element，CSS 直接使用 Element的样式，HTML 结构直接使用 Element 的 HTML 结构
@@ -14,37 +14,35 @@ Blazui 演示地址：http://blazui.com:9000
 
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
-#### 关注与讨论
+## 关注与讨论
 
 使用遇到问题请加入QQ群：74522853
 
-#### 使用前提
+## 使用前提
 参考Blazor使用的前提条件
 
 1. 安装 .Net Core 3.1
 2. 安装 VS2019，更新到最新版
 
-#### 源码说明
+## 源码说明
 
 拉取代码，用 VS2019 打开，直接启动 Blazui.ServerRender 项目
 
-#### 使用文档
+## 使用文档
 
 Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/12096092.html
 
-#### 案例展示
+## 案例展示
 
-1. 地址：http://wandotnet.top/quartz
+地址：http://wandotnet.top/quartz
 用户名密码：blazor,666666
 作者：deathvicky
-不要改密码！！！
-若发现密码被改可进群告之我们
 
 ![image.png-58.1kB][1]
 
-2. 类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
+类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
 
-#### 组件列表
+## 组件列表
 
 
 | 组件名       | 调用Demo                           | 功能支持     | 下一步计划   |
@@ -68,11 +66,43 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
 | 文件上传     |      | |[√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传
 | Markdown 编辑器 |
-#### 感谢
+| 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
+## 更新日志
+
+### 版本 0.0.4.19，2020.01.02发布
+1. 新增 [BDropDown 下拉菜单组件][2]
+2. 修复 [Table控件中 日期的格式化不起作用][3]
+3. 修复 [table 全选][4]
+4. 增加 [Input组件可否添加尺寸（Size）][5]
+5. 修复 [下拉弹出菜单频繁点击会出现多个][6]
+6. 修复 [按钮不支持圆形][7]
+7. 修复 [弹窗组件][8]
+8. 修复 [BButton组件中Cls属性改为追加感觉更合理][9]
+9. 修复 [\[Bug Report\] Checkbox 全选时选项没联动选中][10]
+10. 添加 [about loading][11]
+11. 添加 [是否可以让BMenuItem组件具有匹配路由然后选中的功能][12]
+12. 修复 [表单下拉列表][13]
+13. 添加 [组件可增加一个visible属性，用于隐藏或显示][14]
+14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
+
+## 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
 - 宣传组件库  https://github.com/zaranetCore  @zaranetCore
 
 
-
   [1]: http://static.zybuluo.com/wzxinchen/wt0rvk0k7eft66kfhu1zv89p/image.png
+  [2]: http://blazui.com:9000/dropdown
+  [3]: https://github.com/wzxinchen/Blazui/issues/47
+  [4]: https://github.com/wzxinchen/Blazui/issues/46
+  [5]: https://github.com/wzxinchen/Blazui/issues/45
+  [6]: https://github.com/wzxinchen/Blazui/issues/44
+  [7]: https://github.com/wzxinchen/Blazui/issues/42
+  [8]: https://github.com/wzxinchen/Blazui/issues/41
+  [9]: https://github.com/wzxinchen/Blazui/issues/40
+  [10]: https://github.com/wzxinchen/Blazui/issues/38
+  [11]: https://github.com/wzxinchen/Blazui/issues/31
+  [12]: https://github.com/wzxinchen/Blazui/issues/30
+  [13]: https://github.com/wzxinchen/Blazui/issues/28
+  [14]: https://github.com/wzxinchen/Blazui/issues/14
+  [15]: https://github.com/wzxinchen/Blazui/issues/13

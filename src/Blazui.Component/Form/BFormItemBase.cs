@@ -12,9 +12,13 @@ namespace Blazui.Component.Form
         public TValue OriginValue { get; set; }
         public TValue Value { get; set; }
 
+        internal HtmlPropertyBuilder formItemCssBuilder;
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none");
+
             if (!Form.Values.Any())
             {
                 return;
@@ -30,6 +34,7 @@ namespace Blazui.Component.Form
             OriginValueHasSet = true;
             Form.Values.TryGetValue(Name, out var value);
             OriginValue = (TValue)value;
+            Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             Value = (TValue)value;
             OriginValueHasRendered = false;
         }
@@ -53,6 +58,7 @@ namespace Blazui.Component.Form
 
         public override void Reset()
         {
+            Console.WriteLine($"设置 FormItem {Name} 值:" + OriginValue);
             Value = OriginValue;
             if (OnReset != null)
             {

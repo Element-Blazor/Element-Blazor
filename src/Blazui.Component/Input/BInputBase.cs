@@ -14,26 +14,63 @@ namespace Blazui.Component.Input
 {
     public class BInputBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
+        internal HtmlPropertyBuilder wrapperClsBuilder;
+        /// <summary>
+        /// 输入框类型
+        /// </summary>
         [Parameter]
         public InputType Type { get; set; } = InputType.Text;
 
-        [Parameter]
-        public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
-
+        /// <summary>
+        /// 是否启用清空按钮
+        /// </summary>
         [Parameter]
         public bool IsClearButtonClick { get; set; }
 
         [Parameter]
-        public EventCallback<bool> IsClearButtonClickChanged { get; set; }
+        public EventCallback<bool> EnableClearButtonChanged { get; set; }
+
+        /// <summary>
+        /// 输入框尺寸
+        /// </summary>
+        [Parameter]
+        public InputSize Size { get; set; } = InputSize.Normal;
+
+        /// <summary>
+        /// 如何格式化
+        /// </summary>
+        [Parameter]
+        public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
+
+        /// <summary>
+        /// 输入框的值
+        /// </summary>
         [Parameter]
         public TValue Value { get; set; }
 
+        /// <summary>
+        /// 值改变时触发
+        /// </summary>
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
 
-        [Parameter] public virtual string Placeholder { get; set; } = "请输入内容";
-        [Parameter] public bool IsDisabled { get; set; } = false;
-        [Parameter] public bool IsClearable { get; set; } = false;
+        /// <summary>
+        /// Placeholder
+        /// </summary>
+        [Parameter]
+        public virtual string Placeholder { get; set; } = "请输入内容";
+
+        /// <summary>
+        /// 是否禁用输入框
+        /// </summary>
+        [Parameter]
+        public bool IsDisabled { get; set; } = false;
+
+        /// <summary>
+        /// 是否可清空
+        /// </summary>
+        [Parameter]
+        public bool IsClearable { get; set; } = false;
 
         internal bool IsFocus { get; set; }
 
@@ -69,6 +106,7 @@ namespace Blazui.Component.Input
                 _ = IsClearButtonClickChanged.InvokeAsync(IsClearButtonClick);
             }
             Value = default;
+            Console.WriteLine($"ClearOnClick 设置输入框 {Name} 值:" + Value);
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -82,6 +120,7 @@ namespace Blazui.Component.Input
             {
                 Value = default;
             }
+            Console.WriteLine($"OnFocusAsync 设置输入框 {Name} 值:" + Value);
             IsFocus = true;
             return Task.CompletedTask;
         }
@@ -114,6 +153,7 @@ namespace Blazui.Component.Input
             {
                 Value = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
             }
+            Console.WriteLine($"FormItem_OnReset 设置输入框 {Name} 值:" + Value);
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -127,6 +167,11 @@ namespace Blazui.Component.Input
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add("el-input", Cls, $"el-input--{Size.ToString().ToLower()}")
+                .AddIf(IsClearable || !string.IsNullOrWhiteSpace(SuffixIcon), "el-input--suffix")
+                .AddIf(!string.IsNullOrWhiteSpace(PrefixIcon), "el-input--prefix")
+                .AddIf(IsDisabled, "is-disabled");
             if (FormItem == null)
             {
                 return;
@@ -136,7 +181,11 @@ namespace Blazui.Component.Input
                 return;
             }
             FormItem.OriginValueHasRendered = true;
-            Value = FormItem.OriginValue;
+            if (FormItem.Form.Values.Any())
+            {
+                Value = FormItem.OriginValue;
+            }
+            Console.WriteLine($"OnParametersSet 设置输入框 {Name} 值:" + Value);
             SetFieldValue(Value, false);
         }
 

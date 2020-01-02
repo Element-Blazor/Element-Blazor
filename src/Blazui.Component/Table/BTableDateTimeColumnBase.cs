@@ -8,7 +8,5 @@ namespace Blazui.Component.Table
 {
     public class BTableDateTimeColumnBase : BTableColumn
     {
-        [Parameter]
-        public string Format { get; set; }
     }
 }

@@ -48,21 +48,23 @@
                         <span class="el-dialog__title">@option.Title</span>
                         <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" OnClick="(e=>CloseDialogAsync(option,
                                         new DialogResult() {
-                                         Result= MessageBoxResult.Close
                               }))">
                         </BButton>
                     </div>
                     <div class="el-dialog__body">
                         <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
                     </div>
-                    <div class="el-dialog__footer">
-                        <span class="dialog-footer">
-                            @foreach (var button in option.Buttons)
-                            {
-                                @button
-                            }
-                        </span>
-                    </div>
+                    @if (option.Buttons.Any())
+                    {
+                        <div class="el-dialog__footer">
+                            <span class="dialog-footer">
+                                @foreach (var button in option.Buttons)
+                                {
+                                    @button
+                                }
+                            </span>
+                        </div>
+                    }
                 </div>
             </div>
         }

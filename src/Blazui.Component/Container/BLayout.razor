@@ -13,7 +13,7 @@
     {
         styles.Add("flex:1");
     }
-    <div class="blaz-layout" style="@string.Join(";", styles)">
+    <div class="blaz-layout" style="@string.Join(";", styles)" @ref="Container">
         @if (North != null)
         {
             <div class="blaz-layout-north blaz-layout-card">

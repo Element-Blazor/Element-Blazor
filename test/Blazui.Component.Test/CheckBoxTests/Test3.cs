@@ -44,6 +44,17 @@ namespace Blazui.Component.Test.CheckBoxTests
                 }
                 await AssertCheckBoxesAsync(checkboxes, checkedIndexes.ToArray());
             }
+            await checkAll.ClickAsync();
+            await Task.Delay(50);
+            checkedIndexes.Clear();
+            checkedIndexes.Add(0);
+            checkedIndexes.Add(1);
+            checkedIndexes.Add(2);
+            await AssertCheckBoxesAsync(checkboxes, checkedIndexes.ToArray());
+            await checkAll.ClickAsync();
+            await Task.Delay(50);
+            checkedIndexes.Clear();
+            await AssertCheckBoxesAsync(checkboxes, checkedIndexes.ToArray());
         }
 
         private static async Task AssertCheckBoxAsync(bool isChecked, ElementHandle checkbox)

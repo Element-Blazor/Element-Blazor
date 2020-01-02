@@ -1,24 +1,15 @@
-﻿@inherits BCardBase<TModel>
-@typeparam TModel
-@foreach (var item in DataSource)
-{
-    var shadow = "always";
-    if (Shadow != null)
-    {
-        shadow = Shadow(item).ToString().ToLower();
-    }
-    <div class="el-card box-card is-@shadow-shadow @(Cls?.Invoke(item))" style="@Style?.Invoke(item)">
-        @{
-            if (Header != null)
-            {
-                <div class="el-card__header">
-                    @Header(item)
-                </div>
-            }
+﻿@inherits BCardBase
+<div class="@wrapperClassBuilder" style="@Style" @ref="Container">
+    @{
+        if (Header != null)
+        {
+            <div class="el-card__header">
+                @Header
+            </div>
         }
+    }
 
-        <div class="el-card__body @(BodyCls?.Invoke(item))">
-            @Body(item)
-        </div>
+    <div class="@bodyClassBuilder">
+        @Body
     </div>
-}
+</div>

@@ -15,12 +15,20 @@ namespace Blazui.ServerRender.Demo.Form
         public bool Delivery { get; set; }
         public List<string> Type { get; set; }
         public string Resource { get; set; }
+
+        public Resource Resource1 { get; set; }
         public string Description { get; set; }
 
         public override string ToString()
         {
-            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，性质：{string.Join(",", Type)}，特殊资源：{Resource}，活动形式：{Description}";
+            return $"名称：{Name},区域：{Area},区域2：{Area1},日期：{Time?.ToString()}，即时配送：{Delivery}，性质：{string.Join(",", Type)}，特殊资源：{Resource}，枚举资源：{Resource1}，活动形式：{Description}";
         }
+    }
+
+    public enum Resource
+    {
+        Option1,
+        Option2
     }
 
     public enum Area

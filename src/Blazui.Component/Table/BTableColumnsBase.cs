@@ -39,11 +39,32 @@ namespace Blazui.Component.Table
             var columnConfig = new TableHeader
             {
                 Property = property,
-                Eval = column.Property == null ? null : (Func<object, object>)(row => property.GetValue(row)),
+                Eval = column.Property == null ? null : (Func<object, object>)(row =>
+                {
+                    var value = property.GetValue(row);
+                    if (string.IsNullOrWhiteSpace(column.Format))
+                    {
+                        return value;
+                    }
+                    if (value == null)
+                    {
+                        return null;
+                    }
+
+                    try
+                    {
+                        return Convert.ToDateTime(value).ToString(column.Format);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        throw new BlazuiException("仅日期列支持 Format 参数");
+                    }
+                }),
                 Text = column.Text,
                 Width = column.Width,
                 IsCheckBox = column.IsCheckBox,
-                Template = column.ChildContent
+                Template = column.ChildContent,
+                Format = column.Format
             };
             Table.Headers.Add(columnConfig);
         }

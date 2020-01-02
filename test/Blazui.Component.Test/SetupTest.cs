@@ -18,9 +18,10 @@ namespace Blazui.Component.Test
 {
     public class SetupTest : TestBase, IDisposable
     {
-        System.Threading.SemaphoreSlim SemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
+        static System.Threading.SemaphoreSlim InitilizeSemaphoreSlim = new System.Threading.SemaphoreSlim(1, 1);
+        protected static SemaphoreSlim TestSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool initilized = false;
-        private IHostBuilder host;
+        private IHostBuilder hostBuilder;
         private CancellationTokenSource source;
 
         public SetupTest(ITestOutputHelper output)
@@ -31,32 +32,46 @@ namespace Blazui.Component.Test
         public ITestOutputHelper Output { get; }
         public Browser Browser { get; private set; }
 
-        protected async Task TestCaseAsync(string tabName, string caseName)
+        protected async ValueTask TestCaseAsync(string tabName, string caseName)
         {
-            await InitilizeAsync();
-            await NavigateToMenuAsync(tabName);
-            var demoCards = await WaitForDemoCardsAsync();
-            await TestAsync(tabName, demoCards.FirstOrDefault(x => x.Title == caseName));
+            try
+            {
+                await InitilizeAsync();
+                await NavigateToMenuAsync(tabName);
+                var demoCards = await WaitForDemoCardsAsync();
+                await TestAsync(tabName, demoCards.FirstOrDefault(x => x.Title == caseName));
+            }
+            finally
+            {
+                TestSemaphoreSlim.Release();
+            }
         }
-        protected async Task InitilizeAsync()
+        protected async ValueTask InitilizeAsync()
         {
             if (initilized)
             {
+                await TestSemaphoreSlim.WaitAsync();
+                await RunBrowserAsync();
                 Page = await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 return;
             }
-            await SemaphoreSlim.WaitAsync();
+            await InitilizeSemaphoreSlim.WaitAsync();
             try
             {
                 if (initilized)
                 {
+                    await TestSemaphoreSlim.WaitAsync();
+                    await RunBrowserAsync();
+                    Page = await Browser.NewPageAsync();
+                    await Page.GoToAsync("https://localhost:5001");
                     return;
                 }
                 Output.WriteLine("启动服务器");
-                host = Program.CreateHostBuilder(new string[0]);
+                hostBuilder = Program.CreateHostBuilder(new string[0]);
                 source = new System.Threading.CancellationTokenSource();
-                _ = host.RunConsoleAsync(source.Token);
+                var host = hostBuilder.Build();
+                _ = host.RunAsync(source.Token);
                 demoTesterTypes = AppDomain.CurrentDomain.GetAssemblies()
                     .Where(x => !x.IsDynamic)
                     .SelectMany(x => x.ExportedTypes)
@@ -83,16 +98,8 @@ namespace Blazui.Component.Test
                 {
                     await Task.Delay(1000);
                 }
-                Browser = await Puppeteer.LaunchAsync(new LaunchOptions
-                {
-                    Headless = false,
-                    DefaultViewport = new ViewPortOptions()
-                    {
-                        DeviceScaleFactor = 1,
-                        Height = 800,
-                        Width = 1024
-                    }
-                });
+                await TestSemaphoreSlim.WaitAsync();
+                await RunBrowserAsync();
                 Page = await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 Output.WriteLine("初始化完成");
@@ -100,11 +107,25 @@ namespace Blazui.Component.Test
             }
             finally
             {
-                SemaphoreSlim.Release();
+                InitilizeSemaphoreSlim.Release();
             }
         }
 
-        protected async Task NavigateToMenuAsync(string menuText)
+        private async ValueTask RunBrowserAsync()
+        {
+            Browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = false,
+                DefaultViewport = new ViewPortOptions()
+                {
+                    DeviceScaleFactor = 1,
+                    Height = 800,
+                    Width = 1024
+                }
+            });
+        }
+
+        protected async ValueTask NavigateToMenuAsync(string menuText)
         {
             await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
             while (true)
@@ -129,35 +150,7 @@ namespace Blazui.Component.Test
             }
         }
 
-        protected async Task NavigateToAllMenuAsync()
-        {
-            await Page.WaitForSelectorAsync(".sidebar > .el-menu > li");
-            while (true)
-            {
-                try
-                {
-                    var menus = await Page.QuerySelectorAllAsync(".sidebar > .el-menu > li");
-                    Assert.True(menus.Count() == 17);
-                    foreach (var menu in menus)
-                    {
-                        var backgroundColor = await menu.EvaluateFunctionAsync<string>("x=>x.style.backgroundColor");
-                        Assert.True(string.IsNullOrWhiteSpace(backgroundColor));
-                    }
-                    //foreach (var menu in menus)
-                    //{
-                    //    await menu.HoverAsync();
-                    //    await menu.ClickAsync();
-                    //}
-                    break;
-                }
-                catch (PuppeteerException pe) when (pe.Message == "Node is detached from document" || pe.Message == "Node is either not visible or not an HTMLElement")
-                {
-                    await Task.Delay(50);
-                }
-            }
-        }
-
-        protected async Task TestAsync(string menuName, DemoCard demoCard)
+        protected async ValueTask TestAsync(string menuName, DemoCard demoCard)
         {
             demoTesterTypes.TryGetValue(menuName, out var menuDemos);
             Assert.NotNull(menuDemos);
@@ -169,8 +162,7 @@ namespace Blazui.Component.Test
 
         public void Dispose()
         {
-            _ = Browser.CloseAsync();
-            source.Cancel();
+            Browser.CloseAsync().Wait();
         }
     }
 }

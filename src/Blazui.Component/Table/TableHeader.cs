@@ -16,5 +16,6 @@ namespace Blazui.Component.Table
         public Func<object, object> Eval { get; set; }
         public bool IsCheckBox { get; set; }
         public RenderFragment<object> Template { get; set; }
+        public string Format { get; set; }
     }
 }

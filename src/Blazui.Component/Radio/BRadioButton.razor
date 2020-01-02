@@ -36,7 +36,7 @@
         size = "el-radio-button--" + size;
     }
 }
-<label role="radio" tabindex="0" class="el-radio-button @isChecked @isDisabled @size" @onclick="OnRadioChanged" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
+<label role="radio" tabindex="0" class="el-radio-button @isChecked @isDisabled @size" @onclick="ChangeRadio" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
     <input type="radio" tabindex="-1" class="el-radio-button__orig-radio" checked="@checkedValue" value="@currentSelectedValue">
     <span class="el-radio-button__inner">@ChildContent</span>
 </label>

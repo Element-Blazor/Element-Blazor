@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blazui.Component.Table;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,14 +9,14 @@ namespace Blazui.ServerRender.Demo.Table
 {
     public class AutoGenerateColumnTestData
     {
-        [Description("时间")]
+        [TableColumn(Text = "时间", Format = "yyyy-MM-dd")]
         public DateTime Time { get; set; }
-        [Description("姓名")]
+        [TableColumn(Text = "姓名")]
         public string Name { get; set; }
-        [Description("地址")]
+        [TableColumn(Text = "地址")]
         public string Address { get; set; }
 
-        [Description("是/否")]
+        [TableColumn(Text = "是/否")]
         public bool Yes { get; set; }
     }
 }

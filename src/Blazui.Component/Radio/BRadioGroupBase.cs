@@ -68,5 +68,10 @@ namespace Blazui.Component.Radio
             }
             return true;
         }
+
+        protected override bool ShouldRender()
+        {
+            return true;
+        }
     }
 }
