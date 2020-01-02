@@ -35,6 +35,8 @@ namespace Blazui.Component.Input
         /// </summary>
         [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
+        [Parameter]
+        public bool EnableClearButton { get; set; }
 
         /// <summary>
         /// 如何格式化
@@ -48,6 +50,8 @@ namespace Blazui.Component.Input
         [Parameter]
         public TValue Value { get; set; }
 
+        [Parameter]
+        public EventCallback<bool> EnableClearButtonChanged { get; set; }
         /// <summary>
         /// 值改变时触发
         /// </summary>
@@ -100,10 +104,10 @@ namespace Blazui.Component.Input
 
         protected void ClearOnClick()
         {
-            IsClearButtonClick = true;
-            if (IsClearButtonClickChanged.HasDelegate)
+            EnableClearButton = true;
+            if (EnableClearButtonChanged.HasDelegate)
             {
-                _ = IsClearButtonClickChanged.InvokeAsync(IsClearButtonClick);
+                _ = EnableClearButtonChanged.InvokeAsync(EnableClearButton);
             }
             Value = default;
             Console.WriteLine($"ClearOnClick 设置输入框 {Name} 值:" + Value);
@@ -178,6 +182,7 @@ namespace Blazui.Component.Input
             }
             if (FormItem.OriginValueHasRendered)
             {
+                SetFieldValue(Value, false);
                 return;
             }
             FormItem.OriginValueHasRendered = true;

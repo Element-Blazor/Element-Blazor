@@ -9,7 +9,12 @@ namespace Blazui.Component.Form
 {
     public class BFormItemBase<TValue> : BFormItemBaseObject
     {
-        public TValue OriginValue { get; set; }
+        /// <summary>
+        /// 是否隐藏该表单项
+        /// </summary>
+        [Parameter]
+        public bool IsHidden { get; set; }
+        internal TValue OriginValue { get; set; }
         public TValue Value { get; set; }
 
         internal HtmlPropertyBuilder formItemCssBuilder;
