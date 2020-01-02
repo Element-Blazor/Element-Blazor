@@ -69,7 +69,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 | 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
 ## 更新日志
 
-### 版本 0.0.5.1，2020.01.02发布
+### 版本 0.0.5.23，2020.01.02发布
 1. 新增 [BDropDown 下拉菜单组件][2]
 2. 修复 [Table控件中 日期的格式化不起作用][3]
 3. 修复 [table 全选][4]
