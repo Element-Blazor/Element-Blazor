@@ -76,7 +76,7 @@ namespace Blazui.Component.NavMenu
                 {
                     var uri = new Uri(NavigationManager.Uri);
                     var paths = uri.LocalPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    var menuPaths = route.Split('/');
+                    var menuPaths = route.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
                     if (paths.Length != menuPaths.Length)
                     {
                         return false;
