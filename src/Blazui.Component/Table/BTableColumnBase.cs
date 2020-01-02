@@ -28,6 +28,12 @@ namespace Blazui.Component.Table
         [Parameter]
         public string Text { get; set; }
 
+        /// <summary>
+        /// 格式化
+        /// </summary>
+        [Parameter]
+        public string Format { get; set; }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
