@@ -24,7 +24,7 @@ namespace Blazui.Component.Select
         private Type nullable;
         internal bool isClearable = true;
         private bool valueInitilized = false;
-        internal bool EnableClearButton { get; set; }
+        internal bool IsClearButtonClick { get; set; }
 
         internal string Label { get; set; }
         internal ObservableCollection<BSelectOptionBase<TValue>> Options { get; set; } = new ObservableCollection<BSelectOptionBase<TValue>>();
@@ -144,7 +144,6 @@ namespace Blazui.Component.Select
             {
                 SelectedOption = null;
             }
-            SetFieldValue(Value, true);
         }
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -213,21 +212,24 @@ namespace Blazui.Component.Select
             SelectedOption = item;
             SetFieldValue(item.Value, true);
             Value = item.Value;
-            dict.TryGetValue(Value, out var label);
-            Label = label;
+            if (dict != null)
+            {
+                dict.TryGetValue(Value, out var label);
+                Label = label;
+            }
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(args);
             }
-            EnableClearButton = false;
+            IsClearButtonClick = false;
             StateHasChanged();
         }
 
         internal void OnSelectClick(MouseEventArgs e)
         {
-            if (EnableClearButton)
+            if (IsClearButtonClick)
             {
-                EnableClearButton = false;
+                IsClearButtonClick = false;
                 return;
             }
             if (PopupService.SelectDropDownOptions.Any(x => x.Target.Id == elementSelect.Id))

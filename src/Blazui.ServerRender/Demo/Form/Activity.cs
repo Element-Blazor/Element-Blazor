@@ -11,7 +11,6 @@ namespace Blazui.ServerRender.Demo.Form
     {
         public string Name { get; set; }
         public Area Area { get; set; }
-        public Area? Area1 { get; set; }
         public DateTime? Time { get; set; }
         public bool Delivery { get; set; }
         public List<string> Type { get; set; }

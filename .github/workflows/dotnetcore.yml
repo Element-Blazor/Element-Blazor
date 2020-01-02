@@ -1,7 +1,7 @@
 name: .NET Core
 
 on: 
-  pull_request:
+  push:
     branches: 
       - master
 
