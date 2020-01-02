@@ -320,6 +320,18 @@
     ]
   },
   {
+    "name": "dropdown",
+    "demos": [
+      {
+        "title": "基本使用",
+        "name": "DropDown",
+        "files": [
+          "BasicDropDown.razor"
+        ]
+      }
+    ]
+  },
+  {
     "name": "button",
     "demos": [
       {

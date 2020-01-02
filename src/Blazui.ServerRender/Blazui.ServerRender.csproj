@@ -188,6 +188,9 @@
     <Content Update="Demo\Dialog\TestContent.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="Demo\DropDown\BasicDropDown.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\EditableTab\BindingEditableTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

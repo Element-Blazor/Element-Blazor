@@ -7,17 +7,14 @@
     }
 
 }
-<button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cssClassBuilder">
-    @if (string.IsNullOrWhiteSpace(icon))
-    {
-        <span>@ChildContent</span>
-    }
-    else
-    {
-        <i class="@icon"></i>
-        if (IsLoading)
+    <button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cssClassBuilder">
+        @if (string.IsNullOrWhiteSpace(icon))
         {
             <span>@ChildContent</span>
         }
-    }
-</button>
+        else
+        {
+            <span>@ChildContent</span>
+            <i class="@icon"></i>
+        }
+    </button>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.DropDown
+namespace Blazui.Component
 {
     public class BDropDownItemBase : BComponentBase
     {
@@ -16,6 +16,7 @@ namespace Blazui.Component.DropDown
 
         [Parameter]
         public EventCallback<DropDownOption> OnClick { get; set; }
+
         internal void InternalOnClick()
         {
             _ = Option.Instance.CloseDropDownAsync(Option);

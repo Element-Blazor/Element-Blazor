@@ -139,7 +139,7 @@ services.AddBlazuiServices();
 | Form 表单    | http://blazui.com:9000/form        | [√] 常规支持 <br /> [√] 三种对齐方式 <br /> [√] 单行表单 |       |
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
 | 文件上传     |      | |[√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传
-
+| 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
 #### 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
