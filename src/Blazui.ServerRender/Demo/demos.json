@@ -308,6 +308,14 @@
           "CardLoading.razor",
           "CardLoadingBase.cs"
         ]
+      },
+      {
+        "title": "菜单 Loading",
+        "name": "Loading",
+        "files": [
+          "MenuLoading.razor",
+          "MenuLoadingBase.cs"
+        ]
       }
     ]
   },
@@ -471,6 +479,13 @@
         "name": "BasicInput",
         "files": [
           "BasicInput.razor"
+        ]
+      },
+      {
+        "title": "按钮尺寸",
+        "name": "BasicInput",
+        "files": [
+          "SizeInput.razor"
         ]
       }
     ]

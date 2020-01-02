@@ -2,6 +2,10 @@
     float: left;
 }
 
+.el-card {
+    position: relative;
+}
+
 .blaz-layout {
     display: flex;
     flex-direction: column;
