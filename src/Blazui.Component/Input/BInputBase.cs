@@ -25,7 +25,7 @@ namespace Blazui.Component.Input
         /// 是否启用清空按钮
         /// </summary>
         [Parameter]
-        public bool EnableClearButton { get; set; }
+        public bool IsClearButtonClick { get; set; }
 
         [Parameter]
         public EventCallback<bool> EnableClearButtonChanged { get; set; }
@@ -100,10 +100,10 @@ namespace Blazui.Component.Input
 
         protected void ClearOnClick()
         {
-            EnableClearButton = true;
-            if (EnableClearButtonChanged.HasDelegate)
+            IsClearButtonClick = true;
+            if (IsClearButtonClickChanged.HasDelegate)
             {
-                _ = EnableClearButtonChanged.InvokeAsync(EnableClearButton);
+                _ = IsClearButtonClickChanged.InvokeAsync(IsClearButtonClick);
             }
             Value = default;
             Console.WriteLine($"ClearOnClick 设置输入框 {Name} 值:" + Value);

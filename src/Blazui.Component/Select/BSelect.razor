@@ -10,5 +10,5 @@
     }
 }
 <div class="el-select" @onclick="OnSelectClick" @ref="elementSelect">
-    <BInput TValue="string" IsClearable="isClearable" @bind-EnableClearButton="EnableClearButton" SuffixIcon="@string.Join(" ",suffixIconClsList)" Placeholder="@Placeholder" ValueChanged="UpdateValue" Value="@Label" AdditionalClearIcon="el-select__caret"></BInput>
+    <BInput TValue="string" IsClearable="isClearable" @bind-IsClearButtonClick="IsClearButtonClick" SuffixIcon="@string.Join(" ",suffixIconClsList)" Placeholder="@Placeholder" ValueChanged="UpdateValue" Value="@Label" AdditionalClearIcon="el-select__caret"></BInput>
 </div>
