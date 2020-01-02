@@ -50,8 +50,6 @@ namespace Blazui.Component.Input
         [Parameter]
         public TValue Value { get; set; }
 
-        [Parameter]
-        public EventCallback<bool> EnableClearButtonChanged { get; set; }
         /// <summary>
         /// 值改变时触发
         /// </summary>
