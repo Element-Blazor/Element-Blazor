@@ -110,11 +110,17 @@ namespace Blazui.Component.Container
                 return null;
             }
             var activeOption = DataSource.FirstOrDefault(x => x.IsActive);
+            var activeIndex = DataSource.IndexOf(activeOption);
             if (activeOption.Title != tab.Title)
             {
-                return null;
+                var removingIndex = DataSource.IndexOf(DataSource.FirstOrDefault(x => x.Name == tab.Name));
+                DataSource.RemoveAt(removingIndex);
+                if (activeIndex > removingIndex)
+                {
+                    activeIndex--;
+                }
+                return activeOption;
             }
-            var activeIndex = DataSource.IndexOf(activeOption);
             DataSource.RemoveAt(activeIndex);
             var newActiveIndex = activeIndex;
             if (newActiveIndex >= DataSource.Count - 1)
