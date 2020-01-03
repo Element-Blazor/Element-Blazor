@@ -46,7 +46,7 @@
                 <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;@width">
                     <div class="el-dialog__header">
                         <span class="el-dialog__title">@option.Title</span>
-                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" OnClick="(e=>CloseDialogAsync(option,
+                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option,
                                         new DialogResult() {
                               }))">
                         </BButton>
@@ -77,7 +77,7 @@
                             <!---->
                             <span>@option.Title</span>
                         </div>
-                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" OnClick="(e=>CloseDialogAsync(option, new DialogResult() {
+                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option, new DialogResult() {
                                          Result= MessageBoxResult.Close
                               }))">
                         </BButton>
@@ -144,10 +144,10 @@
             <div class="el-picker-panel__body-wrapper">
                 <div class="el-picker-panel__body">
                     <div class="el-date-picker__header">
-                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-d-arrow-left" OnClick="e=>GoPrevYear(option)"></BButton>
+                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-d-arrow-left" AppendCustomCls="false" OnClick="e=>GoPrevYear(option)"></BButton>
                         @if (option.ShowYear == 0 && option.ShowMonth == 0)
                         {
-                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-arrow-left" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(-1)"></BButton>
+                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-arrow-left" AppendCustomCls="false" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(-1)"></BButton>
                         }
                         @if (option.ShowYear == 0 && option.ShowMonth == 0)
                         {
@@ -164,9 +164,9 @@
                         }
                         @if (option.ShowYear == 0 && option.ShowMonth == 0)
                         {
-                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-arrow-right" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(1)"></BButton>
+                            <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-arrow-right" AppendCustomCls="false" OnClick="e => option.CurrentMonth = option.CurrentMonth.AddMonths(1)"></BButton>
                         }
-                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right" OnClick="e=>GoNextYear(option)"></BButton>
+                        <BButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right" AppendCustomCls="false" OnClick="e=>GoNextYear(option)"></BButton>
                     </div>
                     <div class="el-picker-panel__content">
                         @if (option.ShowMonth > 0)
