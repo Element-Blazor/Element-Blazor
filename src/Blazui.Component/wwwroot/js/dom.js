@@ -46,6 +46,7 @@ window.scanFiles = function (el) {
                 img.onload = function () {
                     infos.push(this.width.toString());
                     infos.push(this.height.toString());
+                    infos.push(img.src);
                     resolver(infos);
                 };
                 img.src = URL.createObjectURL(file);

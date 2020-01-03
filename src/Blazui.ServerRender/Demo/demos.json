@@ -594,6 +594,13 @@
         "files": [
           "BUploadLimit.razor"
         ]
+      },
+      {
+        "title": "图片上传",
+        "name": "Upload",
+        "files": [
+          "ImageUpload.razor"
+        ]
       }
     ]
   }

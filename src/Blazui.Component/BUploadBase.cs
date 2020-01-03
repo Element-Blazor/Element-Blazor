@@ -49,10 +49,36 @@ namespace Blazui.Component
         public float Width { get; set; }
 
         /// <summary>
+        /// 当文件上传成功时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<UploadModel> OnFileUploadSuccess { get; set; }
+        /// <summary>
+        /// 当文件上传失败时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<UploadModel> OnFileUploadFailure { get; set; }
+        /// <summary>
+        /// 当文件列表上传完成时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<UploadModel[]> OnFileListUpload { get; set; }
+        /// <summary>
+        /// 当文件开始上传时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<UploadModel> OnFileUploadStart { get; set; }
+        /// <summary>
         /// 对图片文件限制高度
         /// </summary>
         [Parameter]
         public float Height { get; set; }
+
+        /// <summary>
+        /// 上传类型
+        /// </summary>
+        [Parameter]
+        public UploadType UploadType { get; set; }
         internal ElementReference Input { get; set; }
 
         internal HashSet<UploadModel> Files { get; set; } = new HashSet<UploadModel>();
@@ -69,6 +95,7 @@ namespace Blazui.Component
         internal void DeleteFile(UploadModel file)
         {
             Files.Remove(file);
+            RequireRender = true;
             if (!OnDeleteFile.HasDelegate)
             {
                 return;
@@ -95,12 +122,12 @@ namespace Blazui.Component
                     return;
                 }
                 var size = Convert.ToInt64(item[1]);
-                if (size / 1000 > MaxSize)
+                if (size / 1000 > MaxSize && MaxSize > 0)
                 {
                     Alert("您选择的文件中包含大小超过允许大小的文件");
                     return;
                 }
-                if (item.Length == 4)
+                if (item.Length >= 4)
                 {
                     if ((Convert.ToInt32(item[2]) > Width && Width > 0) || (Convert.ToInt32(item[3]) > Height && Height > 0))
                     {
@@ -111,7 +138,8 @@ namespace Blazui.Component
                 var file = new UploadModel()
                 {
                     FileName = Path.GetFileName(item[0]),
-                    Status = UploadStatus.UnStart
+                    Status = UploadStatus.UnStart,
+                    Base64Url = item.Length == 5 ? item[4] : string.Empty
                 };
                 Files.Add(file);
             }
@@ -134,18 +162,34 @@ namespace Blazui.Component
                 {
                     continue;
                 }
+                if (OnFileUploadStart.HasDelegate)
+                {
+                    _ = OnFileUploadStart.InvokeAsync(item);
+                }
                 var results = await input.UploadFileAsync(item.FileName, Url);
                 if (results[0] == "0")
                 {
                     item.Status = UploadStatus.Success;
+                    if (OnFileUploadSuccess.HasDelegate)
+                    {
+                        _ = OnFileUploadSuccess.InvokeAsync(item);
+                    }
                 }
                 else
                 {
                     item.Status = UploadStatus.Failure;
+                    if (OnFileUploadFailure.HasDelegate)
+                    {
+                        _ = OnFileUploadFailure.InvokeAsync(item);
+                    }
                 }
                 item.Message = results[1];
                 RequireRender = true;
                 await InvokeAsync(StateHasChanged);
+            }
+            if (OnFileListUpload.HasDelegate)
+            {
+                _ = OnFileListUpload.InvokeAsync(Files.ToArray());
             }
         }
     }

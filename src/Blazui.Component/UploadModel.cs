@@ -18,6 +18,10 @@ namespace Blazui.Component
         public UploadStatus Status { get; set; }
 
         /// <summary>
+        /// 图片表示为base64地址
+        /// </summary>
+        public string Base64Url { get; set; }
+        /// <summary>
         /// 上传地址返回的 message 字段信息
         /// </summary>
         public string Message { get; set; }
