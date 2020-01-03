@@ -180,7 +180,7 @@ namespace Blazui.Component.Input
             }
             if (FormItem.OriginValueHasRendered)
             {
-                SetFieldValue(Value, false);
+                SetFieldValue(Value ?? FormItem.Value, false);
                 return;
             }
             FormItem.OriginValueHasRendered = true;
