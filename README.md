@@ -84,7 +84,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 12. 修复 [表单下拉列表][13]
 13. 添加 [组件可增加一个visible属性，用于隐藏或显示][14]
 14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
-
+15. 修复 [tab标签页只能关闭当前的][16]
 ## 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
@@ -106,3 +106,4 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
   [13]: https://github.com/wzxinchen/Blazui/issues/28
   [14]: https://github.com/wzxinchen/Blazui/issues/14
   [15]: https://github.com/wzxinchen/Blazui/issues/13
+  [16]: https://github.com/wzxinchen/BlazAdmin/issues/22
