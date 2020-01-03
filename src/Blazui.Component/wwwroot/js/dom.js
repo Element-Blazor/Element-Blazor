@@ -26,15 +26,46 @@ window.upload = function (el) {
     return el.children[1].click();
 };
 
+window.clear = function (el) {
+    if (!el) {
+        return;
+    }
+    el.value = null;
+};
+
 window.scanFiles = function (el) {
     if (!el) {
         return [];
     }
+
+    let scanFile = function (file) {
+        return new Promise((resolver) => {
+            let infos = [file.name, file.size.toString()];
+            if (file.type.indexOf("image") != -1) {
+                let img = new Image();
+                img.onload = function () {
+                    infos.push(this.width.toString());
+                    infos.push(this.height.toString());
+                    resolver(infos);
+                };
+                img.src = URL.createObjectURL(file);
+                return;
+            }
+            resolver(infos);
+        });
+    };
+
     let files = [];
     for (var i = 0; i < el.files.length; i++) {
-        files.push(el.files.item(i).name);
+        let file = el.files.item(i);
+
+        files.push(new Promise((resolver) => {
+            scanFile(file).then(infos => {
+                resolver(infos);
+            });
+        }));
     }
-    return files;
+    return Promise.all(files);
 };
 
 window.uploadFile = function (el, fileName, url) {

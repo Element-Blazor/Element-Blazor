@@ -3,6 +3,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Blazui.Component.Dom
@@ -25,9 +26,10 @@ namespace Blazui.Component.Dom
             return await jSRuntime.InvokeAsync<string[]>("uploadFile", elementReference, fileName, url);
         }
 
-        public async Task<string[]> ScanFilesAsync()
+        public async Task<string[][]> ScanFilesAsync()
         {
-            return await jSRuntime.InvokeAsync<string[]>("scanFiles", elementReference);
+            var files = await jSRuntime.InvokeAsync<dynamic>("scanFiles", elementReference);
+            return JsonSerializer.Deserialize<string[][]>(files.ToString());
         }
 
         public async Task ClickAsync()
@@ -57,6 +59,11 @@ namespace Blazui.Component.Dom
         public async Task<int> GetOffsetLeftAsync()
         {
             return await jSRuntime.InvokeAsync<int>("getOffsetLeft", elementReference);
+        }
+
+        public ValueTask ClearAsync()
+        {
+            return jSRuntime.InvokeVoidAsync("clear", elementReference);
         }
 
         public async Task<int> GetOffsetTopAsync()
