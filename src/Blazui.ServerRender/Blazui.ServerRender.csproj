@@ -12,6 +12,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Demo\Upload\UploadActivity.cs" />
+    <Compile Remove="Demo\Upload\UploadFormBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Demo\Upload\BasicUpload.razor" />
+    <Content Remove="Demo\Upload\BUploadLimit.razor" />
+    <Content Remove="Demo\Upload\ImageUpload.razor" />
+    <Content Remove="Demo\Upload\UploadForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Demo\BasicButton\BasicButton.razor" />
     <None Include="Demo\BasicInput\BasicInput.razor" />
     <None Include="Demo\BasicRadio\BasicRadio.razor" />
@@ -99,12 +111,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Form\InlineFormBase.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Demo\Upload\UploadActivity.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Demo\Upload\UploadFormBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Loading\MenuLoadingBase.cs">
@@ -204,9 +210,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Form\HiddenFormItem.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\Upload\UploadForm.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Form\InitilizeForm.razor">
@@ -389,15 +392,6 @@
     <Content Update="Demo\TextSwitch.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\Upload\BasicUpload.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\Upload\ImageUpload.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\Upload\BUploadLimit.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\css\site.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -407,6 +401,10 @@
     <Content Update="wwwroot\metadata.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Demo\Upload\" />
   </ItemGroup>
 
 </Project>
