@@ -46,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazui.Component\Blazui.Component.csproj" />
+    <ProjectReference Include="..\..\..\Blazui.Markdown\src\Blazui.Markdown\Blazui.Markdown.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -216,6 +216,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Loading\CardLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MarkdownEditor\BasicEditor.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Menu\CustomBackgroundMenu.razor">
