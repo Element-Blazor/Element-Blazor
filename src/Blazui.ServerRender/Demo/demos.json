@@ -601,6 +601,15 @@
         "files": [
           "ImageUpload.razor"
         ]
+      },
+      {
+        "title": "表单上传",
+        "name": "Upload",
+        "files": [
+          "UploadForm.razor",
+          "UploadActivity.cs",
+          "UploadFormBase.cs"
+        ]
       }
     ]
   }

@@ -20,12 +20,12 @@
     }
 </div>
 <ul class="el-upload-list el-upload-list--@listType">
-    @foreach (var file in Files)
+    @foreach (var file in Files.Cast<UploadModel>())
     {
         <li tabindex="0" class="el-upload-list__item is-success">
             @if (UploadType == UploadType.Image)
             {
-                <img src="@(file.Base64Url)" alt="" class="el-upload-list__item-thumbnail">
+                <img src="@(file.Url)" alt="" class="el-upload-list__item-thumbnail">
             }
             <a class="el-upload-list__item-name">
                 <i class="el-icon-document"></i>@file.FileName

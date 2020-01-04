@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Dom;
+using Blazui.Component.Form;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BUploadBase : BComponentBase
+    public class BUploadBase : BFieldComponentBase<IFileModel[]>
     {
         internal ElementReference hdnField;
         /// <summary>
@@ -28,7 +29,7 @@ namespace Blazui.Component
         /// 文件删除时触发
         /// </summary>
         [Parameter]
-        public EventCallback<UploadModel> OnDeleteFile { get; set; }
+        public EventCallback<IFileModel> OnDeleteFile { get; set; }
 
         /// <summary>
         /// 允许上传的文件后缀，以“.”开头
@@ -52,22 +53,22 @@ namespace Blazui.Component
         /// 当文件上传成功时触发
         /// </summary>
         [Parameter]
-        public EventCallback<UploadModel> OnFileUploadSuccess { get; set; }
+        public EventCallback<IFileModel> OnFileUploadSuccess { get; set; }
         /// <summary>
         /// 当文件上传失败时触发
         /// </summary>
         [Parameter]
-        public EventCallback<UploadModel> OnFileUploadFailure { get; set; }
+        public EventCallback<IFileModel> OnFileUploadFailure { get; set; }
         /// <summary>
         /// 当文件列表上传完成时触发
         /// </summary>
         [Parameter]
-        public EventCallback<UploadModel[]> OnFileListUpload { get; set; }
+        public EventCallback<IFileModel[]> OnFileListUpload { get; set; }
         /// <summary>
         /// 当文件开始上传时触发
         /// </summary>
         [Parameter]
-        public EventCallback<UploadModel> OnFileUploadStart { get; set; }
+        public EventCallback<IFileModel> OnFileUploadStart { get; set; }
         /// <summary>
         /// 对图片文件限制高度
         /// </summary>
@@ -81,7 +82,21 @@ namespace Blazui.Component
         public UploadType UploadType { get; set; }
         internal ElementReference Input { get; set; }
 
-        internal HashSet<UploadModel> Files { get; set; } = new HashSet<UploadModel>();
+        internal HashSet<IFileModel> Files { get; set; } = new HashSet<IFileModel>();
+
+        protected override void FormItem_OnReset(object value, bool requireRerender)
+        {
+            RequireRender = true;
+            if (value == null)
+            {
+                Files = new HashSet<IFileModel>();
+            }
+            else
+            {
+                InitilizeFiles(value as IFileModel[]);
+            }
+            StateHasChanged();
+        }
 
         protected override void OnInitialized()
         {
@@ -92,10 +107,11 @@ namespace Blazui.Component
             }
         }
 
-        internal void DeleteFile(UploadModel file)
+        internal void DeleteFile(IFileModel file)
         {
             Files.Remove(file);
             RequireRender = true;
+            SetFieldValue(Files.ToArray(), true);
             if (!OnDeleteFile.HasDelegate)
             {
                 return;
@@ -139,12 +155,13 @@ namespace Blazui.Component
                 {
                     FileName = Path.GetFileName(item[0]),
                     Status = UploadStatus.UnStart,
-                    Base64Url = item.Length == 5 ? item[4] : string.Empty
+                    Url = item.Length == 5 ? item[4] : string.Empty
                 };
                 Files.Add(file);
             }
 
             RequireRender = true;
+            SetFieldValue(Files.ToArray(), true);
             _ = UploadFilesAsync(input);
         }
 
@@ -152,13 +169,46 @@ namespace Blazui.Component
         {
             base.OnParametersSet();
             AllowExtensions = AllowExtensions.Select(x => x?.Trim()).ToArray();
+            if (FormItem == null)
+            {
+                return;
+            }
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            if (FormItem.Form.Values.Any())
+            {
+                InitilizeFiles(FormItem.OriginValue);
+            }
+        }
+
+        private void InitilizeFiles(IFileModel[] fileModels)
+        {
+            Files = new HashSet<IFileModel>();
+            if (fileModels == null)
+            {
+                return;
+            }
+            foreach (var item in fileModels)
+            {
+                Files.Add(new UploadModel()
+                {
+                    Url = item.Url,
+                    FileName = item.FileName,
+                    Id = item.Id,
+                    Status = UploadStatus.Success
+                });
+            }
         }
 
         private async Task UploadFilesAsync(Element input)
         {
             foreach (var item in Files)
             {
-                if (item.Status != UploadStatus.UnStart)
+                var model = item as UploadModel;
+                if (model.Status != UploadStatus.UnStart)
                 {
                     continue;
                 }
@@ -169,7 +219,7 @@ namespace Blazui.Component
                 var results = await input.UploadFileAsync(item.FileName, Url);
                 if (results[0] == "0")
                 {
-                    item.Status = UploadStatus.Success;
+                    model.Status = UploadStatus.Success;
                     if (OnFileUploadSuccess.HasDelegate)
                     {
                         _ = OnFileUploadSuccess.InvokeAsync(item);
@@ -177,13 +227,13 @@ namespace Blazui.Component
                 }
                 else
                 {
-                    item.Status = UploadStatus.Failure;
+                    model.Status = UploadStatus.Failure;
                     if (OnFileUploadFailure.HasDelegate)
                     {
                         _ = OnFileUploadFailure.InvokeAsync(item);
                     }
                 }
-                item.Message = results[1];
+                model.Message = results[1];
                 RequireRender = true;
                 await InvokeAsync(StateHasChanged);
             }

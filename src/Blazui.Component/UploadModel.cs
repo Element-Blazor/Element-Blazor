@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class UploadModel
+    public class UploadModel: IFileModel
     {
         /// <summary>
         /// 文件名
@@ -18,9 +18,14 @@ namespace Blazui.Component
         public UploadStatus Status { get; set; }
 
         /// <summary>
-        /// 图片表示为base64地址
+        /// 图片地址
         /// </summary>
-        public string Base64Url { get; set; }
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 文件唯一标识
+        /// </summary>
+        public string Id { get; set; }
         /// <summary>
         /// 上传地址返回的 message 字段信息
         /// </summary>
