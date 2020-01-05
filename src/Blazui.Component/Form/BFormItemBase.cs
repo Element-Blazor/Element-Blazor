@@ -22,7 +22,8 @@ namespace Blazui.Component.Form
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none");
+            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none")
+                .Add(Style);
 
             if (!Form.Values.Any())
             {

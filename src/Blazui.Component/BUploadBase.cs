@@ -2,6 +2,7 @@
 using Blazui.Component.Form;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,17 @@ namespace Blazui.Component
 {
     public class BUploadBase : BFieldComponentBase<IFileModel[]>
     {
+        [Inject]
+        internal Document Document { get; set; }
         internal ElementReference hdnField;
+
+        private bool eventRegistered = false;
+        /// <summary>
+        /// 启用粘贴上传
+        /// </summary>
+        [Parameter]
+        public bool EnablePasteUpload { get; set; } = true;
+
         /// <summary>
         /// 文件上传地址
         /// </summary>
@@ -124,11 +135,8 @@ namespace Blazui.Component
             await Input.Dom(JSRuntime).ClickAsync();
         }
 
-        internal async Task ScanFileAsync()
+        private void ScanFiles(string[][] files)
         {
-            var input = Input.Dom(JSRuntime);
-            var files = await input.ScanFilesAsync();
-            await input.ClearAsync();
             foreach (var item in files)
             {
                 var ext = Path.GetExtension(item[0]);
@@ -159,10 +167,17 @@ namespace Blazui.Component
                 };
                 Files.Add(file);
             }
+        }
 
+        internal async Task ScanFileAsync()
+        {
+            var input = Input.Dom(JSRuntime);
+            var files = await input.ScanFilesAsync();
+            await input.ClearAsync();
+            ScanFiles(files);
+            _ = UploadFilesAsync(input);
             RequireRender = true;
             SetFieldValue(Files.ToArray(), true);
-            _ = UploadFilesAsync(input);
         }
 
         protected override void OnParametersSet()
@@ -217,30 +232,64 @@ namespace Blazui.Component
                     _ = OnFileUploadStart.InvokeAsync(item);
                 }
                 var results = await input.UploadFileAsync(item.FileName, Url);
-                if (results[0] == "0")
-                {
-                    model.Status = UploadStatus.Success;
-                    if (OnFileUploadSuccess.HasDelegate)
-                    {
-                        _ = OnFileUploadSuccess.InvokeAsync(item);
-                    }
-                }
-                else
-                {
-                    model.Status = UploadStatus.Failure;
-                    if (OnFileUploadFailure.HasDelegate)
-                    {
-                        _ = OnFileUploadFailure.InvokeAsync(item);
-                    }
-                }
-                model.Message = results[1];
-                RequireRender = true;
-                await InvokeAsync(StateHasChanged);
+                await FileUploadedAsync(model, results);
             }
             if (OnFileListUpload.HasDelegate)
             {
                 _ = OnFileListUpload.InvokeAsync(Files.ToArray());
             }
+        }
+
+        private async Task FileUploadedAsync(UploadModel model, string[] results)
+        {
+            if (results[0] == "0")
+            {
+                model.Status = UploadStatus.Success;
+                if (OnFileUploadSuccess.HasDelegate)
+                {
+                    _ = OnFileUploadSuccess.InvokeAsync(model);
+                }
+            }
+            else
+            {
+                model.Status = UploadStatus.Failure;
+                if (OnFileUploadFailure.HasDelegate)
+                {
+                    _ = OnFileUploadFailure.InvokeAsync(model);
+                }
+            }
+            model.Message = results[1];
+            model.Id = results[2];
+            model.Url = results[3];
+            RequireRender = true;
+            await InvokeAsync(StateHasChanged);
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (EnablePasteUpload && !eventRegistered)
+            {
+                eventRegistered = true;
+                _ = Document.RegisterPasteUploadAsync(this, Url);
+            }
+        }
+
+        [JSInvokable("previewFiles")]
+        public string[] PasteUploadFiles(string[][] files)
+        {
+            ScanFiles(files);
+            RequireRender = true;
+            StateHasChanged();
+            return Files.Select(x => x.Id).ToArray();
+        }
+
+        [JSInvokable("fileUploaded")]
+        public async Task FileUploadedAsync(string[] file, string id)
+        {
+            await FileUploadedAsync((UploadModel)Files.FirstOrDefault(x => x.Id == id), file);
+            RequireRender = true;
+            StateHasChanged();
         }
     }
 }

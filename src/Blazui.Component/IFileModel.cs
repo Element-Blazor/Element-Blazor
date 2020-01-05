@@ -16,7 +16,7 @@ namespace Blazui.Component
         /// </summary>
         string Id { get; set; }
         /// <summary>
-        /// 图片地址
+        /// 文件访问地址，如果上传的是图片，并且需要预览，则必须传入访问地址
         /// </summary>
         string Url { get; set; }
     }

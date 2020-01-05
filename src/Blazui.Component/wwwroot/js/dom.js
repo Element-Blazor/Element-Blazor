@@ -32,12 +32,33 @@ window.clear = function (el) {
     }
     el.value = null;
 };
+window.registerPasteUpload = function (upload, url) {
+    document.addEventListener('paste', async function (event) {
+        var items = event.clipboardData && event.clipboardData.items;
+        var files = [];
+        if (items && items.length) {
+            // 检索剪切板items
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].kind != "file") {
+                    continue;
+                }
+                file = items[i].getAsFile();
+                files.push(file);
+            }
+        }
 
-window.scanFiles = function (el) {
-    if (!el) {
-        return [];
-    }
-
+        let ids = await convertFiles(files).then(async fs => {
+            return await upload.invokeMethodAsync("previewFiles", fs);
+        });
+        for (var j = 0; j < files.length; j++) {
+            var result = await new Promise(resolver => {
+                _uploadFile(url, files[j], resolver);
+            });
+            await upload.invokeMethodAsync("fileUploaded", result, ids[j]);
+        }
+    });
+};
+function convertFiles(files) {
     let scanFile = function (file) {
         return new Promise((resolver) => {
             let infos = [file.name, file.size.toString()];
@@ -55,20 +76,43 @@ window.scanFiles = function (el) {
             resolver(infos);
         });
     };
+    let filePromises = [];
+    for (var i = 0; i < files.length; i++) {
+        let file = files.item ? files.item(i) : files[i];
 
-    let files = [];
-    for (var i = 0; i < el.files.length; i++) {
-        let file = el.files.item(i);
-
-        files.push(new Promise((resolver) => {
+        filePromises.push(new Promise((resolver) => {
             scanFile(file).then(infos => {
                 resolver(infos);
             });
         }));
     }
+    return Promise.all(filePromises);
+}
+window.scanFiles = function (el) {
+    if (!el) {
+        return [];
+    }
+
+    let files = this.convertFiles(el.files);
     return Promise.all(files);
 };
-
+async function _uploadFile(url, file, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+    xhr.onreadystatechange = function () {
+        if (this.readyState != 4) {
+            return;
+        }
+        if (this.status < 200 || this.status >= 300) {
+            return;
+        }
+        let response = JSON.parse(this.responseText);
+        callback([response.code.toString(), response.message, response.id, response.url]);
+    };
+    let formData = new this.FormData();
+    formData.append("fileContent", file);
+    xhr.send(formData);
+}
 window.uploadFile = function (el, fileName, url) {
     return new Promise((resolver, reject) => {
         let file = null;
@@ -78,21 +122,7 @@ window.uploadFile = function (el, fileName, url) {
                 break;
             }
         }
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", url);
-        xhr.onreadystatechange = function () {
-            if (this.readyState != 4) {
-                return;
-            }
-            if (this.status < 200 || this.status >= 300) {
-                return;
-            }
-            let response = JSON.parse(this.responseText);
-            resolver([response.code.toString(), response.message]);
-        };
-        let formData = new this.FormData();
-        formData.append("fileContent", file);
-        xhr.send(formData);
+        _uploadFile(url, file, resolver);
     });
     //const temporaryFileReader = new FileReader();
     //return new Promise((resolve, reject) => {

@@ -16,7 +16,7 @@ namespace Blazui.Component.Dom
             this.jSRuntime = jSRuntime;
         }
 
-        public async Task AppendAsync(ElementReference  content)
+        public async Task AppendAsync(ElementReference content)
         {
             await jSRuntime.InvokeAsync<object>("documentAppendChild", content);
         }
@@ -49,6 +49,11 @@ namespace Blazui.Component.Dom
         public async Task<int> GetClientWidthAsync()
         {
             return await jSRuntime.InvokeAsync<int>("getClientWidth");
+        }
+
+        internal ValueTask RegisterPasteUploadAsync(BUploadBase upload, string url)
+        {
+            return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url);
         }
     }
 }

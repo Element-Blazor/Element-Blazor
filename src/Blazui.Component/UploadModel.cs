@@ -25,7 +25,7 @@ namespace Blazui.Component
         /// <summary>
         /// 文件唯一标识
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         /// <summary>
         /// 上传地址返回的 message 字段信息
         /// </summary>

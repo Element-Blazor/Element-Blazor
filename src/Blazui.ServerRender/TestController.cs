@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,11 +23,17 @@ namespace Blazui.ServerRender
         public async Task<IActionResult> UploadAsync([FromForm]IFormFile fileContent)
         {
             await Task.Delay(new Random().Next(1000));
-            return Content(JsonConvert.SerializeObject(new
+            var ms = new MemoryStream();
+            using (ms)
             {
-                code = 0,
-                message = Guid.NewGuid().ToString()
-            }), "application/json");
+                fileContent.CopyTo(ms);
+                return Content(JsonConvert.SerializeObject(new
+                {
+                    code = 0,
+                    id = Guid.NewGuid().ToString(),
+                    url = $"data:image;base64,{Convert.ToBase64String(ms.ToArray())}"
+                }), "application/json");
+            }
         }
     }
 }
