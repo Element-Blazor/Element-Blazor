@@ -296,7 +296,14 @@ namespace Blazui.Component
         {
             SetFieldValue(Files.ToArray(), true);
             RequireRender = true;
-            StateHasChanged();
+            if (OnFileListUpload.HasDelegate)
+            {
+                _ = OnFileListUpload.InvokeAsync(Files.ToArray());
+            }
+            else
+            {
+                StateHasChanged();
+            }
         }
     }
 }
