@@ -291,5 +291,12 @@ namespace Blazui.Component
             RequireRender = true;
             StateHasChanged();
         }
+        [JSInvokable("filesUploaded")]
+        public void FilesUploaded()
+        {
+            SetFieldValue(Files.ToArray(), true);
+            RequireRender = true;
+            StateHasChanged();
+        }
     }
 }

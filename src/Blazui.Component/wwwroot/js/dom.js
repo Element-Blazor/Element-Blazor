@@ -56,6 +56,7 @@ window.registerPasteUpload = function (upload, url) {
             });
             await upload.invokeMethodAsync("fileUploaded", result, ids[j]);
         }
+        await upload.invokeMethodAsync("filesUploaded");
     });
 };
 function convertFiles(files) {
@@ -107,7 +108,7 @@ async function _uploadFile(url, file, callback) {
             return;
         }
         let response = JSON.parse(this.responseText);
-        callback([response.code.toString(), response.message, response.id, response.url]);
+        callback([response.code.toString(), response.message || "", response.id, response.url]);
     };
     let formData = new this.FormData();
     formData.append("fileContent", file);

@@ -12,18 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Demo\Upload\UploadActivity.cs" />
-    <Compile Remove="Demo\Upload\UploadFormBase.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Demo\Upload\BasicUpload.razor" />
-    <Content Remove="Demo\Upload\BUploadLimit.razor" />
-    <Content Remove="Demo\Upload\ImageUpload.razor" />
-    <Content Remove="Demo\Upload\UploadForm.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Demo\BasicButton\BasicButton.razor" />
     <None Include="Demo\BasicInput\BasicInput.razor" />
     <None Include="Demo\BasicRadio\BasicRadio.razor" />
@@ -401,10 +389,6 @@
     <Content Update="wwwroot\metadata.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Demo\Upload\" />
   </ItemGroup>
 
 </Project>
