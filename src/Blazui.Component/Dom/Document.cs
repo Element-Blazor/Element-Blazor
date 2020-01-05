@@ -55,5 +55,10 @@ namespace Blazui.Component.Dom
         {
             return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url);
         }
+
+        internal ValueTask UnRegisterPasteUploadAsync()
+        {
+            return jSRuntime.InvokeVoidAsync("unRegisterPasteUpload");
+        }
     }
 }

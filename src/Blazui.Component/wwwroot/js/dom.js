@@ -26,38 +26,46 @@ window.upload = function (el) {
     return el.children[1].click();
 };
 
+var uploader, uploadUrl;
 window.clear = function (el) {
     if (!el) {
         return;
     }
     el.value = null;
 };
-window.registerPasteUpload = function (upload, url) {
-    document.addEventListener('paste', async function (event) {
-        var items = event.clipboardData && event.clipboardData.items;
-        var files = [];
-        if (items && items.length) {
-            // 检索剪切板items
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].kind != "file") {
-                    continue;
-                }
-                file = items[i].getAsFile();
-                files.push(file);
+async function executePasteUpload(event) {
+    var items = event.clipboardData && event.clipboardData.items;
+    var files = [];
+    if (items && items.length) {
+        // 检索剪切板items
+        for (var i = items.length - 1; i >= 0; i--) {
+            if (items[i].kind != "file") {
+                continue;
             }
+            file = items[i].getAsFile();
+            files.push(file);
+            break;
         }
+    }
 
-        let ids = await convertFiles(files).then(async fs => {
-            return await upload.invokeMethodAsync("previewFiles", fs);
-        });
-        for (var j = 0; j < files.length; j++) {
-            var result = await new Promise(resolver => {
-                _uploadFile(url, files[j], resolver);
-            });
-            await upload.invokeMethodAsync("fileUploaded", result, ids[j]);
-        }
-        await upload.invokeMethodAsync("filesUploaded");
+    let ids = await convertFiles(files).then(async fs => {
+        return await uploader.invokeMethodAsync("previewFiles", fs);
     });
+    for (var j = 0; j < files.length; j++) {
+        var result = await new Promise(resolver => {
+            _uploadFile(uploadUrl, files[j], resolver);
+        });
+        await uploader.invokeMethodAsync("fileUploaded", result, ids[j]);
+    }
+    await uploader.invokeMethodAsync("filesUploaded");
+};
+window.registerPasteUpload = function (upload, url) {
+    uploader = upload;
+    uploadUrl = url;
+    document.addEventListener('paste', executePasteUpload);
+};
+window.unRegisterPasteUpload = function () {
+    this.document.removeEventListener("paste");
 };
 function convertFiles(files) {
     let scanFile = function (file) {
@@ -95,7 +103,7 @@ window.scanFiles = function (el) {
     }
 
     let files = this.convertFiles(el.files);
-    return Promise.all(files);
+    return files;
 };
 async function _uploadFile(url, file, callback) {
     let xhr = new XMLHttpRequest();

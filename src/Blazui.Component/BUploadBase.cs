@@ -173,7 +173,6 @@ namespace Blazui.Component
         {
             var input = Input.Dom(JSRuntime);
             var files = await input.ScanFilesAsync();
-            await input.ClearAsync();
             ScanFiles(files);
             _ = UploadFilesAsync(input);
             RequireRender = true;
@@ -232,15 +231,18 @@ namespace Blazui.Component
                     _ = OnFileUploadStart.InvokeAsync(item);
                 }
                 var results = await input.UploadFileAsync(item.FileName, Url);
-                await FileUploadedAsync(model, results);
+                FileUploaded(model, results);
             }
+            await input.ClearAsync();
+            RequireRender = true;
             if (OnFileListUpload.HasDelegate)
             {
                 _ = OnFileListUpload.InvokeAsync(Files.ToArray());
             }
+            StateHasChanged();
         }
 
-        private async Task FileUploadedAsync(UploadModel model, string[] results)
+        private void FileUploaded(UploadModel model, string[] results)
         {
             if (results[0] == "0")
             {
@@ -261,8 +263,6 @@ namespace Blazui.Component
             model.Message = results[1];
             model.Id = results[2];
             model.Url = results[3];
-            RequireRender = true;
-            await InvokeAsync(StateHasChanged);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -278,16 +278,17 @@ namespace Blazui.Component
         [JSInvokable("previewFiles")]
         public string[] PasteUploadFiles(string[][] files)
         {
+            var oldFiles = Files.ToArray();
             ScanFiles(files);
             RequireRender = true;
             StateHasChanged();
-            return Files.Select(x => x.Id).ToArray();
+            return Files.Except(oldFiles).Select(x => x.Id).ToArray();
         }
 
         [JSInvokable("fileUploaded")]
         public async Task FileUploadedAsync(string[] file, string id)
         {
-            await FileUploadedAsync((UploadModel)Files.FirstOrDefault(x => x.Id == id), file);
+            FileUploaded((UploadModel)Files.FirstOrDefault(x => x.Id == id), file);
             RequireRender = true;
             StateHasChanged();
         }
@@ -304,6 +305,12 @@ namespace Blazui.Component
             {
                 StateHasChanged();
             }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _ = Document.UnRegisterPasteUploadAsync();
         }
     }
 }
