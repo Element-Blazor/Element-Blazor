@@ -40,13 +40,22 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 
 ![image.png-58.1kB][1]
 
-类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
+---
+
+类似于LayAdmin的后台管理模板 
+https://github.com/wzxinchen/BlazAdmin
+
+---
+
+BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui
+
+地址：https://github.com/caopengfei/BlazorECharts
 
 ## 组件列表
 
 
 | 组件名       | 调用Demo                           | 功能支持     | 下一步计划   |
-| :----------- | :----------:                       | -----------  | -----------  |
+| :----------- | :----------                       | -----------  | -----------  |
 | 按钮         | http://blazui.com:9000/button      | [√] 常规支持 |              |
 | 输入框       | http://blazui.com:9000/input       | [√] 常规支持 |              |
 | 单选框       | http://blazui.com:9000/radio       | [√] 常规支持 <br /> [√] 按钮单选框 <br /> [√] 单选框组 <br /> [√] 按钮单选框组 <br /> [√] 带边框的单选框    |          |    
