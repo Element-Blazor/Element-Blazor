@@ -1,5 +1,27 @@
 ﻿[
   {
+    "name": "markdowneditor",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "MarkdownEditor",
+        "files": [
+          "BasicEditor.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "表单提交",
+        "name": "MarkdownEditor",
+        "files": [
+          "FormMarkdown.razor",
+          "FormMarkdownBase.cs",
+          "ArticleModel.cs"
+        ]
+      }
+    ]
+  },
+  {
     "name": "tabs",
     "demos": [
       {
@@ -585,14 +607,34 @@
         "title": "基础用法",
         "name": "Upload",
         "files": [
-          "BasicUpload.razor"
+          "BasicUpload.razor",
+          "TestController.cs"
         ]
       },
       {
         "title": "限制上传",
         "name": "Upload",
         "files": [
-          "BUploadLimit.razor"
+          "BUploadLimit.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "图片上传",
+        "name": "Upload",
+        "files": [
+          "ImageUpload.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "表单上传",
+        "name": "Upload",
+        "files": [
+          "UploadForm.razor",
+          "UploadActivity.cs",
+          "UploadFormBase.cs",
+          "TestController.cs"
         ]
       }
     ]
