@@ -18,6 +18,13 @@
           "FormMarkdownBase.cs",
           "ArticleModel.cs"
         ]
+      },
+      {
+        "title": "Markdown 显示",
+        "name": "MarkdownEditor",
+        "files": [
+          "Markdown.razor"
+        ]
       }
     ]
   },
