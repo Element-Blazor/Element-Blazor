@@ -73,8 +73,8 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 | 日期选择器   | http://blazui.com:9000/datepicker  | [√] 常规支持 <br /> [√] 指定日期格式 |       |
 | Form 表单    | http://blazui.com:9000/form        | [√] 常规支持 <br /> [√] 三种对齐方式 <br /> [√] 单行表单 |       |
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
-| 文件上传     | http://blazui.com:9000/upload     | [√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传 [√] 文件上传 <br /> [√] 图片上传 <br /> [√] 粘贴上传 <br /> |
-| Markdown 编辑器 |http://blazui.com:9000/markdown | [√] 常规支持 <br /> [√] 文件上传 <br /> [√] 图片上传 <br /> [√] 粘贴上传 <br />
+| 文件上传     | http://blazui.com:9000/upload     | [√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 图片上传 <br /> [√] 粘贴上传 |
+| Markdown 编辑器 |http://blazui.com:9000/markdown | [√] 常规支持 <br /> [√] 文件上传 <br /> [√] 图片上传 <br /> [√] 粘贴上传
 | 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
 ## 更新日志
 
