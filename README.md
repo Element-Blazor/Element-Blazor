@@ -51,6 +51,11 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 
 地址：https://github.com/caopengfei/BlazorECharts
 
+---
+基于 Blazui 的 Markdown 编辑器 Blazui.Markdown
+
+地址：https://github.com/wzxinchen/Blazui.Markdown
+
 ## 组件列表
 
 
