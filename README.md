@@ -95,6 +95,11 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
 15. 修复 [tab标签页只能关闭当前的][16]
 
+### 版本 0.0.6.2 2020.01.06发布
+1. 新增 [文件上传组件][17]
+2. 新增 [Markdown 编辑器][18] 及 [Markdown 渲染器][18]
+3. 修复 [BDatePicker控件DateChanged有问题][19]
+
 ## 感谢
 
 - 测试组件库功能的稳定性和完整度  @deathvicky
@@ -117,3 +122,6 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
   [14]: https://github.com/wzxinchen/Blazui/issues/14
   [15]: https://github.com/wzxinchen/Blazui/issues/13
   [16]: https://github.com/wzxinchen/BlazAdmin/issues/22
+  [17]: http://blazui.com:9000/upload
+  [18]: http://blazui.com:9000/markdown
+  [19]: https://github.com/wzxinchen/Blazui/issues/62
