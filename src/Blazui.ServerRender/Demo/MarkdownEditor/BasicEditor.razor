@@ -1,4 +1,4 @@
-﻿<BMarkdownEditor @bind-Value="value" UploadUrl="/api/test/upload"></BMarkdownEditor>
+﻿<BMarkdownEditor @bind-Value="value" UploadUrl="/api/test/upload" DisableFileUpload="true" DisableImageUpload="true"></BMarkdownEditor>
 
 @code{
     protected string value = @"### 主要特性
@@ -87,7 +87,7 @@ GFM a-tail link @pandao
 即缩进四个空格，也做为实现类似`<pre>`预格式化文本(Preformatted Text)的功能。
 
 <?php
-    echo ""Hello world!"";
+echo ""Hello world!"";
 ?>
 
 预格式化文本：
@@ -106,27 +106,27 @@ console.log(""Hello world!"");
 
 (function(){
 var box = function(){
-    return box.fn.init();
+return box.fn.init();
 };
 
 box.prototype = box.fn = {
-    init : function(){
-        console.log('box.init()');
+init : function(){
+    console.log('box.init()');
 
-        return this;
-    },
+    return this;
+},
 
-    add : function(str){
-        alert(""add"", str);
+add : function(str){
+    alert(""add"", str);
 
-        return this;
-    },
+    return this;
+},
 
-    remove : function(str){
-        alert(""remove"", str);
+remove : function(str){
+    alert(""remove"", str);
 
-        return this;
-    }
+    return this;
+}
 };
 
 box.fn.init.prototype = box.fn;

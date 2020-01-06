@@ -14,7 +14,7 @@ namespace Blazui.Component.Form
         /// </summary>
         [Parameter]
         public bool IsHidden { get; set; }
-        internal TValue OriginValue { get; set; }
+        public TValue OriginValue { get; set; }
         public TValue Value { get; set; }
 
         internal HtmlPropertyBuilder formItemCssBuilder;
