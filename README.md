@@ -40,7 +40,12 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 
 ![image.png-58.1kB][1]
 
-类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
+类似于LayAdmin的后台管理模板 
+https://github.com/wzxinchen/BlazAdmin
+
+BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui
+
+地址：https://github.com/caopengfei/BlazorECharts
 
 ## 组件列表
 
