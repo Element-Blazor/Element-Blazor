@@ -10,14 +10,8 @@ using System.Threading.Tasks;
 namespace Blazui.ServerRender
 {
     [Route("api/test")]
-    public class TestController : ControllerBase
+    public class Test1Controller : ControllerBase
     {
-        [Route("test")]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Content("ok");
-        }
         [Route("upload")]
         [HttpPost]
         public async Task<IActionResult> UploadAsync([FromForm]IFormFile fileContent)
@@ -29,8 +23,11 @@ namespace Blazui.ServerRender
                 fileContent.CopyTo(ms);
                 return Content(JsonConvert.SerializeObject(new
                 {
+                    //0表示成功
                     code = 0,
+                    //id为文件唯一标识符
                     id = Guid.NewGuid().ToString(),
+                    //url为文件访问地址，如果上传的是图片，此url必须返回，否则不能预览，演示为了方便就直接返回了base64字符串
                     url = $"data:image;base64,{Convert.ToBase64String(ms.ToArray())}"
                 }), "application/json");
             }

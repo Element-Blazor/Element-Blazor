@@ -14,7 +14,7 @@ namespace Blazui.Component.Form
         /// </summary>
         [Parameter]
         public bool IsHidden { get; set; }
-        internal TValue OriginValue { get; set; }
+        public TValue OriginValue { get; set; }
         public TValue Value { get; set; }
 
         internal HtmlPropertyBuilder formItemCssBuilder;
@@ -22,7 +22,8 @@ namespace Blazui.Component.Form
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none");
+            formItemCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(IsHidden, "display:none")
+                .Add(Style);
 
             if (!Form.Values.Any())
             {

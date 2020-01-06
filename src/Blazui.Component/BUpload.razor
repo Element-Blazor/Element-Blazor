@@ -1,4 +1,12 @@
 ﻿@inherits BUploadBase
+@{
+    var listType = "text";
+    if (UploadType == UploadType.Image)
+    {
+        listType = "picture";
+    }
+}
+<input type="hidden" @ref="hdnField" />
 <div class="el-upload el-upload--text" onclick="window.upload(this)">
     <BButton Size="@ButtonSize.Small" Type="ButtonType.Primary">
         点击上传
@@ -11,10 +19,14 @@
         @Tip
     }
 </div>
-<ul class="el-upload-list el-upload-list--text">
-    @foreach (var file in Files)
+<ul class="el-upload-list el-upload-list--@listType">
+    @foreach (var file in Files.Cast<UploadModel>())
     {
         <li tabindex="0" class="el-upload-list__item is-success">
+            @if (UploadType == UploadType.Image)
+            {
+                <img src="@(file.Url)" alt="" class="el-upload-list__item-thumbnail">
+            }
             <a class="el-upload-list__item-name">
                 <i class="el-icon-document"></i>@file.FileName
             </a>

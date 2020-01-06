@@ -83,7 +83,7 @@ namespace Blazui.Component.Input
             {
                 Date = Value;
             }
-            if (ValueChanged.HasDelegate)
+            if (DateChanged.HasDelegate)
             {
                 _ = DateChanged.InvokeAsync(Date);
             }

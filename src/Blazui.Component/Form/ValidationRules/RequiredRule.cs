@@ -23,6 +23,13 @@ namespace Blazui.Component.Form.ValidationRules
                     return false;
                 }
             }
+            if (value.GetType().IsArray)
+            {
+                if ((value as Array).Length <= 0)
+                {
+                    return false;
+                }
+            }
             var str = value?.ToString();
             return !string.IsNullOrWhiteSpace(str);
         }
