@@ -37,6 +37,15 @@
         "files": [
           "BasicTransfer.razor"
         ]
+      },
+      {
+        "title": "表单提交",
+        "name": "Transfer",
+        "files": [
+          "FormTransfer.razor",
+          "FormTransferBase.cs",
+          "TransferModel.cs"
+        ]
       }
     ]
   },

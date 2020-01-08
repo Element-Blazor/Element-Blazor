@@ -6,6 +6,10 @@
     position: relative;
 }
 
+.el-transfer {
+    line-height: 0 !important;
+}
+
 .blaz-layout {
     display: flex;
     flex-direction: column;
