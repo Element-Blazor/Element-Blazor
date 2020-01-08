@@ -57,6 +57,14 @@ namespace Blazui.Component
         {
             _ = MessageBox.AlertAsync(text);
         }
+        /// <summary>
+        /// 弹出 Confirm 消息
+        /// </summary>
+        /// <param name="text"></param>
+        public async Task<MessageBoxResult> ConfirmAsync(string text)
+        {
+            return await MessageBox.ConfirmAsync(text);
+        }
 
         /// <summary>
         /// 弹出 Confirm 消息
