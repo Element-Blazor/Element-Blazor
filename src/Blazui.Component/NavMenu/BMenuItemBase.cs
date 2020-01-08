@@ -45,6 +45,10 @@ namespace Blazui.Component.NavMenu
         private string currentRoute;
         public void Activate()
         {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return;
+            }
             isActive = true;
             textColor = Options.ActiveTextColor;
             borderColor = Options.ActiveTextColor;
@@ -53,6 +57,10 @@ namespace Blazui.Component.NavMenu
         }
         public void DeActivate()
         {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return;
+            }
             isActive = false;
             textColor = Options.TextColor;
             borderColor = "transparent";
@@ -66,8 +74,6 @@ namespace Blazui.Component.NavMenu
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            BackgroundColor = Options.BackgroundColor;
-            textColor = Options.TextColor;
 
             Func<string, bool> matchFunc = TopMenu.Match;
             if (matchFunc == null)
@@ -108,7 +114,7 @@ namespace Blazui.Component.NavMenu
             {
                 ParentMenu.KeepSubMenuOpen();
             }
-            if (Options.Mode == MenuMode.Horizontal || string.IsNullOrWhiteSpace(Options.HoverColor))
+            if (string.IsNullOrWhiteSpace(Options.HoverColor))
             {
                 return;
             }
@@ -123,6 +129,17 @@ namespace Blazui.Component.NavMenu
                 return;
             }
             BackgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (!string.IsNullOrWhiteSpace(BackgroundColor))
+            {
+                return;
+            }
+            BackgroundColor = Options.BackgroundColor;
+            textColor = Options.TextColor;
         }
 
         public async Task OnClickAsync()
