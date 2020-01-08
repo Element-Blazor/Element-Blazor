@@ -1,0 +1,51 @@
+﻿@inherits BTransferBase
+<div class="el-transfer @Cls" style="@Style">
+    <div class="el-transfer-panel" targetorder="original">
+        <p class="el-transfer-panel__header">
+            <BCheckBox @bind-Status="List1Status" TValue="bool">
+                列表 1
+                <span>@List1Checked.Count/@List1.Count</span>
+            </BCheckBox>
+        </p>
+        <div class="el-transfer-panel__body">
+            <BCheckBoxGroup Cls="el-transfer-panel__list" TValue="object">
+                @foreach (var item in List1)
+                {
+                    <BCheckBox Status="List1Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status1Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
+                        <span>@item.Label</span>
+                    </BCheckBox>
+                }
+            </BCheckBoxGroup>
+            @if (List1.Count <= 0)
+            {
+                <p class="el-transfer-panel__empty">无数据</p>
+            }
+        </div>
+    </div>
+    <div class="el-transfer__buttons">
+        <BButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToLeft" Icon="el-icon-arrow-left"></BButton>
+        <BButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToRight" Icon="el-icon-arrow-right"></BButton>
+    </div>
+    <div class="el-transfer-panel">
+        <p class="el-transfer-panel__header">
+            <BCheckBox TValue="bool" @bind-Status="List2Status">
+                列表 2
+                <span>@List2Checked.Count/@List2.Count</span>
+            </BCheckBox>
+        </p>
+        <div class="el-transfer-panel__body">
+            <BCheckBoxGroup Cls="el-transfer-panel__list" TValue="object">
+                @foreach (var item in List2)
+                {
+                    <BCheckBox Status="List2Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status2Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
+                        <span>@item.Label</span>
+                    </BCheckBox>
+                }
+            </BCheckBoxGroup>
+            @if (List2.Count <= 0)
+            {
+                <p class="el-transfer-panel__empty" style="display: none;">无数据</p>
+            }
+        </div><!---->
+    </div>
+</div>

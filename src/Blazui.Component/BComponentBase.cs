@@ -35,6 +35,12 @@ namespace Blazui.Component
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }
 
+        /// <summary>
+        /// 自定义 CSS 类
+        /// </summary>
+        [Parameter]
+        public string Cls { get; set; }
+
         [CascadingParameter]
         public BBadgeBase Badge { get; set; }
         /// <summary>
@@ -57,15 +63,6 @@ namespace Blazui.Component
         {
             _ = MessageBox.AlertAsync(text);
         }
-        /// <summary>
-        /// 弹出 Confirm 消息
-        /// </summary>
-        /// <param name="text"></param>
-        public async Task<MessageBoxResult> ConfirmAsync(string text)
-        {
-            return await MessageBox.ConfirmAsync(text);
-        }
-
         /// <summary>
         /// 弹出 Confirm 消息
         /// </summary>
