@@ -550,6 +550,12 @@ namespace Blazui.Component.Popup
             var messageContent = option.Element;
             var dom = messageContent.Dom(JSRuntime);
             var top = await dom.GetOffsetTopAsync();
+            var height = await dom.GetClientHeightAsync();
+            var screenHeight = await Document.GetClientHeightAsync();
+            if (screenHeight - height < 100)
+            {
+                top = 10;
+            }
             var left = await dom.GetOffsetLeftAsync();
             var style = messageContent.Dom(JSRuntime).Style;
             await style.SetAsync("opacity", "0");

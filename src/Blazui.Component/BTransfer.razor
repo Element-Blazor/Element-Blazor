@@ -3,7 +3,7 @@
     <div class="el-transfer-panel" targetorder="original">
         <p class="el-transfer-panel__header">
             <BCheckBox @bind-Status="List1Status" TValue="bool">
-                列表 1
+                @LeftTitle
                 <span>@List1Checked.Count/@List1.Count</span>
             </BCheckBox>
         </p>
@@ -32,7 +32,7 @@
     <div class="el-transfer-panel">
         <p class="el-transfer-panel__header">
             <BCheckBox TValue="bool" @bind-Status="List2Status">
-                列表 2
+                @RightTitle
                 <span>@List2Checked.Count/@List2.Count</span>
             </BCheckBox>
         </p>

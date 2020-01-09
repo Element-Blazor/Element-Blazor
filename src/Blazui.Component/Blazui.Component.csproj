@@ -10,6 +10,8 @@
     <Authors>wzxinchen</Authors>
     <IsPackable>true</IsPackable>
     <Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
+    <RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
+    <PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

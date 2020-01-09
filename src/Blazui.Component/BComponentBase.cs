@@ -39,7 +39,7 @@ namespace Blazui.Component
         /// 自定义 CSS 类
         /// </summary>
         [Parameter]
-        public string Cls { get; set; }
+        public virtual string Cls { get; set; }
 
         [CascadingParameter]
         public BBadgeBase Badge { get; set; }

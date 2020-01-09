@@ -58,6 +58,18 @@ namespace Blazui.Component
             ResetList2(value);
         }
 
+        /// <summary>
+        /// 左边列表的标题
+        /// </summary>
+        [Parameter]
+        public string LeftTitle { get; set; } = "列表1";
+
+        /// <summary>
+        /// 右边列表的标题
+        /// </summary>
+        [Parameter]
+        public string RightTitle { get; set; } = "列表2";
+
         private void ResetList2(object value)
         {
             var valueList = (List<string>)value;
@@ -92,7 +104,7 @@ namespace Blazui.Component
             {
                 ResetList2(FormItem.OriginValue);
             }
-            SyncFieldValue();
+            SyncFieldValue(false);
         }
 
         internal void ToLeft()
@@ -104,12 +116,12 @@ namespace Blazui.Component
             List2.RemoveAll(List2Checked.Contains);
             List2Checked.Clear();
             RequireRender = true;
-            SyncFieldValue();
+            SyncFieldValue(true);
         }
 
-        private void SyncFieldValue()
+        private void SyncFieldValue(bool validate)
         {
-            SetFieldValue(List2.Select(x => x.Id).ToList(), true);
+            SetFieldValue(List2.Select(x => x.Id).ToList(), validate);
         }
 
         internal void ToRight()
@@ -121,7 +133,7 @@ namespace Blazui.Component
             List1.RemoveAll(List1Checked.Contains);
             List1Checked.Clear();
             RequireRender = true;
-            SyncFieldValue();
+            SyncFieldValue(true);
         }
 
         internal void Status1Changed(Status status, TransferItem transferItem)
