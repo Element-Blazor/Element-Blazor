@@ -41,7 +41,7 @@
                             {
                                 width = (100d / validColumnCount).ToString() + "%";
                             }
-                            <col name="el-table_1_column_@i" width="@width" />
+                            <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                         <col name="gutter" width="0" />
                     </colgroup>
@@ -58,7 +58,7 @@
                             @for (int i = 1; i <= Headers.Count; i++)
                             {
                                 var header = Headers.ElementAt(i - 1);
-                                <th colspan="1" rowspan="1" class="el-table_1_column_@i     is-leaf">
+                                <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i     is-leaf">
                                     <div class="cell">
                                         @header.Text
                                     </div>
@@ -90,7 +90,7 @@
                             {
                                 width = (100d / validColumnCount).ToString() + "%";
                             }
-                            <col name="el-table_1_column_@i" width="@width" />
+                            <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                     </colgroup>
                     <tbody>
@@ -103,7 +103,7 @@
                                 clsList.Add("el-table__row--striped");
                             }
                             var row = rows.ElementAt(i);
-                            <tr class="@string.Join(" ", clsList)">
+                            <tr @key="row" class="@string.Join(" ", clsList)">
                                 @if (HasSelectionColumn)
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
@@ -115,7 +115,7 @@
                                 @for (int j = 1; j <= Headers.Count; j++)
                                 {
                                     var header = Headers.ElementAt(j - 1);
-                                    <td rowspan="1" colspan="1" class="el-table_1_column_@j  ">
+                                    <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
                                         <div class="cell">
                                             @if (header.IsCheckBox)
                                             {
