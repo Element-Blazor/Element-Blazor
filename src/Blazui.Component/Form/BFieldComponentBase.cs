@@ -19,6 +19,10 @@ namespace Blazui.Component.Form
             {
                 return;
             }
+            if (TypeHelper.Equal(FormItem.Value, value))
+            {
+                return;
+            }
             Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             FormItem.Value = value;
 

@@ -16,9 +16,20 @@ namespace Blazui.Component
         /// 窗口要显示的组件所需要的参数
         /// </summary>
         public IDictionary<string, object> Parameters { get; set; }
+
+        /// <summary>
+        /// 是否窗口
+        /// </summary>
         public bool IsDialog { get; set; }
+
+        /// <summary>
+        /// 宽度
+        /// </summary>
         public float Width { get; set; }
-        public bool IsShow { get; set; }
+
+        /// <summary>
+        /// 窗口按钮，尚未测试
+        /// </summary>
         public IList<RenderFragment> Buttons { get; set; } = new List<RenderFragment>();
         internal int ZIndex { get; set; }
         internal int ShadowZIndex { get; set; }
