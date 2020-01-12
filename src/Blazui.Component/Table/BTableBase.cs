@@ -224,6 +224,10 @@ namespace Blazui.Component.Table
                             Text = property.Name
                         };
 
+                        if (columnConfig.Ignore)
+                        {
+                            return;
+                        }
                         Headers.Insert(0, new TableHeader()
                         {
                             Eval = row =>

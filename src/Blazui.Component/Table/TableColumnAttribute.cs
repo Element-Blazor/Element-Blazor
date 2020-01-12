@@ -21,5 +21,10 @@ namespace Blazui.Component.Table
         /// 格式化参数，仅支持日期格式
         /// </summary>
         public string Format { get; set; }
+
+        /// <summary>
+        /// 渲染是否忽略该属性
+        /// </summary>
+        public bool Ignore { get; set; }
     }
 }
