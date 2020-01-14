@@ -14,6 +14,12 @@ namespace Blazui.Component
     {
         protected bool RequireRender { get; set; }
         internal IDictionary<string, List<DiagnoseModel>> performanceInfos = new Dictionary<string, List<DiagnoseModel>>();
+
+        /// <summary>
+        /// 若该项为 true，则该组件会始终允许刷新，不受 <seealso cref="BComponentBase.MarkAsRequireRender"/> 方法控制
+        /// </summary>
+        [Parameter]
+        public bool EnableAlwaysRender { get; set; }
         [Inject]
         MessageBox MessageBox { get; set; }
 
@@ -204,7 +210,7 @@ namespace Blazui.Component
 
         protected override bool ShouldRender()
         {
-            return RequireRender;
+            return RequireRender || EnableAlwaysRender;
         }
     }
 }

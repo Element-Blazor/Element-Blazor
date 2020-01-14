@@ -101,7 +101,7 @@ namespace Blazui.Component.NavMenu
                     return true;
                 };
             }
-            if (Options.DefaultActiveIndex == Index || matchFunc(Route))
+            if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == Index) || matchFunc(Route))
             {
                 TopMenu.ActivateItem(this);
             }
