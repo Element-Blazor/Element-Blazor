@@ -1,5 +1,6 @@
 # Blazui
----
+[![Nuget Download](https://img.shields.io/nuget/dt/Blazui.Component.svg)](https://www.nuget.org/packages/Blazui.Component/)
+
 
 ## 介绍
 Element的blazor版本
