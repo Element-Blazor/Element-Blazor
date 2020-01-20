@@ -13,7 +13,7 @@ namespace Blazui.Component
         {
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
-            services.AddScoped<LoadingService>();
+            services.AddSingleton<LoadingService>();
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();

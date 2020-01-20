@@ -71,9 +71,10 @@ namespace Blazui.Component.NavMenu
         public EventCallback<BChangeEventArgs<string>> OnRouteChanging { get; set; }
         protected string BackgroundColor { get; set; }
 
-        protected override void OnInitialized()
+
+        protected override async Task OnParametersSetAsync()
         {
-            base.OnInitialized();
+            await base.OnParametersSetAsync();
 
             Func<string, bool> matchFunc = TopMenu.Match;
             if (matchFunc == null)
@@ -105,7 +106,6 @@ namespace Blazui.Component.NavMenu
             {
                 TopMenu.ActivateItem(this);
             }
-
         }
 
         public void OnOver()
