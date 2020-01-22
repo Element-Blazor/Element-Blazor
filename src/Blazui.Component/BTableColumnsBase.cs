@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Table
+namespace Blazui.Component
 {
     public class BTableColumnsBase : BComponentBase
     {

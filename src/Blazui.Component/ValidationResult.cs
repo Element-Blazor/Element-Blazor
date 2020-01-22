@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Form
+namespace Blazui.Component
 {
     public class ValidationResult
     {

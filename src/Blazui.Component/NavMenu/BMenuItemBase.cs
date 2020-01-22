@@ -71,41 +71,45 @@ namespace Blazui.Component.NavMenu
         public EventCallback<BChangeEventArgs<string>> OnRouteChanging { get; set; }
         protected string BackgroundColor { get; set; }
 
-
-        protected override async Task OnParametersSetAsync()
+        protected override void OnInitialized()
         {
-            await base.OnParametersSetAsync();
-
+            base.OnInitialized();
             Func<string, bool> matchFunc = TopMenu.Match;
             if (matchFunc == null)
             {
-                matchFunc = route =>
-                {
-                    if (string.IsNullOrWhiteSpace(Route))
-                    {
-                        return false;
-                    }
-                    var uri = new Uri(NavigationManager.Uri);
-                    var paths = uri.LocalPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    var menuPaths = route.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    if (paths.Length != menuPaths.Length)
-                    {
-                        return false;
-                    }
-                    for (int i = 0; i < paths.Length; i++)
-                    {
-                        if (paths[i].ToUpper() != menuPaths[i].ToUpper())
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                };
+                matchFunc = DefaultMenuMatcher;
             }
             if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == Index) || matchFunc(Route))
             {
                 TopMenu.ActivateItem(this);
+                RequireRender = true;
+                ParentMenu?.MarkAsRequireRender();
+                TopMenu.MarkAsRequireRender();
+                TopMenu.Refresh();
             }
+        }
+
+        private bool DefaultMenuMatcher(string route)
+        {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return false;
+            }
+            var uri = new Uri(NavigationManager.Uri);
+            var paths = uri.LocalPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            var menuPaths = route.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            if (paths.Length != menuPaths.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < paths.Length; i++)
+            {
+                if (paths[i].ToUpper() != menuPaths[i].ToUpper())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void OnOver()
@@ -119,6 +123,7 @@ namespace Blazui.Component.NavMenu
                 return;
             }
             BackgroundColor = Options.HoverColor;
+            RequireRender = true;
         }
 
         public void OnOut()
@@ -129,11 +134,21 @@ namespace Blazui.Component.NavMenu
                 return;
             }
             BackgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
+            RequireRender = true;
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            Func<string, bool> matchFunc = TopMenu.Match;
+            if (matchFunc == null)
+            {
+                matchFunc = DefaultMenuMatcher;
+            }
+            if (matchFunc(Route))
+            {
+                TopMenu.ActivateItem(this);
+            }
             if (!string.IsNullOrWhiteSpace(BackgroundColor))
             {
                 return;
@@ -163,8 +178,18 @@ namespace Blazui.Component.NavMenu
                     }
                 }
                 NavigationManager.NavigateTo(Route);
+                NavigationManager.LocationChanged += NavigationManager_LocationChanged;
             }
         }
+
+        private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+        {
+            NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
+            ParentMenu?.MarkAsRequireRender();
+            TopMenu.MarkAsRequireRender();
+            TopMenu.Refresh();
+        }
+
         protected override bool ShouldRender()
         {
             return true;

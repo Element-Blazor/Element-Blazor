@@ -7,7 +7,7 @@ using Blazui.Component.CheckBox;
 using Blazui.Component.EventArgs;
 using Blazui.Component.Dom;
 using Microsoft.JSInterop;
-using Blazui.Component.Form;
+using Blazui.Component;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace Blazui.Component.Input

@@ -139,7 +139,9 @@
                 @if (rows.Count <= 0)
                 {
                     <div class="el-table__empty-block" style="height:60px;">
-                        <span class="el-table__empty-text">暂无数据</span>
+                        <span class="el-table__empty-text">
+                            @(string.IsNullOrWhiteSpace(EmptyMessage) ? "暂无数据" : EmptyMessage)
+                        </span>
                     </div>
                 }
             </div>

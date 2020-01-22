@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
-namespace Blazui.Component.Table
+namespace Blazui.Component
 {
     public class TableHeader
     {

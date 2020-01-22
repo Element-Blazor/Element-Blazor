@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Form
+namespace Blazui.Component
 {
-    public enum LabelAlign
+    public class ValidatationRule
     {
-        Left = 0,
-        Right = 1,
-        Top = 2
+        public bool IsRequired { get; set; }
     }
 }

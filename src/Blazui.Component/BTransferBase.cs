@@ -1,5 +1,5 @@
 ﻿using Blazui.Component.CheckBox;
-using Blazui.Component.Form;
+using Blazui.Component;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,9 @@ namespace Blazui.Component
 {
     public class BTransferBase : BFieldComponentBase<List<string>>
     {
+        protected HtmlPropertyBuilder CheckBoxGroupCssBuilder;
+        protected string list1KeyWords = string.Empty;
+        protected string list2KeyWords = string.Empty;
         private Status list1Status = Status.UnChecked;
         internal Status List1Status
         {
@@ -21,7 +24,14 @@ namespace Blazui.Component
             {
                 if (value == Status.Checked)
                 {
-                    List1Checked = List1.ToList();
+                    if (EnableSearch && !OnList1Search.HasDelegate)
+                    {
+                        List1Checked = List1.Where(x => x.Label.Contains(list1KeyWords, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    }
+                    else
+                    {
+                        List1Checked = List1.ToList();
+                    }
                 }
                 else
                 {
@@ -42,7 +52,14 @@ namespace Blazui.Component
             {
                 if (value == Status.Checked)
                 {
-                    List2Checked = List2.ToList();
+                    if (EnableSearch && !OnList2Search.HasDelegate)
+                    {
+                        List2Checked = List2.Where(x => x.Label.Contains(list2KeyWords, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                    }
+                    else
+                    {
+                        List2Checked = List2.ToList();
+                    }
                 }
                 else
                 {
@@ -56,6 +73,54 @@ namespace Blazui.Component
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             ResetList2(value);
+        }
+
+        /// <summary>
+        /// 启用搜索
+        /// </summary>
+        [Parameter]
+        public bool EnableSearch { get; set; }
+
+        /// <summary>
+        /// 当列表1搜索时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<string> OnList1Search { get; set; }
+
+        /// <summary>
+        /// 列表1搜索框 PlaceHolder
+        /// </summary>
+        [Parameter]
+        public string List1SearchPlaceHolder { get; set; }
+
+        /// <summary>
+        /// 列表2搜索框 PlaceHolder
+        /// </summary>
+        [Parameter]
+        public string List2SearchPlaceHolder { get; set; }
+
+        /// <summary>
+        /// 当列表2搜索时触发
+        /// </summary>
+        public EventCallback<string> OnList2Search { get; set; }
+
+        protected async Task List1SearchChanged(string keywords)
+        {
+            list1KeyWords = keywords;
+            if (OnList1Search.HasDelegate)
+            {
+                await OnList1Search.InvokeAsync(keywords);
+                return;
+            }
+        }
+        protected async Task List2SearchChanged(string keywords)
+        {
+            list2KeyWords = keywords;
+            if (OnList2Search.HasDelegate)
+            {
+                await OnList2Search.InvokeAsync(keywords);
+                return;
+            }
         }
 
         /// <summary>
@@ -91,6 +156,9 @@ namespace Blazui.Component
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            CheckBoxGroupCssBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add("el-transfer-panel__list")
+                .AddIf(EnableSearch, "is-filterable");
             if (FormItem == null)
             {
                 return;

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Form
+namespace Blazui.Component
 {
     public class BFormBase : BComponentBase, IContainerComponent
     {

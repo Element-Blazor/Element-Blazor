@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Table
+namespace Blazui.Component
 {
     public class BTableBase : BComponentBase, IContainerComponent
     {
@@ -51,6 +51,11 @@ namespace Blazui.Component.Table
         [Parameter]
         public bool HasSelectionColumn { get; set; } = true;
 
+        /// <summary>
+        /// 当表格无数据时显示的消息
+        /// </summary>
+        [Parameter]
+        public string EmptyMessage { get; set; }
         /// <summary>
         /// 总数据条数
         /// </summary>
