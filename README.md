@@ -34,6 +34,10 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 
 ## 案例展示
 
+地址：http://www.blazor.group:8000
+
+---
+
 地址：http://wandotnet.top/quartz
 用户名密码：blazor,666666
 作者：deathvicky
