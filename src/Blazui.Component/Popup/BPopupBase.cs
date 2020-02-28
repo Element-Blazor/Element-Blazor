@@ -399,6 +399,11 @@ namespace Blazui.Component.Popup
                 option.Left = documentWidth - width - 10;
             }
             option.IsShow = true;
+            if (GlobalBlazuiSettings.DisableAnimation)
+            {
+                StateHasChanged();
+                return;
+            }
             option.ShowStatus = AnimationStatus.Begin;
             StateHasChanged();
             await Task.Delay(10);
@@ -409,6 +414,13 @@ namespace Blazui.Component.Popup
         internal async Task CloseDropDownAsync(DropDownOption option)
         {
             option.IsShow = false;
+            if (GlobalBlazuiSettings.DisableAnimation)
+            {
+                PopupService.SelectDropDownOptions.Remove(option);
+                PopupService.DropDownMenuOptions.Remove(option);
+                option.Refresh?.Invoke();
+                return;
+            }
             option.HideStatus = AnimationStatus.Begin;
             StateHasChanged();
             await Task.Delay(10);
@@ -430,6 +442,12 @@ namespace Blazui.Component.Popup
                     return;
                 }
                 option.IsShow = false;
+                if (GlobalBlazuiSettings.DisableAnimation)
+                {
+                    await InvokeAsync(option.SubMenu.DeActivate);
+                    PopupService.SubMenuOptions.Remove(option);
+                    return;
+                }
                 await InvokeAsync(StateHasChanged);
                 await Task.Delay(200);
                 await InvokeAsync(option.SubMenu.DeActivate);
