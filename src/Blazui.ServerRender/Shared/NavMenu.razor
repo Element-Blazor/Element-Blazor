@@ -36,7 +36,14 @@
     {
         if (new Uri(NavigationManager.Uri).LocalPath == "/")
         {
-            NavigationManager.NavigateTo("button");
+            try
+            {
+                NavigationManager.NavigateTo("button");
+            }
+            catch (Exception)
+            {
+
+            }
         }
     }
 }

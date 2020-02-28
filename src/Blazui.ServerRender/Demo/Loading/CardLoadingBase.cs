@@ -1,5 +1,5 @@
 ﻿using Blazui.Component;
-using Blazui.Component.Table;
+using Blazui.Component;
 using Blazui.ServerRender.Demo.Table;
 using Microsoft.AspNetCore.Components;
 using System;

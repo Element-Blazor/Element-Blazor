@@ -50,21 +50,24 @@ namespace Blazui.Component.Popup
             var top = await dom.GetOffsetTopAsync();
             var left = await dom.GetOffsetLeftAsync();
             var style = messageContent.Dom(JSRuntime).Style;
-            await style.SetAsync("left", $"{left}px");
-            await style.SetAsync("top", $"{top}px");
-            await style.SetAsync("position", "absolute");
-            await style.SetTransitionAsync("top 0.3s,opacity 0.3s");
-            await Task.Delay(100);
-            await style.SetAsync("top", $"{top - 10}px");
-            await style.SetAsync("opacity", $"0");
-            if (--ShadowCount <= 0)
+            if (!GlobalBlazuiSettings.DisableAnimation)
             {
-                await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0");
+                await style.SetAsync("left", $"{left}px");
+                await style.SetAsync("top", $"{top}px");
+                await style.SetAsync("position", "absolute");
+                await style.SetTransitionAsync("top 0.3s,opacity 0.3s");
+                await Task.Delay(100);
+                await style.SetAsync("top", $"{top - 10}px");
+                await style.SetAsync("opacity", $"0");
+                if (--ShadowCount <= 0)
+                {
+                    await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0");
+                }
+                await Task.Delay(300);
+                await style.ClearAsync("left");
+                await style.ClearAsync("top");
+                await style.ClearAsync("position");
             }
-            await Task.Delay(300);
-            await style.ClearAsync("left");
-            await style.ClearAsync("top");
-            await style.ClearAsync("position");
             option.TaskCompletionSource.TrySetResult(result);
             DialogService.Dialogs.Remove(option);
         }
@@ -558,6 +561,23 @@ namespace Blazui.Component.Popup
             }
             var left = await dom.GetOffsetLeftAsync();
             var style = messageContent.Dom(JSRuntime).Style;
+            if (GlobalBlazuiSettings.DisableAnimation)
+            {
+                await style.SetAsync("left", $"{left}px");
+                await style.SetAsync("position", $"absolute");
+                await style.ClearAsync("opacity");
+                if (!option.IsDialog)
+                {
+                    await style.ClearAsync("position");
+                    await style.ClearAsync("top");
+                    await style.ClearAsync("left");
+                }
+                if (ShadowCount++ <= 0)
+                {
+                    await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0.5");
+                }
+                return;
+            }
             await style.SetAsync("opacity", "0");
             await style.SetAsync("position", "absolute");
             if (option.IsDialog)

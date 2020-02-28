@@ -135,7 +135,8 @@
         "files": [
           "PassParameter.razor",
           "BasicDialogBase.cs",
-          "TestContent.razor"
+          "TestContent.razor",
+          "TestContentBase.cs"
         ]
       }
     ]

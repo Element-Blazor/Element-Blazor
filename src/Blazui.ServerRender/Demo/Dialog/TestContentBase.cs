@@ -1,15 +1,15 @@
 ﻿using Blazui.Component;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Table
+namespace Blazui.ServerRender.Demo.Dialog
 {
-    public class TestData
+    public class TestContentBase:BDialogBase
     {
-        public DateTime Time { get; set; }
+        [Parameter]
         public string Name { get; set; }
-        public string Address { get; set; }
     }
 }
