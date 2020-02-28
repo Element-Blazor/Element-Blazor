@@ -511,9 +511,16 @@ namespace Blazui.Component.Popup
             option.Top = top + rect.Height;
             var style = option.Element.Dom(JSRuntime).Style;
             await style.SetAsync("left", $"{rect.Left}px");
-            await style.SetAsync("top", $"{option.Top + 10}px");
-            await style.ClearAsync("display");
-            await Task.Delay(10);
+            if (!GlobalBlazuiSettings.DisableAnimation)
+            {
+                await style.SetAsync("top", $"{option.Top + 10}px");
+                await style.ClearAsync("display");
+                await Task.Delay(10);
+            }
+            else
+            {
+                await style.ClearAsync("display");
+            }
             await style.SetAsync("top", $"{option.Top}px");
             await style.SetAsync("opacity", $"1");
         }
