@@ -14,6 +14,9 @@ Blazui 演示地址：http://blazui.com:9000
 
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
+## 社区讨论
+http://www.blazor.group:8000
+
 ## 关注与讨论
 
 使用遇到问题请加入QQ群：74522853
