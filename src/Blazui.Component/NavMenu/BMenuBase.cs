@@ -18,7 +18,7 @@ namespace Blazui.Component.NavMenu
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
-        public bool Collapse { get; set; } = false;
+        public bool CanCollapse { get; set; } = true;
 
         [Parameter]
         public string BackgroundColor { get; set; }
@@ -65,7 +65,6 @@ namespace Blazui.Component.NavMenu
             {
                 ActiveItemChanged.InvokeAsync(activeItem);
             }
-            StateHasChanged();
         }
 
         public void DeActiveItem()

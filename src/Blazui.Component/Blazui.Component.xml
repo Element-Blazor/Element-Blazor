@@ -19,29 +19,29 @@
             渲染后的内容区域
             </summary>
         </member>
-        <member name="P:Blazui.Component.Form.BFormBase.Validations">
+        <member name="P:Blazui.Component.BFormBase.Validations">
             <summary>
             设置验证规则
             </summary>
         </member>
-        <member name="M:Blazui.Component.Form.BFormBase.SubmitAsync(System.String)">
+        <member name="M:Blazui.Component.BFormBase.SubmitAsync(System.String)">
             <summary>
             触发浏览器提交
             </summary>
         </member>
-        <member name="P:Blazui.Component.Form.BFormBase.Value">
+        <member name="P:Blazui.Component.BFormBase.Value">
             <summary>
-            该属性仅用于设置表单初始值，获取表单输入值请使用 <seealso cref="M:Blazui.Component.Form.BFormBase.GetValue``1"/> 方法
+            该属性仅用于设置表单初始值，获取表单输入值请使用 <seealso cref="M:Blazui.Component.BFormBase.GetValue``1"/> 方法
             </summary>
         </member>
-        <member name="M:Blazui.Component.Form.BFormBase.GetValue``1">
+        <member name="M:Blazui.Component.BFormBase.GetValue``1">
             <summary>
             获取表单输入值
             </summary>
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="P:Blazui.Component.Form.BFormItemBase`1.OriginValueRendered">
+        <member name="P:Blazui.Component.BFormItemBase`1.OriginValueRendered">
             <summary>
             初始值是否已渲染
             </summary>
@@ -107,27 +107,27 @@
             </summary>
             <typeparam name="TValue"></typeparam>
         </member>
-        <member name="P:Blazui.Component.Table.BTableBase`1.Total">
+        <member name="P:Blazui.Component.BTableBase`1.Total">
             <summary>
             总记录数
             </summary>
         </member>
-        <member name="P:Blazui.Component.Table.BTableBase`1.PageSize">
+        <member name="P:Blazui.Component.BTableBase`1.PageSize">
             <summary>
             每页条数
             </summary>
         </member>
-        <member name="P:Blazui.Component.Table.BTableBase`1.CurrentPage">
+        <member name="P:Blazui.Component.BTableBase`1.CurrentPage">
             <summary>
             当前页码，从1开始
             </summary>
         </member>
-        <member name="P:Blazui.Component.Table.BTableBase`1.IsStripe">
+        <member name="P:Blazui.Component.BTableBase`1.IsStripe">
             <summary>
             启用斑马纹
             </summary>
         </member>
-        <member name="P:Blazui.Component.Table.BTableBase`1.IsBordered">
+        <member name="P:Blazui.Component.BTableBase`1.IsBordered">
             <summary>
             启用边框
             </summary>

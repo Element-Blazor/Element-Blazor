@@ -1,0 +1,79 @@
+﻿@inherits BTransferBase
+<div class="el-transfer @Cls" style="@Style">
+    <div class="el-transfer-panel" targetorder="original">
+        <p class="el-transfer-panel__header">
+            <BCheckBox @bind-Status="List1Status" TValue="bool">
+                @LeftTitle
+                <span>@List1Checked.Count/@(List1 == null ? 0 : List1.Count)</span>
+            </BCheckBox>
+        </p>
+        <div class="el-transfer-panel__body">
+            @if (List1 == null || List1.Count <= 0)
+            {
+                <p class="el-transfer-panel__empty">无数据</p>
+            }
+            else
+            {
+                if (EnableSearch)
+                {
+                    <BInput Placeholder="@(List1SearchPlaceHolder ?? "请输入搜索内容")" Value="list1KeyWords" ValueChanged="List1SearchChanged" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" TValue="string"></BInput>
+                }
+                <BCheckBoxGroup Cls="@CheckBoxGroupCssBuilder.ToString()" TValue="object">
+                    @foreach (var item in List1)
+                    {
+                        if (!OnList1Search.HasDelegate)
+                        {
+                            if (!item.Label.Contains(list1KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                continue;
+                            }
+                        }
+                        <BCheckBox Status="List1Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status1Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
+                            <span>@item.Label</span>
+                        </BCheckBox>
+                    }
+                </BCheckBoxGroup>
+            }
+        </div>
+    </div>
+    <div class="el-transfer__buttons">
+        <BButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToLeft" Icon="el-icon-arrow-left"></BButton>
+        <BButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToRight" Icon="el-icon-arrow-right"></BButton>
+    </div>
+    <div class="el-transfer-panel">
+        <p class="el-transfer-panel__header">
+            <BCheckBox TValue="bool" @bind-Status="List2Status">
+                @RightTitle
+                <span>@List2Checked.Count/@(List2 == null ? 0 : List2.Count)</span>
+            </BCheckBox>
+        </p>
+        <div class="el-transfer-panel__body">
+            @if (List2 == null || List2.Count <= 0)
+            {
+                <p class="el-transfer-panel__empty">无数据</p>
+            }
+            else
+            {
+                if (EnableSearch)
+                {
+                    <BInput Placeholder="@(List2SearchPlaceHolder ?? "请输入搜索内容")" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" Value="list2KeyWords" ValueChanged="List2SearchChanged" TValue="string"></BInput>
+                }
+                <BCheckBoxGroup Cls="@CheckBoxGroupCssBuilder.ToString()" TValue="object">
+                    @foreach (var item in List2)
+                    {
+                        if (!OnList2Search.HasDelegate)
+                        {
+                            if (!item.Label.Contains(list2KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                continue;
+                            }
+                        }
+                        <BCheckBox Status="List2Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status2Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
+                            <span>@item.Label</span>
+                        </BCheckBox>
+                    }
+                </BCheckBoxGroup>
+            }
+        </div><!---->
+    </div>
+</div>

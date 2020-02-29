@@ -22,9 +22,6 @@ namespace Blazui.Component.Button
             }
         }
 
-        [Parameter]
-        public string Cls { get; set; }
-
         /// <summary>
         /// 是否将自定义的 CSS 类加入到已有 CSS 类，如果为 false，则替换掉默认 CSS 类，默认为 true
         /// </summary>

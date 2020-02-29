@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Blazui.ServerRender.Data;
 using Blazui.Component;
-using Blazui.Markdown;
 
 namespace Blazui.ServerRender
 {
@@ -31,7 +30,8 @@ namespace Blazui.ServerRender
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazuiServices();
-            services.AddMarkdown();
+            GlobalBlazuiSettings.DisableAnimation = true;
+            //services.AddMarkdown();
             services.AddSingleton<WeatherForecastService>();
             services.AddControllers();
         }

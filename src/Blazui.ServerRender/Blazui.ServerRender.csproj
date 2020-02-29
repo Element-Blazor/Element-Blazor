@@ -12,8 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Demo\MarkdownEditor\ArticleModel.cs" />
+    <Compile Remove="Demo\MarkdownEditor\FormMarkdownBase.cs" />
     <Compile Remove="Demo\MarkdownEditor\TestController.cs" />
     <Compile Remove="Demo\Upload\TestController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Demo\MarkdownEditor\BasicEditor.razor" />
+    <Content Remove="Demo\MarkdownEditor\FormMarkdown.razor" />
+    <Content Remove="Demo\MarkdownEditor\Markdown.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,9 +44,6 @@
     <None Include="Demo\ItemDisabledSelect.razor" />
     <None Include="Demo\LeftTab.razor" />
     <None Include="Demo\LoadingButton.razor" />
-    <None Include="Demo\MarkdownEditor\TestController.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Demo\RadioButton\RadioButton.razor" />
     <None Include="Demo\RadioGroup\RadioGroup.razor" />
     <None Include="Demo\TextButton.razor" />
@@ -51,10 +56,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazui.Markdown" Version="0.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazui.Component\Blazui.Component.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -127,12 +135,6 @@
     <Compile Update="Demo\Loading\ServiceLoadingBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\MarkdownEditor\ArticleModel.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Demo\MarkdownEditor\FormMarkdownBase.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="Demo\MessageBox\ConfirmMessageBoxBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -170,6 +172,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Table\TestData.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Transfer\FormTransferBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Transfer\TransferModel.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Upload\UploadActivity.cs">
@@ -227,15 +235,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Loading\CardLoading.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\MarkdownEditor\Markdown.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\MarkdownEditor\FormMarkdown.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Demo\MarkdownEditor\BasicEditor.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Menu\CustomBackgroundMenu.razor">
@@ -406,6 +405,12 @@
     <Content Update="Demo\TextSwitch.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Update="Demo\Transfer\FormTransfer.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Transfer\BasicTransfer.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\Upload\BasicUpload.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -427,6 +432,10 @@
     <Content Update="wwwroot\metadata.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Demo\MarkdownEditor\" />
   </ItemGroup>
 
 </Project>

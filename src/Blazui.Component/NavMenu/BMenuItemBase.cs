@@ -45,6 +45,10 @@ namespace Blazui.Component.NavMenu
         private string currentRoute;
         public void Activate()
         {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return;
+            }
             isActive = true;
             textColor = Options.ActiveTextColor;
             borderColor = Options.ActiveTextColor;
@@ -53,6 +57,10 @@ namespace Blazui.Component.NavMenu
         }
         public void DeActivate()
         {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return;
+            }
             isActive = false;
             textColor = Options.TextColor;
             borderColor = "transparent";
@@ -66,40 +74,42 @@ namespace Blazui.Component.NavMenu
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            BackgroundColor = Options.BackgroundColor;
-            textColor = Options.TextColor;
-
             Func<string, bool> matchFunc = TopMenu.Match;
             if (matchFunc == null)
             {
-                matchFunc = route =>
-                {
-                    if (string.IsNullOrWhiteSpace(Route))
-                    {
-                        return false;
-                    }
-                    var uri = new Uri(NavigationManager.Uri);
-                    var paths = uri.LocalPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    var menuPaths = route.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
-                    if (paths.Length != menuPaths.Length)
-                    {
-                        return false;
-                    }
-                    for (int i = 0; i < paths.Length; i++)
-                    {
-                        if (paths[i].ToUpper() != menuPaths[i].ToUpper())
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                };
+                matchFunc = DefaultMenuMatcher;
             }
-            if (Options.DefaultActiveIndex == Index || matchFunc(Route))
+            if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == Index) || matchFunc(Route))
             {
                 TopMenu.ActivateItem(this);
+                RequireRender = true;
+                ParentMenu?.MarkAsRequireRender();
+                TopMenu.MarkAsRequireRender();
+                TopMenu.Refresh();
             }
+        }
 
+        private bool DefaultMenuMatcher(string route)
+        {
+            if (string.IsNullOrWhiteSpace(Route))
+            {
+                return false;
+            }
+            var uri = new Uri(NavigationManager.Uri);
+            var paths = uri.LocalPath.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            var menuPaths = route.Split('/').Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+            if (paths.Length != menuPaths.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < paths.Length; i++)
+            {
+                if (paths[i].ToUpper() != menuPaths[i].ToUpper())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void OnOver()
@@ -108,11 +118,12 @@ namespace Blazui.Component.NavMenu
             {
                 ParentMenu.KeepSubMenuOpen();
             }
-            if (Options.Mode == MenuMode.Horizontal || string.IsNullOrWhiteSpace(Options.HoverColor))
+            if (string.IsNullOrWhiteSpace(Options.HoverColor))
             {
                 return;
             }
             BackgroundColor = Options.HoverColor;
+            RequireRender = true;
         }
 
         public void OnOut()
@@ -123,6 +134,27 @@ namespace Blazui.Component.NavMenu
                 return;
             }
             BackgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
+            RequireRender = true;
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            Func<string, bool> matchFunc = TopMenu.Match;
+            if (matchFunc == null)
+            {
+                matchFunc = DefaultMenuMatcher;
+            }
+            if (matchFunc(Route))
+            {
+                TopMenu.ActivateItem(this);
+            }
+            if (!string.IsNullOrWhiteSpace(BackgroundColor))
+            {
+                return;
+            }
+            BackgroundColor = Options.BackgroundColor;
+            textColor = Options.TextColor;
         }
 
         public async Task OnClickAsync()
@@ -146,8 +178,18 @@ namespace Blazui.Component.NavMenu
                     }
                 }
                 NavigationManager.NavigateTo(Route);
+                NavigationManager.LocationChanged += NavigationManager_LocationChanged;
             }
         }
+
+        private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+        {
+            NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
+            ParentMenu?.MarkAsRequireRender();
+            TopMenu.MarkAsRequireRender();
+            TopMenu.Refresh();
+        }
+
         protected override bool ShouldRender()
         {
             return true;

@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.Dialog
 {
-    public class ExmapleDialogBase : ComponentBase
+    public class ExmapleDialogBase : BDialogBase
     {
-        [Inject]
-        DialogService DialogService { get; set; }
-
         [Inject]
         Component.MessageBox MessageService { get; set; }
         public async Task ShowDialog(MouseEventArgs eventArgs)

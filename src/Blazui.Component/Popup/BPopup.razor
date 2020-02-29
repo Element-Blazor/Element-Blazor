@@ -318,7 +318,7 @@
         var transform = "scaleY(0)";
         if (option.IsShow)
         {
-            if (option.ShowStatus == AnimationStatus.Begin)
+            if (option.ShowStatus == AnimationStatus.Begin && !GlobalBlazuiSettings.DisableAnimation)
             {
                 transform = "scaleY(0)";
             }
@@ -328,7 +328,7 @@
             }
         }
         var style = "display:none";
-        if (option.IsShow)
+        if (option.IsShow || GlobalBlazuiSettings.DisableAnimation)
         {
             style = "";
         }
@@ -360,7 +360,7 @@
         var transform = "scaleY(0)";
         if (option.IsShow)
         {
-            if (option.ShowStatus == AnimationStatus.Begin)
+            if (option.ShowStatus == AnimationStatus.Begin && !GlobalBlazuiSettings.DisableAnimation)
             {
                 transform = "scaleY(0)";
             }
@@ -370,7 +370,7 @@
             }
         }
         var style = "display:none";
-        if (option.IsShow)
+        if (option.IsShow || GlobalBlazuiSettings.DisableAnimation)
         {
             style = "";
         }
