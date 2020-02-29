@@ -13,7 +13,7 @@
 <div class="@wrapperClsBuilder" @ref="Content" style="@Style" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
     @if (Type == InputType.Textarea)
     {
-        <textarea type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner" style="height: 60px;overflow-y: hidden;" @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" />
+        <textarea type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner" style="height: 60px;overflow-y: hidden; " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" />
     }
     else
     {
