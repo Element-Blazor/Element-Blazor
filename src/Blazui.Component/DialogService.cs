@@ -182,7 +182,32 @@ namespace Blazui.Component
             ShowDialog(option);
             return await taskCompletionSource.Task;
         }
+        /// <summary>
+        /// 显示一个全屏窗口
+        /// </summary>
+        /// <typeparam name="TComponent"></typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="FullScreen">是否全屏</param>
+        /// <param name="parameters">显示该组件所需要的参数</param>
+        /// <returns></returns>
+        public async Task<DialogResult> ShowDialogAsync<TComponent>(string title, bool FullScreen, IDictionary<string, object> parameters)
+            where TComponent : ComponentBase
+        {
+            var taskCompletionSource = new TaskCompletionSource<DialogResult>();
+            var option = new DialogOption()
+            {
+                Content = typeof(TComponent),
+                IsDialog = true,
+                Title = title,
+                Width = 0,
+                FullScreen = FullScreen,
+                Parameters = parameters,
+                TaskCompletionSource = taskCompletionSource,
 
+            };
+            ShowDialog(option);
+            return await taskCompletionSource.Task;
+        }
         /// <summary>
         /// 显示一个窗口
         /// </summary>

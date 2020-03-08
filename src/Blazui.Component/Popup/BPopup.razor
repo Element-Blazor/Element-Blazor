@@ -38,12 +38,13 @@
         if (option.IsDialog)
         {
             var width = string.Empty;
-            if (option.Width > 0)
+       
+             if (option.Width > 0)
             {
                 width = $"width:{option.Width}px;";
             }
             <div class="el-dialog__wrapper" style="z-index: @index;">
-                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog" style="margin-top:15vh;opacity:0;@width">
+                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog @(option.FullScreen?"is-fullscreen":"")" style="margin-top:15vh;opacity:0;@width ">
                     <div class="el-dialog__header">
                         <span class="el-dialog__title">@option.Title</span>
                         <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option,

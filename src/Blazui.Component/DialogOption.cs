@@ -21,7 +21,10 @@ namespace Blazui.Component
         /// 是否窗口
         /// </summary>
         public bool IsDialog { get; set; }
-
+        /// <summary>
+        /// 弹窗全屏
+        /// </summary>
+        public bool FullScreen { get; set; }
         /// <summary>
         /// 宽度
         /// </summary>
