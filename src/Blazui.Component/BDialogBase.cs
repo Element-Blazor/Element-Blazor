@@ -22,7 +22,7 @@ namespace Blazui.Component
         /// </summary>
         /// <param name="result">窗口返回值，该值将作为 <seealso cref="DialogResult"/> 的 <seealso cref="DialogResult.Result"/> 属性</param>
         /// <returns></returns>
-        public Task CloseAsync<T>(T result)
+        public virtual Task CloseAsync<T>(T result)
         {
             return Dialog.CloseDialogAsync(result);
         }
@@ -31,7 +31,7 @@ namespace Blazui.Component
         /// 关闭当前窗口
         /// </summary>
         /// <returns></returns>
-        public Task CloseAsync()
+        public virtual Task CloseAsync()
         {
             return Dialog.CloseDialogAsync();
         }
