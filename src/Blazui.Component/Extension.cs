@@ -1,4 +1,5 @@
 ﻿using Blazui.Component.Dom;
+using Blazui.Component.Lang;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
+            services.AddScoped<BLangBase>();
             services.AddHttpClient();
             return services;
         }

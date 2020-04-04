@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazui.Component.Lang;
 
 namespace Blazui.Component
 {
@@ -36,6 +37,8 @@ namespace Blazui.Component
         [Inject]
         public LoadingService LoadingService { get; set; }
 
+        [Inject]
+        public BLangBase Lang { get; set; }
 
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }
