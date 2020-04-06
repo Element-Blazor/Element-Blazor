@@ -1,5 +1,6 @@
 ﻿using Blazui.ServerRender.Model;
-using Blazui.Component.Container;
+
+using Blazui.Component;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;

@@ -1,11 +1,12 @@
-﻿using Blazui.Component;
-using Blazui.Component;
+﻿
+
 using Blazui.ServerRender.Demo.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazui.Component;
 
 namespace Blazui.ServerRender.Demo.Loading
 {
