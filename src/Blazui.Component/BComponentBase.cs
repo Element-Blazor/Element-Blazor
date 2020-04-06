@@ -1,5 +1,5 @@
-﻿using Blazui.Component.Diagnose;
-using Blazui.Component;
+﻿
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;

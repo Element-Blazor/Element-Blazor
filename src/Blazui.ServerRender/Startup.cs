@@ -30,6 +30,7 @@ namespace Blazui.ServerRender
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddBlazuiServices();
+            services.AddHttpClient();
             GlobalBlazuiSettings.DisableAnimation = true;
             //services.AddMarkdown();
             services.AddSingleton<WeatherForecastService>();
