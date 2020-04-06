@@ -184,6 +184,7 @@ namespace Blazui.Component
 
         protected override void OnInitialized()
         {
+            SelectedRows = new HashSet<object>();
             base.OnInitialized();
             if (!AutoGenerateColumns)
             {
@@ -264,7 +265,6 @@ namespace Blazui.Component
                     }
                      );
                 }
-                SelectedRows = new HashSet<object>();
                 chkAll?.MarkAsRequireRender();
                 ResetSelectAllStatus();
             }
