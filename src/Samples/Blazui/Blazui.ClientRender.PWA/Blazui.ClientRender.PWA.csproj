@@ -1,0 +1,562 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\netstandard2.1\Blazui.ClientRender.PWA.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Release\netstandard2.1\Blazui.ClientRender.PWA.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Demo\Upload\TestController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Demo\demos.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Demo\demos.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Demo\Upload\TestController.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview2.20160.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview2.20160.5" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview2.20160.5" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview2.20160.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
+  <ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
+    <Content Remove="wwwroot\service-worker.js" />
+    <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\BasicSelect\BasicSelectBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\BasicSelect\Option.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\CheckBox\CheckBoxGroupBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\CheckBox\HardCodeBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DatePicker\BasicPickerBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\BasicDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\ExmapleDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Dialog\NestDialogBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DisabledRadio\DisabledRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\DisallowChangeRadio\DisallowChangeRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\EditableTab\BindingEditableTabBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\Activity.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\AutoGenerateFieldsInitilizeFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\BasicFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\InitilizeFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\InlineFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\BasicLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\CardLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\CustomLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\ManualLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\MenuLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Loading\ServiceLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MessageBox\BasicMessageBoxBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MessageBox\ConfirmMessageBoxBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Message\BasicMessageBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Message\StatusMessageBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\RadioButton\RadioButtonBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\RadioGroup\RadioGroupBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\AutoGenerateColumnTableBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\AutoGenerateColumnTestData.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\BasicTableBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\PaginationTableBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\SearchCondition.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\SearchTableBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Table\TestData.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Transfer\FormTransferBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Transfer\TransferModel.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Upload\UploadActivity.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Upload\UploadFormBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Demo\BasicButton\BasicButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicInput\BasicInput.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicInput\SizeInput.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicLayout.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicRadio\BasicRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicSelect\BasicSelect.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicSelect\BindEnum.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicSelect\BindNullableEnum.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BasicTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BorderCardTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\BorderedRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\ButtonGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\ButtonSize.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\CardTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\CheckBox\CheckBoxButtonGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\CheckBox\CheckBoxGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\CheckBox\HardCode.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DatePicker\BasicPicker.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Dialog\BasicDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Dialog\ExampleDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Dialog\NestDialog.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Dialog\PassParameter.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Dialog\TestContent.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DisabledButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DisabledRadio\DisabledRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DisabledSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DisallowChangeRadio\DisallowChangeRadio.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\DropDown\BasicDropDown.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\EditableTab\BindingEditableTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\EditableTab\EditableTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\EditableTab\TestCheckBoxInTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\AlignForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\AutoGenerateFieldsInitilizeForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\BasicForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\HiddenFormItem.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\InitilizeForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Form\InlineForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\ItemDisabledSelect.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Layout.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\LeftTab.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\LoadingButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\BasicLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\CardLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\CustomLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\ManualLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\MenuLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Loading\ServiceLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Menu\CustomBackgroundMenu.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Menu\HorizontalMenu.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Menu\VerticalMenu.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\MessageBox\BasicMessageBox.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\MessageBox\ConfirmMessageBox.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Message\BasicMessage.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Message\StatusMessage.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\NestedLayout.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Pagination\BackgroundPagination.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Pagination\BasicPagination.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\RadioButton\RadioButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\RadioGroup\RadioGroup.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\AutoGenerateColumnTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\BasicTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\BorderedTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\CheckBoxTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\CustomColumnTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\FixHeaderTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\IgnoreColumnTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\PaginationTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\SearchTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\StripeTable.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\TextButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\TextSwitch.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Transfer\BasicTransfer.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Transfer\FormTransfer.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Upload\BasicUpload.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Upload\BUploadLimit.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Upload\ImageUpload.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Upload\UploadForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Button.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\CheckBox.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\DatePicker.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Demo.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Dialog.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\DropDown.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Error.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Form.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Input.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Layout.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Loading.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\MarkdownEditor.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Menu.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Message.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\MessageBox.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Pagination.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Radio.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Select.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Switch.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Table.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Tabs.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Transfer.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Upload.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
+</Project>

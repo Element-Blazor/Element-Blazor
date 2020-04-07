@@ -1,0 +1,13 @@
+﻿@inherits BasicTableBase
+
+<BTable DataType="typeof(TestData)" OnLoadDataSource="LoadDataSource1" AutoGenerateColumns="false">
+    <BTableColumns>
+        <BTableColumn Width="100" Property="@nameof(TestData.Name)" Text="姓名"></BTableColumn>
+        <BTableDateTimeColumn Width="200" Format="yyyy-MM-dd" Property="@nameof(TestData.Time)" Text="时间"></BTableDateTimeColumn>
+        <BTableColumn Width="300" Property="@nameof(TestData.Address)" Text="地址"></BTableColumn>
+        <BTableTemplateColumn Text="操作">
+            <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
+            <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e=> Del(context))">删除</BButton>
+        </BTableTemplateColumn>
+    </BTableColumns>
+</BTable>

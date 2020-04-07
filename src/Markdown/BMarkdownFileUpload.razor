@@ -1,0 +1,15 @@
+﻿@inherits BMarkdownFileUploadBase
+
+<BTab>
+    @if (!DisableUpload)
+    {
+        <BTabPanel Title="本地上传（粘贴上传）">
+            <BUpload UploadType="UploadType" Url="@UploadUrl" MaxSize="@MaxSize" AllowExtensions="AllowExtensions" Height="Height" Width="Width" OnFileListUpload="UpdateFiles" OnDeleteFile="OnDeleteFile">
+                <Tip>@Tip</Tip>
+            </BUpload>
+        </BTabPanel>
+    }
+    <BTabPanel Title="网络资源">
+        <BInput TValue="string" ValueChanged="UpdateUrl"></BInput>
+    </BTabPanel>
+</BTab>
