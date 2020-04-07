@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazAdmin.Docs", "src\BlazAdmin.Docs\BlazAdmin.Docs.csproj", "{79830AD2-3FEF-4E6A-8064-BD2320146101}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B0C9413B-2E52-4243-A25C-FD3DC49A447A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E11FDAD-45C7-4E56-95D6-A41FE41FDB39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{338D3C99-8FA3-46A7-8CFB-B5E60D283644}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazAdmin", "src\BlazAdmin\BlazAdmin.csproj", "{52857DE9-BAC0-455B-8544-C385380621A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazAdmin.ClientRender", "src\BlazAdmin.ClientRender\BlazAdmin.ClientRender.csproj", "{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dependencies", "dependencies", "{2720E9D3-215A-4755-8647-17484C0ADD7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79830AD2-3FEF-4E6A-8064-BD2320146101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79830AD2-3FEF-4E6A-8064-BD2320146101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79830AD2-3FEF-4E6A-8064-BD2320146101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79830AD2-3FEF-4E6A-8064-BD2320146101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52857DE9-BAC0-455B-8544-C385380621A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52857DE9-BAC0-455B-8544-C385380621A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52857DE9-BAC0-455B-8544-C385380621A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52857DE9-BAC0-455B-8544-C385380621A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79830AD2-3FEF-4E6A-8064-BD2320146101} = {338D3C99-8FA3-46A7-8CFB-B5E60D283644}
+		{52857DE9-BAC0-455B-8544-C385380621A9} = {8E11FDAD-45C7-4E56-95D6-A41FE41FDB39}
+		{DB7A65D7-5AEB-4EE8-942A-0B088BDDC328} = {8E11FDAD-45C7-4E56-95D6-A41FE41FDB39}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85E04683-718A-4B92-AF00-3696180326BE}
+	EndGlobalSection
+EndGlobal

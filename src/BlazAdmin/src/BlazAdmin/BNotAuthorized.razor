@@ -1,0 +1,27 @@
+﻿@inherits BNotAuthorizedBase
+
+@if (requireInitilize.HasValue)
+{
+    @if (requireInitilize.Value)
+    {
+        if (CreatePage != null)
+        {
+            @((RenderFragment)CreatePage)
+        }
+        else
+        {
+            <BCreateSuperUser></BCreateSuperUser>
+        }
+    }
+    else
+    {
+        if (LoginPage != null)
+        {
+            @((RenderFragment)LoginPage)
+        }
+        else
+        {
+            <BLogin DefaultUser="DefaultUser"></BLogin>
+        }
+    }
+}

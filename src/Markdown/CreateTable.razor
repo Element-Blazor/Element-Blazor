@@ -1,0 +1,13 @@
+﻿@inherits CreateTableBase
+@using Blazui.Markdown.IconHandlers
+<BForm @ref="form">
+    <BFormItem IsRequired="true" Label="行数" Name="@nameof(CreateTableModel.Rows)" TValue="int">
+        <BInput TValue="int"></BInput>
+    </BFormItem>
+    <BFormItem IsRequired="true" Label="列数" Name="@nameof(CreateTableModel.Columns)" TValue="int">
+        <BInput TValue="int"></BInput>
+    </BFormItem>
+    <BFormActionItem Style="text-align:right">
+        <BButton Type="@ButtonType.Primary" @onclick="Submit">创建</BButton>
+    </BFormActionItem>
+</BForm>

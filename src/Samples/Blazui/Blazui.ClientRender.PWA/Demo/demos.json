@@ -1,0 +1,684 @@
+﻿[
+  {
+    "name": "markdowneditor",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "MarkdownEditor",
+        "files": [
+          "BasicEditor.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "表单提交",
+        "name": "MarkdownEditor",
+        "files": [
+          "FormMarkdown.razor",
+          "FormMarkdownBase.cs",
+          "ArticleModel.cs"
+        ]
+      },
+      {
+        "title": "Markdown 显示",
+        "name": "MarkdownEditor",
+        "files": [
+          "Markdown.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "transfer",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Transfer",
+        "files": [
+          "BasicTransfer.razor"
+        ]
+      },
+      {
+        "title": "表单提交",
+        "name": "Transfer",
+        "files": [
+          "FormTransfer.razor",
+          "FormTransferBase.cs",
+          "TransferModel.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "tabs",
+    "demos": [
+      {
+        "title": "基础的、简洁的标签页",
+        "name": "BasicTab"
+      },
+      {
+        "title": "选项卡样式的标签页",
+        "name": "CardTab"
+      },
+      {
+        "title": "卡片化的标签页",
+        "name": "BorderCardTab"
+      },
+      {
+        "title": "在左边的标签页",
+        "name": "LeftTab"
+      },
+      {
+        "title": "调用事件API实现可编辑的标签页",
+        "name": "EditableTab",
+        "files": [
+          "EditableTab.razor",
+          "TestCheckBoxInTab.razor"
+        ]
+      },
+      {
+        "title": "双向绑定实现可编辑的标签页",
+        "name": "EditableTab",
+        "files": [
+          "BindingEditableTab.razor",
+          "BindingEditableTabBase.cs",
+          "TestCheckBoxInTab.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "messagebox",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "MessageBox",
+        "files": [
+          "BasicMessageBox.razor",
+          "BasicMessageBoxBase.cs"
+        ]
+      },
+      {
+        "title": "确认消息",
+        "name": "MessageBox",
+        "files": [
+          "ConfirmMessageBox.razor",
+          "ConfirmMessageBoxBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "dialog",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Dialog",
+        "files": [
+          "BasicDialog.razor",
+          "BasicDialogBase.cs"
+        ]
+      },
+      {
+        "title": "嵌套窗口",
+        "name": "Dialog",
+        "files": [
+          "NestDialog.razor",
+          "NestDialogBase.cs",
+          "ExampleDialog.razor",
+          "ExmapleDialogBase.cs"
+        ]
+      },
+      {
+        "title": "向窗口内传参",
+        "name": "Dialog",
+        "files": [
+          "PassParameter.razor",
+          "BasicDialogBase.cs",
+          "TestContent.razor",
+          "TestContentBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "datepicker",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "DatePicker",
+        "files": [
+          "BasicPicker.razor",
+          "BasicPickerBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "form",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Form",
+        "files": [
+          "BasicForm.razor",
+          "BasicFormBase.cs",
+          "Activity.cs"
+        ]
+      },
+      {
+        "title": "行内表单",
+        "name": "Form",
+        "files": [
+          "InlineForm.razor",
+          "InlineFormBase.cs",
+          "Activity.cs"
+        ]
+      },
+      {
+        "title": "表单对齐",
+        "name": "Form",
+        "files": [
+          "AlignForm.razor",
+          "BasicFormBase.cs",
+          "Activity.cs"
+        ]
+      },
+      {
+        "title": "表单双向绑定",
+        "name": "Form",
+        "files": [
+          "InitilizeForm.razor",
+          "InitilizeFormBase.cs",
+          "Activity.cs"
+        ]
+      },
+      {
+        "title": "隐藏表单项",
+        "name": "Form",
+        "files": [
+          "HiddenFormItem.razor",
+          "BasicFormBase.cs",
+          "Activity.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "layout",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicLayout"
+      },
+      {
+        "title": "嵌套布局",
+        "name": "NestedLayout"
+      },
+      {
+        "title": "后台模板用法",
+        "name": "Layout"
+      }
+    ]
+  },
+  {
+    "name": "table",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Table",
+        "files": [
+          "BasicTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "斑马条纹用法",
+        "name": "Table",
+        "files": [
+          "StripeTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "边框表格",
+        "name": "Table",
+        "files": [
+          "BorderedTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "固定表头",
+        "name": "Table",
+        "files": [
+          "FixHeaderTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "复选框表格",
+        "name": "Table",
+        "files": [
+          "CheckBoxTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "带操作列的表格",
+        "name": "Table",
+        "files": [
+          "CustomColumnTable.razor",
+          "BasicTableBase.cs",
+          "TestData.cs"
+        ]
+      },
+      {
+        "title": "自动生成列，宽度自适应",
+        "name": "Table",
+        "files": [
+          "AutoGenerateColumnTable.razor",
+          "AutoGenerateColumnTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "分页",
+        "name": "Table",
+        "files": [
+          "PaginationTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "过滤显示字段",
+        "name": "Table",
+        "files": [
+          "IgnoreColumnTable.razor",
+          "PaginationTableBase.cs",
+          "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "搜索",
+        "name": "Table",
+        "files": [
+          "SearchTable.razor",
+          "SearchTableBase.cs",
+          "AutoGenerateColumnTestData.cs",
+          "SearchCondition.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "loading",
+    "demos": [
+      {
+        "title": "区域加载",
+        "name": "Loading",
+        "files": [
+          "BasicLoading.razor",
+          "BasicLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "自定义加载",
+        "name": "Loading",
+        "files": [
+          "CustomLoading.razor",
+          "CustomLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "服务调用",
+        "name": "Loading",
+        "files": [
+          "ServiceLoading.razor",
+          "ServiceLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "区域手动加载",
+        "name": "Loading",
+        "files": [
+          "ManualLoading.razor",
+          "ManualLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "卡片 Loading",
+        "name": "Loading",
+        "files": [
+          "CardLoading.razor",
+          "CardLoadingBase.cs"
+        ]
+      },
+      {
+        "title": "菜单 Loading",
+        "name": "Loading",
+        "files": [
+          "MenuLoading.razor",
+          "MenuLoadingBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "dropdown",
+    "demos": [
+      {
+        "title": "基本使用",
+        "name": "DropDown",
+        "files": [
+          "BasicDropDown.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "button",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicButton",
+        "files": [
+          "BasicButton.razor"
+        ]
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledButton"
+      },
+      {
+        "title": "文字按钮",
+        "name": "TextButton"
+      },
+      {
+        "title": "按钮组",
+        "name": "ButtonGroup"
+      },
+      {
+        "title": "加载中",
+        "name": "LoadingButton"
+      },
+      {
+        "title": "按钮大小",
+        "name": "ButtonSize"
+      }
+    ]
+  },
+  {
+    "name": "pagination",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Pagination",
+        "files": [
+          "BasicPagination.razor"
+        ]
+      },
+      {
+        "title": "无背景",
+        "name": "Pagination",
+        "files": [
+          "BackgroundPagination.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "switch",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicSwitch"
+      },
+      {
+        "title": "文本描述",
+        "name": "TextSwitch"
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledSwitch"
+      }
+    ]
+  },
+  {
+    "name": "radio",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicRadio",
+        "files": [
+          "BasicRadio.razor",
+          "BasicRadioBase.cs"
+        ]
+      },
+      {
+        "title": "禁用状态",
+        "name": "DisabledRadio",
+        "files": [
+          "DisabledRadio.razor",
+          "DisabledRadioBase.cs"
+        ]
+      },
+      {
+        "title": "Change事件实现不允许切换状态",
+        "name": "DisallowChangeRadio",
+        "files": [
+          "DisallowChangeRadio.razor",
+          "DisallowChangeRadioBase.cs"
+        ]
+      },
+      {
+        "title": "单选框组",
+        "name": "RadioGroup",
+        "files": [
+          "RadioGroup.razor",
+          "RadioGroupBase.cs"
+        ]
+      },
+      {
+        "title": "单选按钮组",
+        "name": "RadioButton",
+        "files": [
+          "RadioButton.razor",
+          "RadioButtonBase.cs"
+        ]
+      },
+      {
+        "title": "带边框的单选框",
+        "name": "BorderedRadio"
+      }
+    ]
+  },
+  {
+    "name": "select",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicSelect",
+        "files": [
+          "BasicSelect.razor",
+          "BasicSelectBase.cs"
+        ]
+      },
+      {
+        "title": "带禁用选项",
+        "name": "ItemDisabledSelect"
+      },
+      {
+        "title": "绑定枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
+      },
+      {
+        "title": "绑定可空枚举值",
+        "name": "BasicSelect",
+        "files": [
+          "BindNullableEnum.razor",
+          "Option.cs",
+          "BasicSelectBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "input",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "BasicInput",
+        "files": [
+          "BasicInput.razor"
+        ]
+      },
+      {
+        "title": "按钮尺寸",
+        "name": "BasicInput",
+        "files": [
+          "SizeInput.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "menu",
+    "demos": [
+      {
+        "title": "横向菜单",
+        "name": "Menu",
+        "files": [
+          "HorizontalMenu.razor"
+        ]
+      },
+      {
+        "title": "坚向菜单",
+        "name": "Menu",
+        "files": [
+          "VerticalMenu.razor"
+        ]
+      },
+      {
+        "title": "自定义背景",
+        "name": "Menu",
+        "files": [
+          "CustomBackgroundMenu.razor"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "message",
+    "demos": [
+      {
+        "title": "消息",
+        "name": "Message",
+        "files": [
+          "BasicMessage.razor",
+          "BasicMessageBase.cs"
+        ]
+      },
+      {
+        "title": "不同状态",
+        "name": "Message",
+        "files": [
+          "StatusMessage.razor",
+          "StatusMessageBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "checkbox",
+    "demos": [
+      {
+        "title": "硬编码",
+        "name": "CheckBox",
+        "files": [
+          "HardCode.razor",
+          "HardCodeBase.cs"
+        ]
+      },
+      {
+        "title": "复选框组",
+        "name": "CheckBox",
+        "files": [
+          "CheckBoxGroup.razor",
+          "CheckBoxGroupBase.cs"
+        ]
+      },
+      {
+        "title": "按钮复选框组",
+        "name": "CheckBox",
+        "files": [
+          "CheckBoxButtonGroup.razor",
+          "CheckBoxGroupBase.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "upload",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Upload",
+        "files": [
+          "BasicUpload.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "限制上传",
+        "name": "Upload",
+        "files": [
+          "BUploadLimit.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "图片上传",
+        "name": "Upload",
+        "files": [
+          "ImageUpload.razor",
+          "TestController.cs"
+        ]
+      },
+      {
+        "title": "表单上传",
+        "name": "Upload",
+        "files": [
+          "UploadForm.razor",
+          "UploadActivity.cs",
+          "UploadFormBase.cs",
+          "TestController.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "lang",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Lang",
+        "files": [
+          "BasicLang.razor",
+          "BasicLangBase.cs"
+        ]
+      }
+    ]
+  }
+]
