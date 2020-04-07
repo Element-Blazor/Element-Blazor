@@ -187,10 +187,9 @@ namespace Blazui.Component
         /// </summary>
         /// <typeparam name="TComponent"></typeparam>
         /// <param name="title">标题</param>
-        /// <param name="FullScreen">是否全屏</param>
         /// <param name="parameters">显示该组件所需要的参数</param>
         /// <returns></returns>
-        public async Task<DialogResult> ShowDialogAsync<TComponent>(string title, bool FullScreen, IDictionary<string, object> parameters)
+        public async Task<DialogResult> ShowFullScreenDialogAsync<TComponent>(string title, IDictionary<string, object> parameters)
             where TComponent : ComponentBase
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
@@ -200,7 +199,7 @@ namespace Blazui.Component
                 IsDialog = true,
                 Title = title,
                 Width = 0,
-                FullScreen = FullScreen,
+                FullScreen = true,
                 Parameters = parameters,
                 TaskCompletionSource = taskCompletionSource,
 
