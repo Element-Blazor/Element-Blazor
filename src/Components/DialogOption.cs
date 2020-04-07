@@ -24,7 +24,7 @@ namespace Blazui.Component
         /// <summary>
         /// 弹窗全屏
         /// </summary>
-        public bool FullScreen { get; set; }
+        public bool FullScreen { get; set; } = false;
         /// <summary>
         /// 宽度
         /// </summary>
