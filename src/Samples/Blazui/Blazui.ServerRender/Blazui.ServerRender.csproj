@@ -19,20 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Demo\BasicButton\BasicButton.razor" />
     <Content Remove="Demo\MarkdownEditor\BasicEditor.razor" />
     <Content Remove="Demo\MarkdownEditor\FormMarkdown.razor" />
     <Content Remove="Demo\MarkdownEditor\Markdown.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Demo\BasicButton\BasicButton.razor">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Demo\BasicButton\BasicButton.razor" />
     <None Include="Demo\BasicInput\BasicInput.razor" />
     <None Include="Demo\BasicRadio\BasicRadio.razor" />
     <None Include="Demo\BasicSelect\BasicSelect.razor" />
@@ -120,6 +112,9 @@
     <Compile Update="Demo\Form\InlineFormBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="Demo\Lang\BasicLangBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Demo\Loading\MenuLoadingBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -192,6 +187,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Demo\BasicButton\BasicButton.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Demo\BasicInput\SizeInput.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -229,6 +227,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Form\InitilizeForm.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\Lang\BasicLang.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Loading\MenuLoading.razor">
