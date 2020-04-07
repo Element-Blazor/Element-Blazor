@@ -51,7 +51,7 @@
     <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Markdown\Blazui.Markdown.csproj" />
+    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
