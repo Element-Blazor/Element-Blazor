@@ -23,7 +23,7 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
-            services.AddScoped<BLangBase>();
+            services.AddTransient<BLangBase>();
             services.AddHttpClient();
             return services;
         }
