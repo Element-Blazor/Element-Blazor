@@ -675,6 +675,14 @@
         "title": "基础用法",
         "name": "Lang",
         "files": [
+          "BasicLangInject.razor",
+          "BasicLangInjectBase.cs"
+        ]
+      },
+      {
+        "title": "继承用法",
+        "name": "Lang",
+        "files": [
           "BasicLang.razor",
           "BasicLangBase.cs"
         ]

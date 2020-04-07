@@ -10,8 +10,6 @@ namespace Blazui.ServerRender.Demo.Lang
 {
     public class BasicLangBase : BComponentBase
     {
-        protected int selectedValue = 2;
-
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
             Lang.LangLocale = "en-US";
@@ -23,6 +21,5 @@ namespace Blazui.ServerRender.Demo.Lang
             Lang.LangLocale = "zh-CN";
             MarkAsRequireRender();
         }
-
     }
 }

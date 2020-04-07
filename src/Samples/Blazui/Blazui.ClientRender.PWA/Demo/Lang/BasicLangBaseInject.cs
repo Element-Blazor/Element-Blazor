@@ -8,18 +8,25 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.Lang
 {
-    public class BasicLangBase : BComponentBase
+    public class BasicLangBaseInject : ComponentBase
     {
+        [Inject]
+        public Component.Lang.BLangBase Lang { get; set; }
+
+        protected override Task OnInitializedAsync()
+        {
+            Lang.LangLocale = "en-US";
+            return base.OnInitializedAsync();
+        }
+
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
             Lang.LangLocale = "en-US";
-            MarkAsRequireRender();
         }
 
         public async Task SetCnLang(MouseEventArgs eventArgs)
         {
             Lang.LangLocale = "zh-CN";
-            MarkAsRequireRender();
         }
     }
 }
