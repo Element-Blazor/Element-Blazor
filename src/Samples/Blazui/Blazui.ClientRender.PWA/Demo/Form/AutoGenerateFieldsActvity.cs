@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.Form
+namespace Blazui.ServerRender.Demo.Form
 {
     public class AutoGenerateFieldsActvity
     {

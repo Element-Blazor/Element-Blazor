@@ -1,5 +1,5 @@
 ﻿
-using Blazui.ClientRender.PWA.Demo.Table;
+using Blazui.ServerRender.Demo.Table;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ClientRender.PWA.Demo.Dialog
+namespace Blazui.ServerRender.Demo.Dialog
 {
     public class BasicDialogBase : BDialogBase
     {

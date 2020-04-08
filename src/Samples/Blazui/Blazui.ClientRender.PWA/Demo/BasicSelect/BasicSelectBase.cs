@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.BasicSelect
+namespace Blazui.ServerRender.Demo.BasicSelect
 {
     public class BasicSelectBase : ComponentBase
     {

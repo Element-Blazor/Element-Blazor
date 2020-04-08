@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.DisallowChangeRadio
+namespace Blazui.ServerRender.Demo.DisallowChangeRadio
 {
     public class DisallowChangeRadioBase : ComponentBase
     {

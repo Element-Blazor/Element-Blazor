@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.DisabledRadio
+namespace Blazui.ServerRender.Demo.DisabledRadio
 {
     public class DisabledRadioBase : ComponentBase
     {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -8,12 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA
+namespace Blazui.ServerRender
 {
-    [Microsoft.AspNetCore.Mvc.Route("api/test")]
+    [Route("api/test")]
     public class Test1Controller : ControllerBase
     {
-        [Microsoft.AspNetCore.Mvc.Route("upload")]
+        [Route("upload")]
         [HttpPost]
         public async Task<IActionResult> UploadAsync([FromForm]IFormFile fileContent)
         {

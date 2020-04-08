@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ClientRender.PWA.Demo.Table
+namespace Blazui.ServerRender.Demo.Table
 {
     public class PaginationTableBase : ComponentBase
     {

@@ -1,6 +1,6 @@
 ﻿
 
-using Blazui.ClientRender.PWA.Demo.Table;
+using Blazui.ServerRender.Demo.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ClientRender.PWA.Demo.Loading
+namespace Blazui.ServerRender.Demo.Loading
 {
     public class MenuLoadingBase : ComponentBase
     {

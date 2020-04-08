@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ClientRender.PWA.Demo.Table
+namespace Blazui.ServerRender.Demo.Table
 {
     public class BasicTableBase : BDialogBase //注意此处继承 BDialogBase 是因为这个组件用于演示弹窗的，因此需要继承 BDialogBase，通常情况下继承 ComponentBase 或 BComponentBase 即可
     {
