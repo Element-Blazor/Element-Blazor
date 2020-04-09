@@ -597,6 +597,14 @@
           "StatusMessage.razor",
           "StatusMessageBase.cs"
         ]
+      },
+      {
+        "title": "快速多个消息",
+        "name": "Message",
+        "files": [
+          "MultiMessage.razor",
+          "MultiMessageBase.cs"
+        ]
       }
     ]
   },
