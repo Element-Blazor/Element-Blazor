@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Blazui.Component;
+using Blazui.Component.Lang;
 
 namespace Blazui.ClientRender.PWA
 {
@@ -16,6 +17,7 @@ namespace Blazui.ClientRender.PWA
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();
             builder.Services.AddBlazuiServices();
+            builder.Services.AddTransient<BLang>();
             builder.Services.AddHttpClient();
             await builder.Build().RunAsync();
         }
