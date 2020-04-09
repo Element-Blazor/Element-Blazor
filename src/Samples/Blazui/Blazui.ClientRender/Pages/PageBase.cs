@@ -1,6 +1,4 @@
-﻿
-
-using Blazui.Component;
+﻿using Blazui.Component;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -11,10 +9,10 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net;
-using Blazui.ClientRender.PWA.Model;
+using Blazui.ClientRender.Model;
 using System.Reflection;
 
-namespace Blazui.ClientRender.PWA.Pages
+namespace Blazui.ClientRender.Pages
 {
     public class PageBase : ComponentBase
     {
@@ -271,7 +269,8 @@ namespace Blazui.ClientRender.PWA.Pages
                         Title="基础用法"
                  }
                 }
-            }); demoPages.Add(new DemoPageModel()
+            });
+            demoPages.Add(new DemoPageModel()
             {
                 Name = "lang",
                 Demos = new List<DemoInfoModel>() {
