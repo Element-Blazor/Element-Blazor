@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blazui.ClientRender.PWA</name>
+    </assembly>
+    <members>
+        <member name="F:Blazui.ClientRender.PWA.Demo.Table.IgnoreColumnTable.ignoreProps">
+            <summary>
+            使用场景：又想自动生成，又想过滤一些字段不显示
+            忽略字段-Address，Yes将不会显示在列表中
+            </summary>
+        </member>
+        <member name="P:Blazui.ClientRender.PWA.Model.DemoModel.Type">
+            <summary>
+            示例类型
+            </summary>
+        </member>
+        <member name="P:Blazui.ClientRender.PWA.Model.DemoPageModel.Name">
+            <summary>
+            示例页面名称
+            </summary>
+        </member>
+        <member name="P:Blazui.ClientRender.PWA.Model.DemoPageModel.Demos">
+            <summary>
+            该页面所有示例
+            </summary>
+        </member>
+    </members>
+</doc>
