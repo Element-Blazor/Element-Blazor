@@ -15,6 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="pwapublish\**" />
+    <Content Remove="pwapublish\**" />
+    <EmbeddedResource Remove="pwapublish\**" />
+    <None Remove="pwapublish\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Demo\Upload\TestController.cs" />
   </ItemGroup>
 
@@ -76,7 +83,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Tab\BindingEditableTabBase.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Form\Activity.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
