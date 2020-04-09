@@ -243,15 +243,6 @@
         ]
       },
       {
-        "title": "边框表格",
-        "name": "Table",
-        "files": [
-          "BorderedTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
         "title": "固定表头",
         "name": "Table",
         "files": [
@@ -313,6 +304,15 @@
           "SearchTableBase.cs",
           "AutoGenerateColumnTestData.cs",
           "SearchCondition.cs"
+        ]
+      },
+      {
+        "title": "更改每页条数",
+        "name": "Table",
+        "files": [
+          "UpdatePageSize.razor",
+          "UpdatePageSizeBase.cs",
+          "AutoGenerateColumnTestData.cs"
         ]
       }
     ]

@@ -243,15 +243,6 @@
         ]
       },
       {
-        "title": "边框表格",
-        "name": "Table",
-        "files": [
-          "BorderedTable.razor",
-          "BasicTableBase.cs",
-          "TestData.cs"
-        ]
-      },
-      {
         "title": "固定表头",
         "name": "Table",
         "files": [
@@ -676,7 +667,7 @@
         "name": "Lang",
         "files": [
           "BasicLangInject.razor",
-          "BasicLangBaseInject.cs"
+          "BasicLangInjectBase.cs"
         ]
       },
       {

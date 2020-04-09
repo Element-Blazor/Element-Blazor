@@ -73,9 +73,15 @@ namespace Blazui.Component
         public EventCallback<int> PageCountChanged { get; set; }
 
         internal int pageCount;
-        protected override void OnInitialized()
+
+        protected override void OnParametersSet()
         {
             pageCount = Convert.ToInt32(Math.Ceiling((float)Total / PageSize));
+            if (CurrentPage > pageCount)
+            {
+                CurrentPage = pageCount;
+                CurrentPageChanged?.Invoke(pageCount);
+            }
             SwitchButtonStatus();
         }
 

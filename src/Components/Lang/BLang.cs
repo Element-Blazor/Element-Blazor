@@ -49,20 +49,20 @@ namespace Blazui.Component.Lang
             path.Append(".Json");
             if (Type.GetType($"Microsoft.AspNetCore.Components.WebAssembly.Hosting.WebAssemblyHostBuilder, Microsoft.AspNetCore.Components.WebAssembly.Hosting") == null)
             {
-                Console.WriteLine("Current Host Is WebAssembly");
-                if (httpClient == null)
-                {
-                    throw new Exception("请添加 HttpClient 依赖");
-                }
-                var jsonResponse = httpClient.GetAsync(path.ToString()).Result.Content.ReadAsStreamAsync().Result;
+                Console.WriteLine("Current Host Is Server");
                 Configuration = new ConfigurationBuilder()
-                    .AddJsonStream(jsonResponse)
+                    .Add(new JsonConfigurationSource { Path = path.ToString(), Optional = false, ReloadOnChange = true })
                     .Build();
                 return;
             }
-            Console.WriteLine("Current Host Is Server");
+            Console.WriteLine("Current Host Is WebAssembly");
+            if (httpClient == null)
+            {
+                throw new Exception("请添加 HttpClient 依赖");
+            }
+            var jsonResponse = httpClient.GetAsync(path.ToString()).Result.Content.ReadAsStreamAsync().Result;
             Configuration = new ConfigurationBuilder()
-                .Add(new JsonConfigurationSource { Path = path.ToString(), Optional = false, ReloadOnChange = true })
+                .AddJsonStream(jsonResponse)
                 .Build();
         }
 

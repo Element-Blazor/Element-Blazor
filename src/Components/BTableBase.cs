@@ -166,11 +166,6 @@ namespace Blazui.Component
         /// </summary>
         [Parameter]
         public Func<int, Task<PagerResult>> OnLoadDataSource { get; set; }
-        /// <summary>
-        /// 启用边框
-        /// </summary>
-        [Parameter]
-        public bool IsBordered { get; set; }
         public ElementReference Container { get; set; }
 
         internal Task OnRowCheckBoxRenderCompleted(object row, BCheckBoxBase<bool> chk)
