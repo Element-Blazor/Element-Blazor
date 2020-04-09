@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace  Blazui.Component
+namespace Blazui.Component
 {
     public class BInputBase<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
@@ -20,7 +20,7 @@ namespace  Blazui.Component
         /// <summary>
         /// 当输入值错误时是否抛出异常
         /// </summary>
-        protected virtual bool ThrowOnInvalidValue { get; } = true;
+        protected virtual bool ThrowOnInvalidValue { get; } = false;
         /// <summary>
         /// 是否启用清空按钮
         /// </summary>
@@ -130,8 +130,13 @@ namespace  Blazui.Component
             {
                 Value = (TValue)TypeHelper.ChangeType(input.Value, typeof(TValue));
             }
-            catch (FormatException) when (ThrowOnInvalidValue)
+            catch (FormatException e)
             {
+                if (ThrowOnInvalidValue)
+                {
+                    throw e;
+                }
+                Value = default;
             }
             if (ValueChanged.HasDelegate)
             {

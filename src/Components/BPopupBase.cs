@@ -545,22 +545,28 @@ namespace Blazui.Component
 
         async Task RenderMessageAsync()
         {
-            var newMessage = Messages.FirstOrDefault(x => x.IsNew);
-            if (newMessage == null)
+            var newMessages = Messages.Where(x => x.IsNew);
+            foreach (var newMessage in newMessages)
             {
-                return;
+                var item = newMessage;
+                _ = Task.Factory.StartNew(async () =>
+                  {
+                      item.IsNew = false;
+                      var messageContent = item.Element;
+                      var style = messageContent.Dom(JSRuntime).Style;
+                      await Task.Delay(50);
+                      await style.SetAsync("top", $"{item.EndTop}px");
+                      await style.SetAsync("opacity", $"1");
+                      await Task.Delay(item.Duration + 500);
+                      await style.SetAsync("top", $"{item.BeginTop}px");
+                      await style.SetAsync("opacity", $"0");
+                      await Task.Delay(200);
+                      lock (MessageService.Messages)
+                      {
+                          MessageService.Messages.Remove(item);
+                      }
+                  });
             }
-            newMessage.IsNew = false;
-            var messageContent = newMessage.Element;
-            var style = messageContent.Dom(JSRuntime).Style;
-            await Task.Delay(50);
-            await style.SetAsync("top", $"{newMessage.EndTop}px");
-            await style.SetAsync("opacity", $"1");
-            await Task.Delay(newMessage.Duration + 500);
-            await style.SetAsync("top", $"{newMessage.BeginTop}px");
-            await style.SetAsync("opacity", $"0");
-            await Task.Delay(500);
-            MessageService.Messages.Remove(newMessage);
         }
 
         protected void CloseDateTimePicker(DateTimePickerOption option)

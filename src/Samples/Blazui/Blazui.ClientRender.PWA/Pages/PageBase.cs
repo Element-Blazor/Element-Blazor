@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-using Newtonsoft.Json;
 using System.Net;
 using Blazui.ClientRender.PWA.Model;
 using System.Reflection;
@@ -444,6 +443,13 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="Message",
                         Title="不同状态"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "MultiMessage.razor"
+                      },
+                       Name="Message",
+                        Title="快速多个消息"
                  }
                 }
             });
@@ -719,8 +725,6 @@ namespace Blazui.ClientRender.PWA.Pages
             }
             return demos;
         }
-        [Inject]
-        private IHttpClientFactory httpClientFactory { get; set; }
         [Inject]
         protected IJSRuntime jSRuntime { get; set; }
 

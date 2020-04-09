@@ -10,6 +10,9 @@
     </BFormItem>
     <BFormItem TValue="IFileModel[]" Label="审批文件" Name="@nameof(UploadActivity.Files)" IsRequired="true">
         <BUpload Url="/api/test/upload">
+            <Tip>
+                仅供演示，无法上传
+            </Tip>
         </BUpload>
     </BFormItem>
     <BFormItem TValue="IFileModel[]" Label="场景预览" Name="@nameof(UploadActivity.Previews)">

@@ -67,20 +67,6 @@
     <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
     <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
     <script src="/_content/Blazui.Markdown/js/dom.js"></script>
-    <script src="https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs/loader.js"></script>
-    <script>
-        require.config({ paths: { 'vs': 'https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs' } });
-        require(['vs/editor/editor.main'], function () {
-            window.renderHightlight = function (el) {
-                if (el.children[0].getAttribute("class")) {
-                    return;
-                }
-                monaco.editor.colorizeElement(el.children[0], {
-                    theme: "vs"
-                });
-            }
-        });
-    </script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>

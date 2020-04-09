@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.MarkdownEditor
+namespace Blazui.ClientRender.PWA2.Demo.MarkdownEditor
 {
     public class FormMarkdownBase : BComponentBase
     {
