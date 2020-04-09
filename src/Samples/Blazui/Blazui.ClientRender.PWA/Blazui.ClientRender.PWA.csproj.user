@@ -6,5 +6,6 @@
   <PropertyGroup>
     <ActiveDebugProfile>Blazui.ClientRender.PWA</ActiveDebugProfile>
     <ShowAllFiles>true</ShowAllFiles>
+    <NameOfLastUsedPublishProfile>FolderProfile</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
