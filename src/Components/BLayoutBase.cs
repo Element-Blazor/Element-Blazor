@@ -22,7 +22,7 @@ namespace Blazui.Component
         [Parameter]
         public float NorthHeight { get; set; } = 50;
         [Parameter]
-        public float SouthWidth { get; set; } = 200;
+        public float SouthHeight { get; set; } = 50;
         [Parameter]
         public RenderFragment West { get; set; }
 

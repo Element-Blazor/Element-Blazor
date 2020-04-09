@@ -10,7 +10,7 @@ namespace Blazui.Component.Lang
         /// <summary>
         /// 初始化加载的json文件
         /// </summary>
-        void InitBLangBase();
+        void InitBLangBaseAsync();
 
         /// <summary>
         /// 读取对应文件的语言

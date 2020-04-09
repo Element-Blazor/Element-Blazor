@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ServerRender.Demo.Form
+namespace Blazui.ClientRender.PWA.Demo.Form
 {
     public class InlineFormBase : ComponentBase
     {

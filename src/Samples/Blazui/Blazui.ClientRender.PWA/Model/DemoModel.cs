@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Model
+namespace Blazui.ClientRender.PWA.Model
 {
     public class DemoModel
     {

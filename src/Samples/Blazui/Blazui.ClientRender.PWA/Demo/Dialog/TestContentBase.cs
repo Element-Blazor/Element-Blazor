@@ -6,7 +6,7 @@ using System.Linq;
 using Blazui.Component;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Dialog
+namespace Blazui.ClientRender.PWA.Demo.Dialog
 {
     public class TestContentBase:BDialogBase
     {

@@ -38,7 +38,7 @@ namespace Blazui.Component
         public LoadingService LoadingService { get; set; }
 
         [Inject]
-        protected BLangBase Lang { get; set; }
+        protected BLang Lang { get; set; }
 
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }

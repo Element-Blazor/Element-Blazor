@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender
+namespace Blazui.ClientRender.PWA
 {
     [Route("api/test")]
     public class Test2Controller : ControllerBase

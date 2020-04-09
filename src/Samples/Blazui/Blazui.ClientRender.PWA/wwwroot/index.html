@@ -6,39 +6,66 @@
     <meta name="viewport" content="width=device-width" />
     <title>Blazui, Element的blazor版本，用 .Net 写前端的 UI 框架，开箱即用，WebAssembly 版本</title>
     <base href="/" />
-    <link href="css/site.css" rel="stylesheet" />
     <link href="manifest.json" rel="manifest" />
 
     <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
     <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
-    <link href="~/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
-    <link href="~/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
     <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
-    <script>
-        var _hmt = _hmt || [];
-        (function () {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?a442e5e066ee13657248681100c2c514";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
+    <style>
+        html {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            background-color: lightblue;
+            font-family: 'Open Sans';
+            font-weight: 100;
+            font-size: 100%;
+            margin: 0em;
+            display: flex;
+            flex: 1;
+            padding: 0em;
+        }
+
+            body > app {
+                flex: 1;
+                display: flex;
+            }
+    </style>
 </head>
 
 <body>
-    <app>Loading...</app>
+    <app>
+        <div class="blaz-loader">
+            <span class="circle">
+                正在
+                <div class="scircle"></div>
+                <div class="scircle"></div>
+            </span>
+            <span class="circle">
+                加载
+                <div class="scircle"></div>
+                <div class="scircle"></div>
+            </span>
+            <span class="circle">
+                页面
+                <div class="scircle"></div>
+                <div class="scircle"></div>
+            </span>
+        </div>
+    </app>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
     <script src="/_content/Blazui.Component/js/dom.js"></script>
     <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
-    <script src="~/_content/Blazui.Markdown/js/addons.min.js"></script>
-    <script src="~/_content/Blazui.Markdown/js/continuelist.js"></script>
-    <script src="~/_content/Blazui.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/addons.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
+    <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
     <script src="/_content/Blazui.Markdown/js/dom.js"></script>
     <script src="https://cdn.bootcss.com/monaco-editor/0.18.0/min/vs/loader.js"></script>
     <script>

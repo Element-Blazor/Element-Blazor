@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.MarkdownEditor
+namespace Blazui.ClientRender.PWA.Demo.MarkdownEditor
 {
     public class ArticleModel
     {

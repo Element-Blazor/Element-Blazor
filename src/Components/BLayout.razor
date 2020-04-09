@@ -13,10 +13,14 @@
     {
         styles.Add("flex:1");
     }
+    if (!string.IsNullOrWhiteSpace(Style))
+    {
+        styles.AddRange(Style.Split(';'));
+    }
     <div class="blaz-layout" style="@string.Join(";", styles)" @ref="Container">
         @if (North != null)
         {
-            <div class="blaz-layout-north blaz-layout-card">
+            <div class="blaz-layout-north blaz-layout-card" style="line-height: @(SouthHeight)px;height:@(NorthHeight)px">
                 @North
             </div>
         }
@@ -43,7 +47,7 @@
 
         @if (South != null)
         {
-            <div class="blaz-layout-south blaz-layout-card">
+            <div class="blaz-layout-south blaz-layout-card" style="line-height: @(SouthHeight)px;height:@(SouthHeight)px;">
                 @South
             </div>
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Table
+namespace Blazui.ClientRender.PWA.Demo.Table
 {
     public class TestData
     {

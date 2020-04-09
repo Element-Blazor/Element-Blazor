@@ -12,19 +12,14 @@ else
                 @demo.Title
             </Header>
             <Body>
-                <BTab Type="@TabType.BorderCard">
-                    <BTabPanel Title="运行效果" IsActive="true" Name="display">
-                        <BDynamicComponent Component="@demo.Demo"></BDynamicComponent>
-                    </BTabPanel>
-                    <BTabPanel Title="示例代码">
-                    </BTabPanel>
-                </BTab>
+                <BDynamicComponent Component="@demo.Demo"></BDynamicComponent>
             </Body>
         </BCard>
     }
     <style>
         .el-card {
             margin-bottom: 10px;
+            margin-top: 10px;
         }
     </style>
 }

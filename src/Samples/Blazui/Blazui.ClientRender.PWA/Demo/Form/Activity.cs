@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Form
+namespace Blazui.ClientRender.PWA.Demo.Form
 {
     public class Activity
     {

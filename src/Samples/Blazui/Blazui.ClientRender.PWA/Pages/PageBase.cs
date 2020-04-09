@@ -1,4 +1,4 @@
-﻿using Blazui.ClientRender.Model;
+﻿
 
 using Blazui.Component;
 using Microsoft.AspNetCore.Components;
@@ -11,22 +11,202 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net;
-using Blazui.ClientRender.PWA.Mode;
+using Blazui.ClientRender.PWA.Model;
+using System.Reflection;
 
-namespace Blazui.ServerRender.Pages
+namespace Blazui.ClientRender.PWA.Pages
 {
     public class PageBase : ComponentBase
     {
         private static List<DemoPageModel> demoPages = new List<DemoPageModel>();
         static PageBase()
         {
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "button",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicButton.razor"
+                      },
+                       Name="BasicButton",
+                        Title="基础用法"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "ButtonGroup.razor"
+                      },
+                       Name="BasicButton",
+                        Title="按钮组"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "ButtonSize.razor"
+                      },
+                       Name="BasicButton",
+                        Title="按钮尺寸"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "DisabledButton.razor"
+                      },
+                       Name="BasicButton",
+                        Title="禁用的按钮"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "LoadingButton.razor"
+                      },
+                       Name="BasicButton",
+                        Title="按钮加载中"
+                 }
+                 }
 
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "input",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicInput.razor"
+                      },
+                       Name="BasicInput",
+                        Title="基础用法"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "SizeInput.razor"
+                      },
+                       Name="BasicInput",
+                        Title="输入框尺寸"
+                 }
+                 }
+
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "radio",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicRadio.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="基础用法"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BorderedRadio.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="有边框"
+                 }
+                 }
+
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "select",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicSelect.razor"
+                      },
+                       Name="BasicSelect",
+                        Title="基础用法"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BindEnum.razor"
+                      },
+                       Name="BasicSelect",
+                        Title="绑定枚举(可空)"
+                 }
+                 }
+
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "checkbox",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "CheckBoxButtonGroup.razor"
+                      },
+                       Name="CheckBox",
+                        Title="复选按钮组"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "CheckBoxGroup.razor"
+                      },
+                       Name="CheckBox",
+                        Title="复选框组"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "HardCode.razor"
+                      },
+                       Name="CheckBox",
+                        Title="硬编码复选框"
+                 }
+                 }
+
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "datepicker",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicPicker.razor"
+                      },
+                       Name="DatePicker",
+                        Title="基础用法"
+                 }
+                }
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "dialog",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicDialog.razor"
+                      },
+                       Name="Dialog",
+                        Title="基础用法"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "NestDialog.razor"
+                      },
+                       Name="Dialog",
+                        Title="无限弹窗"
+                 }
+                }
+            });
         }
         private IList<DemoModel> Code(string name)
         {
-            var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "Demo");
-            var demoInfos = JsonConvert.DeserializeObject<IEnumerable<DemoPageModel>>(System.IO.File.ReadAllText(Path.Combine(location, "demos.json")));
-            var demoInfo = demoInfos.SingleOrDefault(x => x.Name == name);
+            var demoInfo = demoPages.SingleOrDefault(x => x.Name == name);
             if (demoInfo == null)
             {
                 return new List<DemoModel>();
@@ -34,52 +214,11 @@ namespace Blazui.ServerRender.Pages
             var demos = new List<DemoModel>();
             foreach (var item in demoInfo.Demos)
             {
-                var razorPath = Path.Combine(location, item.Name + ".razor");
                 var demoModel = new DemoModel()
                 {
-                    Type = "Blazui.ServerRender.Demo." + item.Name,
+                    Type = "Blazui.ClientRender.PWA.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
-                if (System.IO.File.Exists(razorPath))
-                {
-                    var code = System.IO.File.ReadAllText(razorPath);
-                    demoModel.Options.Add(new TabOption()
-                    {
-                        Content = GetCode(WebUtility.HtmlEncode(code), "razor"),
-                        Name = item.Name,
-                        Title = item.Name + ".razor",
-                        OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
-                    });
-                    demos.Add(demoModel);
-                    continue;
-                }
-                var codeFiles = Directory.EnumerateFiles(Path.Combine(location, item.Name))
-                    .Where(x => item.Files.Contains(Path.GetFileName(x)))
-                    .OrderBy(x => item.Files.IndexOf(Path.GetFileName(x)));
-                demoModel.Type += "." + Path.GetFileNameWithoutExtension(codeFiles.FirstOrDefault());
-                foreach (var codeFile in codeFiles)
-                {
-                    var extension = codeFile.Split('.').LastOrDefault().ToLower();
-                    var language = extension;
-                    var code = System.IO.File.ReadAllText(codeFile);
-                    switch (extension)
-                    {
-                        case "razor":
-                            break;
-                        case "css":
-                            break;
-                        case "cs":
-                            language = "csharp";
-                            break;
-                    }
-                    demoModel.Options.Add(new TabOption()
-                    {
-                        Content = GetCode(WebUtility.HtmlEncode(code), language),
-                        Title = Path.GetFileName(codeFile),
-                        Name = Path.GetFileName(codeFile),
-                        OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
-                    });
-                }
                 demos.Add(demoModel);
             }
             return demos;
@@ -91,15 +230,6 @@ namespace Blazui.ServerRender.Pages
 
         protected IList<DemoModel> demos;
 
-        protected string GetCode(string code, string language)
-        {
-            return $"<pre lang=\"{language}\">{code}</pre>";
-        }
-
-        protected string GetName(string fileName)
-        {
-            return fileName.Replace(".", string.Empty);
-        }
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
@@ -107,9 +237,10 @@ namespace Blazui.ServerRender.Pages
         {
             var router = NavigationManager.Uri.Split('/').LastOrDefault();
             demos = Code(router);
+
             foreach (var item in demos)
             {
-                item.Demo = Type.GetType(item.Type);
+                item.Demo = Assembly.GetExecutingAssembly().GetType(item.Type);
             }
         }
 

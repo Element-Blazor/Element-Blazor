@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.BasicSelect
+namespace Blazui.ClientRender.PWA.Demo.BasicSelect
 {
     public enum Option
     {

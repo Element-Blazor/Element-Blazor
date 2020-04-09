@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Transfer
+namespace Blazui.ClientRender.PWA.Demo.Transfer
 {
     public class TransferModel
     {

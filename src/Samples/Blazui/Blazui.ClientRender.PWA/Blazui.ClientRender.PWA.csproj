@@ -172,7 +172,6 @@
   <ItemGroup>
     <Content Update="Demo\BasicButton\BasicButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="Demo\BasicInput\BasicInput.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -214,15 +213,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Demo\BorderedRadio.razor">
+    <Content Update="Demo\BasicRadio\BorderedRadio.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Demo\ButtonGroup.razor">
+    <Content Update="Demo\BasicButton\ButtonGroup.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Demo\ButtonSize.razor">
+    <Content Update="Demo\BasicButton\ButtonSize.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
@@ -266,7 +265,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Demo\DisabledButton.razor">
+    <Content Update="Demo\BasicButton\DisabledButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
@@ -342,7 +341,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
-    <Content Update="Demo\LoadingButton.razor">
+    <Content Update="Demo\BasicButton\LoadingButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>

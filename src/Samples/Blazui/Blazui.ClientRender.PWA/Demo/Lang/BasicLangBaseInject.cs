@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Lang
+namespace Blazui.ClientRender.PWA.Demo.Lang
 {
     public class BasicLangBaseInject : ComponentBase
     {
         [Inject]
-        public Component.Lang.BLangBase Lang { get; set; }
+        public Component.Lang.BLang Lang { get; set; }
 
         protected override Task OnInitializedAsync()
         {

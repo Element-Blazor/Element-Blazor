@@ -11,7 +11,7 @@ namespace Blazui.ServerRender.Demo.Lang
     public class BasicLangInjectBase : ComponentBase
     {
         [Inject]
-        protected Component.Lang.BLangBase Lang { get; set; }
+        protected Component.Lang.BLang Lang { get; set; }
 
         protected override Task OnInitializedAsync()
         {

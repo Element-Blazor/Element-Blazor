@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blazui.Component;
 
-namespace Blazui.ServerRender.Demo.Table
+namespace Blazui.ClientRender.PWA.Demo.Table
 {
     public class AutoGenerateColumnTestData
     {
