@@ -64,6 +64,14 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="BasicButton",
                         Title="按钮加载中"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "TextButton.razor"
+                      },
+                       Name="BasicButton",
+                        Title="文字按钮"
                  }
                  }
 
@@ -110,6 +118,38 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="BasicRadio",
                         Title="有边框"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "DisabledRadio.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="禁用的单选框"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "DisallowChangeRadio.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="不允许变更的单选框"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "RadioButton.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="单选按钮"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "RadioGroup.razor"
+                      },
+                       Name="BasicRadio",
+                        Title="单选框组"
                  }
                  }
 
@@ -133,6 +173,14 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="BasicSelect",
                         Title="绑定枚举(可空)"
+                 },
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "ItemDisabledSelect.razor"
+                      },
+                       Name="BasicSelect",
+                        Title="选项被禁用"
                  }
                  }
 
@@ -200,6 +248,27 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="Dialog",
                         Title="无限弹窗"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "PassParameter.razor"
+                      },
+                       Name="Dialog",
+                        Title="传递参数"
+                 }
+                }
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "dropdown",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicDropDown.razor"
+                      },
+                       Name="DropDown",
+                        Title="基础用法"
                  }
                 }
             });
