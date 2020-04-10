@@ -11,3 +11,4 @@ PublishProfiles
 launchSettings.json
 .user
 .suo
+*.user
