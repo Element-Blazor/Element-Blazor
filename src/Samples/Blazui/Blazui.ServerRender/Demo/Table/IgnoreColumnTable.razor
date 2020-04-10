@@ -1,0 +1,16 @@
+﻿@inherits PaginationTableBase
+@code{
+    /// <summary>
+    /// 使用场景：又想自动生成，又想过滤一些字段不显示
+    /// 忽略字段-Address，Yes将不会显示在列表中
+    /// </summary>
+    string[] ignoreProps = { "Address","Yes"};
+}
+<BTable IgnoreProperties=ignoreProps  DataSource="Datas" PageSize="pageSize" Total="AllDatas.Count" @bind-CurrentPage="CurrentPage" @ref="table">
+    <BTableColumns>
+        <BTableTemplateColumn Text="操作">
+            <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
+            <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e=> Del(context))">删除</BButton>
+        </BTableTemplateColumn>
+    </BTableColumns>
+</BTable>

@@ -1,0 +1,33 @@
+﻿@inherits PageBase
+@if (demos == null)
+{
+    @("拼命加载中...")
+}
+else
+{
+    @foreach (var context in demos)
+    {
+
+        <BCard>
+            <Header>
+                @context.Title
+            </Header>
+            <Body>
+                <BTab Type="@TabType.BorderCard">
+                    <BTabPanel Title="运行效果" IsActive="true" Name="display">
+                        <BDynamicComponent Component="@context.Demo"></BDynamicComponent>
+                    </BTabPanel>
+                    <BTabPanel Title="示例代码">
+                        <BTab DataSource="context.Options">
+                        </BTab>
+                    </BTabPanel>
+                </BTab>
+            </Body>
+        </BCard>
+    }
+    <style>
+        .el-card {
+            margin-bottom: 10px;
+        }
+    </style>
+}
