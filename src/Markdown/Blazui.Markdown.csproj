@@ -35,11 +35,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Markdig" Version="0.18.0" />
+		<Folder Include="Properties\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Properties\" />
+	  <PackageReference Include="Markdig" Version="0.18.3" />
 	</ItemGroup>
 
 	<ItemGroup>

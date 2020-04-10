@@ -345,7 +345,7 @@ namespace Blazui.Component
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await RenderMessageAsync();
+            await RenderMessagesAsync();
             await RenderLoadingAsync();
             await RenderDialogAsync();
             await RenderDateTimePickerAsync();
@@ -543,29 +543,30 @@ namespace Blazui.Component
             await style.SetAsync("opacity", $"1");
         }
 
-        async Task RenderMessageAsync()
+        async Task RenderMessagesAsync()
         {
             var newMessages = Messages.Where(x => x.IsNew);
             foreach (var newMessage in newMessages)
             {
-                var item = newMessage;
-                _ = Task.Factory.StartNew(async () =>
-                  {
-                      item.IsNew = false;
-                      var messageContent = item.Element;
-                      var style = messageContent.Dom(JSRuntime).Style;
-                      await Task.Delay(50);
-                      await style.SetAsync("top", $"{item.EndTop}px");
-                      await style.SetAsync("opacity", $"1");
-                      await Task.Delay(item.Duration + 500);
-                      await style.SetAsync("top", $"{item.BeginTop}px");
-                      await style.SetAsync("opacity", $"0");
-                      await Task.Delay(200);
-                      lock (MessageService.Messages)
-                      {
-                          MessageService.Messages.Remove(item);
-                      }
-                  });
+                _ = RenderMessageAsync(newMessage);
+            }
+        }
+
+        private async Task RenderMessageAsync(MessageInfo item)
+        {
+            item.IsNew = false;
+            var messageContent = item.Element;
+            var style = messageContent.Dom(JSRuntime).Style;
+            await Task.Delay(50);
+            await style.SetAsync("top", $"{item.EndTop}px");
+            await style.SetAsync("opacity", $"1");
+            await Task.Delay(item.Duration + 500);
+            await style.SetAsync("top", $"{item.BeginTop}px");
+            await style.SetAsync("opacity", $"0");
+            await Task.Delay(200);
+            lock (MessageService.Messages)
+            {
+                MessageService.Messages.Remove(item);
             }
         }
 

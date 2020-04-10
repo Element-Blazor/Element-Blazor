@@ -19,7 +19,7 @@ namespace Blazui.Markdown.IconHandlers
         public async Task HandleAsync(BMarkdownEditorBase editor)
         {
             var selection = await jSRuntime.InvokeAsync<string>("getSelection", editor.textarea);
-            var result = $"``{Environment.NewLine}{(string.IsNullOrWhiteSpace(selection) ? "code" : selection)}{Environment.NewLine}``";
+            var result = $"```{Environment.NewLine}{(string.IsNullOrWhiteSpace(selection) ? "code" : selection)}{Environment.NewLine}```";
             await jSRuntime.InvokeVoidAsync("append", editor.Textarea, result);
         }
     }

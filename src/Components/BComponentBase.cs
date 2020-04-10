@@ -58,6 +58,15 @@ namespace Blazui.Component
         public string Style { get; set; } = string.Empty;
 
         /// <summary>
+        /// 获取国际化的文本
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public string T(string text)
+        {
+            return Lang.T(text);
+        }
+        /// <summary>
         /// 弹出 Alert 消息
         /// </summary>
         /// <param name="text"></param>

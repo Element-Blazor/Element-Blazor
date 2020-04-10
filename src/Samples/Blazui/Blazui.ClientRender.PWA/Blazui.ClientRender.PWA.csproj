@@ -711,7 +711,7 @@
     <None Include="Demo\MarkdownEditor\Markdown.razor" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Components\Blazui.Component.csproj" />
+    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
   </ItemGroup>
 
 </Project>

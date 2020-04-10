@@ -12,16 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Demo\MarkdownEditor\ArticleModel.cs" />
-    <Compile Remove="Demo\MarkdownEditor\FormMarkdownBase.cs" />
-    <Compile Remove="Demo\MarkdownEditor\TestController.cs" />
     <Compile Remove="Demo\Upload\TestController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Demo\MarkdownEditor\BasicEditor.razor" />
-    <Content Remove="Demo\MarkdownEditor\FormMarkdown.razor" />
-    <Content Remove="Demo\MarkdownEditor\Markdown.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +50,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -138,6 +133,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Loading\ServiceLoadingBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MarkdownEditor\ArticleModel.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MarkdownEditor\FormMarkdownBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\MarkdownEditor\TestController.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\MessageBox\ConfirmMessageBoxBase.cs">
@@ -255,6 +259,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Loading\CardLoading.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MarkdownEditor\BasicEditor.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MarkdownEditor\FormMarkdown.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Demo\MarkdownEditor\Markdown.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Menu\CustomBackgroundMenu.razor">
@@ -455,14 +468,6 @@
     <Content Update="wwwroot\metadata.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Demo\MarkdownEditor\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
   </ItemGroup>
 
 </Project>
