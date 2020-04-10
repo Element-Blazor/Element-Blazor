@@ -1,5 +1,5 @@
 # Blazui
----
+[![Nuget](https://img.shields.io/nuget/dt/Blazui.Component.svg)](https://www.nuget.org/packages/Blazui.Component/)
 
 ## 介绍
 Element的blazor版本
@@ -14,9 +14,15 @@ Blazui 演示地址：http://blazui.com:9000
 
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
+## 社区讨论，相关文档
+http://www.blazor.group:8000
+
 ## 关注与讨论
 
 使用遇到问题请加入QQ群：74522853
+
+## 直播
+请进群获取直播信息
 
 ## 使用前提
 参考Blazor使用的前提条件
@@ -28,11 +34,11 @@ Blazui 演示地址：http://blazui.com:9000
 
 拉取代码，用 VS2019 打开，直接启动 Blazui.ServerRender 项目
 
-## 使用文档
-
-Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/12096092.html
-
 ## 案例展示
+
+地址：http://www.blazor.group:8000
+
+---
 
 地址：http://wandotnet.top/quartz
 用户名密码：blazor,666666
@@ -50,6 +56,11 @@ https://github.com/wzxinchen/BlazAdmin
 BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui
 
 地址：https://github.com/caopengfei/BlazorECharts
+
+---
+基于 Blazui 的 Markdown 编辑器 Blazui.Markdown
+
+地址：https://github.com/wzxinchen/Blazui.Markdown
 
 ## 组件列表
 
@@ -73,8 +84,8 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 | 日期选择器   | http://blazui.com:9000/datepicker  | [√] 常规支持 <br /> [√] 指定日期格式 |       |
 | Form 表单    | http://blazui.com:9000/form        | [√] 常规支持 <br /> [√] 三种对齐方式 <br /> [√] 单行表单 |       |
 | 布局面板     | http://blazui.com:9000/layout      | [√] 常规支持 <br /> [√] 嵌套布局 |       |
-| 文件上传     |      | |[√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 多文件上传
-| Markdown 编辑器 |
+| 文件上传     | http://blazui.com:9000/upload     | [√] 常规支持 <br /> [√] 限制文件大小 <br /> [√] 限制文件类型 <br /> [√] 图片预览 <br /> [√] 图片上传 <br /> [√] 粘贴上传 |
+| Markdown 编辑器 |http://blazui.com:9000/markdowneditor | [√] 常规支持 <br /> [√] 文件上传 <br /> [√] 图片上传 <br /> [√] 粘贴上传
 | 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
 ## 更新日志
 
@@ -94,6 +105,11 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 13. 添加 [组件可增加一个visible属性，用于隐藏或显示][14]
 14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
 15. 修复 [tab标签页只能关闭当前的][16]
+
+### 版本 0.0.6.2 2020.01.06发布
+1. 新增 [文件上传组件][17]
+2. 新增 [Markdown 编辑器][18] 及 [Markdown 渲染器][18]
+3. 修复 [BDatePicker控件DateChanged有问题][19]
 
 ## 感谢
 
@@ -117,3 +133,6 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
   [14]: https://github.com/wzxinchen/Blazui/issues/14
   [15]: https://github.com/wzxinchen/Blazui/issues/13
   [16]: https://github.com/wzxinchen/BlazAdmin/issues/22
+  [17]: http://blazui.com:9000/upload
+  [18]: https://github.com/wzxinchen/Blazui.Markdown
+  [19]: https://github.com/wzxinchen/Blazui/issues/62
