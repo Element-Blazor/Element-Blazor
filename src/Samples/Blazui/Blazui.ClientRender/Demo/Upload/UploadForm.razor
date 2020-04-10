@@ -1,5 +1,5 @@
 ﻿@inherits UploadFormBase
-@using  Blazui.ClientRender.PWA.Demo.Form
+@using  Blazui.ClientRender.Demo.Form
 <BForm Style="width:400px;" @ref="demoForm" Value="value">
     <BFormItem TValue="string" Label="活动名称" Name="@nameof(UploadActivity.Name)" IsRequired="true">
         <BInput TValue="string"></BInput>
@@ -10,6 +10,9 @@
     </BFormItem>
     <BFormItem TValue="IFileModel[]" Label="审批文件" Name="@nameof(UploadActivity.Files)" IsRequired="true">
         <BUpload Url="/api/test/upload">
+            <Tip>
+                仅供演示，无法上传
+            </Tip>
         </BUpload>
     </BFormItem>
     <BFormItem TValue="IFileModel[]" Label="场景预览" Name="@nameof(UploadActivity.Previews)">

@@ -1,4 +1,6 @@
-﻿using Blazui.Component;
+﻿
+
+using Blazui.Component;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
-using Newtonsoft.Json;
 using System.Net;
 using Blazui.ClientRender.Model;
 using System.Reflection;
@@ -269,8 +270,7 @@ namespace Blazui.ClientRender.Pages
                         Title="基础用法"
                  }
                 }
-            });
-            demoPages.Add(new DemoPageModel()
+            }); demoPages.Add(new DemoPageModel()
             {
                 Name = "lang",
                 Demos = new List<DemoInfoModel>() {
@@ -443,6 +443,13 @@ namespace Blazui.ClientRender.Pages
                       },
                        Name="Message",
                         Title="不同状态"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "MultiMessage.razor"
+                      },
+                       Name="Message",
+                        Title="快速多个消息"
                  }
                 }
             });
@@ -711,15 +718,13 @@ namespace Blazui.ClientRender.Pages
             {
                 var demoModel = new DemoModel()
                 {
-                    Type = "Blazui.ClientRender.PWA.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
+                    Type = "Blazui.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
                 demos.Add(demoModel);
             }
             return demos;
         }
-        [Inject]
-        private IHttpClientFactory httpClientFactory { get; set; }
         [Inject]
         protected IJSRuntime jSRuntime { get; set; }
 

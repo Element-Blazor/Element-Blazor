@@ -1,37 +1,49 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Blazui.ClientRender</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
-</div>
+﻿<style>
+    .sidebar .el-menu {
+        border: 0;
+    }
+</style>
+<BMenu Mode="@MenuMode.Vertical" DefaultActive="0">
+    <BMenuItem Route="/button">Button 按钮</BMenuItem>
+    <BMenuItem Route="input">Input 输入框</BMenuItem>
+    <BMenuItem Route="radio">Radio 单选框</BMenuItem>
+    <BMenuItem Route="checkbox">Checkbox 多选框</BMenuItem>
+    <BMenuItem Route="select">Select 选择器</BMenuItem>
+    <BMenuItem Route="switch">Switch</BMenuItem>
+    <BMenuItem Route="menu">NavMenu 导航菜单</BMenuItem>
+    <BMenuItem Route="tabs">Tabs 标签页</BMenuItem>
+    <BMenuItem Route="table">Table 表格</BMenuItem>
+    <BMenuItem Route="message">Message 消息</BMenuItem>
+    <BMenuItem Route="pagination">Pagination 分页</BMenuItem>
+    <BMenuItem Route="loading">Loading 加载中</BMenuItem>
+    <BMenuItem Route="messagebox">MessageBox 消息弹窗</BMenuItem>
+    <BMenuItem Route="dialog">Dialog 对话框</BMenuItem>
+    <BMenuItem Route="datepicker">DatePicker 日期选择器</BMenuItem>
+    <BMenuItem Route="form">Form 表单</BMenuItem>
+    <BMenuItem Route="layout">Layout 布局面板</BMenuItem>
+    <BMenuItem Route="upload">Upload 文件上传</BMenuItem>
+    <BMenuItem Route="dropdown">DropDown 下拉菜单</BMenuItem>
+    <BMenuItem Route="markdowneditor">MarkDown Editor</BMenuItem>
+    <BMenuItem Route="transfer">Transfer 穿梭</BMenuItem>
+    <BMenuItem Route="lang">Lang 多语言</BMenuItem>
+</BMenu>
 
 @code {
-    private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
+    protected override void OnInitialized()
     {
-        collapseNavMenu = !collapseNavMenu;
+        if (new Uri(NavigationManager.Uri).LocalPath == "/")
+        {
+            try
+            {
+                NavigationManager.NavigateTo("button");
+            }
+            catch (Exception)
+            {
+
+            }
+        }
     }
 }
