@@ -118,6 +118,8 @@ async function _uploadFile(url, file, callback) {
         let response = JSON.parse(this.responseText);
         callback([response.code.toString(), response.message || "", response.id, response.url]);
     };
+    xhr.withCredentials = true;
+    xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
     let formData = new this.FormData();
     formData.append("fileContent", file);
     xhr.send(formData);

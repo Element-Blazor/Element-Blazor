@@ -1,6 +1,6 @@
 ﻿using Blazui.Component.Dom;
 using Blazui.Component.EventArgs;
-using Blazui.Component.Form;
+using Blazui.Component;
 using Blazui.Component.Input;
 using Blazui.Component.Popup;
 using Microsoft.AspNetCore.Components;

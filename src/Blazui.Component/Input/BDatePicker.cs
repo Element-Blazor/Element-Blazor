@@ -90,6 +90,8 @@ namespace Blazui.Component.Input
             SetFieldValue(Date, true);
         }
 
+        protected override bool ThrowOnInvalidValue { get; } = false;
+
         protected override void OnChangeEventArgs(ChangeEventArgs input)
         {
             try

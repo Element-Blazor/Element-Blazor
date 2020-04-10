@@ -47,19 +47,6 @@ namespace Blazui.Component
             return await ShowDialogAsync<TComponent, TResult>(title, 0, parameters);
         }
 
-        /// <summary>
-        /// 显示一个窗口
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="render">要显示的内容，一个组件的 <seealso cref="RenderFragment"/></param>
-        /// <param name="title">标题</param>
-        /// <param name="width">宽度</param>
-        /// <returns></returns>
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(RenderFragment render, string title, float width)
-        {
-            return await ShowDialogAsync<TResult>((object)render, title, width, new Dictionary<string, object>());
-        }
-
 
         /// <summary>
         /// 显示一个窗口
@@ -94,29 +81,43 @@ namespace Blazui.Component
         /// 显示一个窗口
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
-        /// <param name="typeOrRender">要显示的内容，可以是一个组件的 <seealso cref="Type"/>，也可以是一个组件的 <seealso cref="RenderFragment"/></param>
+        /// <param name="type">要显示的内容，可以是一个组件的 <seealso cref="Type"/></param>
         /// <param name="title">标题</param>
         /// <returns></returns>
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title)
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object type, string title)
         {
-            return await ShowDialogAsync<TResult>(typeOrRender, title, 0, new Dictionary<string, object>());
+            return await ShowDialogAsync<TResult>(type, title, 0, new Dictionary<string, object>());
+        }
+
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="type">要显示的内容，可以是一个组件的 <seealso cref="Type"/></param>
+        /// <param name="title">标题</param>
+        /// <param name="width"></param>
+        /// <returns></returns>
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object type, string title, float width)
+        {
+            return await ShowDialogAsync<TResult>(type, title, width, new Dictionary<string, object>());
         }
 
         /// <summary>
         /// 显示一个窗口
         /// </summary>
         /// <typeparam name="TResult"></typeparam>
-        /// <param name="typeOrRender">要显示的内容，可以是一个组件的 <seealso cref="Type"/>，也可以是一个组件的 <seealso cref="RenderFragment"/></param>
+        /// <param name="type">要显示的内容，可以是一个组件的 <seealso cref="Type"/></param>
         /// <param name="title">标题</param>
         /// <param name="width">宽度</param>
         /// <param name="parameters">显示该组件所需要的参数</param>
         /// <returns></returns>
-        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object typeOrRender, string title, float width, IDictionary<string, object> parameters)
+        public async Task<DialogResult<TResult>> ShowDialogAsync<TResult>(object type, string title, float width, IDictionary<string, object> parameters)
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
             var option = new DialogOption()
             {
-                Content = typeOrRender,
+                Content = type,
                 IsDialog = true,
                 Width = width,
                 Title = title,
@@ -175,13 +176,24 @@ namespace Blazui.Component
                 Title = title,
                 Width = width,
                 Parameters = parameters,
-                TaskCompletionSource = taskCompletionSource
+                TaskCompletionSource = taskCompletionSource,
+
             };
             ShowDialog(option);
             return await taskCompletionSource.Task;
         }
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <param name="option"></param>
         public void ShowDialog(DialogOption option)
         {
+            if (option.Parameters == null)
+            {
+                option.Parameters = new Dictionary<string, object>();
+            }
+            option.Parameters.Add("Dialog", option);
             Dialogs.Add(option);
         }
     }

@@ -11,7 +11,15 @@
     var isClearable = Value != null && IsClearable && (IsFocus || IsMouseOver);
 }
 <div class="@wrapperClsBuilder" @ref="Content" style="@Style" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
-    <input type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner" @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @onchange="OnChangeEventArgs" name="@Name" />
+    @if (Type == InputType.Textarea)
+    {
+        <textarea type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner" style="height: 60px;overflow-y: hidden; " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" />
+    }
+    else
+    {
+        <input type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner" @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" />
+    }
+
     @if (isClearable)
     {
         <span class="el-input__suffix">

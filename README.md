@@ -14,12 +14,15 @@ Blazui 演示地址：http://blazui.com:9000
 
 如果该地址不能访问了请发 Issue 告诉我， **目前版本不稳定** 
 
-## 社区讨论
+## 社区讨论，相关文档
 http://www.blazor.group:8000
 
 ## 关注与讨论
 
 使用遇到问题请加入QQ群：74522853
+
+## 直播
+请进群获取直播信息
 
 ## 使用前提
 参考Blazor使用的前提条件
@@ -30,10 +33,6 @@ http://www.blazor.group:8000
 ## 源码说明
 
 拉取代码，用 VS2019 打开，直接启动 Blazui.ServerRender 项目
-
-## 使用文档
-
-Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/12096092.html
 
 ## 案例展示
 

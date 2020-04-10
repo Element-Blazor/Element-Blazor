@@ -1,5 +1,5 @@
 ﻿using Blazui.Component;
-using Blazui.Component.Table;
+using Blazui.Component;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;

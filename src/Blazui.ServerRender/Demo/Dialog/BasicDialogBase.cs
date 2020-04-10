@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.Dialog
 {
-    public class BasicDialogBase : ComponentBase
+    public class BasicDialogBase : BDialogBase
     {
-        [Inject]
-        DialogService DialogService { get; set; }
 
         [Inject]
         MessageService MessageService { get; set; }
