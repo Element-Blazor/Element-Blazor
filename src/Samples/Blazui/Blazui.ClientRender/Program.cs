@@ -17,7 +17,7 @@ namespace Blazui.ClientRender
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddBaseAddressHttpClient();
-            builder.Services.AddBlazuiServices();
+            builder.Services.AddBlazuiServicesAsync();
             builder.Services.AddSingleton<BLang>();
             await builder.Build().RunAsync();
         }

@@ -13,20 +13,19 @@ namespace Blazui.ClientRender.PWA.Demo.Lang
         [Inject]
         protected Component.Lang.BLang Lang { get; set; }
 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
-            Lang.LangLocale = "en-US";
-            return base.OnInitializedAsync();
+            await Lang.SetLangAsync("en-US");
         }
 
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
-            Lang.LangLocale = "en-US";
+            await Lang.SetLangAsync("en-US");
         }
 
         public async Task SetCnLang(MouseEventArgs eventArgs)
         {
-            Lang.LangLocale = "zh-CN";
+            await Lang.SetLangAsync("zh-CN");
         }
     }
 }

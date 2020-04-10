@@ -20,6 +20,7 @@ namespace Blazui.ClientRender.PWA.Pages
         private static List<DemoPageModel> demoPages = new List<DemoPageModel>();
         static PageBase()
         {
+            Console.WriteLine("PageBase");
             demoPages.Add(new DemoPageModel()
             {
                 Name = "button",
