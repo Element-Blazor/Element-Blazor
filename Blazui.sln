@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.ClientRender.PWA", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Markdown", "src\Markdown\Blazui.Markdown.csproj", "{76FD7947-A9C1-4449-B2D2-B0E59265E879}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp2", "BlazorApp2\BlazorApp2.csproj", "{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{76FD7947-A9C1-4449-B2D2-B0E59265E879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76FD7947-A9C1-4449-B2D2-B0E59265E879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76FD7947-A9C1-4449-B2D2-B0E59265E879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{1E117FB3-851B-4A77-9317-1107E548FC56} = {E36A034A-83C5-4649-90AF-CC4FA1C594E2}
 		{BC6E4E31-5037-4389-A4F9-FACE948C090F} = {70466228-3662-45F3-8304-6EF755D5A863}
 		{76FD7947-A9C1-4449-B2D2-B0E59265E879} = {573B6835-A85C-4C92-95FE-4AB516CF1EE9}
+		{ECADD30E-6AF6-47EA-95EA-F20ACAC71F00} = {70466228-3662-45F3-8304-6EF755D5A863}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4766835C-4DA4-4A53-97D8-CBA1E51E1082}
