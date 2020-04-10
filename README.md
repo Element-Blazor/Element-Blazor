@@ -40,13 +40,22 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 
 ![image.png-58.1kB][1]
 
-类似于LayAdmin的后台管理模板 https://github.com/wzxinchen/BlazAdmin
+---
+
+类似于LayAdmin的后台管理模板 
+https://github.com/wzxinchen/BlazAdmin
+
+---
+
+BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui
+
+地址：https://github.com/caopengfei/BlazorECharts
 
 ## 组件列表
 
 
 | 组件名       | 调用Demo                           | 功能支持     | 下一步计划   |
-| :----------- | :----------:                       | -----------  | -----------  |
+| :----------- | :----------                       | -----------  | -----------  |
 | 按钮         | http://blazui.com:9000/button      | [√] 常规支持 |              |
 | 输入框       | http://blazui.com:9000/input       | [√] 常规支持 |              |
 | 单选框       | http://blazui.com:9000/radio       | [√] 常规支持 <br /> [√] 按钮单选框 <br /> [√] 单选框组 <br /> [√] 按钮单选框组 <br /> [√] 带边框的单选框    |          |    
@@ -69,7 +78,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 | 下拉菜单     | http://blazui.com:9000/dropdown    | [√] 常规支持 |       |
 ## 更新日志
 
-### 版本 0.0.5.24，2020.01.02发布
+### 版本 0.0.6.1，2020.01.03发布
 1. 新增 [BDropDown 下拉菜单组件][2]
 2. 修复 [Table控件中 日期的格式化不起作用][3]
 3. 修复 [table 全选][4]
@@ -84,6 +93,7 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
 12. 修复 [表单下拉列表][13]
 13. 添加 [组件可增加一个visible属性，用于隐藏或显示][14]
 14. 添加 [弹窗-表单赋值的时候radio组件-枚举值无法绑定][15]
+15. 修复 [tab标签页只能关闭当前的][16]
 
 ## 感谢
 
@@ -106,3 +116,4 @@ Blazor 组件库 Blazui 开发入门 https://www.cnblogs.com/wzxinchen/p/1209609
   [13]: https://github.com/wzxinchen/Blazui/issues/28
   [14]: https://github.com/wzxinchen/Blazui/issues/14
   [15]: https://github.com/wzxinchen/Blazui/issues/13
+  [16]: https://github.com/wzxinchen/BlazAdmin/issues/22
