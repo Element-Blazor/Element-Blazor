@@ -1,0 +1,162 @@
+﻿@inherits BTableBase
+@{
+    var styles = new List<string>();
+    var tableClsList = new List<string>();
+    tableClsList.Add("el-table");
+    tableClsList.Add("el-table--fit");
+    tableClsList.Add("el-table--enable-row-hover");
+    tableClsList.Add("el-table--enable-row-transition");
+    if (IsStripe)
+    {
+        tableClsList.Add("el-table--striped");
+    }
+
+    styles.Add("width:100%");
+    if (Height > 0)
+    {
+        tableClsList.Add("el-table--scrollable-y");
+        styles.Add("height:" + Height + "px");
+    }
+
+    <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
+        @if (headerRendered)
+        {
+            var validColumnCount = Headers.Count();
+            <div class="el-table__header-wrapper" @ref="headerElement">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
+                    <colgroup>
+                        @if (HasSelectionColumn)
+                        {
+                            <col name="el-table_1_column_0" width="55" />
+                        }
+                        @for (int i = 1; i <= Headers.Count; i++)
+                        {
+                            var header = Headers.ElementAt(i - 1);
+                            var width = header.Width.ToString();
+                            if (!header.Width.HasValue || header.Width.Value <= 0)
+                            {
+                                width = (100d / validColumnCount).ToString() + "%";
+                            }
+                            <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
+                        }
+                        <col name="gutter" width="0" />
+                    </colgroup>
+                    <thead class="has-gutter">
+                        <tr class="">
+                            @if (HasSelectionColumn)
+                            {
+                                <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
+                                    <div class="cell">
+                                        <BCheckBox TValue="Boolean" @ref="chkAll" Name="selectAll" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
+                                    </div>
+                                </th>
+                            }
+                            @for (int i = 1; i <= Headers.Count; i++)
+                            {
+                                var header = Headers.ElementAt(i - 1);
+                                <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i     is-leaf">
+                                    <div class="cell">
+                                        @header.Text
+                                    </div>
+                                </th>
+                            }
+                            <th class="gutter" style="width: 0px; display: none;"></th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            var bodyStyleList = new List<string>();
+            if (Height > 0)
+            {
+                bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
+            }
+            <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body">
+                    <colgroup>
+                        @if (HasSelectionColumn)
+                        {
+                            <col name="el-table_1_column_0" width="55" />
+                        }
+                        @for (int i = 1; i <= Headers.Count; i++)
+                        {
+                            var header = Headers.ElementAt(i - 1);
+                            var width = header.Width.ToString();
+                            if (!header.Width.HasValue || header.Width.Value <= 0)
+                            {
+                                width = (100d / validColumnCount).ToString() + "%";
+                            }
+                            <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
+                        }
+                    </colgroup>
+                    <tbody>
+                        @for (int i = 0; i < rows.Count; i++)
+                        {
+                            var clsList = new List<string>();
+                            clsList.Add("el-table__row");
+                            if (IsStripe && i % 2 == 1)
+                            {
+                                clsList.Add("el-table__row--striped");
+                            }
+                            var row = rows.ElementAt(i);
+                            <tr @key="row" class="@string.Join(" ", clsList)">
+                                @if (HasSelectionColumn)
+                                {
+                                    <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                        <div class="cell">
+                                            <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBoxBase<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
+                                        </div>
+                                    </td>
+                                }
+                                @for (int j = 1; j <= Headers.Count; j++)
+                                {
+                                    var header = Headers.ElementAt(j - 1);
+                                    <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                        <div class="cell">
+                                            @if (header.IsCheckBox)
+                                            {
+                                                <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
+                                            }
+                                            else if (header.Template != null)
+                                            {
+                                                @header.Template(row)
+                                            }
+                                            else if (header.Eval != null)
+                                            {
+                                                @header.Eval(row)
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                @if (rows.Count <= 0)
+                {
+                    <div class="el-table__empty-block" style="height:60px;">
+                        <span class="el-table__empty-text">
+                            @(string.IsNullOrWhiteSpace(EmptyMessage) ? "暂无数据" : EmptyMessage)
+                        </span>
+                    </div>
+                }
+            </div>
+            <div class="el-table__column-resize-proxy" style="display: none;"></div>
+            @if (EnablePagination)
+            {
+                if (Math.Ceiling((float)Total / PageSize) > 1 || !NoPaginationOnSinglePage)
+                {
+                    <div style="margin-top:20px;margin-bottom:20px;text-align:right;">
+                        <BPagination Total="Total" ShowPageCount="ShowPageCount" PageSize="PageSize" CurrentPageChanged="CurrentPageChangedAsync"></BPagination>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <CascadingValue Value="@this">
+                @ChildContent
+            </CascadingValue>
+        }
+    </div>
+}

@@ -1,0 +1,81 @@
+﻿body {
+    margin: 0;
+}
+
+    body app {
+        display: flex;
+        height: 100vh;
+    }
+
+.blaz-layout-west .el-card {
+    border: none;
+    border-radius: 0;
+}
+
+.blaz-layout-west .el-card__header {
+    color: rgba(255,255,255,.7);
+    border: none;
+}
+
+.blaz-layout-west .el-card__body .el-menu {
+    border: none;
+}
+
+.blaz-layout-center .navbar {
+    display: flex;
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+    .blaz-layout-center .navbar .fill {
+        flex: 1;
+    }
+
+    .blaz-layout-center .navbar .tools, .blaz-layout-center .navbar .tools .el-breadcrumb {
+        line-height: 50px;
+    }
+
+
+.login-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #2d3a4b;
+    align-items: center;
+}
+
+    .login-container form {
+        width: 520px;
+        margin: 0 auto;
+        padding: 0 35px;
+        box-sizing: border-box;
+    }
+
+        .login-container form .el-form-item {
+            border: 1px solid hsla(0,0%,100%,.1);
+            background: rgba(0,0,0,.1);
+            border-radius: 5px;
+            color: #454545;
+        }
+
+            .login-container form .el-form-item .el-input input {
+                background: transparent;
+                border: 0;
+                -webkit-appearance: none;
+                border-radius: 0;
+                color: #fff;
+                padding-left: 40px;
+                caret-color: #fff;
+            }
+
+        .login-container form .title-container .title {
+            font-size: 26px;
+            color: #eee;
+            margin: 0 auto 40px auto;
+            text-align: center;
+            font-weight: 700;
+        }

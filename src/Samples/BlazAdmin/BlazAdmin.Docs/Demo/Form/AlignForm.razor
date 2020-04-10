@@ -1,0 +1,42 @@
+﻿@inherits BasicFormBase
+
+<BRadioGroup TValue="LabelAlign" @bind-SelectedValue="formAlign">
+    <BRadioButton Value="LabelAlign.Left">左对齐</BRadioButton>
+    <BRadioButton Value="LabelAlign.Right">右对齐</BRadioButton>
+    <BRadioButton Value="LabelAlign.Top">顶部对齐</BRadioButton>
+</BRadioGroup>
+<br />
+<BForm Style="width:400px;" @ref="demoForm" LabelAlign="formAlign">
+    <BFormItem TValue="string" Label="活动名称" Name="@nameof(Activity.Name)" IsRequired="true">
+        <BInput TValue="string"></BInput>
+    </BFormItem>
+    <BFormItem TValue="Area" Label="活动区域" Name="@nameof(Activity.Area)" IsRequired="true">
+        <BSelect TValue="Area" Placeholder="请选择活动区域">
+            <BSelectOption Text="区域1" Value="@("shanghai")"></BSelectOption>
+            <BSelectOption Text="区域2" Value="@("beijing")"></BSelectOption>
+        </BSelect>
+    </BFormItem>
+    <BFormItem TValue="DateTime?" Label="活动时间" IsRequired="true" Name="@nameof(Activity.Time)">
+        <BDatePicker></BDatePicker>
+    </BFormItem>
+    <BFormItem TValue="bool" Label="即时配送" IsRequired="true" Name="@nameof(Activity.Delivery)">
+        <BSwitch TValue="bool" ActiveValue="true" InactiveValue="false"></BSwitch>
+    </BFormItem>
+    <BFormItem TValue="IEnumerable<string>" Label="活动性质" IsRequired="true" Name="@nameof(Activity.Type)">
+        <BCheckBoxGroup TValue="string">
+            <BCheckBox Value="@("Online")">美食线上活动</BCheckBox>
+            <BCheckBox Value="@("Offline")">地推活动</BCheckBox>
+        </BCheckBoxGroup>
+    </BFormItem>
+    <BFormItem TValue="string" Label="特殊资源" IsRequired="true" Name="@nameof(Activity.Resource)">
+        <BRadio Value="@("品牌")">线上品牌赞助</BRadio>
+        <BRadio Value="@("场地")">线上场地免费</BRadio>
+    </BFormItem>
+    <BFormItem TValue="string" Label="活动形式" IsRequired="true" Name="@nameof(Activity.Description)">
+        <BInput TValue="string" Type="@InputType.Textarea"></BInput>
+    </BFormItem>
+    <BFormItem TValue="object">
+        <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">立即创建</BButton>
+        <BButton OnClick="e=>Reset()">重置</BButton>
+    </BFormItem>
+</BForm>

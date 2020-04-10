@@ -1,0 +1,16 @@
+﻿@inherits LinkBase
+@using Blazui.Markdown.IconHandlers
+    <BForm @ref="form" Value="Link">
+        <BFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Name)" Label="名称">
+            <BInput TValue="string"></BInput>
+        </BFormItem>
+        <BFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Url)" Label="地址">
+            <BInput TValue="string"></BInput>
+        </BFormItem>
+        <BFormItem TValue="string" Name="@nameof(LinkModel.Title)" Label="标题">
+            <BInput TValue="string"></BInput>
+        </BFormItem>
+        <BFormActionItem Style="text-align:right">
+            <BButton Type="@ButtonType.Primary" @onclick="Submit">确定</BButton>
+        </BFormActionItem>
+    </BForm>
