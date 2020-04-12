@@ -17,9 +17,8 @@ namespace Blazui.ClientRender.PWA
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();
-            builder.Services.AddBlazuiServices();
+            await builder.Services.AddBlazuiServicesAsync();
             builder.Services.AddMarkdown();
-            builder.Services.AddSingleton<BLang>();
             await builder.Build().RunAsync();
         }
     }

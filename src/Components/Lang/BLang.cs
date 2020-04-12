@@ -5,6 +5,7 @@ using System;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazui.Component.Lang
 {
@@ -13,62 +14,39 @@ namespace Blazui.Component.Lang
     /// </summary>
     public class BLang
     {
-        public BLang(HttpClient httpClient)
+        public BLang(IConfiguration configuration, string locale, Func<HttpClient, string, Task<IConfiguration>> refreshConfiguration, HttpClient httpClient)
         {
+            this.configuration = configuration;
+            this.CurrentLang = locale;
+            this.refreshConfiguration = refreshConfiguration;
             this.httpClient = httpClient;
         }
         /// <summary>
         /// 一组键/值应用程序配置属性
         /// </summary>
-        IConfiguration Configuration { get; set; }
+        private IConfiguration configuration { get; set; }
         private HttpClient httpClient;
-        private string langLocale = "/zh-CN";
 
-        public string LangLocale
-        {
-            get
-            {
-                return langLocale;
-            }
-            set
-            {
-                langLocale = value;
-                InitBLangBase();
-            }
-        }
+        /// <summary>
+        /// 当前语言，默认中文
+        /// </summary>
+        public string CurrentLang { get; private set; }
+        private Func<HttpClient, string, Task<IConfiguration>> refreshConfiguration { get; set; }
 
-        public BLang()
+        /// <summary>
+        /// 设置语言文件的文件名
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <returns></returns>
+        public async Task SetLangAsync(string lang)
         {
-            InitBLangBase();
-        }
-
-        public void InitBLangBase()
-        {
-            var path = new StringBuilder();
-            path.Append(LangLocale);
-            path.Append(".Json");
-            if (Type.GetType($"Microsoft.AspNetCore.Components.WebAssembly.Hosting.WebAssemblyHostBuilder, Microsoft.AspNetCore.Components.WebAssembly.Hosting") == null)
-            {
-                Console.WriteLine("Current Host Is Server");
-                Configuration = new ConfigurationBuilder()
-                    .Add(new JsonConfigurationSource { Path = path.ToString(), Optional = false, ReloadOnChange = true })
-                    .Build();
-                return;
-            }
-            Console.WriteLine("Current Host Is WebAssembly");
-            if (httpClient == null)
-            {
-                throw new Exception("请添加 HttpClient 依赖");
-            }
-            var jsonResponse = httpClient.GetAsync(path.ToString()).Result.Content.ReadAsStreamAsync().Result;
-            Configuration = new ConfigurationBuilder()
-                .AddJsonStream(jsonResponse)
-                .Build();
+            CurrentLang = lang;
+            configuration = await refreshConfiguration(httpClient, lang);
         }
 
         public string T(string sections)
         {
-            return Configuration?[sections];
+            return configuration?[sections];
         }
     }
 }

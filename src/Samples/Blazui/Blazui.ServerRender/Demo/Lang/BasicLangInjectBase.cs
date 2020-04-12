@@ -15,18 +15,18 @@ namespace Blazui.ServerRender.Demo.Lang
 
         protected override Task OnInitializedAsync()
         {
-            Lang.LangLocale = "en-US";
+            Lang.CurrentLang = "en-US";
             return base.OnInitializedAsync();
         }
 
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
-            Lang.LangLocale = "en-US";
+            Lang.CurrentLang = "en-US";
         }
 
         public async Task SetCnLang(MouseEventArgs eventArgs)
         {
-            Lang.LangLocale = "zh-CN";
+            Lang.CurrentLang = "zh-CN";
         }
     }
 }

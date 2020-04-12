@@ -30,7 +30,7 @@ namespace Blazui.ServerRender
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddBlazuiServices();
+            services.AddBlazuiServicesAsync();
             services.AddHttpClient();
             GlobalBlazuiSettings.DisableAnimation = true;
             //services.AddMarkdown();
