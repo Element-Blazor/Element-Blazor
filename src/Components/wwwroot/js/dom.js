@@ -33,6 +33,7 @@ window.clear = function (el) {
     }
     el.value = null;
 };
+
 async function executePasteUpload(event) {
     var items = event.clipboardData && event.clipboardData.items;
     var files = [];
@@ -96,7 +97,7 @@ function convertFiles(files) {
         }));
     }
     return Promise.all(filePromises);
-}
+};
 window.scanFiles = function (el) {
     if (!el) {
         return [];
@@ -123,7 +124,7 @@ async function _uploadFile(url, file, callback) {
     let formData = new this.FormData();
     formData.append("fileContent", file);
     xhr.send(formData);
-}
+};
 window.uploadFile = function (el, fileName, url) {
     return new Promise((resolver, reject) => {
         let file = null;
@@ -147,7 +148,7 @@ window.uploadFile = function (el, fileName, url) {
     //    }, false);
     //    temporaryFileReader.readAsDataURL(el.files[0]);
     //});
-}
+};
 window.trigger = function (el, eventName) {
     var eventClass = "";
 
@@ -175,7 +176,7 @@ window.trigger = function (el, eventName) {
     let event = this.document.createEvent(eventClass);
     event.initEvent(eventName);
     el.dispatchEvent(event);
-}
+};
 window.getClientWidth = function (el) {
     if (!el) {
         return this.document.body.clientWidth;
@@ -214,16 +215,16 @@ window.getPaddingRight = function (el) {
 };
 window.disableXScroll = function () {
     this.document.body.style.overflowX = "hidden";
-}
+};
 window.disableYScroll = function () {
     this.document.body.style.overflowY = "hidden";
-}
+};
 window.enableXScroll = function () {
     this.document.body.style.overflowX = "auto";
-}
+};
 window.enableYScroll = function () {
     this.document.body.style.overflowY = "auto";
-}
+};
 window.removeSelf = function (el) {
     if (!el) {
         return;
@@ -250,7 +251,7 @@ window.getTopRelativeBody = function (el) {
         elemRect = el.getBoundingClientRect(),
         offset = elemRect.top - bodyRect.top;
     return this.parseFloat(offset);
-}
+};
 window.Remove = function (el) {
     if (!el) {
         return;

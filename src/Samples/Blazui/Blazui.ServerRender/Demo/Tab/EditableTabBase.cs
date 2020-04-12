@@ -7,9 +7,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.EditableTab
+namespace Blazui.ServerRender.Demo.Tab
 {
-    public class BindingEditableTabBase : ComponentBase
+    public class EditableTabBase : ComponentBase
     {
         protected BTab tab;
         protected ObservableCollection<TabOption> models = new ObservableCollection<TabOption>()
@@ -52,7 +52,11 @@ namespace Blazui.ServerRender.Demo.EditableTab
                 Title = "标题" + models.Count,
                 IsActive = true
             });
-            tab.MarkAsRequireRender();
+        }
+        protected void RemoveTabCloseAsync(BTabPanelBase tab)
+        {
+            models.Remove(models.FirstOrDefault(x => x.Title == tab.Title));
+
         }
     }
 }

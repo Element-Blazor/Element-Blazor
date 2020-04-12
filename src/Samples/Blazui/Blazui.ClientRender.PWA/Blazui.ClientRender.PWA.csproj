@@ -4,7 +4,16 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <BlazorCacheBootResources>false</BlazorCacheBootResources>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Demo\Form\AutoGenerateFieldsInitilizeFormBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview2.20160.5" />
@@ -78,6 +87,9 @@
     <Content Update="Shared\NavMenu.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+    <Content Update="wwwroot\.nojekyll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="wwwroot\index.html">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -124,7 +136,6 @@
     <_ContentIncludedByDefault Remove="Demo\DropDown\BasicDropDown.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\AlignForm.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
-    <_ContentIncludedByDefault Remove="Demo\Form\BasicForm.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\HiddenFormItem.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\InitilizeForm.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\InlineForm.razor" />
@@ -356,12 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Demo\Form\BasicForm.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Demo\Form\BasicForm.razor" />
   </ItemGroup>
   <ItemGroup>
     <Watch Remove="Demo\Form\HiddenFormItem.razor" />

@@ -20,7 +20,6 @@ namespace Blazui.ClientRender.PWA.Pages
         private static List<DemoPageModel> demoPages = new List<DemoPageModel>();
         static PageBase()
         {
-            Console.WriteLine("PageBase");
             demoPages.Add(new DemoPageModel()
             {
                 Name = "button",
@@ -302,14 +301,14 @@ namespace Blazui.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicLayout.razor"
                       },
-                       Name="BasicLayout",
+                       Name="Layout",
                         Title="基础用法"
                  }, new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "NestedLayout.razor"
                       },
-                       Name="NestedLayout",
+                       Name="Layout",
                         Title="嵌套布局"
                  }, new DemoInfoModel
                  {
@@ -505,21 +504,21 @@ namespace Blazui.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicSwitch.razor"
                       },
-                       Name="BasicSwitch",
+                       Name="Switch",
                         Title="基础用法"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "TextSwitch.razor"
                       },
-                       Name="TextSwitch",
+                       Name="Switch",
                         Title="文本描述"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "DisabledSwitch.razor"
                       },
-                       Name="DisabledSwitch",
+                       Name="Switch",
                         Title="禁用状态"
                  }
                 }
@@ -533,42 +532,42 @@ namespace Blazui.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicTab.razor"
                       },
-                       Name="BasicTab",
+                       Name="Tab",
                         Title="基础的、简洁的标签页"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "CardTab.razor"
                       },
-                       Name="CardTab",
+                       Name="Tab",
                         Title="选项卡样式的标签页"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "BorderCardTab.razor"
                       },
-                       Name="BorderCardTab",
+                       Name="Tab",
                         Title="卡片化的标签页"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "LeftTab.razor"
                       },
-                       Name="LeftTab",
+                       Name="Tab",
                         Title="在左边的标签页"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "EditableTab.razor"
                       },
-                       Name="EditableTab",
+                       Name="Tab",
                         Title="调用事件API实现可编辑的标签页"
                  },new DemoInfoModel
                  {
                       Files=new List<string>(){
                       "BindingEditableTab.razor"
                       },
-                       Name="EditableTab",
+                       Name="Tab",
                         Title="双向绑定实现可编辑的标签页"
                  }
                 }
@@ -647,6 +646,48 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="Table",
                         Title="搜索"
+                 }
+                }
+            });
+            demoPages.Add(new DemoPageModel()
+            {
+                Name = "form",
+                Demos = new List<DemoInfoModel>() {
+                 new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "BasicForm.razor"
+                      },
+                       Name="Form",
+                        Title="基础用法"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "InitilizeForm.razor"
+                      },
+                       Name="Form",
+                        Title="表单初始值"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "AlignForm.razor"
+                      },
+                       Name="Form",
+                        Title="表单对齐"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "HiddenFormItem.razor"
+                      },
+                       Name="Form",
+                        Title="隐藏表单项"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "InlineForm.razor"
+                      },
+                       Name="Form",
+                        Title="行内表单"
                  }
                 }
             });

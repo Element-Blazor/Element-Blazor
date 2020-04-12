@@ -19,25 +19,25 @@
     <None Include="Demo\BasicInput\BasicInput.razor" />
     <None Include="Demo\BasicRadio\BasicRadio.razor" />
     <None Include="Demo\BasicSelect\BasicSelect.razor" />
-    <None Include="Demo\BasicSwitch.razor" />
-    <None Include="Demo\BasicTab.razor" />
-    <None Include="Demo\BorderCardTab.razor" />
-    <None Include="Demo\ButtonGroup.razor" />
-    <None Include="Demo\ButtonSize.razor" />
-    <None Include="Demo\CardTab.razor" />
-    <None Include="Demo\DisabledButton.razor" />
-    <None Include="Demo\DisabledRadio\DisabledRadio.razor" />
-    <None Include="Demo\DisabledSwitch.razor" />
-    <None Include="Demo\DisallowChangeRadio\DisallowChangeRadio.razor" />
-    <None Include="Demo\EditableTab\EditableTab.razor" />
-    <None Include="Demo\EditableTab\TestCheckBoxInTab.razor" />
-    <None Include="Demo\ItemDisabledSelect.razor" />
-    <None Include="Demo\LeftTab.razor" />
-    <None Include="Demo\LoadingButton.razor" />
-    <None Include="Demo\RadioButton\RadioButton.razor" />
-    <None Include="Demo\RadioGroup\RadioGroup.razor" />
-    <None Include="Demo\TextButton.razor" />
-    <None Include="Demo\TextSwitch.razor" />
+    <None Include="Demo\Switch\BasicSwitch.razor" />
+    <None Include="Demo\Tab\BasicTab.razor" />
+    <None Include="Demo\Tab\BorderCardTab.razor" />
+    <None Include="Demo\BasicButton\ButtonGroup.razor" />
+    <None Include="Demo\BasicButton\ButtonSize.razor" />
+    <None Include="Demo\Tab\CardTab.razor" />
+    <None Include="Demo\BasicButton\DisabledButton.razor" />
+    <None Include="Demo\BasicRadio\DisabledRadio.razor" />
+    <None Include="Demo\Switch\DisabledSwitch.razor" />
+    <None Include="Demo\BasicRadio\DisallowChangeRadio.razor" />
+    <None Include="Demo\Tab\EditableTab.razor" />
+    <None Include="Demo\Tab\TestCheckBoxInTab.razor" />
+    <None Include="Demo\BasicSelect\ItemDisabledSelect.razor" />
+    <None Include="Demo\Tab\LeftTab.razor" />
+    <None Include="Demo\BasicButton\LoadingButton.razor" />
+    <None Include="Demo\BasicRadio\RadioButton.razor" />
+    <None Include="Demo\BasicRadio\RadioGroup.razor" />
+    <None Include="Demo\BasicButton\TextButton.razor" />
+    <None Include="Demo\Switch\TextSwitch.razor" />
     <None Include="Demo\Upload\TestController.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -81,13 +81,19 @@
     <Compile Update="Demo\Dialog\NestDialogBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\DisabledRadio\DisabledRadioBase.cs">
+    <Compile Update="Demo\Dialog\TestContentBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\DisallowChangeRadio\DisallowChangeRadioBase.cs">
+    <Compile Update="Demo\BasicRadio\DisabledRadioBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\EditableTab\BindingEditableTabBase.cs">
+    <Compile Update="Demo\BasicRadio\DisallowChangeRadioBase.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Form\AutoGenerateFieldsActvity.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Demo\Tab\BindingEditableTabBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Form\Activity.cs">
@@ -156,10 +162,10 @@
     <Compile Update="Demo\Message\StatusMessageBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\RadioButton\RadioButtonBase.cs">
+    <Compile Update="Demo\BasicRadio\RadioButtonBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\RadioGroup\RadioGroupBase.cs">
+    <Compile Update="Demo\BasicRadio\RadioGroupBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Table\PaginationTableBase.cs">
@@ -231,7 +237,7 @@
     <Content Update="Demo\DropDown\BasicDropDown.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\EditableTab\BindingEditableTab.razor">
+    <Content Update="Demo\Tab\BindingEditableTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Form\AutoGenerateFieldsInitilizeForm.razor">
@@ -273,10 +279,10 @@
     <Content Update="Demo\Message\MultiMessage.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\NestedLayout.razor">
+    <Content Update="Demo\Layout\NestedLayout.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BasicLayout.razor">
+    <Content Update="Demo\Layout\BasicLayout.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\BasicRadio\BasicRadio.razor">
@@ -285,25 +291,25 @@
     <Content Update="Demo\BasicSelect\BasicSelect.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BasicSwitch.razor">
+    <Content Update="Demo\Switch\BasicSwitch.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BasicTab.razor">
+    <Content Update="Demo\Tab\BasicTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BorderCardTab.razor">
+    <Content Update="Demo\Tab\BorderCardTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BorderedRadio.razor">
+    <Content Update="Demo\BasicRadio\BorderedRadio.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\ButtonGroup.razor">
+    <Content Update="Demo\BasicButton\ButtonGroup.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\ButtonSize.razor">
+    <Content Update="Demo\BasicButton\ButtonSize.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\CardTab.razor">
+    <Content Update="Demo\Tab\CardTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\CheckBox\CheckBoxButtonGroup.razor">
@@ -321,22 +327,22 @@
     <Content Update="Demo\Dialog\BasicDialog.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\DisabledButton.razor">
+    <Content Update="Demo\BasicButton\DisabledButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\DisabledRadio\DisabledRadio.razor">
+    <Content Update="Demo\BasicRadio\DisabledRadio.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\DisabledSwitch.razor">
+    <Content Update="Demo\Switch\DisabledSwitch.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\DisallowChangeRadio\DisallowChangeRadio.razor">
+    <Content Update="Demo\BasicRadio\DisallowChangeRadio.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\EditableTab\EditableTab.razor">
+    <Content Update="Demo\Tab\EditableTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\EditableTab\TestCheckBoxInTab.razor">
+    <Content Update="Demo\Tab\TestCheckBoxInTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Form\AlignForm.razor">
@@ -348,16 +354,16 @@
     <Content Update="Demo\Form\InlineForm.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\ItemDisabledSelect.razor">
+    <Content Update="Demo\BasicSelect\ItemDisabledSelect.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\Layout.razor">
+    <Content Update="Demo\Layout\Layout.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\LeftTab.razor">
+    <Content Update="Demo\Tab\LeftTab.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\LoadingButton.razor">
+    <Content Update="Demo\BasicButton\LoadingButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Loading\ManualLoading.razor">
@@ -396,10 +402,10 @@
     <Content Update="Demo\Pagination\BasicPagination.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\RadioButton\RadioButton.razor">
+    <Content Update="Demo\BasicRadio\RadioButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\RadioGroup\RadioGroup.razor">
+    <Content Update="Demo\BasicRadio\RadioGroup.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Table\SearchTable.razor">
@@ -432,10 +438,10 @@
     <Content Update="Demo\Table\UpdatePageSize.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\TextButton.razor">
+    <Content Update="Demo\BasicButton\TextButton.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\TextSwitch.razor">
+    <Content Update="Demo\Switch\TextSwitch.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Transfer\FormTransfer.razor">
@@ -456,13 +462,7 @@
     <Content Update="Demo\Upload\UploadForm.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\css\site.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Update="wwwroot\favicon.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\metadata.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

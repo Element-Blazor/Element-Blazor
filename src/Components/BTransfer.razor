@@ -19,15 +19,17 @@
                     <BInput Placeholder="@(List1SearchPlaceHolder ?? "请输入搜索内容")" Value="list1KeyWords" ValueChanged="List1SearchChanged" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" TValue="string"></BInput>
                 }
                 <BCheckBoxGroup Cls="@CheckBoxGroupCssBuilder.ToString()" TValue="object">
+
                     @foreach (var item in List1)
                     {
                         if (!OnList1Search.HasDelegate)
                         {
-                            if (!item.Label.Contains(list1KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                            if (!string.IsNullOrWhiteSpace(list1KeyWords) && !item.Label.Contains(list1KeyWords, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 continue;
                             }
                         }
+
                         <BCheckBox Status="List1Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status1Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
                             <span>@item.Label</span>
                         </BCheckBox>
@@ -63,7 +65,7 @@
                     {
                         if (!OnList2Search.HasDelegate)
                         {
-                            if (!item.Label.Contains(list2KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                            if (!string.IsNullOrWhiteSpace(list2KeyWords) && !item.Label.Contains(list2KeyWords, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 continue;
                             }

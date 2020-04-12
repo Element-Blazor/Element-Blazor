@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Blazui.Component;
 using Blazui.Component.Lang;
+using Blazui.Markdown;
 
 namespace Blazui.ClientRender
 {
@@ -17,8 +18,8 @@ namespace Blazui.ClientRender
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddBaseAddressHttpClient();
-            builder.Services.AddBlazuiServicesAsync();
-            builder.Services.AddSingleton<BLang>();
+            await builder.Services.AddBlazuiServicesAsync();
+            builder.Services.AddMarkdown();
             await builder.Build().RunAsync();
         }
     }
