@@ -54,23 +54,35 @@
     "demos": [
       {
         "title": "基础的、简洁的标签页",
-        "name": "BasicTab"
+        "name": "Tab",
+        "files": [
+          "BasicTab.razor"
+        ]
       },
       {
         "title": "选项卡样式的标签页",
-        "name": "CardTab"
+        "name": "Tab",
+        "files": [
+          "CardTab.razor"
+        ]
       },
       {
         "title": "卡片化的标签页",
-        "name": "BorderCardTab"
+        "name": "Tab",
+        "files": [
+          "BorderCardTab.razor"
+        ]
       },
       {
         "title": "在左边的标签页",
-        "name": "LeftTab"
+        "name": "Tab",
+        "files": [
+          "LeftTab.razor"
+        ]
       },
       {
         "title": "调用事件API实现可编辑的标签页",
-        "name": "EditableTab",
+        "name": "Tab",
         "files": [
           "EditableTab.razor",
           "TestCheckBoxInTab.razor"
@@ -78,7 +90,7 @@
       },
       {
         "title": "双向绑定实现可编辑的标签页",
-        "name": "EditableTab",
+        "name": "Tab",
         "files": [
           "BindingEditableTab.razor",
           "BindingEditableTabBase.cs",
@@ -209,15 +221,24 @@
     "demos": [
       {
         "title": "基础用法",
-        "name": "BasicLayout"
+        "name": "Layout",
+        "files": [
+          "BasicLayout.razor"
+        ]
       },
       {
         "title": "嵌套布局",
-        "name": "NestedLayout"
+        "name": "Layout",
+        "files": [
+          "NestedLayout.razor"
+        ]
       },
       {
         "title": "后台模板用法",
-        "name": "Layout"
+        "name": "Layout",
+        "files": [
+          "Layout.razor"
+        ]
       }
     ]
   },
@@ -394,23 +415,38 @@
       },
       {
         "title": "禁用状态",
-        "name": "DisabledButton"
+        "name": "BasicButton",
+        "files": [
+          "DisabledButton.razor"
+        ]
       },
       {
         "title": "文字按钮",
-        "name": "TextButton"
+        "name": "BasicButton",
+        "files": [
+          "TextButton.razor"
+        ]
       },
       {
         "title": "按钮组",
-        "name": "ButtonGroup"
+        "name": "BasicButton",
+        "files": [
+          "ButtonGroup.razor"
+        ]
       },
       {
         "title": "加载中",
-        "name": "LoadingButton"
+        "name": "BasicButton",
+        "files": [
+          "LoadingButton.razor"
+        ]
       },
       {
         "title": "按钮大小",
-        "name": "ButtonSize"
+        "name": "BasicButton",
+        "files": [
+          "ButtonSize.razor"
+        ]
       }
     ]
   },
@@ -463,7 +499,7 @@
       },
       {
         "title": "禁用状态",
-        "name": "DisabledRadio",
+        "name": "BasicRadio",
         "files": [
           "DisabledRadio.razor",
           "DisabledRadioBase.cs"
@@ -471,7 +507,7 @@
       },
       {
         "title": "Change事件实现不允许切换状态",
-        "name": "DisallowChangeRadio",
+        "name": "BasicRadio",
         "files": [
           "DisallowChangeRadio.razor",
           "DisallowChangeRadioBase.cs"
@@ -479,7 +515,7 @@
       },
       {
         "title": "单选框组",
-        "name": "RadioGroup",
+        "name": "BasicRadio",
         "files": [
           "RadioGroup.razor",
           "RadioGroupBase.cs"
@@ -487,7 +523,7 @@
       },
       {
         "title": "单选按钮组",
-        "name": "RadioButton",
+        "name": "BasicRadio",
         "files": [
           "RadioButton.razor",
           "RadioButtonBase.cs"
@@ -495,7 +531,10 @@
       },
       {
         "title": "带边框的单选框",
-        "name": "BorderedRadio"
+        "name": "BasicRadio",
+        "files": [
+          "BorderedRadio.razor"
+        ]
       }
     ]
   },

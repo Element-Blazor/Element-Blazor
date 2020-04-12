@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.DisabledRadio
+namespace Blazui.ServerRender.Demo.BasicRadio
 {
-    public class DisabledRadioBase : ComponentBase
+    public class RadioButtonBase : ComponentBase
     {
-        protected string selectedValue = "1";
+        protected int selectedValue = 1;
     }
 }

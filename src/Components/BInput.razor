@@ -9,7 +9,6 @@
 
     var text = Formatter(Value);
     var isClearable = Value != null && IsClearable && (IsFocus || IsMouseOver);
-    Console.WriteLine(isClearable);
 }
 <div class="@wrapperClsBuilder" @ref="Content" style="@Style" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
     @if (Type == InputType.Textarea)

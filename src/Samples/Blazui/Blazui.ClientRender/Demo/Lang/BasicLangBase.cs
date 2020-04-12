@@ -12,13 +12,13 @@ namespace Blazui.ClientRender.Demo.Lang
     {
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
-            Lang.CurrentLang = "en-US";
+            await Lang.SetLangAsync("en-US");
             MarkAsRequireRender();
         }
 
         public async Task SetCnLang(MouseEventArgs eventArgs)
         {
-            Lang.CurrentLang = "zh-CN";
+            await Lang.SetLangAsync("zh-CN");
             MarkAsRequireRender();
         }
     }

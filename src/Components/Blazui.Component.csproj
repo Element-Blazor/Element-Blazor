@@ -32,20 +32,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="wwwroot\js\dom.js" />
-		<None Include="wwwroot\css\fix.css" />
-		<None Include="wwwroot\css\index.css" />
-		<None Include="wwwroot\css\fonts\element-icons.ttf" />
-		<None Include="wwwroot\css\fonts\element-icons.woff" />
+	  <None Include="wwwroot\css\fix.css" />
+	  <None Include="wwwroot\css\fonts\element-icons.ttf" />
+	  <None Include="wwwroot\css\fonts\element-icons.woff" />
+	  <None Include="wwwroot\css\index.css" />
+	  <None Include="wwwroot\js\dom.js" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CompareNETObjects" Version="4.65.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.3" />
 		<PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="wwwroot\lang\en-US.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="wwwroot\lang\zh-CN.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 

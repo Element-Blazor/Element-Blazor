@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KellermanSoftware.CompareNetObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +9,12 @@ namespace Blazui.Component
 {
     internal static class TypeHelper
     {
+        static ComparisonConfig config = new ComparisonConfig();
+        static CompareLogic compareLogic = new CompareLogic(config);
+        static TypeHelper()
+        {
+
+        }
         public static bool Equal<TValue>(TValue value1, TValue value2)
         {
             if (value1 == null && value2 != null)
@@ -33,25 +40,7 @@ namespace Blazui.Component
             }
             if (valueType.IsValueType)
             {
-                object result = default;
-                var equalsMethod = typeof(Nullable).GetMethods().FirstOrDefault(x => x.IsGenericMethod && x.Name == "Equals");
-                if (valueType.IsGenericType)
-                {
-                    if (valueType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                    {
-                        var nullType = Nullable.GetUnderlyingType(valueType);
-                        result = equalsMethod.MakeGenericMethod(nullType).Invoke(null, new object[] { value1, value2 });
-                    }
-                    else
-                    {
-                        throw new BlazuiException("非预期的数据类型：" + valueType.FullName);
-                    }
-                }
-                else
-                {
-                    result = ValueType.Equals(value1, value2);
-                }
-                return Convert.ToBoolean(result);
+                return compareLogic.Compare(value1, value2).AreEqual;
             }
             return ReferenceEquals(value1, value2);
         }
