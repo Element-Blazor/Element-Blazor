@@ -5,12 +5,11 @@ EXPOSE 443
 
 FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/sdk:3.1-buster AS build
 COPY . .
-RUN dotnet restore "src/Blazui.ServerRender/Blazui.ServerRender.csproj"
-WORKDIR "/src/Blazui.ServerRender"
-RUN dotnet build "Blazui.ServerRender.csproj" -c Release -o /app/build
+RUN dotnet restore "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj"
+RUN dotnet build "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Blazui.ServerRender.csproj" -c Release -o /app/publish
+RUN dotnet publish "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
