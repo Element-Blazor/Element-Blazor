@@ -1,36 +1,35 @@
-# blazui
+# Blazui
 
-#### Description
-layui的blazor版本
+Blazui is a Blazor UI Framework base on [Element](https://element.eleme.cn/#/zh-CN/component/layout).
 
-#### Software Architecture
-Software architecture description
+[![Nuget](https://img.shields.io/nuget/dt/Blazui.Component.svg)](https://www.nuget.org/packages/Blazui.Component/)
 
-#### Installation
+## Developmenet Environment
 
-1. xxxx
-2. xxxx
-3. xxxx
+- [.Net Core 3.1](https://dotnet.microsoft.com)
+- [Visual Studio 2019](https://visualstudio.microsoft.com)
 
-#### Instructions
+## Online Examples
 
-1. xxxx
-2. xxxx
-3. xxxx
+The demo:
 
-#### Contribution
+[http://blazui.com:9000](http://blazui.com:9000)
 
-1. Fork the repository
-2. Create Feat_xxx branch
-3. Commit your code
-4. Create Pull Request
+## Contribution
 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/ElderJames/ant-design-blazor/pulls)
 
-#### Gitee Feature
+If you would like to contribute, feel free to create a [Pull Request](https://github.com/wzxinchen/Blazui/pulls), or give us [Bug Report](https://github.com/wzxinchen/Blazui/issues/new).
 
-1. You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2. Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3. Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4. The most valuable open source project [GVP](https://gitee.com/gvp)
-5. The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6. The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+## Community Support
+
+Welcome to join the QQ Group: 74522853
+
+## Thanks
+
+- Test the stability and integrity of component library functions  @deathvicky
+- Promote this project https://github.com/zaranetCore  @zaranetCore
+
+## License
+
+[![](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](https://github.com/wzxinchen/Blazui/blob/master/LICENSE)
