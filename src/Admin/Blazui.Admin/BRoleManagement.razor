@@ -1,0 +1,28 @@
+﻿@page "/user/roles"
+@inherits BRoleManagementBase
+@attribute [Resource("roleList", "角色列表")]
+<BAuthorizeView Roles="@Roles">
+    @if (CanCreate)
+    {
+        <BButtonGroup>
+            <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Small" OnClick="CreateRoleAsync">创建角色</BButton>
+        </BButtonGroup>
+    }
+    <BTable DataSource="RoleModels" @ref="table" IgnoreProperties="new string[] { nameof(RoleModel.Id),nameof(RoleModel.Resources)}" HasSelectionColumn="false">
+        <BTableColumns>
+            @if (CanDelete || CanUpdate)
+            {
+                <BTableTemplateColumn Text="操作" Context="role">
+                    @if (CanUpdate)
+                    {
+                        <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e => EditAsync(role))">编辑</BButton>
+                    }
+                    @if (CanDelete)
+                    {
+                        <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e => Del(role))">删除</BButton>
+                    }
+                </BTableTemplateColumn>
+            }
+        </BTableColumns>
+    </BTable>
+</BAuthorizeView>

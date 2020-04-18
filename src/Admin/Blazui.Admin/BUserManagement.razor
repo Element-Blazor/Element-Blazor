@@ -1,0 +1,33 @@
+﻿@page "/user/list"
+@inherits BUserManagementBase
+@attribute [Resource("userList", "用户列表")]
+<BAuthorizeView Roles="@Roles">
+    @if (CanCreate)
+    {
+        <BButtonGroup>
+            <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Small" OnClick="CreateUserAsync">创建用户</BButton>
+        </BButtonGroup>
+    }
+    <BTable DataSource="Users" @ref="table" IgnoreProperties="new string[] { nameof(UserModel.Password),nameof(UserModel.Id),nameof(UserModel.Roles)}" HasSelectionColumn="false">
+        <BTableColumns>
+            @if (CanUpdate || CanDelete)
+            {
+                <BTableTemplateColumn Text="操作" Context="user">
+                    @if (CanUpdate)
+                    {
+                        <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e => EditAsync(user))">编辑</BButton>
+                    }
+                    @if (CanDelete)
+                    {
+                        <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e => Del(user))">删除</BButton>
+                    }
+
+                    @if (CanReset)
+                    {
+                        <BButton Type="@ButtonType.Info" Size="@ButtonSize.Mini" OnClick="@(e => Reset(user))">重置密码</BButton>
+                    }
+                </BTableTemplateColumn>
+            }
+        </BTableColumns>
+    </BTable>
+</BAuthorizeView>

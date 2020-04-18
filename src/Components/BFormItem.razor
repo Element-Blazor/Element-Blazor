@@ -17,7 +17,7 @@
     var bodyStyles = new List<string>();
     if (!Form.Inline)
     {
-        labelStyles.Add("width:100px");
+        labelStyles.Add($"width:{LabelWidth}px");
 
         if (Form.LabelAlign != LabelAlign.Top && !string.IsNullOrWhiteSpace(Label))
         {

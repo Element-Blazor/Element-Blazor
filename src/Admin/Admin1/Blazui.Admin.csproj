@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <Description>基于Blazui的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用</Description>
+    <Authors>wzxinchen</Authors>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="5.0.0-preview.2.20167.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Markdown\Blazui.Markdown.csproj" />
+  </ItemGroup>
+
+
+</Project>
