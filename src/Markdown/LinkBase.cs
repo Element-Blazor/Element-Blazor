@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Blazui.Markdown
 {
-    public class LinkBase : BComponentBase
+    public class LinkBase : BDialogBase
     {
         internal protected BForm form;
 

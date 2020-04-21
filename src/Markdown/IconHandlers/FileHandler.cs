@@ -29,14 +29,20 @@ namespace Blazui.Markdown.IconHandlers
             parameters.Add(nameof(File.Tip), editor.FileUploadTip);
             var result = await dialogService.ShowDialogAsync<File, FileModel>("插入文件", parameters);
             var fileModel = result.Result;
-            var title = fileModel.Title;
-            if (!string.IsNullOrWhiteSpace(title))
+            if(fileModel!=null)
             {
-                title = $"\"{title}\"";
+                var title = fileModel.Title;
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    title = $"\"{title}\"";
+                }
+                if(fileModel.Urls!=null)
+                {
+                    var files = fileModel.Urls.Select(x => $"[{fileModel?.Name}]({x} {title})");
+                    var file = string.Join("\n", files);
+                    await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, file);
+                }
             }
-            var files = fileModel.Urls.Select(x => $"[{fileModel.Name}]({x} {title})");
-            var file = string.Join("\n", files);
-            await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, file);
         }
     }
 }
