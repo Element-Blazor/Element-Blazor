@@ -31,13 +31,19 @@ namespace Blazui.Markdown.IconHandlers
             parameters.Add(nameof(Link.Link), linkModel);
             var result = await dialogService.ShowDialogAsync<Link, LinkModel>("插入链接", parameters);
             linkModel = result.Result;
-            var title = linkModel.Title;
-            if (!string.IsNullOrWhiteSpace(title))
+            if(linkModel!=null)
             {
-                title = $"\"{title}\"";
+                var title = linkModel.Title;
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    title = $"\"{title}\"";
+                }
+                if(!string.IsNullOrWhiteSpace(linkModel.Name)&&!string.IsNullOrWhiteSpace(linkModel.Url))
+                {
+                    var link = $"[{linkModel.Name}]({linkModel.Url} {title})";
+                    await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, link);
+                }
             }
-            var link = $"[{linkModel.Name}]({linkModel.Url} {title})";
-            await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, link);
         }
     }
 }

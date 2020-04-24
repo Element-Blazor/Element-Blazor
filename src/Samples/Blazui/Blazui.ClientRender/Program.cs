@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Blazui.Component;
 using Blazui.Component.Lang;
 using Blazui.Markdown;
+using System.Net.Http;
 
 namespace Blazui.ClientRender
 {
@@ -17,7 +18,7 @@ namespace Blazui.ClientRender
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddBaseAddressHttpClient();
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             await builder.Services.AddBlazuiServicesAsync();
             builder.Services.AddMarkdown();
             await builder.Build().RunAsync();

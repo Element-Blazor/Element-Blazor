@@ -50,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
+    <ProjectReference Include="..\..\..\Admin\Admin.ClientRender\Blazui.Admin.ClientRender.csproj" />
   </ItemGroup>
 
   <ItemGroup>

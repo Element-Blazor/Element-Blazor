@@ -1,0 +1,51 @@
+﻿@page "/"
+@namespace Blazui.Admin.Sample.ServerRender
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>基于Blazui的后台管理模板</title>
+    <base href="~/" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
+    <link href="~/_content/Blazui.Admin/css/admin.css" rel="stylesheet" />
+    <link href="~/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="~/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
+    <style>
+        html {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+            html > body {
+                display: flex;
+                flex: 1;
+            }
+
+        html > body > app {
+            display: flex;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
+
+    <script src="/_content/Blazui.Component/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+    <script src="~/_content/Blazui.Markdown/js/addons.min.js"></script>
+    <script src="~/_content/Blazui.Markdown/js/continuelist.js"></script>
+    <script src="~/_content/Blazui.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/dom.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

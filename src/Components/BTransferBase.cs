@@ -189,6 +189,10 @@ namespace Blazui.Component
 
         private void SyncFieldValue(bool validate)
         {
+            if (List2 == null)
+            {
+                return;
+            }
             SetFieldValue(List2.Select(x => x.Id).ToList(), validate);
         }
 
@@ -197,6 +201,10 @@ namespace Blazui.Component
             List2Checked.Clear();
             list1Status = Status.UnChecked;
             list2Status = Status.UnChecked;
+            if (List2 == null)
+            {
+                List2 = new List<TransferItem>();
+            }
             List2.AddRange(List1Checked);
             List1.RemoveAll(List1Checked.Contains);
             List1Checked.Clear();

@@ -20,6 +20,11 @@ namespace Blazui.Component
         [Parameter]
         public string Label { get; set; }
 
+        /// <summary>
+        /// 标签宽度
+        /// </summary>
+        public float LabelWidth { get; set; } = 100;
+
         [Parameter]
         public string Name { get; set; }
 

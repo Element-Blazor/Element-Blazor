@@ -1,0 +1,27 @@
+﻿@inherits BNotAuthorizedBase
+
+@if (requireInitilize.HasValue)
+{
+    @if (requireInitilize.Value)
+    {
+        if (CreatePage != null)
+        {
+            <BDynamicComponent Component="CreatePage"></BDynamicComponent>
+        }
+        else
+        {
+            <BCreateSuperUser></BCreateSuperUser>
+        }
+    }
+    else
+    {
+        if (LoginPage != null)
+        {
+            <BDynamicComponent Component="LoginPage"></BDynamicComponent>
+        }
+        else
+        {
+            <BLogin DefaultUser="DefaultUser"></BLogin>
+        }
+    }
+}

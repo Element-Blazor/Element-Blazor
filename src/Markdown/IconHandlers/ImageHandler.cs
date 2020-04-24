@@ -38,14 +38,20 @@ namespace Blazui.Markdown.IconHandlers
             parameters.Add(nameof(Image.Tip), editor.ImageUploadTip);
             var result = await dialogService.ShowDialogAsync<Image, ImageModel>("插入图片", parameters);
             imageModel = result.Result;
-            var title = imageModel.Title;
-            if (!string.IsNullOrWhiteSpace(title))
+            if(imageModel!=null)
             {
-                title = $"\"{title}\"";
+                var title = imageModel.Title;
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    title = $"\"{title}\"";
+                }
+                if(imageModel.Urls!=null)
+                {
+                    var images = imageModel.Urls.Select(url => $"![{imageModel.Alt}]({url} {title})");
+                    var image = string.Join("\n", images);
+                    await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, image);
+                }
             }
-            var images = imageModel.Urls.Select(url => $"![{imageModel.Alt}]({url} {title})");
-            var image = string.Join("\n", images);
-            await jSRuntime.InvokeVoidAsync("replaceSelection", editor.Textarea, image);
         }
     }
 }
