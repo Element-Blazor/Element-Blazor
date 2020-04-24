@@ -53,6 +53,14 @@ namespace Blazui.Component
             {
                 Console.WriteLine("Current Host Is Server");
                 var filePath = $"{Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "wwwroot", "lang", locale + ".json")}";
+                if (!File.Exists(filePath))
+                {
+                    filePath = $"{Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "wwwroot", "_content", "Blazui.Component", "lang", locale + ".json")}";
+                }
+                if (!File.Exists(filePath))
+                {
+                    throw new Exception(filePath);
+                }
                 return new ConfigurationBuilder()
                     .AddJsonFile(filePath)
                      .Build();
