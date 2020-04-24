@@ -8,6 +8,16 @@
     <Description>基于Blazui的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用</Description>
     <Authors>wzxinchen</Authors>
     <StartupObject />
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>上海轻然教育责任有限公司</Company>
+    <PackageProjectUrl>https://github.com/wzxinchen/Blazui</PackageProjectUrl>
+    <PackageIcon>BLAZUI 32.png</PackageIcon>
+    <RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
+    <PackageTags>blazor,blazui,admin</PackageTags>
+    <Version>0.0.2</Version>
+    <AssemblyVersion>0.0.2.0</AssemblyVersion>
+    <FileVersion>0.0.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +33,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Admin\Blazui.Admin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

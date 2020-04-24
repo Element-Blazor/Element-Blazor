@@ -4,14 +4,18 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
-		<Version>0.0.1</Version>
-		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Version>0.0.7.2</Version>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>wzxinchen</Authors>
 		<IsPackable>true</IsPackable>
-		<Description>Element的blazor版本，无JS，无TS，用 .Net 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
+		<Description>Element的blazor版本，无JS，无TS，用 .NET 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
 		<RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
 		<PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Company>上海轻然教育责任有限公司</Company>
+		<PackageIcon>BLAZUI 32.png</PackageIcon>
+		<PackageTags>blazor,blazui</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -32,6 +36,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	  <None Include="wwwroot\css\fix.css" />
 	  <None Include="wwwroot\css\fonts\element-icons.ttf" />
 	  <None Include="wwwroot\css\fonts\element-icons.woff" />

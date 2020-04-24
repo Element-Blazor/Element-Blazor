@@ -5,14 +5,18 @@
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
-		<Version>0.0.1</Version>
+		<Version>0.0.2</Version>
 		<Authors>wzxinchen</Authors>
-		<Company>wzxinchen</Company>
+		<Company>上海轻然教育责任有限公司</Company>
 		<Description>基于 Blazui 和 Markdig 的 Markdown 编辑器</Description>
-		<PackageProjectUrl>https://github.com/wzxinchen/Blazui.Markdown</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/wzxinchen/Blazui.Markdown</RepositoryUrl>
+		<PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
 		<RepositoryType></RepositoryType>
 		<RazorLangVersion>3.0</RazorLangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Product>Blazui.Markdown</Product>
+		<PackageIcon>BLAZUI 32.png</PackageIcon>
+		<PackageTags>blazor,blazui,markdown</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,6 +28,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		</None>
 		<None Include="wwwroot\css\editor.css" />
 		<None Include="wwwroot\css\editormd.min.css" />
 		<None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
