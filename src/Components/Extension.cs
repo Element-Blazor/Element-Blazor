@@ -29,7 +29,7 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
-            var httpClient = services.BuildServiceProvider().GetRequiredService<IHttpClientFactory>().CreateClient();
+            var httpClient = services.BuildServiceProvider().GetRequiredService<HttpClient>();
             var configuration = await SetLocaleAsync(httpClient, lang);
             services.AddSingleton(provider =>
             {
