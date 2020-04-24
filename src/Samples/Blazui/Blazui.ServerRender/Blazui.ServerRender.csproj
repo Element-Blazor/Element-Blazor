@@ -50,6 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Admin\Admin.ClientRender\Blazui.Admin.ClientRender.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Demo\BasicRadio\BasicRadioBase.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>

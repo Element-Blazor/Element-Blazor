@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazui.Admin\Blazui.Admin.csproj" />
+    <ProjectReference Include="..\Admin\Blazui.Admin.csproj" />
   </ItemGroup>
 
 </Project>
