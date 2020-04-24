@@ -12,7 +12,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>上海轻然教育责任有限公司</Company>
     <PackageProjectUrl>https://github.com/wzxinchen/Blazui</PackageProjectUrl>
-    <PackageIcon>BLAZUI 32.png</PackageIcon>
+    <PackageIcon>LOGO.png</PackageIcon>
     <RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
     <PackageTags>blazor,blazui,admin</PackageTags>
     <Version>0.0.2</Version>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+    <None Include="..\..\..\LOGO.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

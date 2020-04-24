@@ -13,7 +13,7 @@
     <Authors>wzxinchen</Authors>
     <Company>上海轻然教育责任有限公司</Company>
     <Description>基于Blazui的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用。该包为界面组件包</Description>
-    <PackageIcon>BLAZUI 32.png</PackageIcon>
+    <PackageIcon>LOGO.png</PackageIcon>
     <RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
     <PackageTags>blazui,blazor,admin</PackageTags>
   </PropertyGroup>
@@ -21,7 +21,7 @@
   <ItemGroup>
     <None Include="Blazui.Admin.csproj" />
     <None Include="Blazui.Admin.csproj.user" />
-    <None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+    <None Include="..\..\..\LOGO.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

@@ -15,7 +15,7 @@
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Product>Blazui.Markdown</Product>
-		<PackageIcon>BLAZUI 32.png</PackageIcon>
+		<PackageIcon>LOGO.png</PackageIcon>
 		<PackageTags>blazor,blazui,markdown</PackageTags>
 	</PropertyGroup>
 
@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+		<None Include="..\..\LOGO.png">
 		  <Pack>True</Pack>
 		  <PackagePath></PackagePath>
 		</None>

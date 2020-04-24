@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 	ProjectSection(SolutionItems) = preProject
 		Dockerfile = Dockerfile
 		kubernetes.yml = kubernetes.yml
+		LOGO.png = LOGO.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{70466228-3662-45F3-8304-6EF755D5A863}"
@@ -43,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.ClientRender",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ServerRender", "src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Blazui.Admin.Sample.ServerRender.csproj", "{EE404089-CDFB-4699-9997-8166D6B3A6DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazui.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Blazui.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Blazui.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin", "src\Admin\Admin\Blazui.Admin.csproj", "{36BBE899-CF01-4ECF-B4F4-627D63531005}"
 EndProject
