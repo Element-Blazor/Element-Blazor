@@ -43,8 +43,8 @@ BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，
 
 地址：https://github.com/caopengfei/BlazorECharts
 
-## 组件列表
-
+## 组件列表 
+#### (需要先访问https://pwawasm.github.io)
 
 | 组件名       | 调用Demo                           | 功能支持     | 下一步计划   |
 | :----------- | :----------                       | -----------  | -----------  |
