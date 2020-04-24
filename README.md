@@ -63,6 +63,9 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 
 ## 更新日志
 
+### 版本 0.0.7.2  2020.04.24发布
+    Blazor 升级 preview 5
+
 ### 版本 0.0.7.0，2020.04.24发布
 1. 调整 [将 Blazui 基础组件, BlazAdmin, MarkDown Editor 移动到一个仓库][22]
 2. 修复 [Table checkbox-SelectedRowsChanged 外部传入EventCallBack后，会使得列表checkbox无法勾选][23]
