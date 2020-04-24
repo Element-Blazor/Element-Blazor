@@ -19,7 +19,7 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 | :----------- | :----------                       | --|
 |https://blazorwasm.github.io|Blazor WebAssembly 渲染版本|国外|
 |https://pwawasm.github.io| Blazor WebAssembly 渲染版本 PWA模式|国外|
-|https://www.blazor.group | 基于 Blazui 开发的 Blazor 社区，WASM渲染 |国内| 
+|https://www.blazor.group | 基于 Blazui 开发的 Blazor 社区，Server  渲染 |国内| 
 |http://blazui.com:9000| Blazor Server 渲染版本 | 国内 |
 |https://admin.blazor.group| Blazor 社区后台，基于 Blazui.Admin 开发 |国内|
 |https://github.com/caopengfei/BlazorECharts|BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui||
