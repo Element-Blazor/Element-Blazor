@@ -14,7 +14,7 @@
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Company>上海轻然教育责任有限公司</Company>
-		<PackageIcon>BLAZUI 32.png</PackageIcon>
+		<PackageIcon>LOGO.png</PackageIcon>
 		<PackageTags>blazor,blazui</PackageTags>
 	</PropertyGroup>
 
@@ -36,7 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="C:\Users\wzxin\OneDrive\桌面\BLAZUI\BLAZUI 32.png">
+	  <None Include="..\..\LOGO.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>
 	  </None>
