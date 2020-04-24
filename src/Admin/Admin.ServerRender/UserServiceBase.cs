@@ -106,12 +106,18 @@ namespace Blazui.Admin.ServerRender
 
         public async Task<List<UserModel>> GetUsersAsync()
         {
-            return (await Task.WhenAll((await SignInManager.UserManager.Users.ToListAsync()).Select(async x => new UserModel()
+            return (await Task.WhenAll((await SignInManager.UserManager.Users.ToListAsync()).Select(async x =>
             {
-                Email = x.Email,
-                Id = x.Id,
-                Username = x.UserName,
-                Roles = await SignInManager.UserManager.GetRolesAsync(x)
+                var roleNames = await SignInManager.UserManager.GetRolesAsync(x);
+                var roles = await Task.WhenAll(roleNames.Select(name => RoleManager.FindByNameAsync(name)));
+                var user = new UserModel()
+                {
+                    Email = x.Email,
+                    Id = x.Id,
+                    Username = x.UserName,
+                    RoleIds = roles.Select(x => x.Id).ToList()
+                };
+                return user;
             }))).ToList();
         }
 
@@ -271,7 +277,7 @@ namespace Blazui.Admin.ServerRender
             {
                 Email = user.Email,
                 Id = user.Id,
-                Roles = (await SignInManager.UserManager.GetRolesAsync(user)).ToList(),
+                RoleIds = (await SignInManager.UserManager.GetRolesAsync(user)).ToList(),
                 Username = user.UserName
             };
         }

@@ -35,9 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Markdown", "src\Mark
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{32AEC62D-CC2E-4F5A-B921-548B011FCBFD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlazAdmin", "BlazAdmin", "{B81231A0-5776-4D5B-8ACF-9B1590E92804}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{B81231A0-5776-4D5B-8ACF-9B1590E92804}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazAdmin.Docs.ClientRender.PWA", "src\Samples\BlazAdmin\BlazAdmin.Docs.ClientRender.PWA\BlazAdmin.Docs.ClientRender.PWA.csproj", "{0A499969-DEE3-49A9-B037-E5368668A64F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ClientRender.PWA", "src\Samples\BlazAdmin\BlazAdmin.Docs.ClientRender.PWA\Blazui.Admin.Sample.ClientRender.PWA.csproj", "{0A499969-DEE3-49A9-B037-E5368668A64F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazxAdmin.ClientRender.Server", "src\Samples\BlazAdmin\BlazAdmin.Docs.ClientRender.Server\BlazxAdmin.ClientRender.Server.csproj", "{4DBABCB8-75F0-45DD-892E-ED2BA8AEF003}"
 EndProject

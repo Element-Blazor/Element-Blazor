@@ -13,7 +13,7 @@ namespace Blazui.Admin
 
         [TableColumn(Text = "邮箱")]
         public string Email { get; set; }
-        public IList<string> Roles { get; set; }
+        public IList<string> RoleIds { get; set; }
         public string Password { get; set; }
     }
 }

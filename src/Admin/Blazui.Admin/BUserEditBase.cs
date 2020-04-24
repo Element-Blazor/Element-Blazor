@@ -15,8 +15,7 @@ namespace Blazui.Admin
         [Parameter]
         public UserModel EditingUser { get; set; }
 
-        internal List<TransferItem> RoleItems = new List<TransferItem>();
-        internal List<TransferItem> ExistsRoleItems = new List<TransferItem>();
+        internal List<TransferItem> RoleItems;
         [Parameter]
         public DialogOption Dialog { get; set; }
         private bool isCreate = false;
@@ -24,6 +23,11 @@ namespace Blazui.Admin
         {
             base.OnInitialized();
             isCreate = EditingUser == null;
+            RoleItems = UserService.GetRoles().Select(x => new TransferItem()
+            {
+                Id = x.Id,
+                Label = x.Name
+            }).ToList();
         }
         public async System.Threading.Tasks.Task SubmitAsync()
         {
@@ -54,32 +58,5 @@ namespace Blazui.Admin
             _ = DialogService.CloseDialogAsync(this, (object)null);
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await base.OnAfterRenderAsync(firstRender);
-            if (!firstRender)
-            {
-                return;
-            }
-
-            RoleItems = UserService.GetRoles().Select(x => new TransferItem()
-            {
-                Id = x.Id,
-                Label = x.Name
-            }).ToList();
-            MarkAsRequireRender();
-            StateHasChanged();
-            //if (EditingUser == null)
-            //{
-            //    return;
-            //}
-            //var user = await UserService.GetUserAsync(EditingUser.Id);
-            //ExistsRoleItems = (await UserService.GetRolesAsync(user.Id)).Select(x => new TransferItem()
-            //{
-            //    Id = x.Id,
-            //    Label = x.Name
-            //}).ToList();
-            //StateHasChanged();
-        }
     }
 }

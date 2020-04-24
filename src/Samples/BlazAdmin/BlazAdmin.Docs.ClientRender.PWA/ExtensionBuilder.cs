@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿//using Microsoft.AspNetCore.Builder;
+//using Microsoft.Extensions.DependencyInjection;
+//using System;
 
-namespace Blazui.Admin.Docs.ClientRender.PWA
-{
-    public static class ExtensionBuilder
-    {
-        public static IServiceCollection AddBlazui.Admin(this IServiceCollection services)
-        {
-            return services;
-        }
+//namespace Blazui.Admin.Docs.ClientRender.PWA
+//{
+//    public static class ExtensionBuilder
+//    {
+//        public static IServiceCollection AddAdmin(this IServiceCollection services)
+//        {
+//            return services;
+//        }
 
-        public static IApplicationBuilder UseBlazui.Admin(this IApplicationBuilder app)
-        {
-            app.UseAuthorization();
-            app.UseAuthentication();
-            return app;
-        }
-    }
-}
+//        public static IApplicationBuilder UseAdmin(this IApplicationBuilder app)
+//        {
+//            app.UseAuthorization();
+//            app.UseAuthentication();
+//            return app;
+//        }
+//    }
+//}

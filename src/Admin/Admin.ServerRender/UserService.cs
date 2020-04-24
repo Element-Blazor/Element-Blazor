@@ -50,7 +50,7 @@ namespace Blazui.Admin.ServerRender
             {
                 return GetResultMessage(result);
             }
-            var roles = RoleManager.Roles.Where(x => userModel.Roles.Contains(x.Id)).Select(x => x.Name).ToArray();
+            var roles = RoleManager.Roles.Where(x => userModel.RoleIds.Contains(x.Id)).Select(x => x.Name).ToArray();
             result = await SignInManager.UserManager.AddToRolesAsync(user, roles);
             if (!string.IsNullOrWhiteSpace(GetResultMessage(result)))
             {
@@ -127,7 +127,7 @@ namespace Blazui.Admin.ServerRender
                 {
                     return GetResultMessage(result);
                 }
-                var newRoles = RoleManager.Roles.Where(x => userModel.Roles.Contains(x.Id)).Select(x => x.Name).ToArray();
+                var newRoles = RoleManager.Roles.Where(x => userModel.RoleIds.Contains(x.Id)).Select(x => x.Name).ToArray();
                 result = await SignInManager.UserManager.AddToRolesAsync(user, newRoles);
                 if (!result.Succeeded)
                 {

@@ -8,7 +8,7 @@
             <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Small" OnClick="CreateUserAsync">创建用户</BButton>
         </BButtonGroup>
     }
-    <BTable DataSource="Users" @ref="table" IgnoreProperties="new string[] { nameof(UserModel.Password),nameof(UserModel.Id),nameof(UserModel.Roles)}" HasSelectionColumn="false">
+    <BTable DataSource="Users" @ref="table" IgnoreProperties="new string[] { nameof(UserModel.Password),nameof(UserModel.Id),nameof(UserModel.RoleIds)}" HasSelectionColumn="false">
         <BTableColumns>
             @if (CanUpdate || CanDelete)
             {
