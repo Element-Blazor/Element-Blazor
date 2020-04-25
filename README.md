@@ -105,7 +105,7 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 15. 修复 tab标签页只能关闭当前的
 
 
-  [1]: https://github.com/wzxinchen/Blazui/blob/master/logo.png
+  [1]: http://static.zybuluo.com/wzxinchen/7rqwo2puktuc7cqs14bhyayf/BLAZUI%20PNG%E9%AB%98%E6%B8%85.png
   [2]: https://jq.qq.com/?_wv=1027&k=5jdzC6m
   [3]: https://www.blazor.group
   [4]: https://admin.blazor.group
