@@ -474,15 +474,24 @@
     "demos": [
       {
         "title": "基础用法",
-        "name": "BasicSwitch"
+        "name": "Switch",
+        "files": [
+          "BasicSwitch.razor"
+        ]
       },
       {
         "title": "文本描述",
-        "name": "TextSwitch"
+        "name": "Switch",
+        "files": [
+          "TextSwitch.razor"
+        ]
       },
       {
         "title": "禁用状态",
-        "name": "DisabledSwitch"
+        "name": "Switch",
+        "files": [
+          "DisabledSwitch.razor"
+        ]
       }
     ]
   },
@@ -551,7 +560,10 @@
       },
       {
         "title": "带禁用选项",
-        "name": "ItemDisabledSelect"
+        "name": "BasicSelect",
+        "files": [
+          "ItemDisabledSelect.razor"
+        ]
       },
       {
         "title": "绑定枚举值",
