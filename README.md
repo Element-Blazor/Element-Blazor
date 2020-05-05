@@ -1,7 +1,7 @@
 # Blazui
 ![LOGO][1]
 
-[加入群聊【.NET Blazor  大本营】][2]
+[加入群聊【.NET Blazor  大本营 74522853】][2]
 
 [加入 Blazor 社区][3]
 
