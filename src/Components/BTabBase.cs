@@ -187,8 +187,8 @@ namespace Blazui.Component
 
         internal BTabPanelBase ActiveTab { get; private set; }
 
-        internal int BarOffsetLeft { get; set; }
-        internal int BarWidth { get; set; }
+        internal float BarOffsetLeft { get; set; }
+        internal float BarWidth { get; set; }
         internal void AddTab(BTabPanelBase tab)
         {
             if (Exists(tab.Name))
@@ -266,7 +266,7 @@ namespace Blazui.Component
             await base.OnAfterRenderAsync(firstRender);
         }
 
-        internal async Task UpdateHeaderSizeAsync(BTabPanelBase tabPanel, int barWidth, int barOffsetLeft)
+        internal async Task UpdateHeaderSizeAsync(BTabPanelBase tabPanel, float barWidth, float barOffsetLeft)
         {
             if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
             {

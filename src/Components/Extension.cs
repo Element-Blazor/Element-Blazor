@@ -21,7 +21,7 @@ namespace Blazui.Component
         /// <param name="services"></param>
         /// <param name="lang">默认语言</param>
         /// <returns></returns>
-        public static async Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services, string lang = "zh-CN")
+        public static async Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services, string lang = null)
         {
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
@@ -40,6 +40,10 @@ namespace Blazui.Component
 
         private static async Task<IConfiguration> SetLocaleAsync(HttpClient httpClient, string locale)
         {
+            if (string.IsNullOrWhiteSpace(locale))
+            {
+                return null;
+            }
             Type type = null;
             try
             {

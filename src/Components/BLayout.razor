@@ -17,7 +17,7 @@
     {
         styles.AddRange(Style.Split(';'));
     }
-    <div class="blaz-layout" style="@string.Join(";", styles)" @ref="Container">
+    <div class="blaz-layout" style="@string.Join(";", styles)" @ref="Container" @onkeydown="KeyDown" @onkeypress="KeyPress" @onkeyup="KeyUp">
         @if (North != null)
         {
             <div class="blaz-layout-north blaz-layout-card" style="line-height: @(SouthHeight)px;height:@(NorthHeight)px">

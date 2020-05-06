@@ -71,6 +71,11 @@ namespace Blazui.Component
             return await jSRuntime.InvokeAsync<int>("getOffsetTop", elementReference);
         }
 
+        public ValueTask FocusAsync()
+        {
+            return jSRuntime.InvokeVoidAsync("execFocus", elementReference);
+        }
+
         public async Task ChildMoveToBodyAsync()
         {
             await jSRuntime.InvokeAsync<object>("childMoveToBody", elementReference);
