@@ -63,6 +63,10 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 
 ## 更新日志
 
+### 版本 0.0.7.3, 2020.05.06发布
+1. BLayout 组件新增键盘事件
+2. Extension 扩展类多语言默认为空以解决报错问题
+    
 ### 版本 0.0.7.2, 2020.04.24发布
     Blazor 升级 preview 5
 
