@@ -19,6 +19,12 @@ window.submitForm = function (el, url) {
     el.action = url;
     el.submit();
 };
+window.execFocus = function (el) {
+    if (!el) {
+        return;
+    }
+    el.focus();
+}
 window.upload = function (el) {
     if (!el) {
         return;
