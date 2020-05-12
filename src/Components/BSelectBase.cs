@@ -51,6 +51,7 @@ namespace Blazui.Component
             }
             if (FormItem == null)
             {
+                Label = Options.FirstOrDefault(x => TypeHelper.Equal(x.Value, Value))?.Text;
                 return;
             }
 
