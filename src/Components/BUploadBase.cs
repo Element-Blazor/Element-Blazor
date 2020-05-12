@@ -244,6 +244,10 @@ namespace Blazui.Component
 
         private void FileUploaded(UploadModel model, string[] results)
         {
+            model.Message = results[1];
+            model.Id = results[2];
+            model.Url = results[3];
+
             if (results[0] == "0")
             {
                 model.Status = UploadStatus.Success;
@@ -260,9 +264,7 @@ namespace Blazui.Component
                     _ = OnFileUploadFailure.InvokeAsync(model);
                 }
             }
-            model.Message = results[1];
-            model.Id = results[2];
-            model.Url = results[3];
+           
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
