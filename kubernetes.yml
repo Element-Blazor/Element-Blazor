@@ -65,7 +65,7 @@ spec:
       port: 9000
       protocol: TCP
       targetPort: 80
-    - name: http
+    - name: http1
       port: 80
       protocol: TCP
       targetPort: 80
