@@ -1,6 +1,6 @@
 # Blazui
 ![LOGO][1]
-
+[English][36] | [中文][37]
 [加入群聊【.NET Blazor  大本营 74522853】][2]
 
 [加入 Blazor 社区][3]
@@ -144,3 +144,5 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
   [33]: https://github.com/wzxinchen/Blazui/issues/74
   [34]: https://github.com/wzxinchen/Blazui/issues/73
   [35]: https://github.com/wzxinchen/Blazui/issues/71
+  [36]: https://github.com/wzxinchen/Blazui/blob/master/README.en.md
+  [37]: https://github.com/wzxinchen/Blazui/blob/master/README.md
