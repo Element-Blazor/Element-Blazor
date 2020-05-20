@@ -49,65 +49,62 @@ Element Address：https://element.eleme.cn/#/zh-CN/component/layout
 |          |                  |                         | [Blazui.ServerRender][21]                  | Server Mode                             |                                                                                                                                      |
 
 
-## 主要更新仓库
+## Main update repository
 
 https://github.com/wzxinchen/Blazui
 
-## 贡献说明
+## Contribution description
 
-基于 develop 分支拉出新分支，在这个分支上开发，开发完成后发起PR合并至develop
+Pull out a new branch based on the develop branch, develop on this branch, and initiate PR merge to develop after the development is complete
 
-## 使用文档
+## Use documentation
 
 https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 
-## 更新日志
-
-### 版本 0.0.7.3, 2020.05.06发布
-1. BLayout 组件新增键盘事件
-2. Extension 扩展类多语言默认为空以解决报错问题
+## Change log### Version 0.0.7.3, 2020.05.06 Published
+1. Add keyboard event of BLayout component
+2. ``Extension`` class multi-language is empty by default to solve the error report
     
-### 版本 0.0.7.2, 2020.04.24发布
-    Blazor 升级 preview 5
+### Version 0.0.7.2, 2020.04.24 Published
+    Blazor upgrade preview 5
 
-### 版本 0.0.7.0，2020.04.24发布
-1. 调整 [将 Blazui 基础组件, BlazAdmin, MarkDown Editor 移动到一个仓库][22]
-2. 修复 [Table checkbox-SelectedRowsChanged 外部传入EventCallBack后，会使得列表checkbox无法勾选][23]
-3. 增加 [Dialog全屏弹窗扩展][24]
-4. 增加 [国际化支持(Internationalization support) ][25]
-5. 修复 [BSubMenuBase 的 SemaphoreSlim 属性应该是只读属性，同时应该释放][26]
-6. 修复 [BPaginationBase在PageSize修改后最大页码不会跟着更新][27]
-7. 修复 [BInput InputType=TextArea 渲染无效][28]
-8. 增加 [wasm的支持][29]
-9. 增加 [BTable增加Attribute忽略项][30]
-10. 修复 [MessageService.Show连续使用只显示第一个][31]
-11. 修复 [BTable无数据提示][32]
-12. 修复 [Dialog叉号关闭窗口报错][33]
-13. 修复 [DialogService.ShowDialogAsync 弹出一个窗口关闭后无法紧接着弹出第二个][34]
-14. 添加 [BInput控件，当设置的数据类型是数字时，输入字母后，后面的清空按钮失效了][35]
+### Version 0.0.7.0，2020.04.24 Published
+1. Repair [将 Blazui 基础组件, BlazAdmin, MarkDown Editor 移动到一个仓库][22]
+2. Repair [Table checkbox-SelectedRowsChanged 外部传入EventCallBack后，会使得列表checkbox无法勾选][23]
+3. Add [Dialog全屏弹窗扩展][24]
+4. Add [国际化支持(Internationalization support) ][25]
+5. Repair [BSubMenuBase 的 SemaphoreSlim 属性应该是只读属性，同时应该释放][26]
+6. Repair [BPaginationBase在PageSize修改后最大页码不会跟着更新][27]
+7. Repair [BInput InputType=TextArea 渲染无效][28]
+8. Add [wasm的支持][29]
+9. Add [BTableAddAttribute忽略项][30]
+10. Repair [MessageService.Show连续使用只显示第一个][31]
+11. Repair [BTable无数据提示][32]
+12. Repair [Dialog叉号关闭窗口报错][33]
+13. Repair [DialogService.ShowDialogAsync 弹出一个窗口关闭后无法紧接着弹出第二个][34]
+14. Add [BInput控件，当设置的数据类型是数字时，输入字母后，后面的清空按钮失效了][35]
 
-### 版本 0.0.6.2 2020.01.06发布
-1. 新增 文件上传组件
-2. 新增 Markdown 编辑器 及 Markdown 渲染器
-3. 修复 BDatePicker控件DateChanged有问题
+### Version 0.0.6.2 2020.01.06 Published
+1. Add File upload component
+2. Add Markdown 编辑器 及 Markdown 渲染器
+3. Repair BDatePicker控件DateChanged有问题
 
-### 版本 0.0.6.1，2020.01.03发布
-1. 新增 BDropDown 下拉菜单组件
-2. 修复 Table控件中 日期的格式化不起作用
-3. 修复 table 全选
-4. 增加 Input组件可否添加尺寸（Size
-5. 修复 下拉弹出菜单频繁点击会出现多个
-6. 修复 按钮不支持圆形
-7. 修复 弹窗组件
-8. 修复 BButton组件中Cls属性改为追加感觉更合理
-9. 修复 \[Bug Report\] Checkbox 全选时选项没联动选中
-10. 添加 about loading
-11. 添加 是否可以让BMenuItem组件具有匹配路由然后选中的功能
-12. 修复 表单下拉列表
-13. 添加 组件可增加一个visible属性，用于隐藏或显示
-14. 添加 弹窗-表单赋值的时候radio组件-枚举值无法绑定
-15. 修复 tab标签页只能关闭当前的
-
+### Version 0.0.6.1，2020.01.03 Published
+1. Add BDropDown 下拉菜单组件
+2. Repair Table控件中 日期的格式化不起作用
+3. Repair table 全选
+4. Add Input组件可否Add尺寸（Size
+5. Repair 下拉弹出菜单频繁点击会出现多个
+6. Repair 按钮不支持圆形
+7. Repair 弹窗组件
+8. Repair BButton组件中Cls属性改为追加感觉更合理
+9. Repair \[Bug Report\] Checkbox 全选时选项没联动选中
+10. Add about loading
+11. Add 是否可以让BMenuItem组件具有匹配路由然后选中的功能
+12. Repair 表单下拉列表
+13. Add 组件可Add一个visible属性，用于隐藏或显示
+14. Add 弹窗-表单赋值的时候radio组件-枚举值无法绑定
+15. Repair tab标签页只能关闭当前的
 
   [1]: http://static.zybuluo.com/wzxinchen/c9qvwe1agljfwvqm1j34x1fw/BLAZUI%20128.png
   [2]: https://jq.qq.com/?_wv=1027&k=5jdzC6m
