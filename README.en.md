@@ -9,12 +9,12 @@
 
 [Visit the Blazor community management website, username: admin, password: 88888888][4]
 
-## 介绍
-Element的blazor版本
+## Introduction
+A blazor component library using Element UI
 
-API 模仿 Element，CSS 直接使用 Element的样式，HTML 结构直接使用 Element 的 HTML 结构
+API imitates Element, CSS directly uses Element's style, HTML structure directly uses Element's HTML structure
 
-Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
+Element Address：https://element.eleme.cn/#/zh-CN/component/layout
 
 ## 演示地址及相关案例
 |地址 | 内容 | 服务器位置|
