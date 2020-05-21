@@ -55,7 +55,7 @@ https://github.com/wzxinchen/Blazui
 
 ## Contribution description
 
-Pull out a new branch based on the develop branch, develop on this branch, and initiate PR merge to develop after the development is complete
+Fork a copy of the code to its own repository, and then pull out a new branch based on the develop branch, develop on this branch, and initiate PR merge to develop after the development is complete
 
 ## Use documentation
 
