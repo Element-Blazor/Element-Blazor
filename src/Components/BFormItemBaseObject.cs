@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public abstract class BFormItemBaseObject : BComponentBase
+    public abstract class BFormItemObject : BComponentBase
     {
         /// <summary>
         /// 初始值是否已渲染

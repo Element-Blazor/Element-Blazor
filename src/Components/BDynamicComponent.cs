@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
+    /// <summary>
+    /// 提供动态加载组件的功能
+    /// </summary>
     public class BDynamicComponent : ComponentBase
     {
         [Parameter]

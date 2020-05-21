@@ -50,7 +50,7 @@ namespace Blazui.Component
         public virtual string Cls { get; set; }
 
         [CascadingParameter]
-        public BBadgeBase Badge { get; set; }
+        public BBadge Badge { get; set; }
         /// <summary>
         /// 设置自定义样式
         /// </summary>

@@ -55,6 +55,6 @@ namespace Blazui.Component
         /// <summary>
         /// Tab 页切换时触发
         /// </summary>
-        public EventCallback<BChangeEventArgs<BTabPanelBase>> OnTabPanelChanging { get; set; }
+        public EventCallback<BChangeEventArgs<BTabPanel>> OnTabPanelChanging { get; set; }
     }
 }

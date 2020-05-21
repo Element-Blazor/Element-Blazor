@@ -788,7 +788,7 @@ namespace Blazui.ClientRender.PWA.Pages
 
         protected async Task TabCode_OnRenderCompleteAsync(object tab)
         {
-            await jSRuntime.InvokeVoidAsync("renderHightlight", ((BTabPanelBase)tab).TabContainer.Content);
+            await jSRuntime.InvokeVoidAsync("renderHightlight", ((BTabPanel)tab).TabContainer.Content);
         }
     }
 }

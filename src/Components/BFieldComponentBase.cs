@@ -11,7 +11,7 @@ namespace Blazui.Component
         [Parameter]
         public string Name { get; set; }
         [CascadingParameter]
-        public BFormItemBase<TValue> FormItem { get; set; }
+        public BFormItem<TValue> FormItem { get; set; }
 
         protected void SetFieldValue(TValue value, bool validate)
         {

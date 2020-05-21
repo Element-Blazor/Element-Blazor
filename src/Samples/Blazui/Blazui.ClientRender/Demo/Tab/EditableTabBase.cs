@@ -53,7 +53,7 @@ namespace Blazui.ClientRender.Demo.Tab
                 IsActive = true
             });
         }
-        protected void RemoveTabCloseAsync(BTabPanelBase tab)
+        protected void RemoveTabCloseAsync(BTabPanel tab)
         {
             models.Remove(models.FirstOrDefault(x => x.Title == tab.Title));
 

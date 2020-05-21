@@ -1,4 +1,4 @@
-﻿@inherits BTableBase
+﻿@inherits BComponentBase
 @{
     var styles = new List<string>();
     var tableClsList = new List<string>();
@@ -104,7 +104,7 @@
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                         <div class="cell">
-                                            <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBoxBase<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
+                                            <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBox<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
                                         </div>
                                     </td>
                                 }

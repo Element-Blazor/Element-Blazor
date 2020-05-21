@@ -104,7 +104,7 @@ namespace Blazui.Admin
         [Parameter]
         public ObservableCollection<TabOption> Tabs { get; set; } = new ObservableCollection<TabOption>();
 
-        protected void OnTabPanelChanging(BChangeEventArgs<BTabPanelBase> args)
+        protected void OnTabPanelChanging(BChangeEventArgs<BTabPanel> args)
         {
             args.DisallowChange = true;
             NavigationManager.NavigateTo(args.NewValue.Name);

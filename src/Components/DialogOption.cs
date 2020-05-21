@@ -37,7 +37,7 @@ namespace Blazui.Component
         internal int ZIndex { get; set; }
         internal int ShadowZIndex { get; set; }
         internal TaskCompletionSource<DialogResult> TaskCompletionSource { get; set; }
-        internal BPopupBase Instance { get; set; }
+        internal BPopup Instance { get; set; }
         internal ElementReference Element { get; set; }
         internal ElementReference ShadowElement { get; set; }
         internal bool IsNew { get; set; }
