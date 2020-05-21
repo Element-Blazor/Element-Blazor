@@ -37,10 +37,12 @@ namespace Blazui.Component
                 return;
             }
             OriginValueHasSet = true;
-            Form.Values.TryGetValue(Name, out var value);
-            OriginValue = (TValue)value;
-            Console.WriteLine($"设置 FormItem {Name} 值:" + value);
-            Value = (TValue)value;
+            if (Form.Values.TryGetValue(Name, out var value))
+            {
+                OriginValue = (TValue)value;
+                Console.WriteLine($"设置 FormItem {Name} 值:" + value);
+                Value = (TValue)value;
+            }
             OriginValueHasRendered = false;
         }
 

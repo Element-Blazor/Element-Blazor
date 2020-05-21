@@ -262,7 +262,7 @@ namespace Blazui.Component
             }
             else
             {
-                Label = dict[enumValue];
+                Label = dict?[enumValue];
                 Value = enumValue;
             }
             if (ValueChanged.HasDelegate)
