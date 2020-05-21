@@ -57,7 +57,7 @@ https://github.com/wzxinchen/Blazui
 
 ## 贡献说明
 
-基于 develop 分支拉出新分支，在这个分支上开发，开发完成后发起PR合并至develop
+Fork 一份代码到自己的仓库，然后基于 develop 分支拉出新分支，在这个分支上开发，开发完成后发起PR合并至develop
 
 ## 使用文档
 
