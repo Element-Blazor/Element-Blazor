@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="BlazuiVSExtension.6c6f1492-2563-4142-a520-706ff4c3f9ca" Version="1.0" Language="zh-CN" Publisher="上海轻然教育科技有限责任公司" />
+        <DisplayName>Blazui</DisplayName>
+        <Description xml:space="preserve">One-click creation of projects based on Blazui series components to maximize your development efficiency</Description>
+        <GettingStartedGuide>https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1</GettingStartedGuide>
+        <Icon>BLAZUI 128.png</Icon>
+        <PreviewImage>BLAZUI 128.png</PreviewImage>
+        <Tags>blazui;blazor;admin</Tags>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    </Dependencies>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\服务端渲染.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WebAssemblyRenderProject.zip" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" d:TargetPath="ProjectTemplates\BlazuiAdminServerRenderProject.zip" Path="ProjectTemplates" />
+    </Assets>
+</PackageManifest>

@@ -12,14 +12,12 @@ namespace Blazui.Admin
 {
     public class BAdminBase : BAdminPageBase
     {
-        internal BTabBase tab;
-        internal BBreadcrumbBase breadcrumb;
+        internal BTab tab;
+        internal BBreadcrumb breadcrumb;
         [Inject]
         private RouteService routeService { get; set; }
 
         protected BForm form;
-        [Inject]
-        private MessageService MessageService { get; set; }
 
         [Inject]
         private MessageBox MessageBox { get; set; }
