@@ -18,6 +18,8 @@
         styles.Add("height:" + Height + "px");
     }
 
+    styles.AddRange(Style?.Split(';') ?? new string[0]);
+
     <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
         @if (headerRendered)
         {
