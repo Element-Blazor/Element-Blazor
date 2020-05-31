@@ -646,6 +646,13 @@ namespace Blazui.ClientRender.PWA.Pages
                       },
                        Name="Table",
                         Title="搜索"
+                 },new DemoInfoModel
+                 {
+                      Files=new List<string>(){
+                      "CustomTableOrder.razor"
+                      },
+                       Name="Table",
+                        Title="自定义列顺序"
                  }
                 }
             });

@@ -17,5 +17,6 @@ namespace Blazui.Component
         public bool IsCheckBox { get; set; }
         public RenderFragment<object> Template { get; set; }
         public string Format { get; set; }
+        public int SortNo { get; set; }
     }
 }

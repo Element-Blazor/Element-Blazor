@@ -21,6 +21,8 @@
     <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
         @if (headerRendered)
         {
+
+            Headers = Headers.OrderBy(x => x.SortNo).ToList();
             var validColumnCount = Headers.Count();
             <div class="el-table__header-wrapper" @ref="headerElement">
                 <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">

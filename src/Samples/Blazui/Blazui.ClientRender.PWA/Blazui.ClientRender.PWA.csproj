@@ -30,6 +30,9 @@
     <Content Update="App.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
+    <Content Update="Demo\Table\CustomTableOrder.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="Pages\FetchData.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
@@ -717,6 +720,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Demo\Table\CustomTableOrder.razor.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

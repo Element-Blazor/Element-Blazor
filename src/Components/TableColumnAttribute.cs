@@ -26,5 +26,10 @@ namespace Blazui.Component
         /// 渲染是否忽略该属性
         /// </summary>
         public bool Ignore { get; set; }
+
+        /// <summary>
+        /// 排序编号
+        /// </summary>
+        public int SortNo { get; set; }
     }
 }

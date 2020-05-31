@@ -335,6 +335,14 @@
           "UpdatePageSizeBase.cs",
           "AutoGenerateColumnTestData.cs"
         ]
+      },
+      {
+        "title": "自定义列顺序",
+        "name": "Table",
+        "files": [
+          "CustomTableOrder.razor",
+          "CustomTableOrder.razor.cs"
+        ]
       }
     ]
   },

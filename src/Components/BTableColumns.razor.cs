@@ -20,7 +20,7 @@ namespace Blazui.Component
         {
             if (Table.DataType == null)
             {
-                throw new BlazuiException($"表格 {Table.GetType().Name} 没有设置 DataType 属性");
+                throw new BlazuiException($"表格 {Table.GetType().Name} 没有设置 {nameof(BTable.DataSource)} 属性或该属性为空");
             }
             if (column.Property == null && !(column is BTableTemplateColumn))
             {
@@ -61,6 +61,7 @@ namespace Blazui.Component
                     }
                 }),
                 Text = column.Text,
+                SortNo = column.SortNo,
                 Width = column.Width,
                 IsCheckBox = column.IsCheckBox,
                 Template = column.ChildContent,

@@ -14,6 +14,11 @@ namespace Blazui.Component
         public virtual int? Width { get; set; }
 
         /// <summary>
+        /// 排序编号
+        /// </summary>
+        [Parameter]
+        public int SortNo { get; set; }
+        /// <summary>
         /// 当前列关联的属性名
         /// </summary>
         [Parameter]

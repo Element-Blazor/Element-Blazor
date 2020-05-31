@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
@@ -180,7 +181,7 @@ namespace Blazui.Component
         protected override void OnInitialized()
         {
             SelectedRows = new HashSet<object>();
-            
+
             base.OnInitialized();
             if (!AutoGenerateColumns)
             {
@@ -253,6 +254,7 @@ namespace Blazui.Component
                                     throw new BlazuiException("仅日期列支持 Format 参数");
                                 }
                             },
+                            SortNo = columnConfig.SortNo,
                             IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
                             Property = property,
                             Text = columnConfig.Text,
