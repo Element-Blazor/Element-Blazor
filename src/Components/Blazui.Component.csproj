@@ -20,6 +20,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>obj\Debug\netstandard2.1\Blazui.Component.xml</DocumentationFile>
+		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -49,6 +50,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CompareNETObjects" Version="4.66.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-preview.3.20215.2" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-preview.3.20215.2" />

@@ -347,6 +347,39 @@
     ]
   },
   {
+    "name": "tag",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Tag",
+        "files": [
+          "Basic.razor"
+        ]
+      },
+      {
+        "title": "可移除",
+        "name": "Tag",
+        "files": [
+          "Removeable.razor"
+        ]
+      },
+      {
+        "title": "不同尺寸",
+        "name": "Tag",
+        "files": [
+          "Size.razor"
+        ]
+      },
+      {
+        "title": "不同主题",
+        "name": "Tag",
+        "files": [
+          "Theme.razor"
+        ]
+      }
+    ]
+  },
+  {
     "name": "loading",
     "demos": [
       {

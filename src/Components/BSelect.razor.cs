@@ -23,7 +23,6 @@ namespace Blazui.Component
         private Type valueType;
         private Type nullable;
         internal bool isClearable = true;
-        private bool valueInitilized = false;
         internal bool EnableClearButton { get; set; }
 
         internal string Label { get; set; }

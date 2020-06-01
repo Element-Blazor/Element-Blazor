@@ -1,0 +1,73 @@
+﻿@page "/"
+@using Blazui.ClientRenderWithSeo.Client
+@namespace Blazui.ClientRenderWithSeo.Server.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <title>Blazui, Element的blazor版本，用 .NET 写前端的 UI 框架，开箱即用，WebAssembly 版本，非PWA模式</title>
+    <base href="/" />
+
+    <link href="manifest.json" rel="manifest" />
+
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
+    <link href="/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
+    <style>
+        html {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            background-color: lightblue;
+            font-family: 'Open Sans';
+            font-weight: 100;
+            font-size: 100%;
+            margin: 0em;
+            display: flex;
+            flex: 1;
+            padding: 0em;
+        }
+
+            body > app {
+                flex: 1;
+                display: flex;
+            }
+    </style>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?68404524efb8917aacde222c05799f80";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+
+<body>
+    <app>
+        @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
+    </app>
+    <script src="/_content/Blazui.Component/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/addons.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
+    <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/dom.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+</body>
+
+</html>

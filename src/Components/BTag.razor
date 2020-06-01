@@ -1,0 +1,8 @@
+﻿@if (isClosed)
+{
+    return;
+}
+<span class="@tagCssBuilder.ToString()" @onclick="OnTagClick">
+    @ChildContent
+    <i class="@iconCssBuilder.ToString()" @onclick:stopPropagation="true" @onclick="OnCloseClick"></i>
+</span>

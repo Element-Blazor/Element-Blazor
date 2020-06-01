@@ -30,7 +30,6 @@
 
     .blaz-layout > .blaz-layout-container {
         display: flex;
-        height: 100%;
         border: lightgray 1px solid;
     }
 
@@ -56,6 +55,7 @@
             flex: 1;
             margin-left: 5px;
             display: flex;
+            min-height: 0;
             flex-direction: column;
         }
 
@@ -99,6 +99,15 @@
                     flex-direction: column;
                 }
 
+        .blaz-layout > .blaz-layout-container > .blaz-layout-west {
+            display: flex;
+        }
+
+            .blaz-layout > .blaz-layout-container > .blaz-layout-west > .el-menu {
+                flex: 1;
+                min-height: 0;
+            }
+
         .blaz-layout > .blaz-layout-container > .blaz-layout-east {
             min-width: 100px;
             margin-left: 5px;
@@ -111,6 +120,7 @@
         display: flex;
         flex-direction: column;
     }
+
 
     .blaz-layout > .blaz-layout-north > .el-card {
         min-height: 50px;
