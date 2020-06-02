@@ -33,11 +33,6 @@
                         {
                             var header = Headers.ElementAt(i - 1);
                             var width = header.Width.HasValue ? header.Width.ToString() : "auto";
-                            //var width = header.Width.ToString();
-                            //if (!header.Width.HasValue || header.Width.Value <= 0)
-                            //{
-                            //    width = (100d / validColumnCount).ToString() + "%";
-                            //}
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                         <col name="gutter" width="0" />
@@ -83,11 +78,6 @@
                         {
                             var header = Headers.ElementAt(i - 1);
                             var width = header.Width.HasValue ? header.Width.ToString() : "auto";
-                            //var width = header.Width.ToString();
-                            //if (!header.Width.HasValue || header.Width.Value <= 0)
-                            //{
-                            //    width = (100d / validColumnCount).ToString() + "%";
-                            //}
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                     </colgroup>
