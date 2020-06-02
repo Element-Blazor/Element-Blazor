@@ -1,8 +1,10 @@
-﻿@if (isClosed)
+﻿@inherits BComponentBase
+
+@if (isClosed)
 {
     return;
 }
-<span class="@tagCssBuilder.ToString()" @onclick="OnTagClick">
+<span class="@tagCssBuilder.ToString()" @onclick="OnTagClick" style="@tagStyleBuilder.ToString()">
     @ChildContent
     <i class="@iconCssBuilder.ToString()" @onclick:stopPropagation="true" @onclick="OnCloseClick"></i>
 </span>

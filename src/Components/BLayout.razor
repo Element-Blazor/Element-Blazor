@@ -44,5 +44,12 @@
                 </div>
             }
         </div>
+
+        @if (South != null)
+        {
+            <div class="blaz-layout-south blaz-layout-card" style="line-height: @(SouthHeight)px;height:@(SouthHeight)px;">
+                @South
+            </div>
+        }
     </div>
 }

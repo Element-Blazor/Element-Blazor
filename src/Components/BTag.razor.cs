@@ -11,6 +11,8 @@ namespace Blazui.Component
         private bool isClosed = false;
         private HtmlPropertyBuilder iconCssBuilder;
         private HtmlPropertyBuilder tagCssBuilder;
+        private HtmlPropertyBuilder tagStyleBuilder;
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -85,6 +87,8 @@ namespace Blazui.Component
                 .AddIf(Closable, "el-tag__close", "el-icon-close");
             tagCssBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-tag", $"el-tag--{Size.ToString().ToLower()}", $"el-tag--{Theme.ToString().ToLower()}", $"el-tag--{Type.ToString().ToLower()}");
+            tagStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                .AddIf(!string.IsNullOrEmpty(Style), Style.Split(';'));
         }
     }
 }

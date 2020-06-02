@@ -30,6 +30,7 @@
 
     .blaz-layout > .blaz-layout-container {
         display: flex;
+        height: 100%;
         border: lightgray 1px solid;
     }
 
