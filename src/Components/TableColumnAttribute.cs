@@ -15,7 +15,7 @@ namespace Blazui.Component
         /// <summary>
         /// 宽度
         /// </summary>
-        public IntString? Width { get; set; }
+        public float Width { get; set; }
 
         /// <summary>
         /// 格式化参数，仅支持日期格式
