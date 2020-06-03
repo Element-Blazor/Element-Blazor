@@ -23,6 +23,7 @@ namespace Blazui.Component
         /// <returns></returns>
         public static async Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services, string lang = null)
         {
+            services.AddSingleton<FormFieldControlMap>();
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
             services.AddSingleton<LoadingService>();

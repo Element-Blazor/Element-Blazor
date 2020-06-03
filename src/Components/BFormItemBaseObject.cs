@@ -21,8 +21,15 @@ namespace Blazui.Component
         public string Label { get; set; }
 
         /// <summary>
+        /// 设置字段 Label 为图片地址
+        /// </summary>
+        [Parameter]
+        public string Image { get; set; }
+
+        /// <summary>
         /// 标签宽度
         /// </summary>
+        [Parameter]
         public float LabelWidth { get; set; } = 100;
 
         [Parameter]
@@ -38,6 +45,11 @@ namespace Blazui.Component
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// 占位符
+        /// </summary>
+        [Parameter]
+        public string Placeholder { get; set; }
         [CascadingParameter]
         public BForm Form { get; set; }
 
@@ -75,6 +87,8 @@ namespace Blazui.Component
             });
         }
         public abstract void Validate();
+
+
         public abstract void Reset();
     }
 }

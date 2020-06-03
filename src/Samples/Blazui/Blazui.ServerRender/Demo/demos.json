@@ -213,6 +213,15 @@
           "BasicFormBase.cs",
           "Activity.cs"
         ]
+      },
+      {
+        "title": "自动生成表单",
+        "name": "Form",
+        "files": [
+          "AutoGenerateFieldsInitilizeForm.razor",
+          "AutoGenerateFieldsInitilizeForm.razor.cs",
+          "AutoGenerateFieldsActvity.cs"
+        ]
       }
     ]
   },

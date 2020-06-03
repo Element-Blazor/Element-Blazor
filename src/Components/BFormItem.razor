@@ -26,9 +26,15 @@
     }
 }
 <div class="@string.Join(" ",clsList)" style="@formItemCssBuilder">
-    @if (!string.IsNullOrWhiteSpace(Label))
+    @if (!string.IsNullOrWhiteSpace(Image))
     {
-        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">@Label</label>
+        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
+    }
+    else if (!string.IsNullOrWhiteSpace(Label))
+    {
+        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">
+            @Label
+        </label>
     }
     <div class="el-form-item__content" style="@string.Join(";",bodyStyles)">
         <CascadingValue Value="this">

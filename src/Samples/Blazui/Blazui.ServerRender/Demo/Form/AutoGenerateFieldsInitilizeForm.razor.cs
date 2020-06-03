@@ -9,7 +9,7 @@ using Blazui.Component;
 
 namespace Blazui.ServerRender.Demo.Form
 {
-    public class AutoGenerateFieldsInitilizeFormBase : ComponentBase
+    public partial class AutoGenerateFieldsInitilizeForm
     {
         internal LabelAlign formAlign;
         [Inject]

@@ -12,20 +12,19 @@ namespace Blazui.ServerRender.Demo.Form
 {
     public class AutoGenerateFieldsActvity
     {
-        [Display(Name = "名称")]
+        [FormControl(Label = "名称")]
         public string Name { get; set; }
-        [Display(Name = "区域")]
+        [FormControl(Label = "区域")]
         public Area Area { get; set; }
-        [Display(Name = "日期")]
+        [FormControl(Label = "日期")]
         public DateTime? Time { get; set; }
-        [Display(Name = "即时配送")]
-        [FormControl(typeof(BSwitch<bool>))]
+        [FormControl(ControlType = typeof(BSwitch<bool>), Label = "即时配送")]
         public bool Delivery { get; set; }
-        [Display(Name = "性质")]
+        [FormControl(Label = "性质")]
         public List<string> Type { get; set; }
-        [Display(Name = "特殊资源")]
+        [FormControl(Label = "特殊资源")]
         public string Resource { get; set; }
-        [Display(Name = "活动形式")]
+        [FormControl(Label = "活动形式")]
         public string Description { get; set; }
 
         public override string ToString()

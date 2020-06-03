@@ -102,7 +102,7 @@
     <Compile Update="Demo\Form\Activity.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Demo\Form\AutoGenerateFieldsInitilizeFormBase.cs">
+    <Compile Update="Demo\Form\AutoGenerateFieldsInitilizeForm.razor.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Demo\Form\InitilizeFormBase.cs">
