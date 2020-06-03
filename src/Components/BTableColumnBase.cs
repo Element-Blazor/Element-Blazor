@@ -11,7 +11,7 @@ namespace Blazui.Component
     {
         internal virtual bool IsCheckBox { get; set; }
         [Parameter]
-        public virtual string Width { get; set; }
+        public virtual int? Width { get; set; }
 
         /// <summary>
         /// 当前列关联的属性名
