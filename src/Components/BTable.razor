@@ -23,7 +23,7 @@
         {
             var validColumnCount = Headers.Count();
             <div class="el-table__header-wrapper" @ref="headerElement">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -32,11 +32,7 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
-                            var width = header.Width.ToString();
-                            if (!header.Width.HasValue || header.Width.Value <= 0)
-                            {
-                                width = (100d / validColumnCount).ToString() + "%";
-                            }
+                            var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                         <col name="gutter" width="0" />
@@ -72,7 +68,7 @@
                 bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
             }
             <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -81,11 +77,7 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
-                            var width = header.Width.ToString();
-                            if (!header.Width.HasValue || header.Width.Value <= 0)
-                            {
-                                width = (100d / validColumnCount).ToString() + "%";
-                            }
+                            var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                     </colgroup>
