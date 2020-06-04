@@ -12,3 +12,4 @@ launchSettings.json
 .user
 .suo
 *.user
+/src/Samples/Admin/Blazui.Admin.Sample.ServerRender/Pages/wwwroot
