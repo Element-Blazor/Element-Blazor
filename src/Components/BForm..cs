@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.ControlRenders;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -85,10 +86,9 @@ namespace Blazui.Component
             builder.OpenElement(0, "form");
             builder.AddAttribute(1, "class", string.Join(" ", clsList));
             builder.AddAttribute(2, "style", Style);
-            builder.AddElementReferenceCapture(3, (__value) => Container = __value);
+            builder.AddElementReferenceCapture(3, value => Container = value);
             TypeInference.CreateCascadingValue_0(builder, 4, 5, this, 6, (__builder2) =>
              {
-                 var index = 7;
                  if (EntityType != null)
                  {
                      var formItemConfigs = formFieldControlMap.GetFormItems(EntityType, Name);
@@ -96,37 +96,30 @@ namespace Blazui.Component
                      {
                          foreach (var formItemConfig in formItemConfigs.Values)
                          {
-                             index = formItemConfig.Index + index;
-                             formItemsBuilder.OpenComponent(++index, formItemConfig.FormItem);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.IsRequired), true);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.RequiredMessage), "xxxx");
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.Label), formItemConfig.Label);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.Image), formItemConfig.Image);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.Name), formItemConfig.Name);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.LabelWidth), formItemConfig.LabelWidth);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.ChildContent), (RenderFragment)(inputControlBuilder =>
+                             formItemsBuilder.OpenComponent(1, formItemConfig.FormItem);
+                             formItemsBuilder.AddAttribute(2, nameof(BFormItemObject.IsRequired), formItemConfig.IsRequired);
+                             formItemsBuilder.AddAttribute(3, nameof(BFormItemObject.RequiredMessage), formItemConfig.RequiredMessage);
+                             formItemsBuilder.AddAttribute(4, nameof(BFormItemObject.Label), formItemConfig.Label);
+                             formItemsBuilder.AddAttribute(5, nameof(BFormItemObject.Image), formItemConfig.Image);
+                             formItemsBuilder.AddAttribute(6, nameof(BFormItemObject.Name), formItemConfig.Name);
+                             formItemsBuilder.AddAttribute(7, nameof(BFormItemObject.LabelWidth), formItemConfig.LabelWidth);
+                             formItemsBuilder.AddAttribute(8, nameof(BFormItemObject.ChildContent), (RenderFragment)(inputControlBuilder =>
                              {
-                                 inputControlBuilder.OpenComponent(++index, formItemConfig.InputControl);
-                                 inputControlBuilder.AddAttribute(++index, nameof(BFormItemObject.EnableAlwaysRender), true);
-                                 if (!string.IsNullOrWhiteSpace(formItemConfig.Placeholder))
-                                 {
-                                     inputControlBuilder.AddAttribute(++index, nameof(BFormItemObject.Placeholder), formItemConfig.Placeholder);
-                                 }
-                                 inputControlBuilder.CloseComponent();
+                                 formItemConfig.InputControlRender.Render(inputControlBuilder, formItemConfig);
                              }
                              ));
                              formItemsBuilder.CloseComponent();
                          }
                          if (Buttons != null)
                          {
-                             formItemsBuilder.OpenComponent<BFormActionItem>(++index);
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.Style), "text-align:center");
-                             formItemsBuilder.AddAttribute(++index, nameof(BFormItemObject.ChildContent), Buttons);
+                             formItemsBuilder.OpenComponent<BFormActionItem>(11);
+                             formItemsBuilder.AddAttribute(12, nameof(Style), "text-align:center");
+                             formItemsBuilder.AddAttribute(13, nameof(BFormItemObject.ChildContent), Buttons);
                              formItemsBuilder.CloseComponent();
                          }
                      };
                  }
-                 __builder2.AddContent(index, ChildContent);
+                 __builder2.AddContent(7, ChildContent);
              }
             );
             builder.CloseElement();

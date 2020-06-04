@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Blazui.Component.ControlRender;
+using Blazui.Component.ControlRenders;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,7 +13,7 @@ namespace Blazui.Component
     {
         private Dictionary<Func<PropertyInfo, bool>, Type> fieldsControlMap = new Dictionary<Func<PropertyInfo, bool>, Type>();
         private Dictionary<string, List<BFormItemObject>> formControls = new Dictionary<string, List<BFormItemObject>>();
-        public FormFieldControlMap()
+        public FormFieldControlMap(IServiceProvider provider)
         {
             fieldsControlMap.Add(property => property.PropertyType == typeof(string), typeof(BInput<string>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(int), typeof(BInput<int>));
@@ -45,8 +48,12 @@ namespace Blazui.Component
                     return true;
                 }
                 return false;
-            }, typeof(BSelect<string>));
+            }, typeof(BSelect<>));
+            fieldsControlMap.Add(property => property.PropertyType == typeof(IFileModel[]), typeof(BUpload));
+            this.provider = provider.CreateScope().ServiceProvider;
         }
+
+        private IServiceProvider provider { get; }
 
         internal Dictionary<string, FormItemConfig> GetFormItems(Type entityType, string formName)
         {
@@ -83,24 +90,51 @@ namespace Blazui.Component
                     formControl.RequiredMessage = "请填写此字段";
                 }
                 var formItemType = typeof(BFormItem<>).MakeGenericType(property.PropertyType);
+                if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(BSelect<>))
+                {
+                    controlType = controlType.MakeGenericType(property.PropertyType);
+                }
                 formItems.Add(property.Name, new FormItemConfig()
                 {
                     FormItem = formItemType,
-                    IsRequired = true,
+                    IsRequired = formControl.IsRequired,
+                    RequiredMessage = formControl.RequiredMessage,
                     Index = index,
                     InputControl = controlType,
+                    InputControlRender = GetInputControlRender(controlType),
                     Label = formControl.Label,
                     Image = formControl.Image,
                     LabelWidth = formControl.LabelWidth,
                     Placeholder = formControl.Placeholder,
-                    Name = property.Name
-                }); ;
+                    Name = property.Name,
+                    PropertyType = property.PropertyType
+                }); ; ;
                 index += 11;
-                //var formItem = (BFormItemObject)Activator.CreateInstance(formItemType);
-                //formItem.SetContent(property.Name, valueType, true, string.Empty);
-                //formItems.Add(formItem);
             }
             return formItems;
+        }
+
+        private IControlRender GetInputControlRender(Type controlType)
+        {
+            if (controlType == typeof(BDatePicker))
+            {
+                return this.provider.GetRequiredService<IDatePickerRender>();
+            }
+            var genericDefine = controlType.GetGenericTypeDefinition();
+            if (genericDefine == typeof(BInput<>))
+            {
+                return this.provider.GetRequiredService<IInputRender>();
+            }
+
+            if (genericDefine == typeof(BSwitch<>))
+            {
+                return this.provider.GetRequiredService<ISwitchRender>();
+            }
+            if (genericDefine.GetGenericTypeDefinition() == typeof(BSelect<>))
+            {
+                return this.provider.GetRequiredService<ISelectRender>();
+            }
+            throw new BlazuiException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
         }
     }
 }

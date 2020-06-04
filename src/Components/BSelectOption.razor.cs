@@ -16,6 +16,8 @@ namespace Blazui.Component
         public DropDownOption Option { get; set; }
 
         [Parameter]
+        public RenderFragment ChildContent { get; set; }
+        [Parameter]
         public TValue Value { get; set; }
 
         [Parameter]

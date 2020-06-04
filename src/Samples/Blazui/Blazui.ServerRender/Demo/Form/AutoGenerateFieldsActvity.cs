@@ -2,6 +2,7 @@
 
 
 using Blazui.Component;
+using Blazui.Component.ControlConfigs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,18 +19,19 @@ namespace Blazui.ServerRender.Demo.Form
         public Area Area { get; set; }
         [FormControl(Label = "日期")]
         public DateTime? Time { get; set; }
-        [FormControl(ControlType = typeof(BSwitch<bool>), Label = "即时配送")]
+        [FormControl(Label = "即时配送")]
         public bool Delivery { get; set; }
-        [FormControl(Label = "性质")]
-        public List<string> Type { get; set; }
         [FormControl(Label = "特殊资源")]
         public string Resource { get; set; }
         [FormControl(Label = "活动形式")]
         public string Description { get; set; }
 
+        [FormControl(Label = "附件")]
+        [Upload(Url = "/api/test/upload", Tip = "文件上传")]
+        public IFileModel[] Files { get; set; }
         public override string ToString()
         {
-            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，性质：{string.Join(",", Type)}，特殊资源：{Resource}，活动形式：{Description}";
+            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，特殊资源：{Resource}，活动形式：{Description}，附件：{string.Join("-", Files.Select(x => x.FileName))}";
         }
     }
 }

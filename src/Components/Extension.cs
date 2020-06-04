@@ -1,4 +1,6 @@
-﻿using Blazui.Component.Lang;
+﻿using Blazui.Component.ControlRender;
+using Blazui.Component.ControlRenders;
+using Blazui.Component.Lang;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,10 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
+            services.AddScoped<IInputRender, EmptyRender>();
+            services.AddScoped<ISelectRender, SelectRender>();
+            services.AddScoped<ISwitchRender, SwitchRender>();
+            services.AddScoped<IDatePickerRender, EmptyRender>();
             var httpClient = services.BuildServiceProvider().GetRequiredService<HttpClient>();
             var configuration = await SetLocaleAsync(httpClient, lang);
             services.AddSingleton(provider =>

@@ -68,9 +68,5 @@
 	  </Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="ControlInitilizers\" />
-	</ItemGroup>
-
 
 </Project>

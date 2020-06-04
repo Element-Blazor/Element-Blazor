@@ -21,6 +21,7 @@ namespace Blazui.Component
             }
             if (TypeHelper.Equal(FormItem.Value, value))
             {
+                FormItem.MarkAsRequireRender();
                 return;
             }
             Console.WriteLine($"设置 FormItem {Name} 值:" + value);

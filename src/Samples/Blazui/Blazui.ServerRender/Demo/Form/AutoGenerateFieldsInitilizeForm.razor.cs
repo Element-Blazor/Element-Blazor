@@ -24,24 +24,20 @@ namespace Blazui.ServerRender.Demo.Form
                 return;
             }
 
-            var activity = demoForm.GetValue<Activity>();
+            var activity = demoForm.GetValue<AutoGenerateFieldsActvity>();
             _ = MessageBox.AlertAsync(activity.ToString());
         }
 
         protected override void OnInitialized()
         {
-            value = new Activity()
+            value = new AutoGenerateFieldsActvity()
             {
                 Area = Area.Shanghai,
                 Delivery = true,
                 Description = "详情",
                 Name = "测试",
                 Resource = "场地",
-                Time = DateTime.Now,
-                Type = new List<string>()
-                 {
-                     "Offline","Online"
-                 }
+                Time = DateTime.Now
             };
         }
 

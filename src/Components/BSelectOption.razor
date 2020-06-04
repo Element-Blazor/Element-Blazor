@@ -2,4 +2,15 @@
 @{
     var isDisabled = IsDisabled ? "is-disabled" : string.Empty;
 }
-<li class="el-select-dropdown__item @isDisabled" @onclick="SelectItemAsync"><span>@Text</span></li>
+<li class="el-select-dropdown__item @isDisabled" @onclick="SelectItemAsync">
+    <span>
+        @if (!string.IsNullOrWhiteSpace(Text))
+        {
+            @Text
+        }
+        else
+        {
+            @ChildContent
+        }
+    </span>
+</li>

@@ -169,42 +169,42 @@
   {
     "name": "form",
     "demos": [
-      {
-        "title": "基础用法",
-        "name": "Form",
-        "files": [
-          "BasicForm.razor",
-          "BasicFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "行内表单",
-        "name": "Form",
-        "files": [
-          "InlineForm.razor",
-          "InlineFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "表单对齐",
-        "name": "Form",
-        "files": [
-          "AlignForm.razor",
-          "BasicFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "表单双向绑定",
-        "name": "Form",
-        "files": [
-          "InitilizeForm.razor",
-          "InitilizeFormBase.cs",
-          "Activity.cs"
-        ]
-      },
+      //{
+      //  "title": "基础用法",
+      //  "name": "Form",
+      //  "files": [
+      //    "BasicForm.razor",
+      //    "BasicFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "行内表单",
+      //  "name": "Form",
+      //  "files": [
+      //    "InlineForm.razor",
+      //    "InlineFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "表单对齐",
+      //  "name": "Form",
+      //  "files": [
+      //    "AlignForm.razor",
+      //    "BasicFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "表单双向绑定",
+      //  "name": "Form",
+      //  "files": [
+      //    "InitilizeForm.razor",
+      //    "InitilizeFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
       {
         "title": "隐藏表单项",
         "name": "Form",
