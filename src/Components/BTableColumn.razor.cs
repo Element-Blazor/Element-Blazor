@@ -11,7 +11,7 @@ namespace Blazui.Component
     {
         internal virtual bool IsCheckBox { get; set; }
         [Parameter]
-        public virtual int? Width { get; set; }
+        public virtual string? Width { get; set; }
 
         /// <summary>
         /// 排序编号
