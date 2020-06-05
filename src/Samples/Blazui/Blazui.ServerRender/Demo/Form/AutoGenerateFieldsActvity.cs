@@ -29,9 +29,13 @@ namespace Blazui.ServerRender.Demo.Form
         [FormControl(Label = "附件")]
         [Upload(Url = "/api/test/upload", Tip = "请传附件")]
         public IFileModel[] Files { get; set; }
+
+        [FormControl(Label = "密码")]
+        [Input(Type = InputType.Password)]
+        public string Password { get; set; } = "123456";
         public override string ToString()
         {
-            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，特殊资源：{Resource}，活动形式：{Description}，附件：{string.Join("-", Files.Select(x => x.FileName))}";
+            return $"名称：{Name},区域：{Area},日期：{Time?.ToString()}，即时配送：{Delivery}，特殊资源：{Resource}，活动形式：{Description}，附件：{string.Join("-", Files.Select(x => x.FileName))},密码：{Password})";
         }
     }
 }

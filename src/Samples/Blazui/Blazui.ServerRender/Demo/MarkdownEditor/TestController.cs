@@ -7,14 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender
+namespace Blazui.ServerRender.Demo.MarkdownEditor
 {
-    [Route("api/test")]
-    public class Test1Controller : ControllerBase
+    [Route("api/md")]
+    public class TestController : ControllerBase
     {
         [Route("upload")]
         [HttpPost]
-        public async Task<IActionResult> UploadAsync([FromForm]IFormFile fileContent)
+        public async Task<IActionResult> MarkdownUploadAsync([FromForm] IFormFile fileContent)
         {
             await Task.Delay(new Random().Next(1000));
             var ms = new MemoryStream();

@@ -36,7 +36,6 @@ namespace Blazui.ServerRender
             GlobalBlazuiSettings.DisableAnimation = true;
             services.AddMarkdown();
             services.AddSingleton<WeatherForecastService>();
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +58,7 @@ namespace Blazui.ServerRender
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default","api/{controller}/{action}");
+                endpoints.MapControllerRoute("default", "api/{controller}/{action}");
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

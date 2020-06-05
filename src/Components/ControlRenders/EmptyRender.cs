@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Blazui.Component.ControlRenders
 {
-    internal class EmptyRender : IControlRender, IInputRender, IDatePickerRender
+    internal class EmptyRender : IControlRender, IDatePickerRender
     {
         public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

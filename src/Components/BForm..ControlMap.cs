@@ -108,7 +108,7 @@ namespace Blazui.Component
                     Placeholder = formControl.Placeholder,
                     Name = property.Name,
                     PropertyType = property.PropertyType,
-                    Config = GetInputControlConfig(property)
+                    Config = GetInputControlConfig(property, controlType)
                 }); ; ;
                 index += 11;
             }
@@ -116,18 +116,22 @@ namespace Blazui.Component
         }
 
 
-        private object GetInputControlConfig(PropertyInfo propertyInfo)
+        private object GetInputControlConfig(PropertyInfo propertyInfo, Type controlType)
         {
-            if (propertyInfo.PropertyType != typeof(IFileModel[]))
+            if (propertyInfo.PropertyType == typeof(IFileModel[]))
             {
-                return null;
+                var uploadAttr = propertyInfo.GetCustomAttribute<UploadAttribute>();
+                if (uploadAttr == null)
+                {
+                    throw new BlazuiException("IFileModel[] 类型的属性必须标记 UploadAttribute 特性");
+                }
+                return uploadAttr;
             }
-            var uploadAttr = propertyInfo.GetCustomAttribute<UploadAttribute>();
-            if (uploadAttr == null)
+            if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(BInput<>))
             {
-                throw new BlazuiException("IFileModel[] 类型的属性必须标记 UploadAttribute 特性");
+                return propertyInfo.GetCustomAttribute<InputAttribute>();
             }
-            return uploadAttr;
+            return null;
         }
 
         private IControlRender GetInputControlRender(Type controlType)

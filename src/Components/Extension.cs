@@ -32,7 +32,7 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
-            services.AddScoped<IInputRender, EmptyRender>();
+            services.AddScoped<IInputRender, InputRender>();
             services.AddScoped<ISelectRender, SelectRender>();
             services.AddScoped<ISwitchRender, SwitchRender>();
             services.AddScoped<IDatePickerRender, EmptyRender>();
