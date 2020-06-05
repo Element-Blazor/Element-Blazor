@@ -26,13 +26,13 @@
 .blaz-layout {
     display: flex;
     flex-direction: column;
+    overflow:hidden
 }
 
     .blaz-layout > .blaz-layout-container {
         display: flex;
         height: 100%;
         border: lightgray 1px solid;
-        overflow:auto;
     }
 
         .blaz-layout > .blaz-layout-container > .blaz-layout-card {
