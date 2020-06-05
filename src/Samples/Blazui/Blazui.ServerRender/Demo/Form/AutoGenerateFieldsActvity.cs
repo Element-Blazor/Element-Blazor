@@ -27,7 +27,7 @@ namespace Blazui.ServerRender.Demo.Form
         public string Description { get; set; }
 
         [FormControl(Label = "附件")]
-        [Upload(Url = "/api/test/upload", Tip = "文件上传")]
+        [Upload(Url = "/api/test/upload", Tip = "请传附件")]
         public IFileModel[] Files { get; set; }
         public override string ToString()
         {

@@ -1,4 +1,5 @@
-﻿using Blazui.Component.ControlRender;
+﻿using Blazui.Component.ControlConfigs;
+using Blazui.Component.ControlRender;
 using Blazui.Component.ControlRenders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,7 +100,6 @@ namespace Blazui.Component
                     FormItem = formItemType,
                     IsRequired = formControl.IsRequired,
                     RequiredMessage = formControl.RequiredMessage,
-                    Index = index,
                     InputControl = controlType,
                     InputControlRender = GetInputControlRender(controlType),
                     Label = formControl.Label,
@@ -107,11 +107,27 @@ namespace Blazui.Component
                     LabelWidth = formControl.LabelWidth,
                     Placeholder = formControl.Placeholder,
                     Name = property.Name,
-                    PropertyType = property.PropertyType
+                    PropertyType = property.PropertyType,
+                    Config = GetInputControlConfig(property)
                 }); ; ;
                 index += 11;
             }
             return formItems;
+        }
+
+
+        private object GetInputControlConfig(PropertyInfo propertyInfo)
+        {
+            if (propertyInfo.PropertyType != typeof(IFileModel[]))
+            {
+                return null;
+            }
+            var uploadAttr = propertyInfo.GetCustomAttribute<UploadAttribute>();
+            if (uploadAttr == null)
+            {
+                throw new BlazuiException("IFileModel[] 类型的属性必须标记 UploadAttribute 特性");
+            }
+            return uploadAttr;
         }
 
         private IControlRender GetInputControlRender(Type controlType)
@@ -119,6 +135,14 @@ namespace Blazui.Component
             if (controlType == typeof(BDatePicker))
             {
                 return this.provider.GetRequiredService<IDatePickerRender>();
+            }
+            if (controlType == typeof(BUpload))
+            {
+                return this.provider.GetRequiredService<IUploadRender>();
+            }
+            if (!controlType.IsGenericType)
+            {
+                throw new BlazuiException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
             }
             var genericDefine = controlType.GetGenericTypeDefinition();
             if (genericDefine == typeof(BInput<>))

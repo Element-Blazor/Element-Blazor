@@ -36,6 +36,7 @@ namespace Blazui.Component
             services.AddScoped<ISelectRender, SelectRender>();
             services.AddScoped<ISwitchRender, SwitchRender>();
             services.AddScoped<IDatePickerRender, EmptyRender>();
+            services.AddScoped<IUploadRender, UploadRender>();
             var httpClient = services.BuildServiceProvider().GetRequiredService<HttpClient>();
             var configuration = await SetLocaleAsync(httpClient, lang);
             services.AddSingleton(provider =>
