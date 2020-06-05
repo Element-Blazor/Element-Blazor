@@ -32,6 +32,7 @@
         display: flex;
         height: 100%;
         border: lightgray 1px solid;
+        overflow:auto;
     }
 
         .blaz-layout > .blaz-layout-container > .blaz-layout-card {
@@ -58,6 +59,7 @@
             display: flex;
             min-height: 0;
             flex-direction: column;
+            overflow: auto
         }
 
             .blaz-layout > .blaz-layout-container > .blaz-layout-center > .el-tabs.el-tabs--card.el-tabs--top {

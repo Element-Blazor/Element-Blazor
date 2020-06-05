@@ -24,14 +24,14 @@
                 @North
             </div>
         }
-        <div class="blaz-layout-container">
+        <div class="blaz-layout-container" style="@layoutCssBuilder">
             @if (West != null)
             {
                 <div class="blaz-layout-west blaz-layout-card" style="width:@(WestWidth)px">
                     @West
                 </div>
             }
-            <div class="blaz-layout-center blaz-layout-card">
+            <div class="blaz-layout-center blaz-layout-card"  style="@layoutCssBuilder">
                 @if (Center != null)
                 {
                     @Center
