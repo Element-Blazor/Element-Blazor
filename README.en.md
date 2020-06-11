@@ -61,7 +61,8 @@ Fork a copy of the code to its own repository, and then pull out a new branch ba
 
 https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 
-## Change log### Version 0.0.7.3, 2020.05.06 Published
+## Change log
+### Version 0.0.7.3, 2020.05.06 Published
 1. Add keyboard event of BLayout component
 2. ``Extension`` class multi-language is empty by default to solve the error report
     
