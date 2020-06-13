@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Blazui.Admin.Sample.ClientRender.PWA</title>
+    <base href="/" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
+    <link href="/_content/Blazui.Admin/css/admin.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
+    <link href="manifest.json" rel="manifest" />
+</head>
+
+<body>
+    <app>Loading...</app>
+
+    <script src="/_content/Blazui.Component/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/addons.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
+    <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/dom.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+</body>
+
+</html>

@@ -122,7 +122,7 @@ namespace Blazui.Admin
             FixMenuInfo(Menus);
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
-            username = user.Identity.Name;
+            username = user?.Identity?.Name;
             NavigationManager.LocationChanged -= NavigationManager_LocationChanged;
             NavigationManager.LocationChanged += NavigationManager_LocationChanged;
 
