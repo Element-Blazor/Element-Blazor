@@ -87,15 +87,15 @@ namespace Blazui.Admin.ServerRender
             return string.Empty;
         }
 
-        public override List<RoleModel> GetRoles()
+        public override async Task<List<RoleModel>> GetRolesAsync()
         {
-            var roles = RoleManager.Roles.Select(x => new RoleModel()
+            var roles =await RoleManager.Roles.Select(x => new RoleModel()
             {
                 Name = x.Name,
                 Id = x.Id,
-            }).ToList();
+            }).ToListAsync();
             var roleIds = roles.Select(x => x.Id).ToArray();
-            var resources = DbContext.Set<RoleResource>().Where(x => roleIds.Contains(x.RoleId)).ToArray();
+            var resources =await DbContext.Set<RoleResource>().Where(x => roleIds.Contains(x.RoleId)).ToArrayAsync();
             foreach (var role in roles)
             {
                 role.Resources = resources.Where(x => x.RoleId == role.Id).Select(x => x.ResourceId).ToList();

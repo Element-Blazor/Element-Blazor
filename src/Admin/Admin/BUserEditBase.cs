@@ -19,11 +19,11 @@ namespace Blazui.Admin
         [Parameter]
         public DialogOption Dialog { get; set; }
         private bool isCreate = false;
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            base.OnInitialized();
+            await base.OnInitializedAsync();
             isCreate = EditingUser == null;
-            RoleItems = UserService.GetRoles().Select(x => new TransferItem()
+            RoleItems = (await UserService.GetRolesAsync()).Select(x => new TransferItem()
             {
                 Id = x.Id,
                 Label = x.Name

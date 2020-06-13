@@ -251,7 +251,7 @@ namespace Blazui.Admin.ServerRender
             return string.Empty;
         }
 
-        public abstract List<RoleModel> GetRoles();
+        public abstract Task<List<RoleModel>> GetRolesAsync();
 
         public abstract string GetRolesWithResources(params string[] resources);
 

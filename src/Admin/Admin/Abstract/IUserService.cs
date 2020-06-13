@@ -14,7 +14,7 @@ namespace Blazui.Admin.Abstract
         Task<string> UpdateUserAsync(UserModel userModel);
         Task<string> UpdateRoleAsync(RoleModel roleModel);
         Task<string> AddToRoleAsync(string username, params string[] roles);
-        List<RoleModel> GetRoles();
+        Task<List<RoleModel>> GetRolesAsync();
         Task<List<RoleModel>> GetRolesAsync(string userId);
         Task<string> DeleteUsersAsync(params string[] userIds);
         ValueTask<bool> IsRequireInitilizeAsync();

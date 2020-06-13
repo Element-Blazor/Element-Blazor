@@ -31,17 +31,16 @@ namespace Blazui.Admin
             await RefreshRolesAsync();
         }
 
-        private Task RefreshRolesAsync()
+        private async Task RefreshRolesAsync()
         {
             if (table == null)
             {
-                return Task.CompletedTask;
+                return;
             }
-            RoleModels = UserService.GetRoles();
+            RoleModels =await UserService.GetRolesAsync();
             table.MarkAsRequireRender();
             RequireRender = true;
             StateHasChanged();
-            return Task.CompletedTask;
         }
 
         public async Task EditAsync(object role)
