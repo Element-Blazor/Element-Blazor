@@ -15,7 +15,7 @@ namespace Blazui.Admin
         [Parameter]
         public UserModel EditingUser { get; set; }
 
-        internal List<TransferItem> RoleItems;
+        internal List<TransferItem> RoleItems { get; set; }
         [Parameter]
         public DialogOption Dialog { get; set; }
         private bool isCreate = false;
@@ -28,6 +28,7 @@ namespace Blazui.Admin
                 Id = x.Id,
                 Label = x.Name
             }).ToList();
+            form.Reset();
         }
         public async System.Threading.Tasks.Task SubmitAsync()
         {

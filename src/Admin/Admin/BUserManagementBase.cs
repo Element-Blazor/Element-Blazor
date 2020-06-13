@@ -72,7 +72,7 @@ namespace Blazui.Admin
                 return;
             }
             var result = await UserService.DeleteUsersAsync(((UserModel)user).Id);
-            if (string.IsNullOrWhiteSpace(result))
+            if (!string.IsNullOrWhiteSpace(result))
             {
                 return;
             }

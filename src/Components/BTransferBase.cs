@@ -138,15 +138,15 @@ namespace Blazui.Component
         private void ResetList2(object value)
         {
             var valueList = (List<string>)value;
-            List1.AddRange(List2);
+            List1?.AddRange(List2);
             if (valueList == null)
             {
                 List2.Clear();
             }
             else
             {
-                List2 = List1.Where(x => valueList.Contains(x.Id)).ToList();
-                List1.RemoveAll(List2.Contains);
+                List2 = List1?.Where(x => valueList.Contains(x.Id))?.ToList();
+                List1?.RemoveAll(List2.Contains);
             }
             List1Status = Status.UnChecked;
             List2Status = Status.UnChecked;
