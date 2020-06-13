@@ -10,7 +10,7 @@
         <BInput TValue="string"></BInput>
     </BFormItem>
     <BFormItem TValue="List<string>" EnableAlwaysRender="true" Label="角色权限" Name="@nameof(UserModel.RoleIds)">
-        <BTransfer List1="RoleItems" EnableAlwaysRender="true" LeftTitle="所有角色" RightTitle="所属角色">
+        <BTransfer @ref="btransfer" List1="RoleItems" EnableAlwaysRender="true" LeftTitle="所有角色" RightTitle="所属角色">
         </BTransfer>
     </BFormItem>
     @if (User == null)

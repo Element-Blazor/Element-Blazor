@@ -12,6 +12,7 @@ namespace Blazui.Admin
     public class BUserEditBase : BAdminPageBase
     {
         internal BForm form;
+        internal BTransfer btransfer;
         [Parameter]
         public UserModel EditingUser { get; set; }
 
@@ -23,6 +24,11 @@ namespace Blazui.Admin
         {
             await base.OnInitializedAsync();
             isCreate = EditingUser == null;
+           
+        }
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
             RoleItems = (await UserService.GetRolesAsync()).Select(x => new TransferItem()
             {
                 Id = x.Id,
