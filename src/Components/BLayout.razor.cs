@@ -44,6 +44,13 @@ namespace Blazui.Component
         /// </summary>
         public ElementReference Container { get; set; }
 
+        internal HtmlPropertyBuilder layoutCssBuilder;
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            layoutCssBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(Fit, "height:calc(100vh)").Add(Style);
+        }
+
         /// <summary>
         /// 键按下时触发
         /// </summary>
