@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Blazui.Component.ControlConfigs
 {
-    public class InputAttribute : Attribute
+    public class InputAttribute : BaseAttribute
     {
         /// <summary>
         /// 输入框类型
@@ -19,7 +19,7 @@ namespace Blazui.Component.ControlConfigs
         /// <summary>
         /// Placeholder
         /// </summary>
-        public virtual string Placeholder { get; set; } = "请输入内容";
+        public string Placeholder { get; set; } = "请输入内容";
 
         /// <summary>
         /// 是否禁用输入框

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Blazui.Component
 {
-    internal class FormItemConfig
+    public class FormItemConfig
     {
         public Type FormItem { get; set; }
         public bool IsRequired { get; set; }
@@ -18,7 +18,6 @@ namespace Blazui.Component
         public string Placeholder { get; internal set; }
         public string Name { get; internal set; }
         public Type PropertyType { get; set; }
-
         public object Config { get; set; }
     }
 }

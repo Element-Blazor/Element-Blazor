@@ -24,6 +24,8 @@ namespace Blazui.Component.ControlRenders
                 renderTreeBuilder.AddAttribute(5, nameof(inputConfig.PrefixIcon), inputConfig.PrefixIcon);
                 renderTreeBuilder.AddAttribute(6, nameof(inputConfig.SuffixIcon), inputConfig.SuffixIcon);
                 renderTreeBuilder.AddAttribute(7, nameof(inputConfig.Type), inputConfig.Type);
+                renderTreeBuilder.AddAttribute(8, nameof(inputConfig.Image), inputConfig.Image);
+                renderTreeBuilder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
             }
             renderTreeBuilder.CloseComponent();
         }

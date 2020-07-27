@@ -31,6 +31,12 @@ namespace Blazui.Component
         public EventCallback<bool> EnableClearButtonChanged { get; set; }
 
         /// <summary>
+        /// 按钮背景图片
+        /// </summary>
+        [Parameter]
+        public string Image { get; set; }
+
+        /// <summary>
         /// 输入框尺寸
         /// </summary>
         [Parameter]

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Blazui.Component.ControlRender
 {
-    interface IControlRender
+    public interface IControlRender
     {
         object Data { get; set; }
         void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig config);

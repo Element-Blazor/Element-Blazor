@@ -65,7 +65,8 @@ namespace Blazui.Component
                 Width = column.Width,
                 IsCheckBox = column.IsCheckBox,
                 Template = column.ChildContent,
-                Format = column.Format
+                Format = column.Format,
+                IsTree = column.IsTree
             };
             Table.Headers.Add(columnConfig);
         }

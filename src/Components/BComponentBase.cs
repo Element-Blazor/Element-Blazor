@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
@@ -37,9 +38,6 @@ namespace Blazui.Component
         [Inject]
         public LoadingService LoadingService { get; set; }
 
-        [Inject]
-        protected BLang Lang { get; set; }
-
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }
 
@@ -57,15 +55,6 @@ namespace Blazui.Component
         [Parameter]
         public string Style { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 获取国际化的文本
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public string T(string text)
-        {
-            return Lang.T(text);
-        }
         /// <summary>
         /// 弹出 Alert 消息
         /// </summary>
@@ -86,7 +75,7 @@ namespace Blazui.Component
         /// <summary>
         /// 默认情况下所有复杂组件都只进行一次渲染，该方法将组件置为需要再次渲染
         /// </summary>
-        public void MarkAsRequireRender()
+        public virtual void MarkAsRequireRender()
         {
             RequireRender = true;
         }
@@ -94,6 +83,10 @@ namespace Blazui.Component
         public void Toast(string text)
         {
             MessageService.Show(text);
+        }
+        public void Toast(string text, MessageType type)
+        {
+            MessageService.Show(text, type);
         }
         public async Task<MessageBoxResult> AlertAsync(string text)
         {
@@ -111,6 +104,7 @@ namespace Blazui.Component
             {
                 return;
             }
+
             if (OnRenderCompleted != null)
             {
                 await OnRenderCompleted(this);
@@ -118,7 +112,7 @@ namespace Blazui.Component
             RequireRender = false;
         }
 
-        public void Refresh()
+        public virtual void Refresh()
         {
             StateHasChanged();
         }

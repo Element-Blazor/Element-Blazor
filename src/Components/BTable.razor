@@ -1,4 +1,4 @@
-﻿@inherits BComponentBase
+﻿@inherits BFieldComponentBase<IDictionary<string, string>>
 @{
     var styles = new List<string>();
     var tableClsList = new List<string>();
@@ -27,7 +27,7 @@
             Headers = Headers.OrderBy(x => x.SortNo).ToList();
             var validColumnCount = Headers.Count();
             <div class="el-table__header-wrapper" @ref="headerElement">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header"  width="100%">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -72,7 +72,7 @@
                 bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
             }
             <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body"  width="100%">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -95,7 +95,17 @@
                                 clsList.Add("el-table__row--striped");
                             }
                             var row = rows.ElementAt(i);
-                            <tr @key="row" class="@string.Join(" ", clsList)">
+                            if (hiddenRows.Contains(row))
+                            {
+                                continue;
+                            }
+                            var treeRow = row as ITreeItem;
+                            if (treeRow != null)
+                            {
+                                clsList.Add("el-table__row--level-0");
+                            }
+                            var rowId = treeRow?.Id ?? 0;
+                            <tr @key="row" class="@string.Join(" ", clsList)" @ondblclick="e=>BeginEdit(row)" @onkeyup="SaveTableAsync">
                                 @if (HasSelectionColumn)
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
@@ -107,28 +117,110 @@
                                 @for (int j = 1; j <= Headers.Count; j++)
                                 {
                                     var header = Headers.ElementAt(j - 1);
-                                    <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
-                                        <div class="cell">
-                                            @if (header.IsCheckBox)
-                                            {
-                                                <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
-                                            }
-                                            else if (header.Template != null)
-                                            {
-                                                @header.Template(row)
-                                            }
-                                            else if (header.Eval != null)
-                                            {
-                                                @header.Eval(row)
-                                            }
-                                        </div>
-                                    </td>
+                                    if (header.IsTree)
+                                    {
+                                        if (treeRow == null)
+                                        {
+                                            throw new BlazuiException("BTableTreeColumn 要求实体实现 ITreeItem 接口");
+                                        }
+                                        var hasChild = treeRow.HasChildren || rows.Cast<ITreeItem>().Any(x => x.ParentId == rowId);
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                            <div class="cell">
+                                                @if (hasChild)
+                                                {
+                                                    <span class="el-table__indent" style="padding-left: @(treeRow.Level*16)px;"></span>
+                                                    <div class="el-table__expand-icon el-table__expand-icon--expanded" @onclick="e=>ToggleTreeAsync(row)">
+                                                        @if (treeRow.IsLoading)
+                                                        {
+                                                            <i class="el-icon-loading"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="el-icon-arrow-@(treeRow.Direction ?? "right")"></i>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="el-table__indent" style="padding-left: @((treeRow.Level+1)*16)px;"></span>
+                                                }
+                                                @if (header.Template != null)
+                                                {
+                                                    @header.Template(row)
+                                                }
+                                                else if (header.Eval != null)
+                                                {
+                                                    @header.Eval(row)
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                            <div class="cell">
+                                                @if (row == editingRow && header.Property != null)
+                                                {
+                                                    @if (!header.IsCheckBox)
+                                                    {
+                                                        var text = header.Property.GetValue(row);
+                                                        switch (header.Property.Name)
+                                                        {
+                                                            case "Key":
+                                                                txtKey = string.IsNullOrWhiteSpace(txtKey) ? text?.ToString() : txtKey;
+                                                                <BInput @bind-Value="txtKey"></BInput>
+                                                                break;
+                                                            case "Value":
+                                                                txtValue = txtValue ?? text?.ToString();
+                                                                <BInput @bind-Value="txtValue"></BInput>
+                                                                break;
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (header.IsCheckBox)
+                                                    {
+                                                        <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
+                                                    }
+                                                    else if (header.Template != null)
+                                                    {
+                                                        @header.Template(row)
+                                                    }
+                                                    else if (header.Eval != null)
+                                                    {
+                                                        @header.Eval(row)
+                                                    }
+                                                }
+                                            </div>
+                                        </td>
+                                    }
                                 }
+                            </tr>
+                        }
+                        @if (IsEditable && editingRow == null)
+                        {
+                            <tr @onkeyup="SaveTableAsync">
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+
+                                    </div>
+                                </td>
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+                                        <BInput @bind-Value="txtKey"></BInput>
+                                    </div>
+                                </td>
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+                                        <BInput @bind-Value="txtValue"></BInput>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                @if (rows.Count <= 0)
+                @if (rows.Count <= 0 && !IsEditable)
                 {
                     <div class="el-table__empty-block" style="height:60px;">
                         <span class="el-table__empty-text">

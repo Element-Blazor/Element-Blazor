@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,8 +10,7 @@ namespace Blazui.Component
 {
     public class DialogService
     {
-        internal ObservableCollection<DialogOption> Dialogs = new ObservableCollection<DialogOption>();
-
+        internal static ObservableCollection<DialogOption> Dialogs = new ObservableCollection<DialogOption>();
 
         /// <summary>
         /// 关闭对话框
@@ -132,6 +132,36 @@ namespace Blazui.Component
             };
         }
 
+
+        /// <summary>
+        /// 显示一个非模态的层到指定位置
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="type">要显示的内容，可以是一个组件的 <seealso cref="Type"/></param>
+        /// <param name="width">宽度</param>
+        /// <param name="parameters">显示该组件所需要的参数</param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public async Task<DialogResult<TResult>> ShowLayerAsync<TResult>(object type, float width, IDictionary<string, object> parameters, PointF point)
+        {
+            var taskCompletionSource = new TaskCompletionSource<DialogResult>();
+            var option = new DialogOption()
+            {
+                Content = type,
+                IsDialog = false,
+                IsModal = false,
+                Width = width,
+                Parameters = parameters,
+                TaskCompletionSource = taskCompletionSource,
+                Point = point
+            };
+            ShowDialog(option);
+            var dialogResult = await taskCompletionSource.Task;
+            return new DialogResult<TResult>()
+            {
+                Result = (TResult)dialogResult.Result
+            };
+        }
 
         /// <summary>
         /// 显示一个窗口

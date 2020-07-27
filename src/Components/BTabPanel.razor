@@ -20,7 +20,7 @@
     var tabPosition = position.tabPosition;
     var isClosableCls = IsClosable ? "is-closable" : string.Empty;
 }
-<div @ref="Element" id="tab-@name" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
+<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
     @Title
     @if (IsClosable)
     {

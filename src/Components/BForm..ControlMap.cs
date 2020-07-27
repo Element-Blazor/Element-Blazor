@@ -4,6 +4,7 @@ using Blazui.Component.ControlRenders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -30,6 +31,18 @@ namespace Blazui.Component
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool), typeof(BSwitch<bool>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool?), typeof(BSwitch<bool?>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(List<string>), typeof(BSelect<string>));
+            fieldsControlMap.Add(property =>
+            {
+                if (property.PropertyType == typeof(IDictionary<string, string>))
+                {
+                    return true;
+                }
+                if (property.PropertyType == typeof(Dictionary<string, string>))
+                {
+                    return true;
+                }
+                return false;
+            }, typeof(BTable));
             fieldsControlMap.Add(property =>
             {
                 if (property.PropertyType.IsEnum)
@@ -127,15 +140,31 @@ namespace Blazui.Component
                 }
                 return uploadAttr;
             }
-            if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(BInput<>))
+            if (!propertyInfo.PropertyType.IsGenericType)
             {
-                return propertyInfo.GetCustomAttribute<InputAttribute>();
+                if (controlType.GetGenericTypeDefinition() == typeof(BInput<>))
+                {
+                    return propertyInfo.GetCustomAttribute<InputAttribute>();
+                }
+                if (controlType.GetGenericTypeDefinition() == typeof(BCheckBox<>))
+                {
+                    return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new BlazuiException($"复选框组件所对应的属性必须标记 {nameof(CheckBoxAttribute)} 特性");
+                }
+            }
+            if (propertyInfo.PropertyType == typeof(IDictionary<string, string>)
+                || propertyInfo.PropertyType == typeof(Dictionary<string, string>))
+            {
+                return propertyInfo.GetCustomAttribute<TableAttribute>();
             }
             return null;
         }
 
         private IControlRender GetInputControlRender(Type controlType)
         {
+            if (controlType == typeof(BTable))
+            {
+                return this.provider.GetRequiredService<ITableRender>();
+            }
             if (controlType == typeof(BDatePicker))
             {
                 return this.provider.GetRequiredService<IDatePickerRender>();
@@ -146,12 +175,21 @@ namespace Blazui.Component
             }
             if (!controlType.IsGenericType)
             {
+                if (controlType == typeof(BCheckBox<>))
+                {
+                    return this.provider.GetRequiredService<ICheckBoxRender>();
+                }
                 throw new BlazuiException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
             }
             var genericDefine = controlType.GetGenericTypeDefinition();
             if (genericDefine == typeof(BInput<>))
             {
                 return this.provider.GetRequiredService<IInputRender>();
+            }
+
+            if (genericDefine == typeof(BCheckBox<>))
+            {
+                return this.provider.GetRequiredService<ICheckBoxRender>();
             }
 
             if (genericDefine == typeof(BSwitch<>))

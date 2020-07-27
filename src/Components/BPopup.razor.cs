@@ -214,6 +214,8 @@ namespace Blazui.Component
 
         private void Dialogs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            Console.WriteLine("Dialogs_CollectionChanged");
+            Console.WriteLine(e.Action.ToString());
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 var option = e.NewItems.OfType<DialogOption>().FirstOrDefault();
@@ -610,31 +612,36 @@ namespace Blazui.Component
                 }
                 return;
             }
-            await style.SetAsync("opacity", "0");
+            if (option.Point != System.Drawing.Point.Empty)
+            {
+                await style.SetAsync("opacity", "0");
+            }
             await style.SetAsync("position", "absolute");
             if (option.IsDialog)
             {
                 await style.ClearAsync("margin-top");
                 await style.SetAsync("position", $"absolute");
             }
-            await style.SetAsync("left", $"{left}px");
-            await style.SetAsync("top", $"{top - 10}px");
-            await style.SetTransitionAsync("top 0.3s,opacity 0.3s");
-            await Task.Delay(100);
-            await style.SetAsync("opacity", "1");
-            await style.SetAsync("top", $"{top}px");
-            if (ShadowCount++ <= 0)
+            if (option.Point == System.Drawing.Point.Empty)
             {
-                await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0.5");
+                await style.SetAsync("left", $"{left}px");
+                await style.SetAsync("top", $"{top - 10}px");
+                await style.SetTransitionAsync("top 0.3s,opacity 0.3s");
+                await Task.Delay(100);
+                await style.SetAsync("top", $"{top}px");
+                if (ShadowCount++ <= 0)
+                {
+                    await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0.5");
+                }
+                await Task.Delay(500);
+                if (!option.IsDialog)
+                {
+                    await style.ClearAsync("position");
+                    await style.ClearAsync("top");
+                    await style.ClearAsync("left");
+                }
+                await style.ClearAsync("transition");
             }
-            await Task.Delay(500);
-            if (!option.IsDialog)
-            {
-                await style.ClearAsync("position");
-                await style.ClearAsync("top");
-                await style.ClearAsync("left");
-            }
-            await style.ClearAsync("transition");
         }
 
         async Task ShowFullScreenLoadingAsync(LoadingOption option)

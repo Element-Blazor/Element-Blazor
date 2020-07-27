@@ -10,6 +10,10 @@
     line-height: 0 !important;
 }
 
+.el-table th, .el-table tr {
+    width: 100%;
+}
+
 *::-webkit-scrollbar,
 *::-webkit-scrollbar-thumb {
     width: 10px;
@@ -147,3 +151,81 @@
 .el-table__header-wrapper {
     display: flex;
 }
+
+div.blazor-ribbon {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+    div.blazor-ribbon > div.blazor-tabs {
+        display: flex;
+        flex-direction: column;
+    }
+
+    div.blazor-ribbon > div.blazor-body {
+        flex: 1;
+        align-items: center;
+        display: flex;
+        align-self: center;
+    }
+
+    div.blazor-ribbon .el-tabs--border-card {
+        flex: 1;
+        background-color: #F5F6F7;
+    }
+
+    div.blazor-ribbon > div.blazor-tabs i[class*=" el-icon-"], div.blazor-ribbon > div.blazor-tabs i[class^=el-icon-] {
+        font-size: 32px;
+        display: block;
+    }
+
+    div.blazor-ribbon > div.blazor-tabs .blazor-block-header {
+        font-size: 14px;
+        text-align: center;
+        clear: both;
+    }
+
+    div.blazor-ribbon > div.blazor-tabs .blazor-block-body {
+        text-align: center;
+        font-size: 14px;
+        display: flex;
+    }
+
+    div.blazor-ribbon > div.blazor-tabs .blazor-block {
+        min-width: 100px;
+        font-size: 14px;
+        float: left;
+    }
+
+    div.blazor-ribbon > div.blazor-tabs .blazor-ribbon-item {
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        border: 1px solid transparent;
+    }
+
+        div.blazor-ribbon > div.blazor-tabs .blazor-ribbon-item:hover {
+            background-color: #E8EFF7;
+            border: 1px solid #A4CEF9;
+        }
+
+        div.blazor-ribbon > div.blazor-tabs .blazor-ribbon-item:active {
+            background-color: lightblue;
+            border: 1px solid darkblue;
+        }
+
+    div.blazor-ribbon > div.blazor-tabs .el-tabs--border-card > .el-tabs__content {
+        cursor: default;
+        padding-top: 5px;
+    }
+
+    div.blazor-ribbon div.blazor-block {
+        border-right: 1px solid lightgray;
+    }
+
+        div.blazor-ribbon div.blazor-block:last-child {
+            border-right: 1px solid transparent;
+        }

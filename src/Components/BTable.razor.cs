@@ -2,16 +2,25 @@
 
 
 
+using Blazui.Component.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Dynamic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
@@ -20,13 +29,27 @@ namespace Blazui.Component
     {
         internal BCheckBox<bool> chkAll;
         internal ElementReference headerElement;
+        private object editingRow;
         internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
         internal bool headerInitilized = false;
         internal bool headerRendered = false;
         private IDictionary<BCheckBox<bool>, object> rowCheckBoxses = new Dictionary<BCheckBox<bool>, object>();
         internal int headerHeight = 49;
-
+        private string txtKey;
+        private string txtValue;
         internal List<object> rows = new List<object>();
+        internal List<object> hiddenRows = new List<object>();
+
+        [Inject]
+        private HttpClient httpClient { get; set; }
+
+
+        /// <summary>
+        /// 表格可编辑
+        /// </summary>
+        [Parameter]
+        public bool IsEditable { get; set; }
+
         /// <summary>
         /// 忽略的字段名称
         /// </summary>
@@ -34,11 +57,32 @@ namespace Blazui.Component
         public string[] IgnoreProperties { get; set; } = { };
 
         /// <summary>
+        /// 数据获取地址
+        /// </summary>
+        [Parameter]
+        public string Url { get; set; }
+
+        /// <summary>
+        /// 懒加载时该参数的值将作为名称传给服务器，这个参数代表了点击的节点的ID
+        /// </summary>
+        [Parameter]
+        public string NodeIdParameterName { get; set; }
+        /// <summary>
         /// 数据源
         /// </summary>
         [Parameter]
         public object DataSource { get; set; }
-        internal Type DataType { get; set; }
+
+        /// <summary>
+        /// 当数据源发生变化时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback<object> DataSourceChanged { get; set; }
+        /// <summary>
+        /// 动态加载数据时设置实体类型
+        /// </summary>
+        [Parameter]
+        public Type DataType { get; set; }
 
         /// <summary>
         /// 是否自动生成列
@@ -200,6 +244,21 @@ namespace Blazui.Component
                 await (OnRenderCompleted?.Invoke(this) ?? Task.CompletedTask);
                 return;
             }
+            if (!string.IsNullOrWhiteSpace(Url))
+            {
+                DataSource = await httpClient.GetFromJsonAsync(Url, typeof(List<>).MakeGenericType(DataType));
+                if (DataSourceChanged.HasDelegate)
+                {
+                    await DataSourceChanged.InvokeAsync(DataSource);
+                }
+
+                if (FormItem != null)
+                {
+                    var dyncmicDataSource = (List<KeyValueModel>)DataSource;
+                    SetFieldValue(dyncmicDataSource.ToDictionary(x => x.Key, x => x.Value), true);
+                }
+            }
+            InitlizeDataSource(0, "up");
             headerRendered = true;
             RequireRender = true;
             StateHasChanged();
@@ -210,62 +269,284 @@ namespace Blazui.Component
             await base.SetParametersAsync(parameters);
             if (parameters.GetValueOrDefault<object>(nameof(DataSource)) != null)
             {
-                rows = (DataSource as IEnumerable).Cast<object>().ToList();
-                DataType = DataSource.GetType().GetGenericArguments()[0];
-                if (AutoGenerateColumns && !headerInitilized)
-                {
-                    headerInitilized = true;
-                    DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
-                    {
-                        if (Headers.Any(x => x.Property?.Name == property.Name))
-                        {
-                            return;
-                        }
-                        var attrs = property.GetCustomAttributes(true);
-                        var columnConfig = attrs.OfType<TableColumnAttribute>().FirstOrDefault() ?? new TableColumnAttribute()
-                        {
-                            Text = property.Name
-                        };
-
-                        if (columnConfig.Ignore)
-                        {
-                            return;
-                        }
-                        Headers.Insert(0, new TableHeader()
-                        {
-                            Eval = row =>
-                            {
-                                var value = property.GetValue(row);
-                                if (string.IsNullOrWhiteSpace(columnConfig.Format))
-                                {
-                                    return value;
-                                }
-                                if (value == null)
-                                {
-                                    return null;
-                                }
-
-                                try
-                                {
-                                    return Convert.ToDateTime(value).ToString(columnConfig.Format);
-                                }
-                                catch (InvalidCastException)
-                                {
-                                    throw new BlazuiException("仅日期列支持 Format 参数");
-                                }
-                            },
-                            SortNo = columnConfig.SortNo,
-                            IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
-                            Property = property,
-                            Text = columnConfig.Text,
-                            Width = columnConfig.Width
-                        });
-                    }
-                     );
-                }
-                chkAll?.MarkAsRequireRender();
-                ResetSelectAllStatus();
+                InitlizeDataSource(0, string.Empty);
+                return;
             }
+        }
+
+        private void InitlizeDataSource(int level, string direction)
+        {
+            if (DataSource != null)
+            {
+                rows = (DataSource as IEnumerable).Cast<object>().ToList();
+                if (string.IsNullOrWhiteSpace(Url))
+                {
+                    if (rows.Any(x => x is ITreeItem))
+                    {
+                        var rootLevels = rows.Cast<ITreeItem>().Where(x => x.ParentId == 0).ToList();
+                        CalculateLevel(rootLevels, -1, rows.Cast<ITreeItem>().ToArray());
+                    }
+                    DataType = DataSource.GetType().GetGenericArguments()[0];
+                }
+                else
+                {
+                    rows.Clear();
+                    foreach (ITreeItem item in (DataSource as IEnumerable))
+                    {
+                        if (item.Level == null)
+                        {
+                            item.Level = level;
+                            item.Direction = direction;
+                        }
+                        Console.WriteLine(item.ToString());
+                        rows.Add(item);
+                    }
+
+                }
+            }
+            if (AutoGenerateColumns && !headerInitilized)
+            {
+                headerInitilized = true;
+                DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
+                {
+                    if (Headers.Any(x => x.Property?.Name == property.Name))
+                    {
+                        return;
+                    }
+                    var attrs = property.GetCustomAttributes(true);
+                    var columnConfig = attrs.OfType<TableColumnAttribute>().FirstOrDefault() ?? new TableColumnAttribute()
+                    {
+                        Text = property.Name
+                    };
+
+                    if (columnConfig.Ignore)
+                    {
+                        return;
+                    }
+                    Headers.Insert(0, new TableHeader()
+                    {
+                        Eval = row =>
+                        {
+                            var value = property.GetValue(row);
+                            if (string.IsNullOrWhiteSpace(columnConfig.Format))
+                            {
+                                return value;
+                            }
+                            if (value == null)
+                            {
+                                return null;
+                            }
+
+                            try
+                            {
+                                return Convert.ToDateTime(value).ToString(columnConfig.Format);
+                            }
+                            catch (InvalidCastException)
+                            {
+                                throw new BlazuiException("仅日期列支持 Format 参数");
+                            }
+                        },
+                        SortNo = columnConfig.SortNo,
+                        IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
+                        Property = property,
+                        Text = columnConfig.Text,
+                        Width = columnConfig.Width
+                    });
+                }
+                 );
+            }
+            chkAll?.MarkAsRequireRender();
+            ResetSelectAllStatus();
+        }
+
+        private void CalculateLevel(List<ITreeItem> treeItems, int parentLevel, ITreeItem[] allTreeItems)
+        {
+            foreach (var treeRow in treeItems)
+            {
+                if (treeRow.Level != null)
+                {
+                    return;
+                }
+                treeRow.Level = parentLevel + 1;
+                var children = allTreeItems.Where(x => x.ParentId == treeRow.Id).ToList();
+                CalculateLevel(children, treeRow.Level.Value, allTreeItems);
+            }
+        }
+
+        private async Task SaveTableAsync(KeyboardEventArgs e)
+        {
+            if (e.Code != "Enter")
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtKey))
+            {
+                return;
+            }
+            txtKey = txtKey.Trim();
+            var keyValueModels = (List<KeyValueModel>)DataSource;
+            if (keyValueModels == null)
+            {
+                DataSource = keyValueModels = new List<KeyValueModel>();
+            }
+            var existKeyValueModel = keyValueModels.FirstOrDefault(x => x.Key == txtKey);
+            if (existKeyValueModel == null)
+            {
+                keyValueModels.Add(new KeyValueModel()
+                {
+                    Key = txtKey,
+                    Value = txtValue
+                });
+            }
+            else
+            {
+                Console.WriteLine(txtValue);
+                existKeyValueModel.Value = txtValue;
+            }
+            txtKey = string.Empty;
+            txtValue = null;
+            InitlizeDataSource(0, string.Empty);
+            if (editingRow != null)
+            {
+                editingRow = null;
+            }
+            if (DataSourceChanged.HasDelegate)
+            {
+                await DataSourceChanged.InvokeAsync(DataSource);
+            }
+            if (FormItem != null)
+            {
+                SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
+            }
+        }
+
+        private void BeginEdit(object row)
+        {
+            editingRow = row;
+            MarkAsRequireRender();
+        }
+
+        protected override void FormItem_OnReset(object value, bool requireRerender)
+        {
+            DataSource = ((IDictionary<string, string>)value).Select(x => new KeyValueModel()
+            {
+                Key = x.Key,
+                Value = x.Value
+            }).ToList();
+            if (requireRerender)
+            {
+                MarkAsRequireRender();
+            }
+        }
+
+        private async Task ToggleTreeAsync(object row)
+        {
+            var treeRow = row as ITreeItem;
+            if (treeRow == null || treeRow.IsLoading)
+            {
+                return;
+            }
+            var treeRows = rows.Cast<ITreeItem>().ToArray();
+            var children = treeRows.Where(x => x.ParentId == treeRow.Id).ToList();
+            var finalChildren = children.ToList();
+            foreach (var item in children)
+            {
+                finalChildren.AddRange(FindChildren(item));
+            }
+            if (string.IsNullOrWhiteSpace(Url))
+            {
+                if (hiddenRows.Any(x => finalChildren.Contains(x)))
+                {
+                    hiddenRows.RemoveAll(finalChildren.Contains);
+                    treeRow.Direction = "right";
+                }
+                else
+                {
+                    hiddenRows.AddRange(finalChildren);
+                    treeRow.Direction = "up";
+                }
+            }
+            else
+            {
+                if (finalChildren.Any())
+                {
+                    rows.RemoveAll(finalChildren.Contains);
+                    DataSource = rows;
+                    InitlizeDataSource(0, "up");
+                    if (DataSourceChanged.HasDelegate)
+                    {
+                        await DataSourceChanged.InvokeAsync(DataSource);
+                    }
+                    if (FormItem != null)
+                    {
+                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
+                    }
+                    treeRow.Direction = "up";
+                }
+                else
+                {
+                    treeRow.IsLoading = true;
+                    MarkAsRequireRender();
+                    Refresh();
+                    object newDataSource = await FetchChildrenAsync(treeRow);
+                    treeRow.IsLoading = false;
+                    var enumerbale = DataSource as IEnumerable;
+                    var startIndex = 0;
+                    foreach (var item in enumerbale)
+                    {
+                        if (item == row)
+                        {
+                            break;
+                        }
+                        startIndex++;
+                    }
+                    var oldDataSource = enumerbale.Cast<object>().ToList();
+                    oldDataSource.InsertRange(startIndex + 1, (newDataSource as IEnumerable).Cast<object>());
+                    DataSource = oldDataSource;
+                    InitlizeDataSource(treeRow.Level.Value + 1, "up");
+                    if (DataSourceChanged.HasDelegate)
+                    {
+                        await DataSourceChanged.InvokeAsync(DataSource);
+                    }
+                    if (FormItem != null)
+                    {
+                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
+                    }
+                }
+            }
+            MarkAsRequireRender();
+        }
+
+        private async Task<object> FetchChildrenAsync(ITreeItem treeRow)
+        {
+            treeRow.Direction = "right";
+            if (!Url.EndsWith("/"))
+            {
+                Url += "/";
+            }
+
+            object newDataSource = await httpClient.GetFromJsonAsync(Url + treeRow.Id, typeof(List<>).MakeGenericType(DataType));
+            return newDataSource;
+        }
+
+        public override void MarkAsRequireRender()
+        {
+            base.MarkAsRequireRender();
+            headerRendered = false;
+            headerInitilized = false;
+            Headers.Clear();
+        }
+
+        private List<ITreeItem> FindChildren(ITreeItem child)
+        {
+            var results = new List<ITreeItem>();
+            var treeItems = rows.Cast<ITreeItem>().Where(x => x.ParentId == child.Id).ToArray();
+            foreach (var childTreeItem in treeItems)
+            {
+                results.Add(childTreeItem);
+                results.AddRange(FindChildren(childTreeItem));
+            }
+            return results;
         }
 
         internal async Task CurrentPageChangedAsync(int page)

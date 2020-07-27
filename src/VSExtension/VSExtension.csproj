@@ -49,7 +49,7 @@
     <Compile Include="BlazuiVSExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BLAZUI 128.png">
+    <Content Include="BLAZUI PNG高清.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -65,7 +65,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\Blazor 组件（代码后置模板）.zip">
+    <Content Include="ItemTemplates\Blazor 组件（代码后置）.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

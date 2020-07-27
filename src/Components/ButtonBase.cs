@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public partial class BButton
+    internal class ButtonBase : BComponentBase
     {
         internal HtmlPropertyBuilder cssClassBuilder;
-        protected async Task OnButtonClickedAsync(MouseEventArgs e)
+        protected virtual async Task OnButtonClickedAsync(MouseEventArgs e)
         {
             if (IsDisabled)
             {
@@ -34,7 +34,8 @@ namespace Blazui.Component
             }
         }
 
-        private string showingImage;
+        protected string showingImage;
+
         /// <summary>
         /// 按钮图片
         /// </summary>
@@ -88,12 +89,12 @@ namespace Blazui.Component
         [Parameter]
         public bool IsLoading { get; set; }
 
-        protected override bool ShouldRender()
+        protected virtual bool ShouldRender()
         {
             return true;
         }
 
-        private void MouseOver()
+        protected virtual void MouseOver()
         {
             if (string.IsNullOrWhiteSpace(HoverImage))
             {
@@ -101,7 +102,7 @@ namespace Blazui.Component
             }
             showingImage = HoverImage;
         }
-        private void MouseOut()
+        protected virtual void MouseOut()
         {
             if (string.IsNullOrWhiteSpace(HoverImage))
             {
@@ -111,7 +112,7 @@ namespace Blazui.Component
             showingImage = Image;
         }
 
-        protected override void OnParametersSet()
+        protected virtual void OnParametersSet()
         {
             base.OnParametersSet();
             if (string.IsNullOrWhiteSpace(showingImage) && !string.IsNullOrWhiteSpace(Image))

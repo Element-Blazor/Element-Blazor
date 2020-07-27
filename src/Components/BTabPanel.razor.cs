@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public partial class BTabPanel :  IDisposable
+    public partial class BTabPanel : IDisposable
     {
         [Parameter]
         public EventCallback<BChangeEventArgs<BTabPanel>> OnTabPanelChanging { get; set; }
@@ -76,8 +76,13 @@ namespace Blazui.Component
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                Name = "tab_" + (++tabIndex);
+            }
             if (!TabContainer.Exists(Name))
             {
+                Console.WriteLine("Add Tab:" + Name);
                 TabContainer.AddTab(this);
             }
         }
@@ -86,6 +91,11 @@ namespace Blazui.Component
         {
             if (IsActive && TabContainer.Type == TabType.Normal)
             {
+                if (string.IsNullOrWhiteSpace(Element.Id))
+                {
+                    return;
+                }
+                Console.WriteLine("id:" + Element.Id);
                 var dom = Element.Dom(JSRuntime);
                 var width = await dom.GetClientWidthAsync();
                 var paddingLeft = await dom.Style.GetPaddingLeftAsync();
@@ -102,6 +112,7 @@ namespace Blazui.Component
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            Console.WriteLine("Render:" + Name);
             await AcitveTabOnRenderCompletedAsync();
             if (!firstRender)
             {

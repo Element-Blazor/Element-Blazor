@@ -13,6 +13,7 @@ namespace Blazui.Component
         [Parameter]
         public virtual string? Width { get; set; }
 
+        internal virtual bool IsTree { get; set; }
         /// <summary>
         /// 排序编号
         /// </summary>

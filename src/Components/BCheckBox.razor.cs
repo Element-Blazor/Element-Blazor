@@ -22,8 +22,6 @@ namespace Blazui.Component
 
         [Parameter]
         public Status Status { get; set; }
-
-        private TValue rawValue;
         [Parameter]
         public TValue Value { get; set; }
         [Parameter]
@@ -34,7 +32,6 @@ namespace Blazui.Component
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            rawValue = Value;
         }
 
         protected override void OnParametersSet()

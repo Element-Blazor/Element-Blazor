@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Blazui.Component
 {
-    internal class FormControlGenerateConfig
+    public partial class BTableTreeColumn
     {
-        public Type Control { get; set; }
+        internal override bool IsTree { get; set; } = true;
     }
 }

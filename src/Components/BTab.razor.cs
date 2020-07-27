@@ -12,7 +12,7 @@ using Microsoft.JSInterop;
 
 namespace Blazui.Component
 {
-    public partial class BTab 
+    public partial class BTab
     {
         /// <summary>
         /// 数据源
@@ -195,6 +195,8 @@ namespace Blazui.Component
             {
                 return;
             }
+
+            Console.WriteLine(tab.Title);
             tabPanels.Add(tab);
         }
 
@@ -239,7 +241,7 @@ namespace Blazui.Component
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            var tabOption = DataSource?.FirstOrDefault(x => x.IsActive);
+            var activeTabOption = DataSource?.FirstOrDefault(x => x.IsActive);
             var activeTab = tabPanels.FirstOrDefault(x => x.IsActive);
             if (activeTab == null)
             {
@@ -249,14 +251,24 @@ namespace Blazui.Component
                     activeTab.Activate();
                 }
             }
-            foreach (var item in tabPanels)
+            Console.WriteLine("ActiveTab:" + activeTab.Name);
+            if (activeTabOption == null)
             {
-                if (tabOption != null && item.Name != tabOption.Name)
+                activeTab.MarkAsRequireRender();
+                activeTab.Refresh();
+            }
+            else
+            {
+                foreach (var item in tabPanels)
                 {
-                    continue;
+                    if (item.Name != activeTabOption.Name)
+                    {
+                        continue;
+                    }
+                    Console.WriteLine("for:" + item.Name);
+                    item.MarkAsRequireRender();
+                    item.Refresh();
                 }
-                item.MarkAsRequireRender();
-                item.Refresh();
             }
             if (!firstRender && !RequireRender)
             {

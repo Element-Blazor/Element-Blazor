@@ -10,14 +10,14 @@
     var text = Formatter(Value);
     var isClearable = Value != null && IsClearable && (IsFocus || IsMouseOver);
 }
-<div class="@wrapperClsBuilder" @ref="Content" style="@Style" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
+<div class="@wrapperClsBuilder" @ref="Content" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(Style).AddIf(!string.IsNullOrWhiteSpace(Image),$"background:url('{Image}') center center no-repeat")" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
     @if (Type == InputType.Textarea)
     {
-        <textarea type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " style="height: 60px;overflow-y: hidden; " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
+        <textarea type="@Type.ToString().ToLower()" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(!string.IsNullOrWhiteSpace(Image),"background: transparent;border: transparent;").Add("height: 60px;","overflow-y: hidden; ").ToString()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
     }
     else
     {
-        <input type="@Type.ToString().ToLower()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
+        <input type="@Type.ToString().ToLower()" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(!string.IsNullOrWhiteSpace(Image),"background: transparent;border: transparent;").ToString()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
     }
 
     @if (isClearable)

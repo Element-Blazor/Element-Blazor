@@ -1,0 +1,15 @@
+﻿@inherits BComponentBase
+
+<div class="blazor-ribbon">
+    <div class="blazor-tabs" style="@styleBuilder.ToString()">
+        <BTab OnActiveTabChanging="PreventMenuSwitchAsync" Type="@TabType.BorderCard">
+            <BTabPanel Title="@(MenuText ?? "开始")" @ref="menuTabPanel" Style="@menuStyleBuilder.ToString()">
+
+            </BTabPanel>
+            @Tabs
+        </BTab>
+    </div>
+    <div class="blazor-body">
+        @Body
+    </div>
+</div>

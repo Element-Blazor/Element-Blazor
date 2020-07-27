@@ -7,6 +7,8 @@
     }
 
 }
+@if (string.IsNullOrWhiteSpace(Image))
+{
     <button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cssClassBuilder">
         @if (string.IsNullOrWhiteSpace(icon))
         {
@@ -18,3 +20,8 @@
             <i class="@icon"></i>
         }
     </button>
+}
+else
+{
+    <img src="@showingImage" class="@Cls" @onclick="OnButtonClickedAsync" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(Style).Add("cursor:pointer").ToString()" @onmouseover="MouseOver" @onmouseout="MouseOut" />
+}

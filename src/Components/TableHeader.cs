@@ -18,6 +18,7 @@ namespace Blazui.Component
         public RenderFragment<object> Template { get; set; }
         public string Format { get; set; }
         public int SortNo { get; set; }
+        public bool IsTree { get; set; }
     }
 
     public struct IntString

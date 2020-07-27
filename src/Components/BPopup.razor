@@ -34,21 +34,23 @@
         var option = DialogOptions[i];
         var shadowIndex = option.ShadowZIndex;
         var index = option.ZIndex;
+
         if (option.IsDialog)
         {
             var width = string.Empty;
-       
-             if (option.Width > 0)
+
+            if (option.Width > 0)
             {
                 width = $"width:{option.Width}px;";
             }
             <div class="el-dialog__wrapper" style="z-index: @index;">
-                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog @(option.FullScreen?"is-fullscreen":"")" style="margin-top:15vh;opacity:0;@width ">
+                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog @(option.FullScreen?"is-fullscreen":"")" style="margin-top:15vh;opacity:1;@width ">
                     <div class="el-dialog__header">
                         <span class="el-dialog__title">@option.Title</span>
-                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option,
-                                        new DialogResult() {
-                              }))">
+                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
+                                        new DialogResult()
+                                        {
+                                        }))">
                         </BButton>
                     </div>
                     <div class="el-dialog__body">
@@ -70,41 +72,59 @@
         }
         else
         {
+            var layerSyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+           .AddIf(option.Point != System.Drawing.Point.Empty, $"left:{option.Point.X}px;", $"top:{option.Point.Y}px");
+            var messageBoxStyleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .AddIf(option.Point == System.Drawing.Point.Empty, "el-message-box");
             <div tabindex="-1" role="dialog" aria-modal="true" aria-label="@option.Title" class="el-message-box__wrapper" style="z-index: @index">
-                <div class="el-message-box" style="opacity:0;" @ref="option.Element">
-                    <div class="el-message-box__header">
-                        <div class="el-message-box__title">
-                            <!---->
-                            <span>@option.Title</span>
-                        </div>
-                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option, new DialogResult() {
-                                         Result= MessageBoxResult.Close
-                              }))">
-                        </BButton>
-                    </div>
-                    <div class="el-message-box__content">
-                        <!---->
-                        <div class="el-message-box__message">
-                            <p><BDynamicComponent Component="option.Content"></BDynamicComponent></p>
-                        </div>
-                        <div class="el-message-box__input" style="display: none;">
-                            <div class="el-input">
+                <div class="@messageBoxStyleBuilder.ToString()" style="@layerSyleBuilder.ToString()" @ref="option.Element">
+                    @if (!string.IsNullOrWhiteSpace(option.Title))
+                    {
+                        <div class="el-message-box__header">
+                            <div class="el-message-box__title">
                                 <!---->
-                                <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+                                <span>@option.Title</span>
                             </div>
-                            <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+                            <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option, new DialogResult()
+                                                                                                                                             {
+                                                                                                                                                 Result = MessageBoxResult.Close
+                                                                                                                                             }))">
+                            </BButton>
                         </div>
-                    </div>
-                    <div class="el-message-box__btns">
-                        @foreach (var button in option.Buttons)
-                        {
-                            @button
-                        }
-                    </div>
+                    }
+                    @if (option.Point == System.Drawing.Point.Empty)
+                    {
+                        <div class="el-message-box__content">
+                            <!---->
+                            <div class="el-message-box__message">
+                                <p><BDynamicComponent Component="option.Content"></BDynamicComponent></p>
+                            </div>
+                            <div class="el-message-box__input" style="display: none;">
+                                <div class="el-input">
+                                    <!---->
+                                    <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+                                </div>
+                                <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+                            </div>
+                        </div>
+                        <div class="el-message-box__btns">
+                            @foreach (var button in option.Buttons)
+                            {
+                                @button
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <BDynamicComponent Component="option.Content"></BDynamicComponent>
+                    }
                 </div>
             </div>
         }
-        <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount==0 ? "0":"0.5");position:fixed;" @ref="@option.ShadowElement"></div>
+        @if (option.IsModal)
+        {
+            <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount == 0 ? "0" : "0.5");position:fixed;" @ref="@option.ShadowElement"></div>
+        }
     }
 
     for (int i = 0; i < DateTimePickerOptions.Count; i++)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,16 @@ namespace Blazui.Component
         /// 窗口按钮，尚未测试
         /// </summary>
         public IList<RenderFragment> Buttons { get; set; } = new List<RenderFragment>();
+
+        /// <summary>
+        /// 是否模态窗口
+        /// </summary>
+        public bool IsModal { get; set; } = true;
+
+        /// <summary>
+        /// 窗口显示位置
+        /// </summary>
+        public PointF Point { get; internal set; }
         internal int ZIndex { get; set; }
         internal int ShadowZIndex { get; set; }
         internal TaskCompletionSource<DialogResult> TaskCompletionSource { get; set; }
