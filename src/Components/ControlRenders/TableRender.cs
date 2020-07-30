@@ -15,12 +15,10 @@ namespace Blazui.Component.ControlRenders
     {
         private readonly MessageBox messageBox;
         BTable currentTable = null;
-        private IHttpContextAccessor httpContextAccessor;
 
-        public TableRender(MessageBox messageBox, IHttpContextAccessor httpContextAccessor)
+        public TableRender(MessageBox messageBox)
         {
             this.messageBox = messageBox;
-            this.httpContextAccessor = httpContextAccessor;
         }
         public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

@@ -56,6 +56,11 @@ namespace Blazui.Component
             await jSRuntime.InvokeVoidAsync("submitForm", elementReference, url);
         }
 
+        internal void RegisterAnimationEndAsync()
+        {
+            
+        }
+
         public async Task<int> GetOffsetLeftAsync()
         {
             return await jSRuntime.InvokeAsync<int>("getOffsetLeft", elementReference);

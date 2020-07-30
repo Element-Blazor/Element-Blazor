@@ -347,7 +347,7 @@ namespace Blazui.Component
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            RenderMessages();
+            //RenderMessages();
             await RenderLoadingAsync();
             await RenderDialogAsync();
             await RenderDateTimePickerAsync();
@@ -566,6 +566,15 @@ namespace Blazui.Component
             await style.SetAsync("top", $"{item.BeginTop}px");
             await style.SetAsync("opacity", $"0");
             await Task.Delay(200);
+            lock (MessageService.Messages)
+            {
+                MessageService.Messages.Remove(item);
+            }
+        }
+        private void DisposeMessage(MessageInfo item)
+        {
+            Console.WriteLine("disp:" + item.Message);
+            item.IsNew = false;
             lock (MessageService.Messages)
             {
                 MessageService.Messages.Remove(item);

@@ -4,10 +4,25 @@
     {
         var message = Messages[i];
         var index = message.ZIndex;
-        <div role="alert" class="el-message el-message--@(message.Type.ToString().ToLower())" @ref="message.Element" style="top: @(message.BeginTop)px;opacity:0;transition:top 0.5s,opacity 0.5s;z-index:@index;">
-            <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
-            <p class="el-message__content">@message.Message</p>
-        </div>
+        var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+           .Add("el-message", $"el-message--{message.Type.ToString().ToLower()}");
+        var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.BeginTop}px", "opacity:0", $"z-index:{index}");
+        var firstStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.EndTop}px")
+            .Add("opacity:1");
+        var secondStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.BeginTop}px", "opacity:0");
+        <BTransition role="alert" Cls="@clsBuilder.ToString()" OnAllEnd="e=>DisposeMessage(message)" InitialStyle="@styleBuilder.ToString()">
+            <Path>
+                <BTransitionPath Style="@firstStyleBuilder.ToString()" Delay="200" Duration="300"></BTransitionPath>
+                <BTransitionPath Style="@secondStyleBuilder.ToString()" Delay="3000" Duration="300"></BTransitionPath>
+            </Path>
+            <Content>
+                <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
+                <p class="el-message__content">@message.Message</p>
+            </Content>
+        </BTransition>
     }
     for (int i = 0; i < LoadingOptions.Count; i++)
     {

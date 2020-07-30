@@ -12,9 +12,12 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BComponentBase : ComponentBase
+    public class BComponentBase : ComponentBase, IDisposable
     {
         protected bool RequireRender { get; set; }
+
+        [Parameter(CaptureUnmatchedValues = true)]
+        public IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
         /// 若该项为 true，则该组件会始终允许刷新，不受 <seealso cref="BComponentBase.MarkAsRequireRender"/> 方法控制
@@ -120,6 +123,10 @@ namespace Blazui.Component
         protected override bool ShouldRender()
         {
             return RequireRender || EnableAlwaysRender;
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 }

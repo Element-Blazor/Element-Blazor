@@ -314,6 +314,10 @@ namespace Blazui.Component
                         return;
                     }
                     var attrs = property.GetCustomAttributes(true);
+                    if (attrs.OfType<TableIgnoreAttribute>().Any())
+                    {
+                        return;
+                    }
                     var columnConfig = attrs.OfType<TableColumnAttribute>().FirstOrDefault() ?? new TableColumnAttribute()
                     {
                         Text = property.Name

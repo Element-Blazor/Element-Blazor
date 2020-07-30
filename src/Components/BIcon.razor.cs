@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +23,21 @@ namespace Blazui.Component
         protected override void OnParametersSet()
         {
             icon = Icon.GetType().GetField(Icon.ToString()).GetCustomAttribute<DisplayAttribute>()?.Prompt;
+        }
+
+        /// <summary>
+        /// 点击事件
+        /// </summary>
+        [Parameter]
+        public EventCallback OnClick { get; set; }
+
+        private async System.Threading.Tasks.Task OnElClickAsync(MouseEventArgs e)
+        {
+            if (!OnClick.HasDelegate)
+            {
+                return;
+            }
+            await OnClick.InvokeAsync(e);
         }
     }
 }

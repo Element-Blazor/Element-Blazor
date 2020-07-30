@@ -20,9 +20,9 @@ namespace Blazui.Component
         /// <param name="services"></param>
         /// <param name="lang">默认语言</param>
         /// <returns></returns>
-        public static async Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services)
+        public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
+            services.AddScoped<HttpClient>();
             services.AddSingleton<FormFieldControlMap>();
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();

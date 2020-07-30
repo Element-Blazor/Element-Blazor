@@ -312,3 +312,10 @@ window.setTransitionAsync = function (el, value) {
     }
     el.style.transition = value;
 };
+window.onblazortransitionend = function (e) {
+    return window[e.target.attributes[2].name].invokeMethodAsync('AnimationEnd', e.propertyName);
+}
+window.RegisterAnimationBegin = function (transitionRef, el) {
+    window[el.attributes[2].name] = transitionRef;
+    el.addEventListener('transitionend', onblazortransitionend);
+}

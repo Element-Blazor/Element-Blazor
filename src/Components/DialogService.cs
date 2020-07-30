@@ -62,6 +62,20 @@ namespace Blazui.Component
             return await ShowDialogAsync<TResult>(typeof(TComponent), title, width, new Dictionary<string, object>());
         }
 
+
+        /// <summary>
+        /// 显示一个窗口
+        /// </summary>
+        /// <typeparam name="TComponent">要显示的组件</typeparam>
+        /// <param name="title">标题</param>
+        /// <param name="width">宽度</param>
+        /// <returns></returns>
+        public async Task<DialogResult<object>> ShowDialogAsync<TComponent>(string title, float width)
+            where TComponent : ComponentBase
+        {
+            return await ShowDialogAsync<object>(typeof(TComponent), title, width, new Dictionary<string, object>());
+        }
+
         /// <summary>
         /// 显示一个窗口
         /// </summary>
@@ -122,6 +136,7 @@ namespace Blazui.Component
                 Width = width,
                 Title = title,
                 Parameters = parameters,
+                IsModal = true,
                 TaskCompletionSource = taskCompletionSource
             };
             ShowDialog(option);
