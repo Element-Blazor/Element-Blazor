@@ -26,6 +26,8 @@ namespace Blazui.Component
         /// 弹窗全屏
         /// </summary>
         public bool FullScreen { get; set; } = false;
+        public DialogResult Result { get; internal set; }
+
         /// <summary>
         /// 宽度
         /// </summary>
@@ -49,8 +51,8 @@ namespace Blazui.Component
         internal int ShadowZIndex { get; set; }
         internal TaskCompletionSource<DialogResult> TaskCompletionSource { get; set; }
         internal BPopup Instance { get; set; }
-        internal ElementReference Element { get; set; }
-        internal ElementReference ShadowElement { get; set; }
+        internal BTransition Element { get; set; }
+        internal BTransition ShadowElement { get; set; }
         internal bool IsNew { get; set; }
 
         /// <summary>
@@ -59,12 +61,13 @@ namespace Blazui.Component
         /// <typeparam name="T"></typeparam>
         /// <param name="result"></param>
         /// <returns></returns>
-        public async Task CloseDialogAsync<T>(T result)
+        public Task CloseDialogAsync<T>(T result)
         {
-            await Instance.CloseDialogAsync(this, new DialogResult()
+            Instance.CloseDialogAsync(this, new DialogResult()
             {
                 Result = result
             });
+            return Task.CompletedTask;
         }
 
         /// <summary>

@@ -58,41 +58,71 @@
             {
                 width = $"width:{option.Width}px;";
             }
+            var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add("el-dialog")
+                .AddIf(option.FullScreen, "is-fullscrren");
+            var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                .Add("opacity:0", "top:10px")
+                .Add(width);
             <div class="el-dialog__wrapper" style="z-index: @index;">
-                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog @(option.FullScreen?"is-fullscreen":"")" style="margin-top:15vh;opacity:1;@width ">
-                    <div class="el-dialog__header">
-                        <span class="el-dialog__title">@option.Title</span>
-                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
-                                        new DialogResult()
-                                        {
-                                        }))">
-                        </BButton>
-                    </div>
-                    <div class="el-dialog__body">
-                        <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
-                    </div>
-                    @if (option.Buttons.Any())
-                    {
-                        <div class="el-dialog__footer">
-                            <span class="dialog-footer">
-                                @foreach (var button in option.Buttons)
-                                {
-                                    @button
-                                }
-                            </span>
+                <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
+                    <Path>
+                        <BTransitionPath top="15vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
+                        <BTransitionPath top="10px" opacity="0" Duration="300" Pause="true"></BTransitionPath>
+                    </Path>
+                    <Content>
+                        <div class="el-dialog__header">
+                            <span class="el-dialog__title">@option.Title</span>
+                            <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
+                                            new DialogResult()
+                                            {
+                                            }))">
+                            </BButton>
                         </div>
-                    }
-                </div>
+                        <div class="el-dialog__body">
+                            <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
+                        </div>
+                        @if (option.Buttons.Any())
+                        {
+                            <div class="el-dialog__footer">
+                                <span class="dialog-footer">
+                                    @foreach (var button in option.Buttons)
+                                    {
+                                        @button
+                                    }
+                                </span>
+                            </div>
+                        }
+                    </Content>
+                </BTransition>
             </div>
+            @if (option.IsModal)
+            {
+                ShadowCount++;
+                var shadowStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                    .Add("opacity:0", "position:fixed")
+                    .Add($"z-index:{shadowIndex}");
+                var firstStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                    .Add($"opacity:{(ShadowCount == 0 ? 0 : 0.5)}");
+                <BTransition InitialStyle="@shadowStyle.ToString()" @ref="option.ShadowElement" Cls="v-modal">
+                    <Path>
+                        <BTransitionPath Style="@firstStyle.ToString()" Delay="300" Duration="200"></BTransitionPath>
+                        <BTransitionPath opacity="0" Duration="300" Pause="true"></BTransitionPath>
+                    </Path>
+                    <Content></Content>
+                </BTransition>
+            }
         }
         else
         {
+            ShadowCount++;
             var layerSyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
-           .AddIf(option.Point != System.Drawing.Point.Empty, $"left:{option.Point.X}px;", $"top:{option.Point.Y}px");
+   .AddIf(option.Point != System.Drawing.Point.Empty, $"left:{option.Point.X}px;", $"top:{option.Point.Y}px");
             var messageBoxStyleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .AddIf(option.Point == System.Drawing.Point.Empty, "el-message-box");
+
             <div tabindex="-1" role="dialog" aria-modal="true" aria-label="@option.Title" class="el-message-box__wrapper" style="z-index: @index">
-                <div class="@messageBoxStyleBuilder.ToString()" style="@layerSyleBuilder.ToString()" @ref="option.Element">
+                <div class="@messageBoxStyleBuilder.ToString()" style="@layerSyleBuilder.ToString()">
                     @if (!string.IsNullOrWhiteSpace(option.Title))
                     {
                         <div class="el-message-box__header">
@@ -101,9 +131,9 @@
                                 <span>@option.Title</span>
                             </div>
                             <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option, new DialogResult()
-                                                                                                                                             {
-                                                                                                                                                 Result = MessageBoxResult.Close
-                                                                                                                                             }))">
+                                                                                                                                                 {
+                                                                                                                                                     Result = MessageBoxResult.Close
+                                                                                                                                                 }))">
                             </BButton>
                         </div>
                     }
@@ -135,10 +165,10 @@
                     }
                 </div>
             </div>
-        }
-        @if (option.IsModal)
-        {
-            <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount == 0 ? "0" : "0.5");position:fixed;" @ref="@option.ShadowElement"></div>
+            @if (option.IsModal)
+            {
+                <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount == 0 ? "0" : "0.5");position:fixed;"></div>
+            }
         }
     }
 

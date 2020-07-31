@@ -16,10 +16,18 @@ namespace Blazui.Component
         private bool animationBegined = false;
         private HtmlPropertyBuilder styleBuilder;
         private List<string> currentStyleNames;
-        private Queue<(string Style, int Delay, bool Increment, int Duration)> paths = new Queue<(string Style, int Delay, bool Increment, int Duration)>();
+        private Queue<TransitionOption> paths = new Queue<TransitionOption>();
         private DotNetObjectReference<BTransition> thisRef;
-        private (string Style, int Delay, bool Increment, int Duration) currentPath;
+        private TransitionOption currentPath;
         private HtmlPropertyBuilder clsBuilder;
+        private TaskCompletionSource<int> taskTrigger;
+        private bool animating = false;
+
+        /// <summary>
+        /// 根据动画元素尺寸自动调整位置，一般用于弹窗位置调整
+        /// </summary>
+        [Parameter]
+        public bool AutoAdjustPosition { get; set; }
 
         /// <summary>
         /// 当所有动画执行完成后触发
@@ -33,6 +41,9 @@ namespace Blazui.Component
         [Parameter]
         public bool IsAbsolute { get; set; }
 
+        [Inject]
+        internal Document Document { get; set; }
+
         /// <summary>
         /// 动画执行路径
         /// </summary>
@@ -45,17 +56,18 @@ namespace Blazui.Component
         [Parameter]
         public string InitialStyle { get; set; }
 
-        internal void AddPathConfig(string style, int delay, bool increment, int duration)
+        internal void AddPathConfig(TransitionOption option)
         {
-            if (!IsAbsolute && (style.StartsWith("top:") || style.StartsWith("left:") || style.Contains(";top:") || style.Contains(";left:")))
+            if (!IsAbsolute && (option.Style.StartsWith("top:") || option.Style.StartsWith("left:") || option.Style.Contains(";top:") || option.Style.Contains(";left:")))
             {
                 IsAbsolute = true;
             }
-            paths.Enqueue((style, delay, increment, duration));
+            paths.Enqueue(option);
         }
 
         protected override void OnInitialized()
         {
+            Console.WriteLine("init:" + this.GetHashCode());
             styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("display:none");
         }
@@ -72,6 +84,14 @@ namespace Blazui.Component
             {
                 return;
             }
+            if (AutoAdjustPosition)
+            {
+                var rect = await animationElement.Dom(JSRuntime).GetBoundingClientRectAsync();
+                var screenHeight = await Document.GetClientHeightAsync();
+                var screenWidth = await Document.GetClientWidthAsync();
+                var left = screenWidth / 2 - rect.Width / 2;
+                styleBuilder.Add($"left:{left}px");
+            }
             currentPath = paths.Dequeue();
             await Task.Delay(currentPath.Delay);
             ExecuteAnimation(currentPath.Style, currentPath.Increment);
@@ -79,10 +99,9 @@ namespace Blazui.Component
 
         private void ExecuteAnimation(string style, bool increment)
         {
+            animating = true;
             var styles = style.Split(';');
             currentStyleNames = styles.Select(x => x.Split(':')[0]).ToList();
-            Console.Write(style);
-            Console.WriteLine(currentStyleNames.Count);
             for (int i = 0; i < currentStyleNames.Count; i++)
             {
                 var styleName = currentStyleNames[i];
@@ -123,6 +142,19 @@ namespace Blazui.Component
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 使暂停的动画继续执行
+        /// </summary>
+        public void Resume()
+        {
+            Console.WriteLine("resume:" + this.GetHashCode());
+            if (taskTrigger == null)
+            {
+                return;
+            }
+            taskTrigger.TrySetResult(0);
+        }
+
         [JSInvokable("AnimationEnd")]
         public async Task AnimationEndAsync(string propertyName)
         {
@@ -131,19 +163,26 @@ namespace Blazui.Component
                 if (!currentStyleNames.Remove(propertyName))
                 {
                     Console.WriteLine("样式移除失败:" + propertyName + "，还有" + currentStyleNames.Count + "个样式等待移除");
-                    throw new BlazuiException("样式移除失败:" + propertyName + "，还有" + currentStyleNames.Count + "个样式等待移除");
                 }
-                Console.WriteLine($"{propertyName}移除成功，还有{currentStyleNames.Count  }个样式等待移除");
-                while (currentStyleNames.Contains(propertyName))
+                else
                 {
-                    currentStyleNames.Remove(propertyName);
-                }
-                if (currentStyleNames.Any())
-                {
-                    return;
+                    Console.WriteLine($"{propertyName}移除成功，还有{currentStyleNames.Count  }个样式等待移除");
+                    while (currentStyleNames.Contains(propertyName))
+                    {
+                        currentStyleNames.Remove(propertyName);
+                    }
+                    if (currentStyleNames.Any())
+                    {
+                        return;
+                    }
                 }
             }
 
+            if (!animating)
+            {
+                return;
+            }
+            animating = false;
             if (paths == null || !paths.Any())
             {
                 if (OnAllEnd.HasDelegate)
@@ -153,6 +192,13 @@ namespace Blazui.Component
                 return;
             }
             currentPath = paths.Dequeue();
+            if (currentPath.Pause.HasValue && currentPath.Pause.Value)
+            {
+                taskTrigger = new TaskCompletionSource<int>();
+                await taskTrigger.Task;
+                Console.WriteLine("null:" + thisRef.Value.GetHashCode());
+                taskTrigger = null;
+            }
             await Task.Delay(currentPath.Delay);
             styleBuilder.Remove("transition").Add($"transition:all {(currentPath.Duration <= 0 ? 1000 : currentPath.Duration)}ms ease");
             ExecuteAnimation(currentPath.Style, currentPath.Increment);
@@ -165,7 +211,7 @@ namespace Blazui.Component
                 thisRef = DotNetObjectReference.Create(this);
                 clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                     .Add("blazor-animation")
-                    .AddIf(!string.IsNullOrWhiteSpace(Cls), Cls.Split(' '));
+                    .Add(Cls?.Split(' ') ?? new string[0]);
 
                 await JSRuntime.InvokeVoidAsync("RegisterAnimationBegin", thisRef, animationElement);
                 styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()

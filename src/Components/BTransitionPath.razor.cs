@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Blazui.Component
@@ -17,6 +18,12 @@ namespace Blazui.Component
         public bool Increment { get; set; }
 
         /// <summary>
+        /// 使动画暂停执行，直到 <see cref="BTransition"/> 的 <see cref="BTransition.Resume"/> 方法被调用
+        /// </summary>
+        [Parameter]
+        public bool? Pause { get; set; }
+
+        /// <summary>
         /// 动画执行时长，以毫秒为单位
         /// </summary>
         [Parameter]
@@ -29,7 +36,13 @@ namespace Blazui.Component
         public int Delay { get; set; }
         protected override void OnInitialized()
         {
-            Transition.AddPathConfig(Style, Delay, Increment, Duration);
+            var option = new TransitionOption();
+            option.Style = string.IsNullOrWhiteSpace(Style) ? string.Join(";", Attributes.Select(x => $"{x.Key}:{x.Value.ToString()}")) : Style;
+            option.Delay = Delay;
+            option.Increment = Increment;
+            option.Duration = Duration;
+            option.Pause = Pause;
+            Transition.AddPathConfig(option);
         }
     }
 }
