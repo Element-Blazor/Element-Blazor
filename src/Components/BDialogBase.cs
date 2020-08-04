@@ -17,6 +17,20 @@ namespace Blazui.Component
         [Parameter]
         public DialogOption Dialog { get; set; }
 
+        public event Func<Task> OnShow;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            Dialog.OnShow = () =>
+            {
+                if (OnShow != null)
+                {
+                    return OnShow();
+                }
+                return Task.CompletedTask;
+            };
+        }
         /// <summary>
         /// 关闭当前窗口
         /// </summary>

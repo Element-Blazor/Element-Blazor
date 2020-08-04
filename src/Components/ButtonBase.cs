@@ -89,7 +89,7 @@ namespace Blazui.Component
         [Parameter]
         public bool IsLoading { get; set; }
 
-        protected virtual bool ShouldRender()
+        protected override bool ShouldRender()
         {
             return true;
         }
@@ -112,7 +112,7 @@ namespace Blazui.Component
             showingImage = Image;
         }
 
-        protected virtual void OnParametersSet()
+        protected override void OnParametersSet()
         {
             base.OnParametersSet();
             if (string.IsNullOrWhiteSpace(showingImage) && !string.IsNullOrWhiteSpace(Image))

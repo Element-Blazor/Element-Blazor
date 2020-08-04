@@ -14,6 +14,8 @@ namespace Blazui.Component
 {
     public class BComponentBase : ComponentBase, IDisposable
     {
+        [CascadingParameter(Name ="Page")]
+        public BComponentBase Page { get; set; }
         protected bool RequireRender { get; set; }
 
         [Parameter(CaptureUnmatchedValues = true)]
@@ -66,6 +68,15 @@ namespace Blazui.Component
         {
             _ = MessageBox.AlertAsync(text);
         }
+
+        protected override void OnInitialized()
+        {
+            if (DialogContainer != null)
+            {
+                DialogContainer.OnShow += OnDialogShowAsync;
+            }
+        }
+
         /// <summary>
         /// 弹出 Confirm 消息
         /// </summary>
@@ -83,6 +94,13 @@ namespace Blazui.Component
             RequireRender = true;
         }
 
+        [CascadingParameter]
+        public BDialogBase DialogContainer { get; set; }
+
+        protected virtual Task OnDialogShowAsync()
+        {
+            return Task.CompletedTask;
+        }
         public void Toast(string text)
         {
             MessageService.Show(text);
@@ -117,6 +135,7 @@ namespace Blazui.Component
 
         public virtual void Refresh()
         {
+            MarkAsRequireRender();
             StateHasChanged();
         }
 
@@ -127,6 +146,11 @@ namespace Blazui.Component
 
         public virtual void Dispose()
         {
+            if (DialogContainer == null)
+            {
+                return;
+            }
+            DialogContainer.OnShow -= OnDialogShowAsync;
         }
     }
 }

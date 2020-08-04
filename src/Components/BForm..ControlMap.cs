@@ -120,8 +120,8 @@ namespace Blazui.Component
                     LabelWidth = formControl.LabelWidth,
                     Placeholder = formControl.Placeholder,
                     Name = property.Name,
-                    PropertyType = property.PropertyType,
-                    Config = GetInputControlConfig(property, controlType)
+                    Property = property,
+                    ControlAttribute = GetInputControlConfig(property, controlType)
                 }); ; ;
                 index += 11;
             }

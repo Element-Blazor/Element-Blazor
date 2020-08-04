@@ -25,7 +25,11 @@ namespace Blazui.Component
         internal bool isClearable = true;
         internal bool EnableClearButton { get; set; }
 
-        internal string Label { get; set; }
+        [Parameter]
+        public string Label { get; set; }
+
+        [Parameter]
+        public Action<string> LabelChanged { get; set; }
         internal ObservableCollection<BSelectOption<TValue>> Options { get; set; } = new ObservableCollection<BSelectOption<TValue>>();
 
         [Parameter]
@@ -50,7 +54,7 @@ namespace Blazui.Component
             }
             if (FormItem == null)
             {
-                Label = Options.FirstOrDefault(x => TypeHelper.Equal(x.Value, Value))?.Text;
+                Label = Label ?? Options.FirstOrDefault(x => TypeHelper.Equal(x.Value, Value))?.Text;
                 return;
             }
 
@@ -66,7 +70,7 @@ namespace Blazui.Component
 
             if (dict != null && Value != null)
             {
-                Label = dict[Value];
+                Label = Label ?? dict[Value];
             }
             SetFieldValue(Value, false);
         }
@@ -183,6 +187,7 @@ namespace Blazui.Component
                     Label = value.Text;
                 }
                 selectedOption = value;
+                LabelChanged?.Invoke(Label);
                 if (ValueChanged.HasDelegate)
                 {
                     _ = ValueChanged.InvokeAsync(Value);

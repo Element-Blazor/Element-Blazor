@@ -36,6 +36,10 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
+                            if (header.Ignore)
+                            {
+                                continue;
+                            }
                             var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
@@ -54,6 +58,10 @@
                             @for (int i = 1; i <= Headers.Count; i++)
                             {
                                 var header = Headers.ElementAt(i - 1);
+                                if (header.Ignore)
+                                {
+                                    continue;
+                                }
                                 <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i     is-leaf">
                                     <div class="cell">
                                         @header.Text
@@ -81,6 +89,10 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
+                            if (header.Ignore)
+                            {
+                                continue;
+                            }
                             var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
@@ -117,6 +129,21 @@
                                 @for (int j = 1; j <= Headers.Count; j++)
                                 {
                                     var header = Headers.ElementAt(j - 1);
+                                    if (row == editingRow)
+                                    {
+                                        header.RawValue = row;
+                                    }
+                                    if (header.Ignore)
+                                    {
+                                        continue;
+                                    }
+                                    if (IsEditable && header.IsEditable && editingRow == row && !header.EditorRenderConfig.RawInfoHasSet)
+                                    {
+                                        header.EditorRenderConfig.RawInfoHasSet = true;
+                                        header.EditorRenderConfig.RawValue = header.EvalRaw?.Invoke(row) ?? null;
+                                        header.EditorRenderConfig.RawLabel = header.Eval?.Invoke(row) ?? null;
+                                        header.EditorRenderConfig.EditingValue = header.EditorRenderConfig.RawValue;
+                                    }
                                     if (header.IsTree)
                                     {
                                         if (treeRow == null)
@@ -159,22 +186,11 @@
                                     {
                                         <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
                                             <div class="cell">
-                                                @if (row == editingRow && header.Property != null)
+                                                @if (row == editingRow && CanEdit(header))
                                                 {
                                                     @if (!header.IsCheckBox)
                                                     {
-                                                        var text = header.Property.GetValue(row);
-                                                        switch (header.Property.Name)
-                                                        {
-                                                            case "Key":
-                                                                txtKey = string.IsNullOrWhiteSpace(txtKey) ? text?.ToString() : txtKey;
-                                                                <BInput @bind-Value="txtKey"></BInput>
-                                                                break;
-                                                            case "Value":
-                                                                txtValue = txtValue ?? text?.ToString();
-                                                                <BInput @bind-Value="txtValue"></BInput>
-                                                                break;
-                                                        }
+                                                        <BDynamicComponent Component="header.EditorRender" Config="header.EditorRenderConfig"></BDynamicComponent>
                                                     }
                                                 }
                                                 else
@@ -200,20 +216,39 @@
                         }
                         @if (IsEditable && editingRow == null)
                         {
-                            <tr @onkeyup="SaveTableAsync">
+                            <tr @onkeyup="e=> { saveAction = SaveAction.Create; _ = SaveTableAsync(e); }" @ref="editingRowEl">
                                 <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                     <div class="cell">
 
                                     </div>
                                 </td>
+                                @for (int j = 0; j < Headers.Count - 1; j++)
+                                {
+                                    var header = Headers.ElementAt(j);
+                                    if (header.Ignore)
+                                    {
+                                        continue;
+                                    }
+                                    if (CanEdit(header))
+                                    {
+                                        <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                            <div class="cell">
+                                                <BDynamicComponent Component="header.EditorRender" Config="header.EditorRenderConfig"></BDynamicComponent>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                            <div class="cell">
+                                            </div>
+                                        </td>
+                                    }
+                                }
+
                                 <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                     <div class="cell">
-                                        <BInput @bind-Value="txtKey"></BInput>
-                                    </div>
-                                </td>
-                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
-                                    <div class="cell">
-                                        <BInput @bind-Value="txtValue"></BInput>
+                                        <BButton Type="ButtonType.Primary" Size="ButtonSize.Small" OnClick="SaveTableAsync" @ref="saveAddButton">保存</BButton>
                                     </div>
                                 </td>
                             </tr>

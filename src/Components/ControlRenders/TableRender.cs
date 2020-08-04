@@ -20,13 +20,12 @@ namespace Blazui.Component.ControlRenders
         {
             this.messageBox = messageBox;
         }
-        public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig config)
+        public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig config)
         {
             object tableDataSource = null;
-            var attributeConfig = (TableAttribute)config.Config;
-            renderTreeBuilder.OpenComponent(0, config.InputControl);
+            var attributeConfig = (TableAttribute)config.ControlAttribute;
+            renderTreeBuilder.OpenComponent(0, config.InputControlType);
             renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
             renderTreeBuilder.AddAttribute(2, nameof(BTable.AutoGenerateColumns), true);
             renderTreeBuilder.AddAttribute(3, nameof(BTable.DataType), typeof(KeyValueModel));

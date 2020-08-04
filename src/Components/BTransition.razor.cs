@@ -24,6 +24,12 @@ namespace Blazui.Component
         private bool animating = false;
 
         /// <summary>
+        /// 当动画暂停时触发
+        /// </summary>
+        [Parameter]
+        public EventCallback OnPause { get; set; }
+
+        /// <summary>
         /// 根据动画元素尺寸自动调整位置，一般用于弹窗位置调整
         /// </summary>
         [Parameter]
@@ -67,7 +73,7 @@ namespace Blazui.Component
 
         protected override void OnInitialized()
         {
-            Console.WriteLine("init:" + this.GetHashCode());
+            base.OnInitialized();
             styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("display:none");
         }
@@ -87,7 +93,6 @@ namespace Blazui.Component
             if (AutoAdjustPosition)
             {
                 var rect = await animationElement.Dom(JSRuntime).GetBoundingClientRectAsync();
-                var screenHeight = await Document.GetClientHeightAsync();
                 var screenWidth = await Document.GetClientWidthAsync();
                 var left = screenWidth / 2 - rect.Width / 2;
                 styleBuilder.Add($"left:{left}px");
@@ -194,9 +199,12 @@ namespace Blazui.Component
             currentPath = paths.Dequeue();
             if (currentPath.Pause.HasValue && currentPath.Pause.Value)
             {
+                if (OnPause.HasDelegate)
+                {
+                    await OnPause.InvokeAsync(null);
+                }
                 taskTrigger = new TaskCompletionSource<int>();
                 await taskTrigger.Task;
-                Console.WriteLine("null:" + thisRef.Value.GetHashCode());
                 taskTrigger = null;
             }
             await Task.Delay(currentPath.Delay);
@@ -206,6 +214,7 @@ namespace Blazui.Component
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
                 thisRef = DotNetObjectReference.Create(this);

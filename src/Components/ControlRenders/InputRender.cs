@@ -1,33 +1,37 @@
 ﻿using Blazui.Component.ControlConfigs;
 using Blazui.Component.ControlRender;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.CompilerServices;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazui.Component.ControlRenders
 {
-    internal class InputRender : IInputRender
+    internal class InputRender : RenderBase, IInputRender
     {
-        public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig config)
+        public void Render(RenderTreeBuilder builder, RenderConfig config)
         {
-            var inputConfig = (InputAttribute)config.Config;
-            renderTreeBuilder.OpenComponent(0, config.InputControl);
-            renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
+            var inputConfig = (InputAttribute)config.ControlAttribute;
+            builder.OpenComponent(0, config.InputControlType);
             if (inputConfig != null)
             {
-                renderTreeBuilder.AddAttribute(2, nameof(inputConfig.IsClearable), inputConfig.IsClearable);
-                renderTreeBuilder.AddAttribute(3, nameof(inputConfig.IsDisabled), inputConfig.IsDisabled);
-                renderTreeBuilder.AddAttribute(4, nameof(inputConfig.Placeholder), inputConfig.Placeholder);
-                renderTreeBuilder.AddAttribute(5, nameof(inputConfig.PrefixIcon), inputConfig.PrefixIcon);
-                renderTreeBuilder.AddAttribute(6, nameof(inputConfig.SuffixIcon), inputConfig.SuffixIcon);
-                renderTreeBuilder.AddAttribute(7, nameof(inputConfig.Type), inputConfig.Type);
-                renderTreeBuilder.AddAttribute(8, nameof(inputConfig.Image), inputConfig.Image);
-                renderTreeBuilder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
+                builder.AddAttribute(2, nameof(inputConfig.IsClearable), inputConfig.IsClearable);
+                builder.AddAttribute(3, nameof(inputConfig.IsDisabled), inputConfig.IsDisabled);
+                builder.AddAttribute(4, nameof(inputConfig.Placeholder), inputConfig.Placeholder);
+                builder.AddAttribute(5, nameof(inputConfig.PrefixIcon), inputConfig.PrefixIcon);
+                builder.AddAttribute(6, nameof(inputConfig.SuffixIcon), inputConfig.SuffixIcon);
+                builder.AddAttribute(7, nameof(inputConfig.Type), inputConfig.Type);
+                builder.AddAttribute(8, nameof(inputConfig.Image), inputConfig.Image);
+                builder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
             }
-            renderTreeBuilder.CloseComponent();
+            builder.AddAttribute(10, nameof(BFormItemObject.EnableAlwaysRender), true);
+            CreateBind(config, builder, 10);
+            builder.CloseComponent();
         }
     }
 }

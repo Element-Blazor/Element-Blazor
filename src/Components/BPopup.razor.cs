@@ -42,6 +42,7 @@ namespace Blazui.Component
         internal protected List<DropDownOption> SelectDropDownOptions = new List<DropDownOption>();
         internal protected List<DropDownOption> DropDownMenuOptions = new List<DropDownOption>();
         internal protected List<SubMenuOption> SubMenuOptions = new List<SubMenuOption>();
+        internal List<PopupLayerOption> PopupOptions = new List<PopupLayerOption>();
 
         internal async Task CloseDialogAsync(DialogOption option, DialogResult result)
         {
@@ -56,6 +57,11 @@ namespace Blazui.Component
                 option.Element.Resume();
             }
             await option.TaskCompletionSource.Task;
+        }
+
+        private async Task OnPauseAsync(DialogOption option)
+        {
+            await option.OnShow();
         }
 
         async Task DialogAnimationEndAsync(DialogOption option)
@@ -101,6 +107,36 @@ namespace Blazui.Component
             PopupService.DropDownMenuOptions.CollectionChanged -= DropDownMenuOptions_CollectionChanged;
             PopupService.DropDownMenuOptions = new ObservableCollection<DropDownOption>();
             PopupService.DropDownMenuOptions.CollectionChanged += DropDownMenuOptions_CollectionChanged;
+
+            PopupService.PopupLayerOptions.CollectionChanged -= PopupLayerOptions_CollectionChanged;
+            PopupService.PopupLayerOptions = new ObservableCollection<PopupLayerOption>();
+            PopupService.PopupLayerOptions.CollectionChanged += PopupLayerOptions_CollectionChanged;
+        }
+
+        private void PopupLayerOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var option = e.NewItems.OfType<PopupLayerOption>().FirstOrDefault();
+                option.IsNew = true;
+                option.Instance = this;
+                option.ShadowZIndex = ZIndex++;
+                option.ZIndex = ZIndex++;
+                PopupOptions.Add(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var option = e.OldItems.OfType<PopupLayerOption>().FirstOrDefault();
+                PopupOptions.Remove(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
         }
 
         private void DropDownMenuOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

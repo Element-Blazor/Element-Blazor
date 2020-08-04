@@ -8,6 +8,10 @@ namespace Blazui.Component
     public class TableColumnAttribute : Attribute
     {
         /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        public bool IsEditable { get; set; } = true;
+        /// <summary>
         /// 列头文本
         /// </summary>
         public string Text { get; set; }

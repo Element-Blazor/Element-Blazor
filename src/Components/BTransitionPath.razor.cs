@@ -36,6 +36,7 @@ namespace Blazui.Component
         public int Delay { get; set; }
         protected override void OnInitialized()
         {
+            base.OnInitialized();
             var option = new TransitionOption();
             option.Style = string.IsNullOrWhiteSpace(Style) ? string.Join(";", Attributes.Select(x => $"{x.Key}:{x.Value.ToString()}")) : Style;
             option.Delay = Delay;

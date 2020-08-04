@@ -1,18 +1,18 @@
 ﻿using Blazui.Component.ControlRender;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazui.Component.ControlRenders
 {
     internal class EmptyRender : IControlRender, IDatePickerRender
     {
-        public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig formItemConfig)
+        public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig formItemConfig)
         {
-            renderTreeBuilder.OpenComponent(0, formItemConfig.InputControl);
+            renderTreeBuilder.OpenComponent(0, formItemConfig.InputControlType);
             renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
             renderTreeBuilder.CloseComponent();
         }

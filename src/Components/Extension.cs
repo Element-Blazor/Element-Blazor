@@ -18,12 +18,12 @@ namespace Blazui.Component
         /// 添加 Blazui 相关服务
         /// </summary>
         /// <param name="services"></param>
-        /// <param name="lang">默认语言</param>
         /// <returns></returns>
         public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
         {
             services.AddScoped<HttpClient>();
             services.AddSingleton<FormFieldControlMap>();
+            services.AddSingleton<TableEditorMap>();
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
             services.AddSingleton<LoadingService>();

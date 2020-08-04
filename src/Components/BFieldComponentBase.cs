@@ -39,6 +39,7 @@ namespace Blazui.Component
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
             if (FormItem != null)
             {
                 FormItem.OnReset += FormItem_OnReset;
@@ -51,8 +52,9 @@ namespace Blazui.Component
 
         }
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             if (FormItem != null)
             {
                 FormItem.OnReset -= FormItem_OnReset;

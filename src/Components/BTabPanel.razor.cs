@@ -112,7 +112,6 @@ namespace Blazui.Component
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            Console.WriteLine("Render:" + Name);
             await AcitveTabOnRenderCompletedAsync();
             if (!firstRender)
             {
@@ -121,8 +120,9 @@ namespace Blazui.Component
             await base.OnAfterRenderAsync(firstRender);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             TabContainer?.RemoveTab(this.Name);
         }
 

@@ -1,5 +1,11 @@
 ﻿@using System.Globalization;
 @{
+    foreach (var item in PopupOptions)
+    {
+        <div @key="item.ZIndex" style="position:absolute;left:@(item.Position.X)px;top:@(item.Position.Y)px;z-index:@item.ZIndex;">
+            @item.Content
+        </div>
+    }
     for (int i = 0; i < Messages.Count; i++)
     {
         var message = Messages[i];
@@ -64,8 +70,8 @@
             var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("opacity:0", "top:10px")
                 .Add(width);
-            <div class="el-dialog__wrapper" style="z-index: @index;">
-                <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
+            <div @key="option" class="el-dialog__wrapper" style="z-index: @index;">
+                <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
                     <Path>
                         <BTransitionPath top="15vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
                         <BTransitionPath top="10px" opacity="0" Duration="300" Pause="true"></BTransitionPath>

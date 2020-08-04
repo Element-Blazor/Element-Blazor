@@ -153,6 +153,7 @@ namespace Blazui.Component
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await base.OnAfterRenderAsync(firstRender);
             if (IsDisabled)
             {
                 await InputElement.Dom(JSRuntime).SetDisabledAsync(IsDisabled);

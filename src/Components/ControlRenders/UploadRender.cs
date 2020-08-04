@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazui.Component.ControlRenders
 {
     internal class UploadRender : IUploadRender
     {
-        public object Data { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig config)
+        public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig config)
         {
-            var uploadConfig = (UploadAttribute)config.Config;
+            var uploadConfig = (UploadAttribute)config.ControlAttribute;
             renderTreeBuilder.OpenComponent<BUpload>(0);
             renderTreeBuilder.AddAttribute(1, nameof(BUpload.Url), uploadConfig.Url);
             renderTreeBuilder.AddAttribute(2, nameof(BUpload.Width), uploadConfig.Width);

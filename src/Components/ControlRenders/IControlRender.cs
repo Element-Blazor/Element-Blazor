@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blazui.Component.ControlRender
 {
     public interface IControlRender
     {
-        object Data { get; set; }
-        void Render(RenderTreeBuilder renderTreeBuilder, FormItemConfig config);
+        void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig config);
     }
 }

@@ -12,11 +12,25 @@
     <button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cssClassBuilder">
         @if (string.IsNullOrWhiteSpace(icon))
         {
-            <span>@ChildContent</span>
+            @if (string.IsNullOrWhiteSpace(Text))
+            {
+                <span>@ChildContent</span>
+            }
+            else
+            {
+                <span>@Text</span>
+            }
         }
         else
         {
-            <span>@ChildContent</span>
+            @if (string.IsNullOrWhiteSpace(Text))
+            {
+                <span>@ChildContent</span>
+            }
+            else
+            {
+                <span>@Text</span>
+            }
             <i class="@icon"></i>
         }
     </button>

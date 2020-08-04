@@ -4,7 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Blazui.Component.ControlRender;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 
 namespace Blazui.Component
 {
@@ -17,8 +19,16 @@ namespace Blazui.Component
         public bool IsCheckBox { get; set; }
         public RenderFragment<object> Template { get; set; }
         public string Format { get; set; }
+        public string EditingValue { get; set; }
+        public object RawValue { get; set; }
         public int SortNo { get; set; }
         public bool IsTree { get; set; }
+        public bool IsEditable { get; internal set; }
+        public IControlRender EditorRender { get; set; }
+        public RenderConfig EditorRenderConfig { get; set; }
+        public PropertyInfo EntityProperty { get; set; }
+        public Func<object, object> EvalRaw { get; set; }
+        public bool Ignore { get; internal set; }
     }
 
     public struct IntString

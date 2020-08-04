@@ -35,6 +35,13 @@ namespace Blazui.Component
         }
 
         private string showingImage;
+
+        /// <summary>
+        /// 文本
+        /// </summary>
+        [Parameter]
+        public string Text { get; set; }
+
         /// <summary>
         /// 按钮图片
         /// </summary>

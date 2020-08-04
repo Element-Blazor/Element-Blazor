@@ -55,6 +55,8 @@ namespace Blazui.Component
         internal BTransition ShadowElement { get; set; }
         internal bool IsNew { get; set; }
 
+        internal Func<Task> OnShow { get; set; }
+
         /// <summary>
         /// 关闭窗口
         /// </summary>
@@ -63,11 +65,10 @@ namespace Blazui.Component
         /// <returns></returns>
         public Task CloseDialogAsync<T>(T result)
         {
-            Instance.CloseDialogAsync(this, new DialogResult()
+            return Instance.CloseDialogAsync(this, new DialogResult()
             {
                 Result = result
             });
-            return Task.CompletedTask;
         }
 
         /// <summary>
