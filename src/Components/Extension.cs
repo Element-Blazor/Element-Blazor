@@ -21,7 +21,7 @@ namespace Blazui.Component
         /// <param name="services"></param>
         /// <param name="lang">默认语言</param>
         /// <returns></returns>
-        public static async Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services, string lang = null)
+        public static Task<IServiceCollection> AddBlazuiServicesAsync(this IServiceCollection services, string lang = null)
         {
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
@@ -29,13 +29,14 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
-            var httpClient = services.BuildServiceProvider().GetRequiredService<HttpClient>();
-            var configuration = await SetLocaleAsync(httpClient, lang);
-            services.AddSingleton(provider =>
+           
+            services.AddSingleton(async provider =>
             {
-                return new BLang(configuration, lang, SetLocaleAsync, httpClient);
+                var httpClient = provider.GetRequiredService<HttpClient>();
+
+                return await BLang.CreateBLangAsync(lang, SetLocaleAsync, httpClient);
             });
-            return services;
+            return Task.FromResult(services);
         }
 
         private static async Task<IConfiguration> SetLocaleAsync(HttpClient httpClient, string locale)
