@@ -99,7 +99,7 @@ namespace Blazui.Component
             SetFieldValue(Value, false);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             if (value == null)
             {

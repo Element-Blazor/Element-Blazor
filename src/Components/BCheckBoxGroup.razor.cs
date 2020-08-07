@@ -55,7 +55,7 @@ namespace Blazui.Component
             SetFieldValue(SelectedItems.ToList(), true);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
             if (value != null)

@@ -153,7 +153,7 @@ namespace Blazui.Markdown
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             Value = value?.ToString();
             if (ValueChanged.HasDelegate)
