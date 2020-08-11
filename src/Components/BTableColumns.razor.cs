@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazui.Component.DisplayRenders;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace Blazui.Component
 {
     public partial class BTableColumns
     {
+        [Inject]
+        DisplayRenderFactory displayRender { get; set; }
         [Parameter]
         public RenderFragment ChildContent { get; set; }
         [CascadingParameter]
@@ -39,27 +42,6 @@ namespace Blazui.Component
             var columnConfig = new TableHeader
             {
                 Property = property,
-                Eval = column.Property == null ? null : (Func<object, object>)(row =>
-                {
-                    var value = property.GetValue(row);
-                    if (string.IsNullOrWhiteSpace(column.Format))
-                    {
-                        return value;
-                    }
-                    if (value == null)
-                    {
-                        return null;
-                    }
-
-                    try
-                    {
-                        return Convert.ToDateTime(value).ToString(column.Format);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        throw new BlazuiException("仅日期列支持 Format 参数");
-                    }
-                }),
                 Text = column.Text,
                 SortNo = column.SortNo,
                 Width = column.Width,
@@ -68,6 +50,10 @@ namespace Blazui.Component
                 Format = column.Format,
                 IsTree = column.IsTree
             };
+            if (columnConfig.Property != null)
+            {
+                columnConfig.Eval = displayRender.CreateRenderFactory(columnConfig).CreateRender(columnConfig);
+            }
             Table.Headers.Add(columnConfig);
         }
     }

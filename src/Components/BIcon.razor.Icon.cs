@@ -25,6 +25,8 @@ namespace Blazui.Component
         [Display(Prompt = "video-pause")]
         VideoPause = 6,
         [Display(Prompt = "switch-button")]
-        SwitchButton = 7
+        SwitchButton = 7,
+        [Display(Prompt = "delete")]
+        Delete = 8
     }
 }

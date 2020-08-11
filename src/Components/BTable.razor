@@ -217,11 +217,14 @@
                         @if (IsEditable && editingRow == null)
                         {
                             <tr @onkeyup="e=> { saveAction = SaveAction.Create; _ = SaveTableAsync(e); }" @ref="editingRowEl">
-                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
-                                    <div class="cell">
+                                @if (HasSelectionColumn)
+                                {
+                                    <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                        <div class="cell">
 
-                                    </div>
-                                </td>
+                                        </div>
+                                    </td>
+                                }
                                 @for (int j = 0; j < Headers.Count - 1; j++)
                                 {
                                     var header = Headers.ElementAt(j);

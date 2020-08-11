@@ -4,6 +4,8 @@
 
 using Blazui.Component.ControlConfigs;
 using Blazui.Component.ControlRender;
+using Blazui.Component.ControlRenders;
+using Blazui.Component.DisplayRenders;
 using Blazui.Component.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -24,6 +26,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
@@ -32,6 +35,7 @@ namespace Blazui.Component
     {
         private SaveAction saveAction = SaveAction.Create;
         private TaskCompletionSource<int> editingTaskCompletionSource;
+        private TaskCompletionSource<int> loadTaskCompletionSource;
         private bool dataSourceUpdated = false;
         private BButton saveAddButton;
         private bool renderCompleted = false;
@@ -39,13 +43,35 @@ namespace Blazui.Component
         internal BCheckBox<bool> chkAll;
         internal ElementReference headerElement;
         private object editingRow;
+
+        /// <summary>
+        /// 主键字段
+        /// </summary>
+        [Parameter]
+        public string Key { get; set; }
+
+        [Inject]
+        private DisplayRenderFactory displayRender { get; set; }
         internal List<TableHeader> Headers { get; set; } = new List<TableHeader>();
+
         internal bool headerInitilized = false;
         internal bool headerRendered = false;
         private IDictionary<BCheckBox<bool>, object> rowCheckBoxses = new Dictionary<BCheckBox<bool>, object>();
         internal int headerHeight = 49;
         internal List<object> rows = new List<object>();
         internal List<object> hiddenRows = new List<object>();
+
+        /// <summary>
+        /// 自动展开所有节点
+        /// </summary>
+        [Parameter]
+        public bool AutoExpandAll { get; set; } = true;
+
+        /// <summary>
+        /// 节点并行加载
+        /// </summary>
+        [Parameter]
+        public bool EnableParallel { get; set; } = true;
 
         [Inject]
         private TableEditorMap map { get; set; }
@@ -55,6 +81,70 @@ namespace Blazui.Component
 
         [Inject]
         private HttpClient httpClient { get; set; }
+
+        public async Task RefreshNodeAsync(ITreeItem item)
+        {
+            await ExpandAsync(item, true);
+        }
+
+        /// <summary>
+        /// 刷新根节点
+        /// </summary>
+        public async Task RefreshRootNodeAsync()
+        {
+            if (!rows.Any())
+            {
+                return;
+            }
+            await RefreshNodeAsync((ITreeItem)rows[0]);
+        }
+
+        /// <summary>
+        /// 展开某个节点，如果这个节点当前没有子节点，则动态加载子节点
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="forceLoad">是否强制加载新数据</param>
+        public async Task ExpandAsync(ITreeItem item, bool forceLoad = false)
+        {
+            if (string.IsNullOrWhiteSpace(Url))
+            {
+                ExceptionHelper.Throw(ExceptionHelper.ExpandOnlyHasUrl, "展开某个节点只支持异步加载");
+            }
+            item.Expanded = true;
+            var finalChildren = GetAllChildren(item);
+            if (forceLoad || !finalChildren.Any())
+            {
+                if (!forceLoad)
+                {
+                    item.HasChildren = true;
+                }
+                if (finalChildren.Count != rows.RemoveAll(finalChildren.Contains))
+                {
+                    ExceptionHelper.Throw(ExceptionHelper.ClearChildFailure, "清空子节点失败");
+                }
+                DataSource = rows;
+                await LoadChildrenAsync(item, false);
+                Refresh();
+                return;
+            }
+
+            LocalExpand(item, finalChildren);
+            Refresh();
+        }
+
+        private async Task ForceExpandAsync(ITreeItem item)
+        {
+            if (string.IsNullOrWhiteSpace(Url))
+            {
+                ExceptionHelper.Throw(ExceptionHelper.ExpandOnlyHasUrl, "展开某个节点只支持异步加载");
+            }
+            item.Expanded = true;
+            var finalChildren = GetAllChildren(item);
+            item.HasChildren = true;
+            rows.RemoveAll(finalChildren.Contains);
+            await LoadChildrenAsync(item, AutoExpandAll);
+            Refresh();
+        }
 
         /// <summary>
         /// 当保存数据时触发
@@ -145,6 +235,12 @@ namespace Blazui.Component
         private int currentPage = 1;
 
         /// <summary>
+        /// 若实体实现了 <seealso cref="INotifyPropertyChanged"/> 接口，此参数控制多少毫秒没有新通知后刷新数据
+        /// </summary>
+        [Parameter]
+        public int BatchUpdateDelayTime { get; set; } = 1000;
+
+        /// <summary>
         /// 最大显示的页码数
         /// </summary>
         [Parameter]
@@ -181,6 +277,8 @@ namespace Blazui.Component
         [Parameter]
         public EventCallback<HashSet<object>> SelectedRowsChanged { get; set; }
         internal Status selectAllStatus;
+        private CancellationTokenSource delayCancelToken;
+        private Task delayTask;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -249,7 +347,7 @@ namespace Blazui.Component
                 if (dataSourceUpdated)
                 {
                     dataSourceUpdated = false;
-                    await RefreshDataSourceAsync();
+                    await RefreshDataSourceAsync(AutoExpandAll);
                 }
                 return;
             }
@@ -259,14 +357,13 @@ namespace Blazui.Component
                 await (OnRenderCompleted?.Invoke(this) ?? Task.CompletedTask);
                 return;
             }
-            await RefreshDataSourceAsync();
-            InitlizeDataSource(0, "up");
+            await RefreshDataSourceAsync(AutoExpandAll);
             headerRendered = true;
             RequireRender = true;
             StateHasChanged();
         }
 
-        private async Task RefreshDataSourceAsync()
+        internal async Task RefreshDataSourceAsync(bool autoExpand)
         {
             if (!string.IsNullOrWhiteSpace(Url))
             {
@@ -282,6 +379,7 @@ namespace Blazui.Component
                     SetFieldValue(dyncmicDataSource.ToDictionary(x => x.Key, x => x.Value), true);
                 }
             }
+            await InitlizeDataSourceAsync(0, "up", autoExpand);
         }
 
         public override async Task SetParametersAsync(ParameterView parameters)
@@ -289,16 +387,26 @@ namespace Blazui.Component
             await base.SetParametersAsync(parameters);
             if (parameters.GetValueOrDefault<object>(nameof(DataSource)) != null)
             {
-                InitlizeDataSource(0, string.Empty);
+                await InitlizeDataSourceAsync(0, string.Empty, true);
                 return;
             }
         }
 
-        private void InitlizeDataSource(int level, string direction)
+        private async Task InitlizeDataSourceAsync(int level, string direction, bool autoExpand)
         {
             if (DataSource != null)
             {
                 rows = (DataSource as IEnumerable).Cast<object>().ToList();
+                foreach (var item in rows)
+                {
+                    var propertyChanged = item as INotifyPropertyChanged;
+                    if (propertyChanged == null)
+                    {
+                        break;
+                    }
+                    propertyChanged.PropertyChanged -= PropertyChanged_PropertyChanged;
+                    propertyChanged.PropertyChanged += PropertyChanged_PropertyChanged;
+                }
                 if (string.IsNullOrWhiteSpace(Url))
                 {
                     if (rows.Any(x => x is ITreeItem))
@@ -319,12 +427,31 @@ namespace Blazui.Component
                             item.Direction = direction;
                         }
                         rows.Add(item);
+                        if (AutoExpandAll && autoExpand && item.HasChildren && !item.Expanded)
+                        {
+                            var task = ForceExpandAsync(item);
+                            if (!EnableParallel)
+                            {
+                                await task;
+                            }
+                            _ = ReadyExecuteRefreshAsync();
+                        }
                     }
 
                 }
             }
+            else
+            {
+                DataSource = Activator.CreateInstance(typeof(List<>).MakeGenericType(DataType));
+            }
+            InitilizeHeaders();
+        }
+
+        private void InitilizeHeaders()
+        {
             if (AutoGenerateColumns && !headerInitilized)
             {
+                Console.WriteLine("InitilizeHeaders");
                 headerInitilized = true;
                 DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
                 {
@@ -356,92 +483,32 @@ namespace Blazui.Component
                         });
                         return;
                     }
-                    var editorConfig = attrs.OfType<EditorAttribute>().FirstOrDefault() ?? new EditorAttribute()
+                    var editorConfig = attrs.OfType<EditorGeneratorAttribute>().FirstOrDefault() ?? new EditorGeneratorAttribute()
                     {
                         Control = typeof(BInput<string>)
                     };
 
-                    var formConfig = attrs.OfType<FormControlAttribute>().FirstOrDefault() ?? new FormControlAttribute()
-                    {
-                        IsRequired = true,
-                        RequiredMessage = "该字段必填"
-                    };
+                    var formConfig = attrs.OfType<FormControlAttribute>().FirstOrDefault();
                     var propertyConfig = attrs.OfType<PropertyAttribute>().FirstOrDefault();
-                    PropertyInfo entityProperty = null;
-                    PropertyInfo dataTypeProperty = null;
-                    if (propertyConfig != null)
-                    {
-                        dataTypeProperty = DataType.GetProperty(propertyConfig.ModelProperty);
-                        entityProperty = dataTypeProperty.PropertyType.GetProperty(propertyConfig.Property);
-                    }
 
                     var tableHeader = new TableHeader()
                     {
                         EvalRaw = row =>
                         {
-                            object value = null;
-                            if (entityProperty != null)
-                            {
-                                value = entityProperty.GetValue(dataTypeProperty.GetValue(row));
-                            }
-                            else
-                            {
-                                value = property.GetValue(row);
-                            }
+                            object value = property.GetValue(row);
                             return value;
-                        },
-                        Eval = row =>
-                        {
-                            object value = null;
-                            if (entityProperty != null)
-                            {
-                                value = entityProperty.GetValue(dataTypeProperty.GetValue(row));
-                            }
-                            else
-                            {
-                                value = property.GetValue(row);
-                            }
-                            if (value != null)
-                            {
-                                var valueType = value.GetType();
-                                var finalType = Nullable.GetUnderlyingType(valueType) ?? valueType;
-                                if (finalType.IsEnum)
-                                {
-                                    var enumObj = Convert.ChangeType(value, finalType).ToString();
-                                    var attrs = finalType.GetField(enumObj).GetCustomAttributes();
-                                    var display = (attrs.OfType<DescriptionAttribute>().FirstOrDefault()?.Description ?? attrs.OfType<DisplayAttribute>().FirstOrDefault()?.Description) ?? enumObj;
-                                    value = display;
-                                }
-                            }
-                            if (string.IsNullOrWhiteSpace(columnConfig.Format))
-                            {
-                                return value;
-                            }
-                            if (value == null)
-                            {
-                                return null;
-                            }
-
-                            try
-                            {
-                                return Convert.ToDateTime(value).ToString(columnConfig.Format);
-                            }
-                            catch (InvalidCastException)
-                            {
-                                throw new BlazuiException("仅日期列支持 Format 参数");
-                            }
                         },
                         SortNo = columnConfig.SortNo,
                         IsCheckBox = property.PropertyType == typeof(bool) || Nullable.GetUnderlyingType(property.PropertyType) == typeof(bool),
                         Property = property,
-                        EntityProperty = entityProperty,
                         Text = columnConfig.Text,
                         Width = columnConfig.Width,
                         IsEditable = columnConfig.IsEditable
                     };
+                    tableHeader.Eval = displayRender.CreateRenderFactory(tableHeader).CreateRender(tableHeader);
                     if (IsEditable && columnConfig.IsEditable)
                     {
-                        var controlInfo = map.GetControl(property, entityProperty);
+                        var controlInfo = map.GetControl(property);
                         tableHeader.EditorRender = (IControlRender)provider.GetRequiredService(controlInfo.RenderType);
                         tableHeader.EditorRenderConfig = new RenderConfig()
                         {
@@ -450,114 +517,158 @@ namespace Blazui.Component
                             RequiredMessage = editorConfig.RequiredMessage ?? $"{tableHeader.Text}不能为空",
                             Placeholder = editorConfig.Placeholder,
                             Property = property,
-                            EntityProperty = entityProperty,
                             DataSourceLoader = controlInfo.DataSourceLoader,
                             Page = Page
                         };
+                        Headers.Insert(0, tableHeader);
                     }
-                    Headers.Insert(0, tableHeader);
                 }
                  );
                 var lastIndex = Headers.Count;
                 var btnUpdateText = "更新";
                 BButton btnUpdate = null, btnDelete = null;
-                Headers.Insert(lastIndex++, new TableHeader()
+                var operationHeader = new TableHeader()
                 {
-                    Text = "操作",
-                    Template = row =>
+                    Text = "操作"
+                };
+                operationHeader.Template = row =>
+                {
+                    return (builder) =>
                     {
-                        return (builder) =>
+                        builder.OpenComponent<BButtonGroup>(0);
+                        builder.AddAttribute(1, nameof(BButtonGroup.ChildContent), (RenderFragment)(builder =>
                         {
-                            builder.OpenComponent<BButtonGroup>(0);
-                            builder.AddAttribute(1, nameof(BButtonGroup.ChildContent), (RenderFragment)(builder =>
+                            builder.OpenComponent<BButton>(1);
+                            builder.AddAttribute(2, nameof(BButton.Type), ButtonType.Primary);
+                            builder.AddAttribute(3, nameof(BButton.Size), ButtonSize.Small);
+                            builder.AddAttribute(4, nameof(BButton.ChildContent), (RenderFragment)(builder =>
                             {
-                                builder.OpenComponent<BButton>(1);
-                                builder.AddAttribute(2, nameof(BButton.Type), ButtonType.Primary);
-                                builder.AddAttribute(3, nameof(BButton.Size), ButtonSize.Small);
-                                builder.AddAttribute(4, nameof(BButton.ChildContent), (RenderFragment)(builder =>
-                                {
-                                    if (row == editingRow)
-                                    {
-                                        builder.AddMarkupContent(5, btnUpdateText);
-                                    }
-                                    else
-                                    {
-                                        builder.AddMarkupContent(5, "更新");
-                                    }
-                                }));
-                                builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
-                                {
-                                    if (editingTaskCompletionSource == null)
-                                    {
-                                        editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                        editingRow = row;
-                                        btnUpdateText = "保存";
-                                        btnUpdate.MarkAsRequireRender();
-                                        Refresh();
-                                        return;
-                                    }
-                                    btnUpdate.IsLoading = true;
-                                    btnUpdate.Refresh();
-                                    _ = SaveDataAsync(SaveAction.Update);
-                                    var result = await editingTaskCompletionSource.Task;
-                                    if (result != 0)
-                                    {
-                                        editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                        return;
-                                    }
-                                    editingTaskCompletionSource = null;
-                                    dataSourceUpdated = true;
-                                    Toast("更新成功");
-                                    editingRow = null;
-                                    btnUpdate.IsLoading = false;
-                                    btnUpdateText = "更新";
-                                    Refresh();
-                                }));
-                                builder.AddComponentReferenceCapture(7, btn => btnUpdate = (BButton)btn);
-                                builder.CloseComponent();
-                                builder.OpenComponent<BButton>(8);
-                                builder.AddAttribute(9, nameof(BButton.Type), ButtonType.Danger);
-                                builder.AddAttribute(10, nameof(BButton.Size), ButtonSize.Small);
-                                builder.AddAttribute(11, nameof(BButton.ChildContent), (RenderFragment)(builder =>
-                                {
-                                    builder.AddMarkupContent(12, "删除");
-                                }));
-                                builder.AddAttribute(13, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
-                                {
-                                    var confirmResult = await ConfirmAsync("确认要删除吗？");
-                                    if (confirmResult != MessageBoxResult.Ok)
-                                    {
-                                        return;
-                                    }
-                                    foreach (var item in Headers)
-                                    {
-                                        item.RawValue = row;
-                                    }
-                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                    btnDelete.IsLoading = true;
-                                    btnDelete.Refresh();
-                                    _ = SaveDataAsync(SaveAction.Delete);
-                                    var result = await editingTaskCompletionSource.Task;
-                                    if (result != 0)
-                                    {
-                                        editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                        return;
-                                    }
-                                    editingTaskCompletionSource = null;
-                                    dataSourceUpdated = true;
-                                    Toast("删除成功");
-                                    Refresh();
-                                }));
-                                builder.AddComponentReferenceCapture(14, btn => btnDelete = (BButton)btn);
-                                builder.CloseComponent();
+                                builder.AddMarkupContent(5, btnUpdateText);
                             }));
+                            if (Page == null)
+                            {
+                                throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
+                            }
+                            builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
+                            {
+                                if (editingTaskCompletionSource == null)
+                                {
+                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                    editingRow = row;
+                                    btnUpdateText = "保存";
+                                    btnUpdate.MarkAsRequireRender();
+                                    Refresh();
+                                    return;
+                                }
+                                btnUpdate.IsLoading = true;
+                                Refresh();
+                                _ = SaveDataAsync(SaveAction.Update);
+                                var result = await editingTaskCompletionSource.Task;
+                                editingTaskCompletionSource = null;
+                                btnUpdate.IsLoading = false;
+                                if (result != 0)
+                                {
+                                    Refresh();
+                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                    return;
+                                }
+                                btnUpdateText = "更新";
+                                btnUpdate.MarkAsRequireRender();
+                                Refresh();
+                            }));
+                            builder.AddComponentReferenceCapture(7, btn => btnUpdate = (BButton)btn);
                             builder.CloseComponent();
-                        };
-                    }
-                }); ;
+                            builder.OpenComponent<BButton>(8);
+                            builder.AddAttribute(9, nameof(BButton.Type), ButtonType.Danger);
+                            builder.AddAttribute(10, nameof(BButton.Size), ButtonSize.Small);
+                            builder.AddAttribute(11, nameof(BButton.ChildContent), (RenderFragment)(builder =>
+                            {
+                                builder.AddMarkupContent(12, "删除");
+                            }));
+                            builder.AddAttribute(13, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
+                            {
+                                var confirmResult = await ConfirmAsync("确认要删除吗？");
+                                if (confirmResult != MessageBoxResult.Ok)
+                                {
+                                    return;
+                                }
+                                foreach (var item in Headers)
+                                {
+                                    item.RawValue = row;
+                                }
+                                editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                btnDelete.IsLoading = true;
+                                btnDelete.Refresh();
+                                _ = SaveDataAsync(SaveAction.Delete);
+                                var result = await editingTaskCompletionSource.Task;
+                                btnDelete.IsLoading = false;
+                                editingTaskCompletionSource = null;
+                                if (result != 0)
+                                {
+                                    btnDelete.Refresh();
+                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                    return;
+                                }
+                                editingTaskCompletionSource = null;
+                                editingRow = null;
+                                Toast("删除成功");
+                            }));
+                            builder.AddComponentReferenceCapture(14, btn => btnDelete = (BButton)btn);
+                            builder.CloseComponent();
+                        }));
+                        builder.CloseComponent();
+                    };
+                };
+                Headers.Insert(lastIndex++, operationHeader);
+                chkAll?.MarkAsRequireRender();
+                ResetSelectAllStatus();
             }
-            chkAll?.MarkAsRequireRender();
-            ResetSelectAllStatus();
+        }
+
+        private async Task ReadyExecuteRefreshAsync()
+        {
+            if (loadTaskCompletionSource == null)
+            {
+                loadTaskCompletionSource = new TaskCompletionSource<int>();
+            }
+            else
+            {
+                loadTaskCompletionSource.TrySetResult(0);
+                loadTaskCompletionSource.TrySetCanceled();
+                loadTaskCompletionSource = null;
+                await ReadyExecuteRefreshAsync();
+                return;
+            }
+            var task = Task.Delay(500);
+            var resultTask = await Task.WhenAny(task, loadTaskCompletionSource.Task);
+            if (resultTask == loadTaskCompletionSource.Task)
+            {
+                return;
+            }
+            await InvokeAsync(Refresh);
+        }
+
+        private void PropertyChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (delayTask == null)
+            {
+                delayCancelToken = new CancellationTokenSource();
+                delayTask = Task.Delay(BatchUpdateDelayTime, delayCancelToken.Token).ContinueWith(t =>
+                {
+                    if (t.IsCanceled)
+                    {
+                        return;
+                    }
+                    dataSourceUpdated = true;
+                    InvokeAsync(Refresh);
+                    delayTask = null;
+                });
+            }
+            else if (delayTask.Status == TaskStatus.Running)
+            {
+                delayCancelToken.Dispose();
+            }
+
         }
 
         private void CalculateLevel(List<ITreeItem> treeItems, int parentLevel, ITreeItem[] allTreeItems)
@@ -581,7 +692,8 @@ namespace Blazui.Component
             saveAddButton.Refresh();
             await SaveDataAsync(SaveAction.Create);
             saveAddButton.IsLoading = false;
-            saveAddButton.Refresh();
+            saveAddButton.MarkAsRequireRender();
+            MarkAsRequireRender();
 #pragma warning restore BL0005 // Component parameter should not be set outside of its component.
         }
 
@@ -622,7 +734,7 @@ namespace Blazui.Component
                 }
                 keyHeader.EditingValue = string.Empty;
                 valueHeader.EditingValue = null;
-                InitlizeDataSource(0, string.Empty);
+                await InitlizeDataSourceAsync(0, string.Empty, true);
                 if (editingRow != null)
                 {
                     editingRow = null;
@@ -646,63 +758,76 @@ namespace Blazui.Component
             {
                 if (DataSource == null)
                 {
-                    throw new BlazuiException("DataType 或 DataSource 必须设置一个");
+                    throw new BlazuiException(2, "DataType 或 DataSource 必须设置一个");
                 }
                 DataType = DataSource.GetType().GetGenericArguments()[0];
             }
             var row = Activator.CreateInstance(DataType);
             foreach (var header in Headers)
             {
-                if (!CanEdit(header))
+                if ((!header.IsEditable && header.EditorRenderConfig == null) || (saveAction != SaveAction.Create && !CanEdit(header)))
                 {
-                    if (header.Property != null && header.Property.Name.Contains("Id"))
+                    if (header.Property != null && header.Property.Name.Contains("Id") && saveAction != SaveAction.Create)
                     {
                         header.Property.SetValue(row, header.Property.GetValue(header.RawValue));
                     }
+                    Clear(header);
                     continue;
                 }
                 if (saveAction != SaveAction.Delete)
                 {
-                    object cell;
-                    if (header.EntityProperty != null)
-                    {
-                        cell = Convert.ChangeType(header.EditorRenderConfig.EditingValue, header.EntityProperty.PropertyType);
-                    }
-                    else
-                    {
-                        cell = Convert.ChangeType(header.EditorRenderConfig.EditingValue, header.Property.PropertyType);
-                    }
+                    object cell = Convert.ChangeType(header.EditorRenderConfig.EditingValue, header.Property.PropertyType);
                     if (header.EditorRenderConfig.IsRequired && cell == null)
                     {
                         Toast(header.EditorRenderConfig.RequiredMessage);
-                        editingTaskCompletionSource.TrySetResult(-1);
+                        editingTaskCompletionSource?.TrySetResult(-1);
                         return;
                     }
                     header.Property.SetValue(row, cell);
                 }
-                header.RawValue = null;
-                header.EditingValue = null;
-                header.EditorRenderConfig.RawValue = null;
-                header.EditorRenderConfig.RawLabel = null;
-                header.EditorRenderConfig.RawInfoHasSet = false;
+                Clear(header);
             }
             var tableSaveArg = new TableSaveEventArgs()
             {
                 Action = saveAction,
-                Data = row
+                Data = row,
+                Table = this,
             };
+            if (!OnSave.HasDelegate)
+            {
+                if (DataType == typeof(KeyValueModel))
+                {
+                    OnSave = EventCallback.Factory.Create<TableSaveEventArgs>(this, TableRender.DefaultSaverAsync);
+                }
+                else if (!string.IsNullOrWhiteSpace(Key))
+                {
+                    OnSave = EventCallback.Factory.Create<TableSaveEventArgs>(this, TableRender.DefaultSaverAsync);
+                }
+                else
+                {
+                    Toast("OnSave 事件没有注册或数据源类型不是 KeyValueModel 或没指定 Key");
+                    editingTaskCompletionSource?.TrySetResult(-1);
+                    return;
+                }
+            }
+            tableSaveArg.Key = Key;
+            tableSaveArg.DataType = DataType;
             if (editingTaskCompletionSource != null)
             {
-                if (OnSave.HasDelegate)
+                await OnSave.InvokeAsync(tableSaveArg);
+                if (tableSaveArg.Cancel)
                 {
-                    await OnSave.InvokeAsync(tableSaveArg);
-                    if (tableSaveArg.Cancel)
-                    {
-                        editingTaskCompletionSource.TrySetResult(-1);
-                        return;
-                    }
-                    editingTaskCompletionSource.TrySetResult(0);
+                    editingTaskCompletionSource.TrySetResult(-1);
                     return;
+                }
+                editingRow = null;
+                dataSourceUpdated = true;
+                Toast("更新成功");
+                await RefreshDataSourceAsync(false);
+                editingTaskCompletionSource.TrySetResult(0);
+                if (FormItem != null)
+                {
+                    SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), false);
                 }
 
                 editingTaskCompletionSource.TrySetResult(-1);
@@ -711,13 +836,39 @@ namespace Blazui.Component
             {
                 if (OnSave.HasDelegate)
                 {
-                    await OnSave.InvokeAsync(new TableSaveEventArgs()
+                    await OnSave.InvokeAsync(tableSaveArg);
+                    if (tableSaveArg.Cancel)
                     {
-                        Action = SaveAction.Create,
-                        Data = row
-                    });
+                        editingTaskCompletionSource?.TrySetResult(-1);
+                        return;
+                    }
+                    editingRow = null;
+                    dataSourceUpdated = true;
+                    Toast("更新成功");
+                    await RefreshDataSourceAsync(false);
+                    editingTaskCompletionSource?.TrySetResult(0);
+                    if (FormItem != null)
+                    {
+                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), false);
+                    }
+                    return;
                 }
+                editingTaskCompletionSource?.TrySetResult(-1);
             }
+        }
+
+        private void Clear(TableHeader header)
+        {
+            header.RawValue = null;
+            header.EditingValue = null;
+            if (header.EditorRenderConfig == null)
+            {
+                return;
+            }
+            header.EditorRenderConfig.RawValue = null;
+            header.EditorRenderConfig.EditingValue = null;
+            header.EditorRenderConfig.RawLabel = null;
+            header.EditorRenderConfig.RawInfoHasSet = false;
         }
 
         private bool CanEdit(TableHeader header)
@@ -752,6 +903,55 @@ namespace Blazui.Component
             {
                 return;
             }
+            var finalChildren = GetAllChildren(treeRow);
+            if (string.IsNullOrWhiteSpace(Url))
+            {
+                if (!treeRow.Expanded)
+                {
+                    LocalExpand(treeRow, finalChildren);
+                }
+                else
+                {
+                    hiddenRows.AddRange(finalChildren);
+                    treeRow.Direction = "up";
+                    treeRow.Expanded = false;
+                }
+            }
+            else
+            {
+                if (treeRow.Expanded)
+                {
+                    treeRow.Expanded = false;
+                    rows.RemoveAll(finalChildren.Contains);
+                    DataSource = rows;
+                    await InitlizeDataSourceAsync(0, "up", false);
+                    if (DataSourceChanged.HasDelegate)
+                    {
+                        await DataSourceChanged.InvokeAsync(DataSource);
+                    }
+                    if (FormItem != null)
+                    {
+                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
+                    }
+                    treeRow.Direction = "up";
+                }
+                else
+                {
+                    await LoadChildrenAsync(treeRow, false);
+                }
+            }
+            MarkAsRequireRender();
+        }
+
+        private void LocalExpand(ITreeItem treeRow, List<ITreeItem> finalChildren)
+        {
+            hiddenRows.RemoveAll(finalChildren.Contains);
+            treeRow.Direction = "right";
+            treeRow.Expanded = true;
+        }
+
+        private List<ITreeItem> GetAllChildren(ITreeItem treeRow)
+        {
             var treeRows = rows.Cast<ITreeItem>().ToArray();
             var children = treeRows.Where(x => x.ParentId == treeRow.Id).ToList();
             var finalChildren = children.ToList();
@@ -759,71 +959,42 @@ namespace Blazui.Component
             {
                 finalChildren.AddRange(FindChildren(item));
             }
-            if (string.IsNullOrWhiteSpace(Url))
-            {
-                if (hiddenRows.Any(x => finalChildren.Contains(x)))
-                {
-                    hiddenRows.RemoveAll(finalChildren.Contains);
-                    treeRow.Direction = "right";
-                }
-                else
-                {
-                    hiddenRows.AddRange(finalChildren);
-                    treeRow.Direction = "up";
-                }
-            }
-            else
-            {
-                if (finalChildren.Any())
-                {
-                    rows.RemoveAll(finalChildren.Contains);
-                    DataSource = rows;
-                    InitlizeDataSource(0, "up");
-                    if (DataSourceChanged.HasDelegate)
-                    {
-                        await DataSourceChanged.InvokeAsync(DataSource);
-                    }
-                    if (FormItem != null)
-                    {
-                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
-                    }
-                    treeRow.Direction = "up";
-                }
-                else
-                {
-                    treeRow.IsLoading = true;
-                    MarkAsRequireRender();
-                    Refresh();
-                    object newDataSource = await FetchChildrenAsync(treeRow);
-                    treeRow.IsLoading = false;
-                    var enumerbale = DataSource as IEnumerable;
-                    var startIndex = 0;
-                    foreach (var item in enumerbale)
-                    {
-                        if (item == row)
-                        {
-                            break;
-                        }
-                        startIndex++;
-                    }
-                    var oldDataSource = enumerbale.Cast<object>().ToList();
-                    oldDataSource.InsertRange(startIndex + 1, (newDataSource as IEnumerable).Cast<object>());
-                    DataSource = oldDataSource;
-                    InitlizeDataSource(treeRow.Level.Value + 1, "up");
-                    if (DataSourceChanged.HasDelegate)
-                    {
-                        await DataSourceChanged.InvokeAsync(DataSource);
-                    }
-                    if (FormItem != null)
-                    {
-                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
-                    }
-                }
-            }
-            MarkAsRequireRender();
+
+            return finalChildren;
         }
 
-        private async Task<object> FetchChildrenAsync(ITreeItem treeRow)
+        private async Task LoadChildrenAsync(ITreeItem row, bool autoExpand)
+        {
+            row.Expanded = true;
+            row.IsLoading = true;
+            Refresh();
+            var newDataSource = await FetchChildrenAsync(row);
+            row.IsLoading = false;
+            var enumerbale = DataSource as IEnumerable;
+            var startIndex = 0;
+            foreach (var item in enumerbale)
+            {
+                if (item == row)
+                {
+                    break;
+                }
+                startIndex++;
+            }
+            var oldDataSource = enumerbale.Cast<object>().ToList();
+            oldDataSource.InsertRange(startIndex + 1, (newDataSource as IEnumerable).Cast<object>());
+            DataSource = oldDataSource;
+            await InitlizeDataSourceAsync(row.Level.Value + 1, "up", autoExpand);
+            if (DataSourceChanged.HasDelegate)
+            {
+                await DataSourceChanged.InvokeAsync(DataSource);
+            }
+            if (FormItem != null)
+            {
+                SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
+            }
+        }
+
+        private async Task<IEnumerable> FetchChildrenAsync(ITreeItem treeRow)
         {
             treeRow.Direction = "right";
             if (!Url.EndsWith("/"))
@@ -831,7 +1002,11 @@ namespace Blazui.Component
                 Url += "/";
             }
 
-            object newDataSource = await httpClient.GetFromJsonAsync(Url + treeRow.Id, typeof(List<>).MakeGenericType(DataType));
+            var newDataSource = (IEnumerable)await httpClient.GetFromJsonAsync(Url + treeRow.Id, typeof(List<>).MakeGenericType(DataType));
+            if (!newDataSource.Cast<object>().Any())
+            {
+                treeRow.HasChildren = false;
+            }
             return newDataSource;
         }
 

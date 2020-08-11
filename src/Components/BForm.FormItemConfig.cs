@@ -13,5 +13,7 @@ namespace Blazui.Component
         public string Image { get; internal set; }
         public float LabelWidth { get; internal set; }
         public string Name { get; internal set; }
+        public bool Ignore { get; internal set; }
+        public int SortNo { get; internal set; }
     }
 }

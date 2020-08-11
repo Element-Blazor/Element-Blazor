@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Blazui.Component.Model
 {
-    internal class KeyValueModel
+    public class KeyValueModel
     {
         [TableColumn(Text ="名称")]
         public string Key { get; set; }

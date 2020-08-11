@@ -26,7 +26,6 @@ namespace Blazui.Component
         public bool IsEditable { get; internal set; }
         public IControlRender EditorRender { get; set; }
         public RenderConfig EditorRenderConfig { get; set; }
-        public PropertyInfo EntityProperty { get; set; }
         public Func<object, object> EvalRaw { get; set; }
         public bool Ignore { get; internal set; }
     }

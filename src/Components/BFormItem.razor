@@ -25,32 +25,52 @@
         }
     }
 }
-<div class="@string.Join(" ",clsList)" style="@formItemCssBuilder">
-    @if (!string.IsNullOrWhiteSpace(Image))
-    {
-        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
-    }
-    else if (!string.IsNullOrWhiteSpace(Label))
-    {
-        <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">
-            @Label
-        </label>
-    }
-    <div class="el-form-item__content" style="@string.Join(";",bodyStyles)">
-        <CascadingValue Value="this">
-            @ChildContent
-        </CascadingValue>
-        @if (ValidationResult != null && !ValidationResult.IsValid)
+@if (ApplyStyle)
+{
+    <div class="@string.Join(" ", clsList)" style="@formItemCssBuilder">
+        @if (!string.IsNullOrWhiteSpace(Image))
         {
-            @foreach (var errorMessage in ValidationResult.ErrorMessages)
-            {
-                var marginTop = IsShowing ? "3px" : "0px";
-                var opacity = IsShowing ? "0" : "1";
-                <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
-                    @errorMessage
-                </div>
-            }
+            <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
         }
-    </div>
+        else if (!string.IsNullOrWhiteSpace(Label))
+        {
+            <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">
+                @Label
+            </label>
+        }
+        <div class="el-form-item__content" style="@string.Join(";", bodyStyles)">
+            <CascadingValue Value="this">
+                @ChildContent
+            </CascadingValue>
+            @if (ValidationResult != null && !ValidationResult.IsValid)
+            {
+                @foreach (var errorMessage in ValidationResult.ErrorMessages)
+                {
+                    var marginTop = IsShowing ? "3px" : "0px";
+                    var opacity = IsShowing ? "0" : "1";
+                    <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                        @errorMessage
+                    </div>
+                }
+            }
+        </div>
 
-</div>
+    </div>
+}
+else
+{
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+    @if (ValidationResult != null && !ValidationResult.IsValid)
+    {
+        @foreach (var errorMessage in ValidationResult.ErrorMessages)
+        {
+            var marginTop = IsShowing ? "3px" : "0px";
+            var opacity = IsShowing ? "0" : "1";
+            <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                @errorMessage
+            </div>
+        }
+    }
+}

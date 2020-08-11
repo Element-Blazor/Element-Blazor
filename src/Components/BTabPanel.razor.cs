@@ -42,6 +42,7 @@ namespace Blazui.Component
 
         public void Activate()
         {
+            TabContainer.headerSizeUpdated = false;
             IsActive = true;
         }
 
@@ -103,6 +104,11 @@ namespace Blazui.Component
                 var padding = paddingLeft + (await dom.Style.GetPaddingRightAsync());
                 var barWidth = width - padding;
                 var barOffsetLeft = offsetLeft + paddingLeft;
+                if (barWidth < 0)
+                {
+                    Refresh();
+                    return;
+                }
                 await TabContainer.UpdateHeaderSizeAsync(this, barWidth, barOffsetLeft);
             }
             else

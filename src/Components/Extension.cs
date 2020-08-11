@@ -1,5 +1,6 @@
 ﻿using Blazui.Component.ControlRender;
 using Blazui.Component.ControlRenders;
+using Blazui.Component.DisplayRenders;
 using Blazui.Component.Lang;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,6 @@ namespace Blazui.Component
         /// <returns></returns>
         public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
         {
-            services.AddScoped<HttpClient>();
             services.AddSingleton<FormFieldControlMap>();
             services.AddSingleton<TableEditorMap>();
             services.AddScoped<Document>();
@@ -36,6 +36,10 @@ namespace Blazui.Component
             services.AddScoped<IDatePickerRender, EmptyRender>();
             services.AddScoped<IUploadRender, UploadRender>();
             services.AddScoped<ITableRender, TableRender>();
+            services.AddSingleton<DisplayRenderFactory>();
+            services.AddSingleton<DateTimeRender>();
+            services.AddSingleton<EnumRender>();
+            services.AddSingleton<GenericRender>();
             return services;
         }
 

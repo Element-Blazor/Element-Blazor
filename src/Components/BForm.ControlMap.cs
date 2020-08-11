@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Blazui.Component
@@ -69,10 +71,10 @@ namespace Blazui.Component
 
         private IServiceProvider provider { get; }
 
-        internal Dictionary<string, FormItemConfig> GetFormItems(Type entityType, string formName)
+        internal List<FormItemConfig> GetFormItems(Type entityType)
         {
             var properties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.SetProperty);
-            var formItems = new Dictionary<string, FormItemConfig>();
+            var formItems = new List<FormItemConfig>();
             var index = 0;
             foreach (var property in properties)
             {
@@ -89,43 +91,41 @@ namespace Blazui.Component
                 {
                     throw new BlazuiException($"类型 {property.PropertyType.FullName} 没有配置对应的组件，表单无法生成");
                 }
-                var formControl = property.GetCustomAttribute<FormControlAttribute>();
-                if (formControl == null)
+                var formControl = property.GetCustomAttribute<FormControlAttribute>() ?? new FormControlAttribute()
                 {
-                    formControl = new FormControlAttribute()
-                    {
-                        ControlType = controlType,
-                        IsRequired = true,
-                        Label = property.Name
-                    };
-                }
-                if (string.IsNullOrWhiteSpace(formControl.RequiredMessage))
+                    LabelWidth = 100
+                };
+                if (formControl.LabelWidth <= 0)
                 {
-                    formControl.RequiredMessage = "请填写此字段";
+                    formControl.LabelWidth = 100;
                 }
+                var editorGeneratorAttr = property.GetCustomAttribute<EditorGeneratorAttribute>();
                 var formItemType = typeof(BFormItem<>).MakeGenericType(property.PropertyType);
                 if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(BSelect<>))
                 {
                     controlType = controlType.MakeGenericType(property.PropertyType);
                 }
-                formItems.Add(property.Name, new FormItemConfig()
+
+                formItems.Add(new FormItemConfig()
                 {
+                    SortNo = formControl.SortNo,
                     FormItem = formItemType,
-                    IsRequired = formControl.IsRequired,
-                    RequiredMessage = formControl.RequiredMessage,
-                    InputControl = controlType,
+                    IsRequired = editorGeneratorAttr?.IsRequired ?? true,
+                    RequiredMessage = editorGeneratorAttr.RequiredMessage ?? "请填写此字段",
+                    InputControlType = controlType,
+                    Ignore = editorGeneratorAttr?.Ignore ?? false,
                     InputControlRender = GetInputControlRender(controlType),
-                    Label = formControl.Label,
-                    Image = formControl.Image,
+                    Label = editorGeneratorAttr?.Label ?? property.Name,
+                    Image = editorGeneratorAttr.Image,
                     LabelWidth = formControl.LabelWidth,
-                    Placeholder = formControl.Placeholder,
+                    Placeholder = editorGeneratorAttr.Placeholder,
                     Name = property.Name,
                     Property = property,
                     ControlAttribute = GetInputControlConfig(property, controlType)
-                }); ; ;
+                });
                 index += 11;
             }
-            return formItems;
+            return formItems.Any(x => x.SortNo > 0) ? formItems.OrderBy(x => x.SortNo).ToList() : formItems;
         }
 
 

@@ -14,6 +14,7 @@ namespace Blazui.Component
 {
     public partial class BTab
     {
+        internal bool headerSizeUpdated = false;
         /// <summary>
         /// 数据源
         /// </summary>
@@ -250,24 +251,21 @@ namespace Blazui.Component
                 {
                     activeTab.Activate();
                 }
-            }
-            Console.WriteLine("ActiveTab:" + activeTab.Name);
-            if (activeTabOption == null)
-            {
-                activeTab.MarkAsRequireRender();
-                activeTab.Refresh();
-            }
-            else
-            {
-                foreach (var item in tabPanels)
+                Console.WriteLine("ActiveTab:" + activeTab.Name);
+                if (activeTabOption == null)
                 {
-                    if (item.Name != activeTabOption.Name)
+                    activeTab.Refresh();
+                }
+                else
+                {
+                    foreach (var item in tabPanels)
                     {
-                        continue;
+                        if (item.Name != activeTabOption.Name)
+                        {
+                            continue;
+                        }
+                        item.Refresh();
                     }
-                    Console.WriteLine("for:" + item.Name);
-                    item.MarkAsRequireRender();
-                    item.Refresh();
                 }
             }
             if (!firstRender && !RequireRender)
@@ -280,11 +278,12 @@ namespace Blazui.Component
 
         internal async Task UpdateHeaderSizeAsync(BTabPanel tabPanel, float barWidth, float barOffsetLeft)
         {
-            if (BarWidth == barWidth && barOffsetLeft == BarOffsetLeft)
+            if (headerSizeUpdated)
             {
                 await TabRenderCompletedAsync(tabPanel);
                 return;
             }
+            headerSizeUpdated = true;
             BarWidth = barWidth;
             BarOffsetLeft = barOffsetLeft;
             RequireRender = true;
@@ -308,7 +307,7 @@ namespace Blazui.Component
             var tab = tabPanels.FirstOrDefault(x => x.Name == name);
             if (tab == null)
             {
-                throw new BlazuiException($"Name 为 {name} 的 Tab 不存在");
+                ExceptionHelper.Throw(ExceptionHelper.TabNameNotFound, $"Name 为 {name} 的 Tab 不存在");
             }
             await SetActivateTabAsync(tab);
         }

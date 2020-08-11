@@ -14,6 +14,7 @@ namespace Blazui.Component.ControlRenders
         {
             Type valueType = CreateTwoWayBinding(config, builder, startIndex);
             var finalType = Nullable.GetUnderlyingType(valueType) ?? valueType;
+            var editingValue = config.EditingValue?.ToString();
             if (finalType.IsEnum)
             {
                 if (config.RawValue == null && finalType != valueType)
@@ -26,18 +27,24 @@ namespace Blazui.Component.ControlRenders
                 }
                 else
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Enum.Parse(finalType, config.RawValue.ToString()));
+                    builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Enum.Parse(finalType, editingValue));
                 }
             }
             else
             {
-                builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Convert.ChangeType(config.RawValue, valueType));
+                builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Convert.ChangeType(editingValue, valueType));
             }
         }
 
         protected Type CreateTwoWayBinding(RenderConfig config, RenderTreeBuilder builder, int startIndex, string propertyName = nameof(BInput<string>.ValueChanged), Type valueType = null)
         {
             valueType = valueType ?? config.InputControlType.GetGenericArguments()[0];
+            if (config.Page == null)
+            {
+                Console.WriteLine("没有双向绑定");
+                return valueType;
+            }
+            Console.WriteLine("开始双向绑定");
             var createMethod = typeof(EventCallbackFactory).GetMethods().FirstOrDefault(x =>
             {
                 if (!x.IsGenericMethod || !x.IsPublic)

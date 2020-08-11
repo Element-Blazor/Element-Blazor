@@ -17,6 +17,7 @@ namespace Blazui.Component.ControlRenders
         public void Render(RenderTreeBuilder builder, RenderConfig config)
         {
             var inputConfig = (InputAttribute)config.ControlAttribute;
+            Console.WriteLine(config.InputControlType);
             builder.OpenComponent(0, config.InputControlType);
             if (inputConfig != null)
             {
@@ -30,7 +31,7 @@ namespace Blazui.Component.ControlRenders
                 builder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
             }
             builder.AddAttribute(10, nameof(BFormItemObject.EnableAlwaysRender), true);
-            CreateBind(config, builder, 10);
+            CreateBind(config, builder, 11);
             builder.CloseComponent();
         }
     }

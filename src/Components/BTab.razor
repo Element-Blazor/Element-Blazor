@@ -16,6 +16,8 @@
     var position = GetPosition();
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
+    var classBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+        .Add("el-tabs", tabType, tabPosition);
     object activeContent = ActiveTab?.ChildContent;
     var bodyStyle = ActiveTab?.Style;
     if (DataSource != null)
@@ -25,7 +27,7 @@
         bodyStyle = activeOption?.BodyStyle;
     }
 }
-<div class="el-tabs @tabType @tabPosition">
+<div class="@classBuilder.ToString()" style="@Style">
     @if (TabPosition == TabPosition.Bottom)
     {
         <div class="el-tabs__content" style="@bodyStyle" @ref="Content">

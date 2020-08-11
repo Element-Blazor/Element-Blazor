@@ -30,7 +30,7 @@
 .blaz-layout {
     display: flex;
     flex-direction: column;
-    overflow:hidden
+    overflow: hidden
 }
 
     .blaz-layout > .blaz-layout-container {
@@ -230,4 +230,35 @@ div.blazor-ribbon {
 
         div.blazor-ribbon div.blazor-block:last-child {
             border-right: 1px solid transparent;
+        }
+
+div.el-input-group__prepend {
+    width: 120px;
+}
+
+fieldset.blazor-fieldset {
+    border-color: #DCDFE6;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+    fieldset.blazor-fieldset legend {
+        padding-left: 10px;
+        padding-right: 10px;
+        color: grey;
+    }
+
+div.blazor-groupbox {
+    display: flex;
+}
+
+    div.blazor-groupbox > div.el-form-item {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+        div.blazor-groupbox > div.el-form-item:last-child {
+            margin-right: 0;
         }

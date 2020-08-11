@@ -1,5 +1,6 @@
 ﻿using Blazui.Component.ControlRenders;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Blazui.Component
 {
     public partial class BForm : BComponentBase, IContainerComponent
     {
+        private List<FormItemConfig> formItemConfigs;
         [Inject]
         FormFieldControlMap formFieldControlMap { get; set; }
 
@@ -22,6 +24,12 @@ namespace Blazui.Component
 
         [Parameter]
         public bool Inline { get; set; }
+
+        /// <summary>
+        /// 是否是创建
+        /// </summary>
+        [Parameter]
+        public bool IsCreate { get; set; } = true;
 
         /// <summary>
         /// 表单名称
@@ -91,11 +99,19 @@ namespace Blazui.Component
              {
                  if (EntityType != null)
                  {
-                     var formItemConfigs = formFieldControlMap.GetFormItems(EntityType, Name);
+                     if (formItemConfigs == null)
+                     {
+                         formItemConfigs = formFieldControlMap.GetFormItems(EntityType);
+                     }
                      ChildContent = formItemsBuilder =>
                      {
-                         foreach (var formItemConfig in formItemConfigs.Values)
+                         foreach (var formItemConfig in formItemConfigs)
                          {
+                             formItemConfig.Page = Page;
+                             if (formItemConfig.Ignore)
+                             {
+                                 continue;
+                             }
                              formItemsBuilder.OpenComponent(1, formItemConfig.FormItem);
                              formItemsBuilder.AddAttribute(2, nameof(BFormItemObject.IsRequired), formItemConfig.IsRequired);
                              formItemsBuilder.AddAttribute(3, nameof(BFormItemObject.RequiredMessage), formItemConfig.RequiredMessage);
@@ -113,7 +129,7 @@ namespace Blazui.Component
                          if (Buttons != null)
                          {
                              formItemsBuilder.OpenComponent<BFormActionItem>(11);
-                             formItemsBuilder.AddAttribute(12, nameof(Style), "text-align:center");
+                             formItemsBuilder.AddAttribute(12, nameof(Style), "text-align:right");
                              formItemsBuilder.AddAttribute(13, nameof(BFormItemObject.ChildContent), Buttons);
                              formItemsBuilder.CloseComponent();
                          }
@@ -173,7 +189,7 @@ namespace Blazui.Component
             {
                 return;
             }
-            Values = Value.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(Value));
+            Values = Value.GetType().GetProperties().Reverse().ToDictionary(x => x.Name, x => x.GetValue(Value));
         }
 
         protected override void OnParametersSet()

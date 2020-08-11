@@ -11,7 +11,7 @@ namespace Blazui.Component
 {
     public class TableEditorMap
     {
-        private IDictionary<Func<PropertyInfo, EditorAttribute, bool>, Type> propertyEditorMap = new Dictionary<Func<PropertyInfo, EditorAttribute, bool>, Type>();
+        private IDictionary<Func<PropertyInfo, EditorGeneratorAttribute, bool>, Type> propertyEditorMap = new Dictionary<Func<PropertyInfo, EditorGeneratorAttribute, bool>, Type>();
         private IDictionary<Func<PropertyInfo, Type, bool>, Type> editorRenderMap = new Dictionary<Func<PropertyInfo, Type, bool>, Type>();
         public TableEditorMap()
         {
@@ -87,11 +87,11 @@ namespace Blazui.Component
             propertyEditorMap.Add((property, editorAttribute) => property.PropertyType == typeof(List<string>), typeof(BSelect<string>));
         }
 
-        internal (Type ControlType, Type RenderType, Type DataSourceLoader) GetControl(PropertyInfo propertyInfo, PropertyInfo entityProperty)
+        internal (Type ControlType, Type RenderType, Type DataSourceLoader) GetControl(PropertyInfo propertyInfo)
         {
-            var editorAttribute = propertyInfo.GetCustomAttribute<EditorAttribute>();
-            var control = propertyEditorMap.FirstOrDefault(x => x.Key(entityProperty ?? propertyInfo, editorAttribute)).Value;
-            var renderType = editorRenderMap.FirstOrDefault(x => x.Key(entityProperty ?? propertyInfo, control)).Value;
+            var editorAttribute = propertyInfo.GetCustomAttribute<EditorGeneratorAttribute>();
+            var control = propertyEditorMap.FirstOrDefault(x => x.Key(propertyInfo, editorAttribute)).Value;
+            var renderType = editorRenderMap.FirstOrDefault(x => x.Key(propertyInfo, control)).Value;
             if (renderType == null)
             {
                 throw new BlazuiException($"属性 {propertyInfo.Name} 类型为 {propertyInfo.PropertyType} 对应的渲染器不存在");

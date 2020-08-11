@@ -20,5 +20,12 @@ namespace Blazui.Component
         /// 是否取消保存动作
         /// </summary>
         public bool Cancel { get; set; }
+
+        /// <summary>
+        /// 表格对象
+        /// </summary>
+        public BTable Table { get; set; }
+        public string Key { get; set; }
+        public Type DataType { get; set; }
     }
 }

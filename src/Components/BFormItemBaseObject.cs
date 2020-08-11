@@ -10,6 +10,11 @@ namespace Blazui.Component
     public abstract class BFormItemObject : BComponentBase
     {
         /// <summary>
+        /// 是否应用样式，如果不应用，则该组件本身不生成任何 HTML
+        /// </summary>
+        [Parameter]
+        public bool ApplyStyle { get; set; } = true;
+        /// <summary>
         /// 初始值是否已渲染
         /// </summary>
         public bool OriginValueHasRendered { get; set; } = false;

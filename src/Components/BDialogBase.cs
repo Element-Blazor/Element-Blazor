@@ -22,6 +22,10 @@ namespace Blazui.Component
         protected override void OnInitialized()
         {
             base.OnInitialized();
+            if (Dialog == null)
+            {
+                return;
+            }
             Dialog.OnShow = () =>
             {
                 if (OnShow != null)

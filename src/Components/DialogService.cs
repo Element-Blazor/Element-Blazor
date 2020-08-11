@@ -157,9 +157,13 @@ namespace Blazui.Component
             };
             ShowDialog(option);
             var dialogResult = await taskCompletionSource.Task;
+            if (dialogResult == null)
+            {
+                ExceptionHelper.Throw(ExceptionHelper.DialogResultIsNull, "弹窗返回值为null");
+            }
             return new DialogResult<TResult>()
             {
-                Result = (TResult)dialogResult.Result
+                Result = dialogResult.Result == null ? default : (TResult)dialogResult.Result
             };
         }
 

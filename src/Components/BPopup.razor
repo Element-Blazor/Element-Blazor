@@ -73,7 +73,7 @@
             <div @key="option" class="el-dialog__wrapper" style="z-index: @index;">
                 <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
                     <Path>
-                        <BTransitionPath top="15vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
+                        <BTransitionPath top="10vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
                         <BTransitionPath top="10px" opacity="0" Duration="300" Pause="true"></BTransitionPath>
                     </Path>
                     <Content>

@@ -125,10 +125,7 @@ namespace Blazui.Component
             {
                 showingImage = Image;
             }
-            if (IsLoading)
-            {
-                IsDisabled = true;
-            }
+            IsDisabled = IsLoading;
             cssClassBuilder = HtmlPropertyBuilder.CreateCssClassBuilder();
             if (string.IsNullOrWhiteSpace(Cls) || AppendCustomCls)
             {

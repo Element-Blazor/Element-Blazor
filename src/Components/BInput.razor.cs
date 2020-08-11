@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Blazui.Component
 {
-    public partial class BInput<TValue> :  IDisposable
+    public partial class BInput<TValue> : IDisposable
     {
         internal HtmlPropertyBuilder wrapperClsBuilder;
         /// <summary>
@@ -21,6 +21,13 @@ namespace Blazui.Component
         /// 当输入值错误时是否抛出异常
         /// </summary>
         protected virtual bool ThrowOnInvalidValue { get; } = false;
+
+        /// <summary>
+        /// 在前方加入元素
+        /// </summary>
+        [Parameter]
+        public RenderFragment Prepend { get; set; }
+
         /// <summary>
         /// 是否启用清空按钮
         /// </summary>
@@ -189,7 +196,8 @@ namespace Blazui.Component
                 .Add("el-input", Cls, $"el-input--{Size.ToString().ToLower()}")
                 .AddIf(IsClearable || !string.IsNullOrWhiteSpace(SuffixIcon), "el-input--suffix")
                 .AddIf(!string.IsNullOrWhiteSpace(PrefixIcon), "el-input--prefix")
-                .AddIf(IsDisabled, "is-disabled");
+                .AddIf(IsDisabled, "is-disabled")
+                .AddIf(Prepend != null, "el-input-group", "el-input-group--append", "el-input-group--prepend");
             if (FormItem == null)
             {
                 return;

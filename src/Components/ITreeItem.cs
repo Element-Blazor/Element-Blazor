@@ -12,5 +12,6 @@ namespace Blazui.Component
         public string Direction { get; set; }
         public bool IsLoading { get; set; }
         public bool HasChildren { get; set; }
+        public bool Expanded { get; set; }
     }
 }
