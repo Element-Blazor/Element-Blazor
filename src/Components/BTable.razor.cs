@@ -82,7 +82,7 @@ namespace Blazui.Component
         [Inject]
         private HttpClient httpClient { get; set; }
 
-        public async Task RefreshNodeAsync(ITreeItem item)
+        public async Task RefreshNodeAsync(TreeItemBase item)
         {
             await ExpandAsync(item, true);
         }
@@ -96,7 +96,7 @@ namespace Blazui.Component
             {
                 return;
             }
-            await RefreshNodeAsync((ITreeItem)rows[0]);
+            await RefreshNodeAsync((TreeItemBase)rows[0]);
         }
 
         /// <summary>
@@ -104,12 +104,13 @@ namespace Blazui.Component
         /// </summary>
         /// <param name="item"></param>
         /// <param name="forceLoad">是否强制加载新数据</param>
-        public async Task ExpandAsync(ITreeItem item, bool forceLoad = false)
+        public async Task ExpandAsync(TreeItemBase item, bool forceLoad = false)
         {
             if (string.IsNullOrWhiteSpace(Url))
             {
                 ExceptionHelper.Throw(ExceptionHelper.ExpandOnlyHasUrl, "展开某个节点只支持异步加载");
             }
+            ResetSelectAllStatus();
             item.Expanded = true;
             var finalChildren = GetAllChildren(item);
             if (forceLoad || !finalChildren.Any())
@@ -123,7 +124,7 @@ namespace Blazui.Component
                     ExceptionHelper.Throw(ExceptionHelper.ClearChildFailure, "清空子节点失败");
                 }
                 DataSource = rows;
-                await LoadChildrenAsync(item, false);
+                await LoadChildrenAsync(item, AutoExpandAll);
                 Refresh();
                 return;
             }
@@ -132,7 +133,7 @@ namespace Blazui.Component
             Refresh();
         }
 
-        private async Task ForceExpandAsync(ITreeItem item)
+        private async Task ForceExpandAsync(TreeItemBase item)
         {
             if (string.IsNullOrWhiteSpace(Url))
             {
@@ -373,13 +374,20 @@ namespace Blazui.Component
                     await DataSourceChanged.InvokeAsync(DataSource);
                 }
 
-                if (FormItem != null)
-                {
-                    var dyncmicDataSource = (List<KeyValueModel>)DataSource;
-                    SetFieldValue(dyncmicDataSource.ToDictionary(x => x.Key, x => x.Value), true);
-                }
+                SyncFieldValue();
             }
             await InitlizeDataSourceAsync(0, "up", autoExpand);
+        }
+
+        private void SyncFieldValue()
+        {
+            if (FormItem == null)
+            {
+                return;
+            }
+            var dyncmicDataSource = (List<KeyValueModel>)DataSource;
+            var fieldValue = dyncmicDataSource.ToDictionary(x => x.Key, x => x.Value);
+            SetFieldValue(fieldValue, true);
         }
 
         public override async Task SetParametersAsync(ParameterView parameters)
@@ -409,17 +417,17 @@ namespace Blazui.Component
                 }
                 if (string.IsNullOrWhiteSpace(Url))
                 {
-                    if (rows.Any(x => x is ITreeItem))
+                    if (rows.Any(x => x is TreeItemBase))
                     {
-                        var rootLevels = rows.Cast<ITreeItem>().Where(x => x.ParentId == 0).ToList();
-                        CalculateLevel(rootLevels, -1, rows.Cast<ITreeItem>().ToArray());
+                        var rootLevels = rows.Cast<TreeItemBase>().Where(x => x.ParentId == 0).ToList();
+                        CalculateLevel(rootLevels, null, rows.Cast<TreeItemBase>().ToArray());
                     }
                     DataType = DataSource.GetType().GetGenericArguments()[0];
                 }
                 else
                 {
                     rows.Clear();
-                    foreach (ITreeItem item in (DataSource as IEnumerable))
+                    foreach (TreeItemBase item in (DataSource as IEnumerable))
                     {
                         if (item.Level == null)
                         {
@@ -451,7 +459,6 @@ namespace Blazui.Component
         {
             if (AutoGenerateColumns && !headerInitilized)
             {
-                Console.WriteLine("InitilizeHeaders");
                 headerInitilized = true;
                 DataType.GetProperties().Where(p => !IgnoreProperties.Contains(p.Name)).Reverse().ToList().ForEach(property =>
                 {
@@ -671,7 +678,7 @@ namespace Blazui.Component
 
         }
 
-        private void CalculateLevel(List<ITreeItem> treeItems, int parentLevel, ITreeItem[] allTreeItems)
+        private void CalculateLevel(List<TreeItemBase> treeItems, TreeItemBase parentNode, TreeItemBase[] allTreeItems)
         {
             foreach (var treeRow in treeItems)
             {
@@ -679,9 +686,14 @@ namespace Blazui.Component
                 {
                     return;
                 }
-                treeRow.Level = parentLevel + 1;
+                treeRow.Level = (parentNode?.Level ?? -1) + 1;
+                treeRow.TextPaths = parentNode?.TextPaths == null ? new Dictionary<int, string>() : new Dictionary<int, string>(parentNode.TextPaths);
+                if (!treeRow.TextPaths.ContainsKey(treeRow.Id))
+                {
+                    treeRow.TextPaths.Add(treeRow.Id, treeRow.Text);
+                }
                 var children = allTreeItems.Where(x => x.ParentId == treeRow.Id).ToList();
-                CalculateLevel(children, treeRow.Level.Value, allTreeItems);
+                CalculateLevel(children, treeRow, allTreeItems);
             }
         }
 
@@ -743,10 +755,7 @@ namespace Blazui.Component
                 {
                     await DataSourceChanged.InvokeAsync(DataSource);
                 }
-                if (FormItem != null)
-                {
-                    SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
-                }
+                SyncFieldValue();
                 return;
             }
             await SaveDataAsync(saveAction);
@@ -825,10 +834,7 @@ namespace Blazui.Component
                 Toast("更新成功");
                 await RefreshDataSourceAsync(false);
                 editingTaskCompletionSource.TrySetResult(0);
-                if (FormItem != null)
-                {
-                    SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), false);
-                }
+                SyncFieldValue();
 
                 editingTaskCompletionSource.TrySetResult(-1);
             }
@@ -847,10 +853,7 @@ namespace Blazui.Component
                     Toast("更新成功");
                     await RefreshDataSourceAsync(false);
                     editingTaskCompletionSource?.TrySetResult(0);
-                    if (FormItem != null)
-                    {
-                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), false);
-                    }
+                    SyncFieldValue();
                     return;
                 }
                 editingTaskCompletionSource?.TrySetResult(-1);
@@ -883,22 +886,9 @@ namespace Blazui.Component
             MarkAsRequireRender();
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
-        {
-            DataSource = ((IDictionary<string, string>)value).Select(x => new KeyValueModel()
-            {
-                Key = x.Key,
-                Value = x.Value
-            }).ToList();
-            if (requireRerender)
-            {
-                MarkAsRequireRender();
-            }
-        }
-
         private async Task ToggleTreeAsync(object row)
         {
-            var treeRow = row as ITreeItem;
+            var treeRow = row as TreeItemBase;
             if (treeRow == null || treeRow.IsLoading)
             {
                 return;
@@ -929,10 +919,7 @@ namespace Blazui.Component
                     {
                         await DataSourceChanged.InvokeAsync(DataSource);
                     }
-                    if (FormItem != null)
-                    {
-                        SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
-                    }
+                    SyncFieldValue();
                     treeRow.Direction = "up";
                 }
                 else
@@ -943,16 +930,16 @@ namespace Blazui.Component
             MarkAsRequireRender();
         }
 
-        private void LocalExpand(ITreeItem treeRow, List<ITreeItem> finalChildren)
+        private void LocalExpand(TreeItemBase treeRow, List<TreeItemBase> finalChildren)
         {
             hiddenRows.RemoveAll(finalChildren.Contains);
             treeRow.Direction = "right";
             treeRow.Expanded = true;
         }
 
-        private List<ITreeItem> GetAllChildren(ITreeItem treeRow)
+        private List<TreeItemBase> GetAllChildren(TreeItemBase treeRow)
         {
-            var treeRows = rows.Cast<ITreeItem>().ToArray();
+            var treeRows = rows.Cast<TreeItemBase>().ToArray();
             var children = treeRows.Where(x => x.ParentId == treeRow.Id).ToList();
             var finalChildren = children.ToList();
             foreach (var item in children)
@@ -963,7 +950,7 @@ namespace Blazui.Component
             return finalChildren;
         }
 
-        private async Task LoadChildrenAsync(ITreeItem row, bool autoExpand)
+        private async Task LoadChildrenAsync(TreeItemBase row, bool autoExpand)
         {
             row.Expanded = true;
             row.IsLoading = true;
@@ -988,13 +975,10 @@ namespace Blazui.Component
             {
                 await DataSourceChanged.InvokeAsync(DataSource);
             }
-            if (FormItem != null)
-            {
-                SetFieldValue(((List<KeyValueModel>)DataSource).ToDictionary(x => x.Key, x => x.Value), true);
-            }
+            SyncFieldValue();
         }
 
-        private async Task<IEnumerable> FetchChildrenAsync(ITreeItem treeRow)
+        private async Task<IEnumerable> FetchChildrenAsync(TreeItemBase treeRow)
         {
             treeRow.Direction = "right";
             if (!Url.EndsWith("/"))
@@ -1020,10 +1004,10 @@ namespace Blazui.Component
             }
         }
 
-        private List<ITreeItem> FindChildren(ITreeItem child)
+        private List<TreeItemBase> FindChildren(TreeItemBase child)
         {
-            var results = new List<ITreeItem>();
-            var treeItems = rows.Cast<ITreeItem>().Where(x => x.ParentId == child.Id).ToArray();
+            var results = new List<TreeItemBase>();
+            var treeItems = rows.Cast<TreeItemBase>().Where(x => x.ParentId == child.Id).ToArray();
             foreach (var childTreeItem in treeItems)
             {
                 results.Add(childTreeItem);

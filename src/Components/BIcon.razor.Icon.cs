@@ -27,6 +27,8 @@ namespace Blazui.Component
         [Display(Prompt = "switch-button")]
         SwitchButton = 7,
         [Display(Prompt = "delete")]
-        Delete = 8
+        Delete = 8,
+        [Display(Prompt = "close")]
+        Close = 9
     }
 }

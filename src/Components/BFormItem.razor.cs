@@ -30,6 +30,10 @@ namespace Blazui.Component
             }
             if (string.IsNullOrWhiteSpace(Name))
             {
+                if (GetType() != typeof(BFormActionItem))
+                {
+                    ExceptionHelper.Throw(ExceptionHelper.FormItemMustHaveName, "BFormItem 组件必须指定 Name 属性");
+                }
                 return;
             }
             if (OriginValueHasSet)

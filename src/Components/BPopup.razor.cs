@@ -111,6 +111,36 @@ namespace Blazui.Component
             PopupService.PopupLayerOptions.CollectionChanged -= PopupLayerOptions_CollectionChanged;
             PopupService.PopupLayerOptions = new ObservableCollection<PopupLayerOption>();
             PopupService.PopupLayerOptions.CollectionChanged += PopupLayerOptions_CollectionChanged;
+
+            PopupService.DropDownTreeOptions.CollectionChanged -= DropDownTreeOptions_CollectionChanged;
+            PopupService.DropDownTreeOptions = new ObservableCollection<PopupLayerOption>();
+            PopupService.DropDownTreeOptions.CollectionChanged += DropDownTreeOptions_CollectionChanged;
+        }
+
+        private void DropDownTreeOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
+                option.IsNew = true;
+                option.Instance = this;
+                option.ShadowZIndex = ZIndex++;
+                option.ZIndex = ZIndex++;
+                SelectDropDownOptions.Add(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var option = e.OldItems.OfType<DropDownOption>().FirstOrDefault();
+                SelectDropDownOptions.Remove(option);
+                InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+            }
         }
 
         private void PopupLayerOptions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -584,73 +614,6 @@ namespace Blazui.Component
         {
             PopupService.DateTimePickerOptions.Remove(option);
         }
-        //async Task RenderDialogAsync()
-        //{
-        //    var option = DialogOptions.FirstOrDefault(x => x.IsNew);
-        //    if (option == null)
-        //    {
-        //        return;
-        //    }
-        //    option.IsNew = false;
-        //    var messageContent = option.Element;
-        //    var dom = messageContent.Dom(JSRuntime);
-        //    var top = await dom.GetOffsetTopAsync();
-        //    var height = await dom.GetClientHeightAsync();
-        //    var screenHeight = await Document.GetClientHeightAsync();
-        //    if (screenHeight - height < 100)
-        //    {
-        //        top = 10;
-        //    }
-        //    var left = await dom.GetOffsetLeftAsync();
-        //    var style = messageContent.Dom(JSRuntime).Style;
-        //    if (GlobalBlazuiSettings.DisableAnimation)
-        //    {
-        //        await style.SetAsync("left", $"{left}px");
-        //        await style.SetAsync("position", $"absolute");
-        //        await style.ClearAsync("opacity");
-        //        if (!option.IsDialog)
-        //        {
-        //            await style.ClearAsync("position");
-        //            await style.ClearAsync("top");
-        //            await style.ClearAsync("left");
-        //        }
-        //        if (ShadowCount++ <= 0)
-        //        {
-        //            await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0.5");
-        //        }
-        //        return;
-        //    }
-        //    if (option.Point != System.Drawing.Point.Empty)
-        //    {
-        //        await style.SetAsync("opacity", "0");
-        //    }
-        //    await style.SetAsync("position", "absolute");
-        //    if (option.IsDialog)
-        //    {
-        //        await style.ClearAsync("margin-top");
-        //        await style.SetAsync("position", $"absolute");
-        //    }
-        //    if (option.Point == System.Drawing.Point.Empty)
-        //    {
-        //        await style.SetAsync("left", $"{left}px");
-        //        await style.SetAsync("top", $"{top - 10}px");
-        //        await style.SetTransitionAsync("top 0.3s,opacity 0.3s");
-        //        await Task.Delay(100);
-        //        await style.SetAsync("top", $"{top}px");
-        //        if (ShadowCount++ <= 0)
-        //        {
-        //            await option.ShadowElement.Dom(JSRuntime).Style.SetAsync("opacity", "0.5");
-        //        }
-        //        await Task.Delay(500);
-        //        if (!option.IsDialog)
-        //        {
-        //            await style.ClearAsync("position");
-        //            await style.ClearAsync("top");
-        //            await style.ClearAsync("left");
-        //        }
-        //        await style.ClearAsync("transition");
-        //    }
-        //}
 
         async Task ShowFullScreenLoadingAsync(LoadingOption option)
         {

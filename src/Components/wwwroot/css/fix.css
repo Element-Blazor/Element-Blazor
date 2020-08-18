@@ -233,7 +233,7 @@ div.blazor-ribbon {
         }
 
 div.el-input-group__prepend {
-    width: 120px;
+    width: 100px;
 }
 
 fieldset.blazor-fieldset {
@@ -262,3 +262,19 @@ div.blazor-groupbox {
         div.blazor-groupbox > div.el-form-item:last-child {
             margin-right: 0;
         }
+
+ul.el-select-dropdown__list.blazor-dropdown-tree {
+    padding: 10px !important;
+}
+
+div.el-form-item div.el-select {
+    width: 100% !important;
+}
+
+.el-input-group__append .el-button, .el-input-group__append .el-select, .el-input-group__prepend .el-button, .el-input-group__prepend .el-select {
+    margin: 0 !important;
+}
+
+.el-input-group__append, .el-input-group__prepend {
+    padding: 0 !important;
+}

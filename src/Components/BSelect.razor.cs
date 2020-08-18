@@ -3,6 +3,7 @@
 
 
 
+using Blazui.Component.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
@@ -18,19 +19,26 @@ namespace Blazui.Component
 {
     public partial class BSelect<TValue> : IDisposable
     {
-
+        protected internal bool isTree;
+        private HtmlPropertyBuilder warpperClsBuilder;
         internal ElementReference elementSelect;
         private Type valueType;
         private Type nullable;
         internal bool isClearable = true;
         internal bool EnableClearButton { get; set; }
 
+        /// <summary>
+        /// 下拉树
+        /// </summary>
+        [Parameter]
+        public RenderFragment DropDowntree { get; set; }
+
         [Parameter]
         public string Label { get; set; }
 
         [Parameter]
         public Action<string> LabelChanged { get; set; }
-        internal ObservableCollection<BSelectOption<TValue>> Options { get; set; } = new ObservableCollection<BSelectOption<TValue>>();
+        internal ObservableCollection<SelectResultModel<TValue>> Options { get; set; } = new ObservableCollection<SelectResultModel<TValue>>();
 
         [Parameter]
         public TValue InitialValue { get; set; }
@@ -48,13 +56,15 @@ namespace Blazui.Component
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            warpperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add("el-select", Cls);
             if (valueType == null)
             {
                 InitilizeEnumValues(FormItem != null);
             }
             if (FormItem == null)
             {
-                Label = Label ?? Options.FirstOrDefault(x => TypeHelper.Equal(x.Value, Value))?.Text;
+                Label = Label ?? Options.FirstOrDefault(x => TypeHelper.Equal(x.Key, Value))?.Text;
                 return;
             }
 
@@ -129,7 +139,7 @@ namespace Blazui.Component
             }
         }
 
-        internal void UpdateValue(string text)
+        public void UpdateValue(string text)
         {
             var option = Options.FirstOrDefault(x => x.Text == text);
             if (option == null)
@@ -138,7 +148,7 @@ namespace Blazui.Component
             }
             else
             {
-                Value = option.Value;
+                Value = option.Key;
             }
             if (ValueChanged.HasDelegate)
             {
@@ -163,12 +173,12 @@ namespace Blazui.Component
         public TValue Value { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSelectOption<TValue>>> OnChange { get; set; }
+        public EventCallback<BChangeEventArgs<SelectResultModel<TValue>>> OnChange { get; set; }
 
         [Parameter]
-        public EventCallback<BChangeEventArgs<BSelectOption<TValue>>> OnChanging { get; set; }
+        public EventCallback<BChangeEventArgs<SelectResultModel<TValue>>> OnChanging { get; set; }
 
-        internal BSelectOption<TValue> SelectedOption
+        internal SelectResultModel<TValue> SelectedOption
         {
             get
             {
@@ -183,7 +193,7 @@ namespace Blazui.Component
                 }
                 else
                 {
-                    Value = value.Value;
+                    Value = value.Key;
                     Label = value.Text;
                 }
                 selectedOption = value;
@@ -196,13 +206,13 @@ namespace Blazui.Component
             }
         }
 
-        private BSelectOption<TValue> selectedOption;
+        private SelectResultModel<TValue> selectedOption;
         internal DropDownOption dropDownOption;
         private Dictionary<TValue, string> dict;
 
-        internal async Task OnInternalSelectAsync(BSelectOption<TValue> item)
+        internal async Task OnInternalSelectAsync(SelectResultModel<TValue> item)
         {
-            var args = new BChangeEventArgs<BSelectOption<TValue>>();
+            var args = new BChangeEventArgs<SelectResultModel<TValue>>();
             args.NewValue = item;
             args.OldValue = SelectedOption;
             if (OnChanging.HasDelegate)
@@ -216,8 +226,8 @@ namespace Blazui.Component
 
             await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
             SelectedOption = item;
-            SetFieldValue(item.Value, true);
-            Value = item.Value;
+            SetFieldValue(item.Key, true);
+            Value = item.Key;
             if (dict != null)
             {
                 dict.TryGetValue(Value, out var label);
@@ -227,6 +237,7 @@ namespace Blazui.Component
             {
                 await OnChange.InvokeAsync(args);
             }
+            Console.WriteLine(Label);
             EnableClearButton = false;
             StateHasChanged();
         }
@@ -245,6 +256,7 @@ namespace Blazui.Component
 
             dropDownOption = new DropDownOption()
             {
+                IsTree = isTree,
                 Select = this,
                 Target = elementSelect,
                 OptionContent = ChildContent,

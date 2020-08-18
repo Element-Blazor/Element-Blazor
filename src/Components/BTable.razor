@@ -111,7 +111,7 @@
                             {
                                 continue;
                             }
-                            var treeRow = row as ITreeItem;
+                            var treeRow = row as TreeItemBase;
                             if (treeRow != null)
                             {
                                 clsList.Add("el-table__row--level-0");
@@ -148,9 +148,9 @@
                                     {
                                         if (treeRow == null)
                                         {
-                                            throw new BlazuiException("BTableTreeColumn 要求实体实现 ITreeItem 接口");
+                                            throw new BlazuiException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
                                         }
-                                        var hasChild = treeRow.HasChildren || rows.Cast<ITreeItem>().Any(x => x.ParentId == rowId);
+                                        var hasChild = treeRow.HasChildren || rows.Cast<TreeItemBase>().Any(x => x.ParentId == rowId);
                                         <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
                                             <div class="cell">
                                                 @if (hasChild)

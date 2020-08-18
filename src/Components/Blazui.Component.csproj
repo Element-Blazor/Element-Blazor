@@ -52,6 +52,7 @@
 		<PackageReference Include="CompareNETObjects" Version="4.66.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.7" />
 		<PackageReference Include="System.Collections" Version="4.3.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
 		<PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
@@ -66,6 +67,10 @@
 	  <Content Update="wwwroot\lang\zh-CN.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="PopupRenders\" />
 	</ItemGroup>
 
 

@@ -778,6 +778,26 @@
     ]
   },
   {
+    "name": "tree",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Tree",
+        "files": [
+          "SimpleTree.razor"
+        ]
+      },
+      {
+        "title": "远程加载",
+        "name": "Tree",
+        "files": [
+          "LoadTree.razor",
+          "TreeController.cs"
+        ]
+      }
+    ]
+  },
+  {
     "name": "lang",
     "demos": [
       {

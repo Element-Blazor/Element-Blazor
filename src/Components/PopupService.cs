@@ -13,5 +13,6 @@ namespace Blazui.Component
         internal ObservableCollection<DropDownOption> DropDownMenuOptions = new ObservableCollection<DropDownOption>();
         internal ObservableCollection<SubMenuOption> SubMenuOptions = new ObservableCollection<SubMenuOption>();
         internal ObservableCollection<PopupLayerOption> PopupLayerOptions = new ObservableCollection<PopupLayerOption>();
+        internal ObservableCollection<PopupLayerOption> DropDownTreeOptions = new ObservableCollection<PopupLayerOption>();
     }
 }

@@ -15,5 +15,12 @@ namespace Blazui.Component
 
         public PointF Position { get; set; }
         public RenderFragment Content { get; internal set; }
+        public bool IsShow { get; set; }
+        public AnimationStatus ShowStatus { get; set; }
+        public ElementReference Element { get; set; }
+        public int Width { get; set; }
+        public int Left { get; set; }
+        public int Top { get; set; }
+        public ElementReference ShadowElement { get; set; }
     }
 }

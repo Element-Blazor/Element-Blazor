@@ -1,6 +1,7 @@
 ﻿
 
 
+using Blazui.Component.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -12,6 +13,8 @@ namespace Blazui.Component
 {
     public partial class BSelectOption<TValue>
     {
+        private SelectResultModel<TValue> currentResultModel;
+
         [CascadingParameter]
         public DropDownOption Option { get; set; }
 
@@ -28,7 +31,12 @@ namespace Blazui.Component
 
         protected override void OnInitialized()
         {
-            ((BSelect<TValue>)Option.Select).Options.Add(this);
+            currentResultModel = new SelectResultModel<TValue>()
+            {
+                Key = Value,
+                Text = Text
+            };
+            ((BSelect<TValue>)Option.Select).Options.Add(currentResultModel);
         }
 
         public async Task SelectItemAsync(MouseEventArgs e)
@@ -37,7 +45,7 @@ namespace Blazui.Component
             {
                 return;
             }
-            await ((BSelect<TValue>)Option.Select).OnInternalSelectAsync(this);
+            await ((BSelect<TValue>)Option.Select).OnInternalSelectAsync(currentResultModel);
         }
         protected override bool ShouldRender()
         {

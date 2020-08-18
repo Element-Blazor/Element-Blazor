@@ -16,7 +16,7 @@ namespace Blazui.Component
     {
         [CascadingParameter(Name ="Page")]
         public BComponentBase Page { get; set; }
-        protected bool RequireRender { get; set; }
+        protected bool RequireRender { get; set; } = true;
 
         [Parameter(CaptureUnmatchedValues = true)]
         public IDictionary<string, object> Attributes { get; set; }

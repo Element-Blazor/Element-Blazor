@@ -13,6 +13,7 @@ namespace Blazui.Component
         public Action Refresh { get; set; }
         public object Select { get; set; }
         public RenderFragment OptionContent { get; set; }
+        public bool IsTree { get; set; }
         internal float Width { get; set; }
     }
 }

@@ -403,14 +403,26 @@
         {
             style = "";
         }
+        var listClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-scrollbar__view", "el-select-dropdown__list")
+            .AddIf(option.IsTree, "blazor-dropdown-tree");
         <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
         <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(index);" x-placement="bottom-start">
             <div class="el-scrollbar" style="">
-                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
-                    <ul class="el-scrollbar__view el-select-dropdown__list">
-                        <CascadingValue Value="option">
-                            @option.OptionContent
-                        </CascadingValue>
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap">
+                    <ul class="@listClsBuilder.ToString()">
+                        @if (option.IsTree)
+                        {
+                            <CascadingValue Value="(BTreeSingleSelect)option.Select">
+                                @option.OptionContent
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="option">
+                                @option.OptionContent
+                            </CascadingValue>
+                        }
                     </ul>
                 </div>
                 <div class="el-scrollbar__bar is-horizontal">

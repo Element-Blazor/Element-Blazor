@@ -109,7 +109,7 @@ namespace Blazui.Component.ControlRenders
                     renderTreeBuilder.AddAttribute(6, nameof(BTable.DataType), typeof(KeyValueModel));
                     if (config.Page == null)
                     {
-                        throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 this，名称为 Page");
+                        ExceptionHelper.Throw(ExceptionHelper.CascadingValueNotFound, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 this，名称为 Page");
                     }
                     renderTreeBuilder.AddAttribute(7, nameof(BTable.OnSave), EventCallback.Factory.Create<TableSaveEventArgs>(config.Page, DefaultSaverAsync));
                 }

@@ -13,24 +13,24 @@ namespace Blazui.ServerRender.Demo.Form
 {
     public class AutoGenerateFieldsActvity
     {
-        [FormControl(Label = "名称")]
+        [EditorGenerator(Label = "名称")]
         public string Name { get; set; }
-        [FormControl(Label = "区域")]
+        [EditorGenerator(Label = "区域")]
         public Area Area { get; set; }
-        [FormControl(Label = "日期")]
+        [EditorGenerator(Label = "日期")]
         public DateTime? Time { get; set; }
-        [FormControl(Label = "即时配送")]
+        [EditorGenerator(Label = "即时配送")]
         public bool Delivery { get; set; }
-        [FormControl(Label = "特殊资源")]
+        [EditorGenerator(Label = "特殊资源")]
         public string Resource { get; set; }
-        [FormControl(Label = "活动形式")]
+        [EditorGenerator(Label = "活动形式")]
         public string Description { get; set; }
 
-        [FormControl(Label = "附件")]
+        [EditorGenerator(Label = "附件")]
         [Upload(Url = "/api/test/upload", Tip = "请传附件")]
         public IFileModel[] Files { get; set; }
 
-        [FormControl(Label = "密码")]
+        [EditorGenerator(Label = "密码")]
         [Input(Type = InputType.Password)]
         public string Password { get; set; } = "123456";
         public override string ToString()
