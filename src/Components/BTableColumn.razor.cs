@@ -35,6 +35,12 @@ namespace Blazui.Component
         public string Text { get; set; }
 
         /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        [Parameter]
+        public bool IsEditable { get; set; } = true;
+
+        /// <summary>
         /// 格式化
         /// </summary>
         [Parameter]

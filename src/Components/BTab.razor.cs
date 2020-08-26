@@ -250,11 +250,14 @@ namespace Blazui.Component
                 if (activeTab != null)
                 {
                     activeTab.Activate();
-                }
-                Console.WriteLine("ActiveTab:" + activeTab.Name);
-                if (activeTabOption == null)
-                {
                     activeTab.Refresh();
+                }
+                else if (activeTabOption == null)
+                {
+                    if (firstRender)
+                    {
+                        Refresh();
+                    }
                 }
                 else
                 {

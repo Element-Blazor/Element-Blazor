@@ -27,12 +27,6 @@ namespace Blazui.Component
         internal bool isClearable = true;
         internal bool EnableClearButton { get; set; }
 
-        /// <summary>
-        /// 下拉树
-        /// </summary>
-        [Parameter]
-        public RenderFragment DropDowntree { get; set; }
-
         [Parameter]
         public string Label { get; set; }
 

@@ -108,7 +108,11 @@ namespace Blazui.Component
         public virtual string AdditionalClearIcon { get; set; }
 
         internal ElementReference Content { get; set; }
-        internal ElementReference InputElement { get; set; }
+
+        /// <summary>
+        /// HTML 元素引用
+        /// </summary>
+        public ElementReference InputElement { get; set; }
 
         protected void ClearOnClick()
         {
@@ -205,6 +209,7 @@ namespace Blazui.Component
             if (FormItem.OriginValueHasRendered)
             {
                 SetFieldValue(Value ?? FormItem.Value, false);
+                Value = Value ?? FormItem.OriginValue;
                 return;
             }
             FormItem.OriginValueHasRendered = true;

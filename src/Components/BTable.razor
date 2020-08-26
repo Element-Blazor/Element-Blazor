@@ -117,7 +117,7 @@
                                 clsList.Add("el-table__row--level-0");
                             }
                             var rowId = treeRow?.Id ?? 0;
-                            <tr @key="row" class="@string.Join(" ", clsList)" @ondblclick="e=>BeginEdit(row)" @onkeyup="SaveTableAsync">
+                            <tr @key="row" class="@string.Join(" ", clsList)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync">
                                 @if (HasSelectionColumn)
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">

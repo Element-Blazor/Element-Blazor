@@ -1,8 +1,4 @@
-﻿
-
-
-
-using Blazui.Component.ControlConfigs;
+﻿using Blazui.Component.ControlConfigs;
 using Blazui.Component.ControlRender;
 using Blazui.Component.ControlRenders;
 using Blazui.Component.DisplayRenders;
@@ -72,6 +68,9 @@ namespace Blazui.Component
         /// </summary>
         [Parameter]
         public bool EnableParallel { get; set; } = true;
+
+        [Parameter]
+        public EventCallback<object> OnRowDblClick { get; set; }
 
         [Inject]
         private TableEditorMap map { get; set; }
@@ -515,121 +514,164 @@ namespace Blazui.Component
                     tableHeader.Eval = displayRender.CreateRenderFactory(tableHeader).CreateRender(tableHeader);
                     if (IsEditable && columnConfig.IsEditable)
                     {
-                        var controlInfo = map.GetControl(property);
-                        tableHeader.EditorRender = (IControlRender)provider.GetRequiredService(controlInfo.RenderType);
-                        tableHeader.EditorRenderConfig = new RenderConfig()
-                        {
-                            InputControlType = controlInfo.ControlType,
-                            IsRequired = editorConfig.IsRequired,
-                            RequiredMessage = editorConfig.RequiredMessage ?? $"{tableHeader.Text}不能为空",
-                            Placeholder = editorConfig.Placeholder,
-                            Property = property,
-                            DataSourceLoader = controlInfo.DataSourceLoader,
-                            Page = Page
-                        };
-                        Headers.Insert(0, tableHeader);
+                        InitilizeHeaderEditor(property, editorConfig, tableHeader);
                     }
+                    Headers.Insert(0, tableHeader);
                 }
                  );
-                var lastIndex = Headers.Count;
-                var btnUpdateText = "更新";
-                BButton btnUpdate = null, btnDelete = null;
-                var operationHeader = new TableHeader()
+                if (IsEditable)
                 {
-                    Text = "操作"
-                };
-                operationHeader.Template = row =>
-                {
-                    return (builder) =>
-                    {
-                        builder.OpenComponent<BButtonGroup>(0);
-                        builder.AddAttribute(1, nameof(BButtonGroup.ChildContent), (RenderFragment)(builder =>
-                        {
-                            builder.OpenComponent<BButton>(1);
-                            builder.AddAttribute(2, nameof(BButton.Type), ButtonType.Primary);
-                            builder.AddAttribute(3, nameof(BButton.Size), ButtonSize.Small);
-                            builder.AddAttribute(4, nameof(BButton.ChildContent), (RenderFragment)(builder =>
-                            {
-                                builder.AddMarkupContent(5, btnUpdateText);
-                            }));
-                            if (Page == null)
-                            {
-                                throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
-                            }
-                            builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
-                            {
-                                if (editingTaskCompletionSource == null)
-                                {
-                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                    editingRow = row;
-                                    btnUpdateText = "保存";
-                                    btnUpdate.MarkAsRequireRender();
-                                    Refresh();
-                                    return;
-                                }
-                                btnUpdate.IsLoading = true;
-                                Refresh();
-                                _ = SaveDataAsync(SaveAction.Update);
-                                var result = await editingTaskCompletionSource.Task;
-                                editingTaskCompletionSource = null;
-                                btnUpdate.IsLoading = false;
-                                if (result != 0)
-                                {
-                                    Refresh();
-                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                    return;
-                                }
-                                btnUpdateText = "更新";
-                                btnUpdate.MarkAsRequireRender();
-                                Refresh();
-                            }));
-                            builder.AddComponentReferenceCapture(7, btn => btnUpdate = (BButton)btn);
-                            builder.CloseComponent();
-                            builder.OpenComponent<BButton>(8);
-                            builder.AddAttribute(9, nameof(BButton.Type), ButtonType.Danger);
-                            builder.AddAttribute(10, nameof(BButton.Size), ButtonSize.Small);
-                            builder.AddAttribute(11, nameof(BButton.ChildContent), (RenderFragment)(builder =>
-                            {
-                                builder.AddMarkupContent(12, "删除");
-                            }));
-                            builder.AddAttribute(13, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
-                            {
-                                var confirmResult = await ConfirmAsync("确认要删除吗？");
-                                if (confirmResult != MessageBoxResult.Ok)
-                                {
-                                    return;
-                                }
-                                foreach (var item in Headers)
-                                {
-                                    item.RawValue = row;
-                                }
-                                editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                btnDelete.IsLoading = true;
-                                btnDelete.Refresh();
-                                _ = SaveDataAsync(SaveAction.Delete);
-                                var result = await editingTaskCompletionSource.Task;
-                                btnDelete.IsLoading = false;
-                                editingTaskCompletionSource = null;
-                                if (result != 0)
-                                {
-                                    btnDelete.Refresh();
-                                    editingTaskCompletionSource = new TaskCompletionSource<int>();
-                                    return;
-                                }
-                                editingTaskCompletionSource = null;
-                                editingRow = null;
-                                Toast("删除成功");
-                            }));
-                            builder.AddComponentReferenceCapture(14, btn => btnDelete = (BButton)btn);
-                            builder.CloseComponent();
-                        }));
-                        builder.CloseComponent();
-                    };
-                };
-                Headers.Insert(lastIndex++, operationHeader);
+                    CreateOperationColumn();
+                }
                 chkAll?.MarkAsRequireRender();
                 ResetSelectAllStatus();
             }
+            else if (!AutoGenerateColumns && !headerInitilized && Headers.Any())
+            {
+                headerInitilized = true;
+                foreach (var header in Headers)
+                {
+                    if (!CanEdit(header))
+                    {
+                        continue;
+                    }
+                    InitilizeHeaderEditor(header.Property, header.Property.GetCustomAttribute<EditorGeneratorAttribute>() ?? new EditorGeneratorAttribute(), header);
+                }
+                CreateOperationColumn();
+                Refresh();
+            }
+        }
+
+        private void CreateOperationColumn()
+        {
+            Headers.RemoveAll(x => x.IsOperation);
+            var lastIndex = Headers.Count;
+            var operationHeader = new TableHeader()
+            {
+                Text = "操作",
+                IsOperation = true
+            };
+            BButton btnUpdate = null, btnDelete = null;
+            operationHeader.Template = row =>
+            {
+                return (builder) =>
+                {
+                    builder.OpenComponent<BButtonGroup>(0);
+                    builder.AddAttribute(1, nameof(BButtonGroup.ChildContent), (RenderFragment)(builder =>
+                    {
+                        builder.OpenComponent<BButton>(1);
+                        builder.AddAttribute(2, nameof(BButton.Type), ButtonType.Primary);
+                        builder.AddAttribute(3, nameof(BButton.Size), ButtonSize.Small);
+                        builder.AddAttribute(4, nameof(BButton.ChildContent), (RenderFragment)(builder =>
+                        {
+                            if (row == editingRow)
+                            {
+                                builder.AddMarkupContent(5, "保存");
+                            }
+                            else
+                            {
+                                builder.AddMarkupContent(5, "更新");
+                            }
+                        }));
+                        if (Page == null)
+                        {
+                            throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
+                        }
+                        builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
+                        {
+                            if (editingTaskCompletionSource == null)
+                            {
+                                editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                editingRow = row;
+                                btnUpdate.MarkAsRequireRender();
+                                Refresh();
+                                return;
+                            }
+                            btnUpdate.IsLoading = true;
+                            Refresh();
+                            _ = SaveDataAsync(SaveAction.Update);
+                            var result = await editingTaskCompletionSource.Task;
+                            editingTaskCompletionSource = null;
+                            btnUpdate.IsLoading = false;
+                            if (result != 0)
+                            {
+                                Refresh();
+                                editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                return;
+                            }
+                            foreach (var item in Headers)
+                            {
+                                item.EditingValue = (string)(item.EditorRenderConfig == null ? null : item.EditorRenderConfig.EditingValue = null);
+                            }
+                            btnUpdate.MarkAsRequireRender();
+                            Refresh();
+                        }));
+                        builder.AddComponentReferenceCapture(7, btn =>
+                        {
+                            if (row == editingRow || editingRow == null)
+                            {
+                                btnUpdate = (BButton)btn;
+                            }
+                        });
+                        builder.CloseComponent();
+                        builder.OpenComponent<BButton>(8);
+                        builder.AddAttribute(9, nameof(BButton.Type), ButtonType.Danger);
+                        builder.AddAttribute(10, nameof(BButton.Size), ButtonSize.Small);
+                        builder.AddAttribute(11, nameof(BButton.ChildContent), (RenderFragment)(builder =>
+                        {
+                            builder.AddMarkupContent(12, "删除");
+                        }));
+                        builder.AddAttribute(13, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
+                        {
+                            var confirmResult = await ConfirmAsync("确认要删除吗？");
+                            if (confirmResult != MessageBoxResult.Ok)
+                            {
+                                return;
+                            }
+                            foreach (var item in Headers)
+                            {
+                                item.RawValue = row;
+                            }
+                            editingTaskCompletionSource = new TaskCompletionSource<int>();
+                            btnDelete.IsLoading = true;
+                            btnDelete.Refresh();
+                            _ = SaveDataAsync(SaveAction.Delete);
+                            var result = await editingTaskCompletionSource.Task;
+                            btnDelete.IsLoading = false;
+                            editingTaskCompletionSource = null;
+                            if (result != 0)
+                            {
+                                btnDelete.Refresh();
+                                editingTaskCompletionSource = new TaskCompletionSource<int>();
+                                return;
+                            }
+                            editingTaskCompletionSource = null;
+                            editingRow = null;
+                            Toast("删除成功");
+                        }));
+                        builder.AddComponentReferenceCapture(14, btn => btnDelete = (BButton)btn);
+                        builder.CloseComponent();
+                    }));
+                    builder.CloseComponent();
+                };
+            };
+            Headers.Insert(lastIndex++, operationHeader);
+        }
+
+        private void InitilizeHeaderEditor(PropertyInfo property, EditorGeneratorAttribute editorConfig, TableHeader tableHeader)
+        {
+            var controlInfo = map.GetControl(property);
+            tableHeader.EditorRender = (IControlRender)provider.GetRequiredService(controlInfo.RenderType);
+            tableHeader.EditorRenderConfig = new RenderConfig()
+            {
+                InputControlType = controlInfo.ControlType,
+                IsRequired = editorConfig.IsRequired,
+                RequiredMessage = editorConfig.RequiredMessage ?? $"{tableHeader.Text}不能为空",
+                Placeholder = editorConfig.Placeholder,
+                Property = property,
+                DataSourceLoader = controlInfo.DataSourceLoader,
+                Page = Page
+            };
         }
 
         private async Task ReadyExecuteRefreshAsync()
@@ -776,7 +818,7 @@ namespace Blazui.Component
             {
                 if ((!header.IsEditable && header.EditorRenderConfig == null) || (saveAction != SaveAction.Create && !CanEdit(header)))
                 {
-                    if (header.Property != null && header.Property.Name.Contains("Id") && saveAction != SaveAction.Create)
+                    if (header.Property != null && (header.Property.Name.Contains("Id") || header.Property.Name.Contains("Key")) && saveAction != SaveAction.Create)
                     {
                         header.Property.SetValue(row, header.Property.GetValue(header.RawValue));
                     }
@@ -831,12 +873,9 @@ namespace Blazui.Component
                 }
                 editingRow = null;
                 dataSourceUpdated = true;
-                Toast("更新成功");
                 await RefreshDataSourceAsync(false);
                 editingTaskCompletionSource.TrySetResult(0);
                 SyncFieldValue();
-
-                editingTaskCompletionSource.TrySetResult(-1);
             }
             else
             {
@@ -850,7 +889,6 @@ namespace Blazui.Component
                     }
                     editingRow = null;
                     dataSourceUpdated = true;
-                    Toast("更新成功");
                     await RefreshDataSourceAsync(false);
                     editingTaskCompletionSource?.TrySetResult(0);
                     SyncFieldValue();
@@ -879,8 +917,16 @@ namespace Blazui.Component
             return header.IsEditable && header.Eval != null;
         }
 
-        private void BeginEdit(object row)
+        private async Task BeginEditAsync(object row)
         {
+            if (OnRowDblClick.HasDelegate)
+            {
+                await OnRowDblClick.InvokeAsync(row);
+            }
+            if (!IsEditable)
+            {
+                return;
+            }
             saveAction = SaveAction.Create;
             editingRow = row;
             MarkAsRequireRender();

@@ -26,7 +26,6 @@ namespace Blazui.Component
             }
             Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             FormItem.Value = value;
-
             if (!validate)
             {
                 return;

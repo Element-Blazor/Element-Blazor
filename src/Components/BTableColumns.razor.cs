@@ -41,6 +41,11 @@ namespace Blazui.Component
             }
             var columnConfig = new TableHeader
             {
+                EvalRaw = row =>
+                {
+                    object value = property.GetValue(row);
+                    return value;
+                },
                 Property = property,
                 Text = column.Text,
                 SortNo = column.SortNo,
@@ -48,7 +53,8 @@ namespace Blazui.Component
                 IsCheckBox = column.IsCheckBox,
                 Template = column.ChildContent,
                 Format = column.Format,
-                IsTree = column.IsTree
+                IsTree = column.IsTree,
+                IsEditable = column.IsEditable
             };
             if (columnConfig.Property != null)
             {

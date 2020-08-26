@@ -28,6 +28,7 @@ namespace Blazui.Component
         public RenderConfig EditorRenderConfig { get; set; }
         public Func<object, object> EvalRaw { get; set; }
         public bool Ignore { get; internal set; }
+        public bool IsOperation { get; internal set; }
     }
 
     public struct IntString
