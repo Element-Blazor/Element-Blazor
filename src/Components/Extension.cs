@@ -30,6 +30,12 @@ namespace Blazui.Component
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();
             services.AddScoped<MessageBox>();
+            services.AddSingleton(async provider =>
+            {
+                var httpClient = provider.GetRequiredService<HttpClient>();
+
+                return await BLang.CreateBLangAsync(lang, SetLocaleAsync, httpClient);
+            });
             services.AddScoped<IInputRender, InputRender>();
             services.AddScoped<ISelectRender, SelectRender>();
             services.AddScoped<ISwitchRender, SwitchRender>();
@@ -41,6 +47,7 @@ namespace Blazui.Component
             services.AddSingleton<EnumRender>();
             services.AddSingleton<GenericRender>();
             return services;
+
         }
 
     }
