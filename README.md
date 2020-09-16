@@ -31,33 +31,7 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 |https://blazorwasm.github.io|Blazor WebAssembly 渲染版本|国外|
 |https://pwawasm.github.io| Blazor WebAssembly 渲染版本 PWA模式|国外|
 |https://github.com/caopengfei/BlazorECharts|BlazorECharts 是 Blazor 版的 Echarts 组件，它本身没有依赖 Blazui，但它的 Demo 使用了 Blazui||
-
-## 目录作用及对应 nuget 包
-
-| 一级目录  | 二级目录         | 三级目录                 | 四级目录                                    | 描述                                  | Nuget包                                                                                                                              |
-|----------|------------------|-------------------------|--------------------------------------------|---------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| [src][5] |                  |                         |                                            | 存放源码                               |                                                                                                                                      |
-|          | [Admin][6]       |                         |                                            | 基于 Blazui 开发的后台管理模板          |                                                                                                                                      |
-|          |                  | [Admin.ClientRender][7] |                                            | 模板的 WebAssembly 渲染版（未完成）     |                                                                                                                                      |
-|          |                  | [Admin.ServerRender][8] |                                            | 模板的 Server 渲染版                   | [![Nuget](https://img.shields.io/nuget/dt/Blazui.Admin.ServerRender.svg)](https://www.nuget.org/packages/Blazui.Admin.ServerRender/) |
-|          |                  | [Admin][9]              |                                            | 仅为模板的界面框架                      | [![Nuget](https://img.shields.io/nuget/dt/Blazui.Admin.svg)](https://www.nuget.org/packages/Blazui.Admin/)                           |
-|          | [Components][10] |                         |                                            | Blazui 组件源码                        | [![Nuget](https://img.shields.io/nuget/dt/Blazui.Component.svg)](https://www.nuget.org/packages/Blazui.Component/)                   |
-|          |                  | [Lang][11]              |                                            | 多语言功能源码                          |                                                                                                                                      |
-|          |                  | ...                     |                                            | 组件源码                               |                                                                                                                                      |
-|          | [MarkDown][12]   |                         |                                            | 基于 Blazui 开发的 MarkDown 编辑器      | [![Nuget](https://img.shields.io/nuget/dt/Blazui.MarkDown.svg)](https://www.nuget.org/packages/Blazui.MarkDown/)                     |
-|          |                  | [IconHandlers][13]      |                                            | MarkDown 编辑器图标的处理程序           |                                                                                                                                      |
-|          |                  | ...                     |                                            | 编辑器源码                             |                                                                                                                                      |
-|          | [Samples][14]    |                         |                                            | 所有组件的演示代码                      |                                                                                                                                      |
-|          |                  | [Admin][15]             |                                            | Blazui.Admin 的演示代码                |                                                                                                                                      |
-|          |                  |                         | [Blazui.Admin.Sample.ClientRender.PWA][16] | PWA WASM 模式，没有服务端，无法运行     |                                                                                                                                      |
-|          |                  |                         | [Blazui.Admin.Sample.ServerRender][17]     | Server 模式                           |                                                                                                                                      |
-|          |                  | [Blazui][18]            |                                            | Blazui 的演示代码，包括 MarkDown 编辑器 |                                                                                                                                      |
-|          |                  |                         | [Blazui.ClientRender.PWA][19]              | PWA WASM 模式                          |                                                                                                                                      |
-|          |                  |                         | [Blazui.ClientRender][20]                  | WASM 模式                              |                                                                                                                                      |
-|          |                  |                         | [Blazui.ServerRender][21]                  | Server模式                             |                                                                                                                                      |
-
  
-
 ## Contribute
 
  Please read  [CONTRIBUTING.md](https://github.com/Element-Blazor/Element-Blazor/blob/master/CONTRIBUTING.md)
