@@ -6,6 +6,11 @@ namespace Blazui.Component
 {
     public class EditorGeneratorAttribute : Attribute
     {
+        public EditorGeneratorAttribute()
+        {
+
+        }
+        public EditorGeneratorAttribute(Type type) => Control = type;
         /// <summary>
         /// 编辑器控件
         /// </summary>

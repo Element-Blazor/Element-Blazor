@@ -16,7 +16,7 @@ namespace Blazui.Admin.Sample.ServerRender
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient();
-            await services.AddBlazuiServicesAsync();
+            services.AddBlazuiServices();
             services.AddSingleton<RouteService>();
             services.AddScoped<IUserService, TUserService>();
             services.AddAdmin<DocsDbContext>();

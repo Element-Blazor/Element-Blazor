@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazui.ServerRender;
+
 using PuppeteerSharp;
 using Xunit;
 using Xunit.Abstractions;
