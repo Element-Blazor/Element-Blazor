@@ -14,7 +14,7 @@ namespace Blazui.Component
         {
             IsShow = true;
         }
-        public BSubMenuBase SubMenu { get; set; }
+        public BSubMenu SubMenu { get; set; }
         public MenuOptions Options { get; set; }
         public RenderFragment Content { get; set; }
         public TaskCompletionSource<int> TaskCompletionSource { get; set; }

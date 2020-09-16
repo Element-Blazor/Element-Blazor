@@ -8,6 +8,6 @@ namespace Blazui.Markdown
 {
     public interface IIconHandler
     {
-        Task HandleAsync(BMarkdownEditorBase editor);
+        Task HandleAsync(BMarkdownEditor editor);
     }
 }

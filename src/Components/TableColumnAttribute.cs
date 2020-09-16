@@ -8,6 +8,10 @@ namespace Blazui.Component
     public class TableColumnAttribute : Attribute
     {
         /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        public bool IsEditable { get; set; } = true;
+        /// <summary>
         /// 列头文本
         /// </summary>
         public string Text { get; set; }
@@ -15,7 +19,7 @@ namespace Blazui.Component
         /// <summary>
         /// 宽度
         /// </summary>
-        public float Width { get; set; }
+        public IntString? Width { get; set; }
 
         /// <summary>
         /// 格式化参数，仅支持日期格式
@@ -26,5 +30,10 @@ namespace Blazui.Component
         /// 渲染是否忽略该属性
         /// </summary>
         public bool Ignore { get; set; }
+
+        /// <summary>
+        /// 排序编号
+        /// </summary>
+        public int SortNo { get; set; }
     }
 }

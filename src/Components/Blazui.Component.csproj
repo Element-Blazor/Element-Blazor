@@ -20,6 +20,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>obj\Debug\netstandard2.1\Blazui.Component.xml</DocumentationFile>
+		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -48,13 +49,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CompareNETObjects" Version="4.66.0" />
+		<PackageReference Include="CompareNETObjects" Version="4.67.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-preview.3.20215.2" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-preview.3.20215.2" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="3.1.8" />
+		<PackageReference Include="System.Collections" Version="4.3.0" />
+		<PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
 		<PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.0-preview.3.20215.14" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0-preview.3.20215.14" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.8" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.8" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -64,6 +67,10 @@
 	  <Content Update="wwwroot\lang\zh-CN.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="PopupRenders\" />
 	</ItemGroup>
 
 

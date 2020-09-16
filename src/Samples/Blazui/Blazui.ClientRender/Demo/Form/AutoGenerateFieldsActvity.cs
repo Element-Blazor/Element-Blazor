@@ -19,7 +19,7 @@ namespace Blazui.ClientRender.Demo.Form
         [Display(Name = "日期")]
         public DateTime? Time { get; set; }
         [Display(Name = "即时配送")]
-        [FormControl(typeof(BSwitch<bool>))]
+        [EditorGenerator( Control = typeof(BSwitch<bool>))]
         public bool Delivery { get; set; }
         [Display(Name = "性质")]
         public List<string> Type { get; set; }

@@ -10,9 +10,9 @@ namespace Blazui.Component
     public class PopupOption
     {
         /// <summary>
-        /// 关联到的 BPopupBase 组件实例
+        /// 关联到的 BPopup 组件实例
         /// </summary>
-        public BPopupBase Instance { get; internal set; }
+        public BPopup Instance { get; internal set; }
 
         /// <summary>
         /// 弹出层元素本身

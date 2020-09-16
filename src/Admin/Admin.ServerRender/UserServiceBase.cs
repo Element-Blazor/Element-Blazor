@@ -106,19 +106,22 @@ namespace Blazui.Admin.ServerRender
 
         public async Task<List<UserModel>> GetUsersAsync()
         {
-            return (await Task.WhenAll((await SignInManager.UserManager.Users.ToListAsync()).Select(async x =>
+            var userModelList = new List<UserModel>();
+            var allTUser  = await SignInManager.UserManager.Users.ToListAsync();
+            foreach(var user in allTUser)
             {
-                var roleNames = await SignInManager.UserManager.GetRolesAsync(x);
+                var roleNames = await SignInManager.UserManager.GetRolesAsync(user);
                 var roles = await Task.WhenAll(roleNames.Select(name => RoleManager.FindByNameAsync(name)));
-                var user = new UserModel()
+                var userModel = new UserModel()
                 {
-                    Email = x.Email,
-                    Id = x.Id,
-                    Username = x.UserName,
+                    Email = user.Email,
+                    Id = user.Id,
+                    Username = user.UserName,
                     RoleIds = roles.Select(x => x.Id).ToList()
                 };
-                return user;
-            }))).ToList();
+                userModelList.Add(userModel);
+            }
+            return userModelList;
         }
 
         public async Task<string> CreateSuperUserAsync(string username, string password)

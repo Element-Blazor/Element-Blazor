@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using Blazui.Admin.Sample.ServerRender;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
 using PuppeteerSharp;
 using System;

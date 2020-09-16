@@ -65,7 +65,9 @@ namespace Blazui.Component
             option.Buttons.Add(cancelRenderFragment);
             option.Buttons.Add(okRenderFragment);
             DialogService.Dialogs.Add(option);
+            Console.WriteLine("wait ConfirmAsync");
             var dialogResult = await option.TaskCompletionSource.Task;
+            Console.WriteLine("end ConfirmAsync");
             await Task.Delay(10);
             return (MessageBoxResult)dialogResult.Result;
         }

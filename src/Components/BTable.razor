@@ -1,4 +1,4 @@
-﻿@inherits BTableBase
+﻿@inherits BFieldComponentBase<IDictionary<string, string>>
 @{
     var styles = new List<string>();
     var tableClsList = new List<string>();
@@ -18,12 +18,16 @@
         styles.Add("height:" + Height + "px");
     }
 
+    styles.AddRange(Style?.Split(';') ?? new string[0]);
+
     <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
         @if (headerRendered)
         {
+
+            Headers = Headers.OrderBy(x => x.SortNo).ToList();
             var validColumnCount = Headers.Count();
             <div class="el-table__header-wrapper" @ref="headerElement">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -32,11 +36,11 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
-                            var width = header.Width.ToString();
-                            if (!header.Width.HasValue || header.Width.Value <= 0)
+                            if (header.Ignore)
                             {
-                                width = (100d / validColumnCount).ToString() + "%";
+                                continue;
                             }
+                            var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                         <col name="gutter" width="0" />
@@ -54,6 +58,10 @@
                             @for (int i = 1; i <= Headers.Count; i++)
                             {
                                 var header = Headers.ElementAt(i - 1);
+                                if (header.Ignore)
+                                {
+                                    continue;
+                                }
                                 <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i     is-leaf">
                                     <div class="cell">
                                         @header.Text
@@ -72,7 +80,7 @@
                 bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
             }
             <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -81,11 +89,11 @@
                         @for (int i = 1; i <= Headers.Count; i++)
                         {
                             var header = Headers.ElementAt(i - 1);
-                            var width = header.Width.ToString();
-                            if (!header.Width.HasValue || header.Width.Value <= 0)
+                            if (header.Ignore)
                             {
-                                width = (100d / validColumnCount).ToString() + "%";
+                                continue;
                             }
+                            var width = header.Width.HasValue ? header.Width.ToString() : "auto";
                             <col name="el-table_1_column_@i" @key="header.Text" width="@width" />
                         }
                     </colgroup>
@@ -99,40 +107,158 @@
                                 clsList.Add("el-table__row--striped");
                             }
                             var row = rows.ElementAt(i);
-                            <tr @key="row" class="@string.Join(" ", clsList)">
+                            if (hiddenRows.Contains(row))
+                            {
+                                continue;
+                            }
+                            var treeRow = row as TreeItemBase;
+                            if (treeRow != null)
+                            {
+                                clsList.Add("el-table__row--level-0");
+                            }
+                            var rowId = treeRow?.Id ?? 0;
+                            <tr @key="row" class="@string.Join(" ", clsList)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync">
                                 @if (HasSelectionColumn)
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                         <div class="cell">
-                                            <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBoxBase<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
+                                            <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBox<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
                                         </div>
                                     </td>
                                 }
                                 @for (int j = 1; j <= Headers.Count; j++)
                                 {
                                     var header = Headers.ElementAt(j - 1);
-                                    <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                    if (row == editingRow)
+                                    {
+                                        header.RawValue = row;
+                                    }
+                                    if (header.Ignore)
+                                    {
+                                        continue;
+                                    }
+                                    if (IsEditable && header.IsEditable && editingRow == row && !header.EditorRenderConfig.RawInfoHasSet)
+                                    {
+                                        header.EditorRenderConfig.RawInfoHasSet = true;
+                                        header.EditorRenderConfig.RawValue = header.EvalRaw?.Invoke(row) ?? null;
+                                        header.EditorRenderConfig.RawLabel = header.Eval?.Invoke(row) ?? null;
+                                        header.EditorRenderConfig.EditingValue = header.EditorRenderConfig.RawValue;
+                                    }
+                                    if (header.IsTree)
+                                    {
+                                        if (treeRow == null)
+                                        {
+                                            throw new BlazuiException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
+                                        }
+                                        var hasChild = treeRow.HasChildren || rows.Cast<TreeItemBase>().Any(x => x.ParentId == rowId);
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                            <div class="cell">
+                                                @if (hasChild)
+                                                {
+                                                    <span class="el-table__indent" style="padding-left: @(treeRow.Level*16)px;"></span>
+                                                    <div class="el-table__expand-icon el-table__expand-icon--expanded" @onclick="e=>ToggleTreeAsync(row)">
+                                                        @if (treeRow.IsLoading)
+                                                        {
+                                                            <i class="el-icon-loading"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="el-icon-arrow-@(treeRow.Direction ?? "right")"></i>
+                                                        }
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <span class="el-table__indent" style="padding-left: @((treeRow.Level+1)*16)px;"></span>
+                                                }
+                                                @if (header.Template != null)
+                                                {
+                                                    @header.Template(row)
+                                                }
+                                                else if (header.Eval != null)
+                                                {
+                                                    @header.Eval(row)
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                            <div class="cell">
+                                                @if (row == editingRow && CanEdit(header))
+                                                {
+                                                    @if (!header.IsCheckBox)
+                                                    {
+                                                        <BDynamicComponent Component="header.EditorRender" Config="header.EditorRenderConfig"></BDynamicComponent>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @if (header.IsCheckBox)
+                                                    {
+                                                        <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
+                                                    }
+                                                    else if (header.Template != null)
+                                                    {
+                                                        @header.Template(row)
+                                                    }
+                                                    else if (header.Eval != null)
+                                                    {
+                                                        @header.Eval(row)
+                                                    }
+                                                }
+                                            </div>
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                        @if (IsEditable && editingRow == null)
+                        {
+                            <tr @onkeyup="e=> { saveAction = SaveAction.Create; _ = SaveTableAsync(e); }" @ref="editingRowEl">
+                                @if (HasSelectionColumn)
+                                {
+                                    <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
                                         <div class="cell">
-                                            @if (header.IsCheckBox)
-                                            {
-                                                <BCheckBox TValue="Boolean" Status="Convert.ToBoolean(header.Eval(row)) ? Status.Checked : Status.UnChecked" IsDisabled="true"></BCheckBox>
-                                            }
-                                            else if (header.Template != null)
-                                            {
-                                                @header.Template(row)
-                                            }
-                                            else if (header.Eval != null)
-                                            {
-                                                @header.Eval(row)
-                                            }
+
                                         </div>
                                     </td>
                                 }
+                                @for (int j = 0; j < Headers.Count - 1; j++)
+                                {
+                                    var header = Headers.ElementAt(j);
+                                    if (header.Ignore)
+                                    {
+                                        continue;
+                                    }
+                                    if (CanEdit(header))
+                                    {
+                                        <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                            <div class="cell">
+                                                <BDynamicComponent Component="header.EditorRender" Config="header.EditorRenderConfig"></BDynamicComponent>
+                                            </div>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                            <div class="cell">
+                                            </div>
+                                        </td>
+                                    }
+                                }
+
+                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <div class="cell">
+                                        <BButton Type="ButtonType.Primary" Size="ButtonSize.Small" OnClick="SaveTableAsync" @ref="saveAddButton">保存</BButton>
+                                    </div>
+                                </td>
                             </tr>
                         }
                     </tbody>
                 </table>
-                @if (rows.Count <= 0)
+                @if (rows.Count <= 0 && !IsEditable)
                 {
                     <div class="el-table__empty-block" style="height:60px;">
                         <span class="el-table__empty-text">

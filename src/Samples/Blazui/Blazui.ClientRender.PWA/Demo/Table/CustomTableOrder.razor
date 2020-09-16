@@ -1,0 +1,8 @@
+﻿<BTable DataSource="Datas" AutoGenerateColumns="true">
+    <BTableColumns>
+        <BTableTemplateColumn Text="操作" SortNo="-1">
+            <BButton Type="@ButtonType.Primary" Size="@ButtonSize.Mini" OnClick="@(e=> Edit(context))">编辑</BButton>
+            <BButton Type="@ButtonType.Danger" Size="@ButtonSize.Mini" OnClick="@(e=> Del(context))">删除</BButton>
+        </BTableTemplateColumn>
+    </BTableColumns>
+</BTable>

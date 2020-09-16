@@ -13,6 +13,7 @@ using Blazui.ServerRender.Data;
 using Blazui.Component;
 using Blazui.Component.Lang;
 using Blazui.Markdown;
+using System.Net.Http;
 
 namespace Blazui.ServerRender
 {
@@ -32,11 +33,10 @@ namespace Blazui.ServerRender
             services.AddRazorPages();
             services.AddHttpClient();
             services.AddServerSideBlazor();
-            services.AddBlazuiServicesAsync().Wait();
+            services.AddBlazuiServices();
             GlobalBlazuiSettings.DisableAnimation = true;
             services.AddMarkdown();
             services.AddSingleton<WeatherForecastService>();
-            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,7 +59,7 @@ namespace Blazui.ServerRender
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default","api/{controller}/{action}");
+                endpoints.MapControllerRoute("default", "api/{controller}/{action}");
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

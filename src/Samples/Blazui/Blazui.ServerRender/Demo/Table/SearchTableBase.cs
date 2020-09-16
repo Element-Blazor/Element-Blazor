@@ -32,7 +32,9 @@ namespace Blazui.ServerRender.Demo.Table
             Datas = AllDatas;
         }
 
-        internal async Task Submit()
+        internal async Task SubmitAsync() => await Task.Run(Submit);
+
+        internal void Submit()
         {
             condition = searchForm.GetValue<SearchCondition>();
             Datas = AllDatas.Where(x => x.Name.Contains(condition.Name)).ToList();

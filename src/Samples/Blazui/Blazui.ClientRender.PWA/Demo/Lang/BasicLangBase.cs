@@ -10,6 +10,8 @@ namespace Blazui.ClientRender.PWA.Demo.Lang
 {
     public class BasicLangBase : BComponentBase
     {
+        [Inject]
+        public Component.Lang.BLang Lang { get; set; }
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
             await Lang.SetLangAsync("en-US");

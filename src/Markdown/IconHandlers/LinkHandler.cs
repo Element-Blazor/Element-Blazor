@@ -19,7 +19,7 @@ namespace Blazui.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditorBase editor)
+        public async Task HandleAsync(BMarkdownEditor editor)
         {
             var linkName = await jSRuntime.InvokeAsync<string>("getSelection", editor.Textarea);
             var linkModel = new LinkModel

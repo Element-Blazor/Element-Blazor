@@ -1,4 +1,4 @@
-﻿@inherits BButtonBase
+﻿@inherits BComponentBase
 @{
     var icon = Icon;
     if (IsLoading)
@@ -7,14 +7,35 @@
     }
 
 }
+@if (string.IsNullOrWhiteSpace(Image))
+{
     <button type="button" @onclick="OnButtonClickedAsync" style="@Style" class="@cssClassBuilder">
         @if (string.IsNullOrWhiteSpace(icon))
         {
-            <span>@ChildContent</span>
+            @if (string.IsNullOrWhiteSpace(Text))
+            {
+                <span>@ChildContent</span>
+            }
+            else
+            {
+                <span>@Text</span>
+            }
         }
         else
         {
-            <span>@ChildContent</span>
+            @if (string.IsNullOrWhiteSpace(Text))
+            {
+                <span>@ChildContent</span>
+            }
+            else
+            {
+                <span>@Text</span>
+            }
             <i class="@icon"></i>
         }
     </button>
+}
+else
+{
+    <img src="@showingImage" class="@Cls" @onclick="OnButtonClickedAsync" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(Style).Add("cursor:pointer").ToString()" @onmouseover="MouseOver" @onmouseout="MouseOut" />
+}

@@ -55,7 +55,7 @@ namespace Blazui.Component
             return await jSRuntime.InvokeAsync<int>("getClientHeight");
         }
 
-        internal ValueTask RegisterPasteUploadAsync(BUploadBase upload, string url)
+        internal ValueTask RegisterPasteUploadAsync(BUpload upload, string url)
         {
             return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url);
         }

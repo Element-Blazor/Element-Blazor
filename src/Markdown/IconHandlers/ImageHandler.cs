@@ -19,7 +19,7 @@ namespace Blazui.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditorBase editor)
+        public async Task HandleAsync(BMarkdownEditor editor)
         {
             var imageName = await jSRuntime.InvokeAsync<string>("getSelection", editor.textarea);
             var imageModel = new ImageModel
@@ -28,15 +28,15 @@ namespace Blazui.Markdown.IconHandlers
                 Title = imageName
             };
             var parameters = new Dictionary<string, object>();
-            parameters.Add(nameof(Image.Image), imageModel);
-            parameters.Add(nameof(Image.UploadUrl), editor.UploadUrl);
-            parameters.Add(nameof(Image.MaxSize), editor.ImageMaxSize);
-            parameters.Add(nameof(Image.Width), editor.ImageWidth);
-            parameters.Add(nameof(Image.Height), editor.ImageHeight);
-            parameters.Add(nameof(Image.AllowExtensions), editor.AllowImageExtensions);
-            parameters.Add(nameof(Image.DisableUpload), editor.DisableImageUpload);
-            parameters.Add(nameof(Image.Tip), editor.ImageUploadTip);
-            var result = await dialogService.ShowDialogAsync<Image, ImageModel>("插入图片", parameters);
+            parameters.Add(nameof(ImageUpload.Image), imageModel);
+            parameters.Add(nameof(ImageUpload.UploadUrl), editor.UploadUrl);
+            parameters.Add(nameof(ImageUpload.MaxSize), editor.ImageMaxSize);
+            parameters.Add(nameof(ImageUpload.Width), editor.ImageWidth);
+            parameters.Add(nameof(ImageUpload.Height), editor.ImageHeight);
+            parameters.Add(nameof(ImageUpload.AllowExtensions), editor.AllowImageExtensions);
+            parameters.Add(nameof(ImageUpload.DisableUpload), editor.DisableImageUpload);
+            parameters.Add(nameof(ImageUpload.Tip), editor.ImageUploadTip);
+            var result = await dialogService.ShowDialogAsync<ImageUpload, ImageModel>("插入图片", parameters);
             imageModel = result.Result;
             if(imageModel!=null)
             {

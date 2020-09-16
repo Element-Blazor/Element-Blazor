@@ -13,9 +13,16 @@ namespace Blazui.Component
 
         }
 
+        public BlazuiException(int code, string message):base(message)
+        {
+            Code = code;
+        }
+
         public BlazuiException(string message, Exception exception)
             : base(message, exception)
         {
         }
+
+        public int Code { get; }
     }
 }

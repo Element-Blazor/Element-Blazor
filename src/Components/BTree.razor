@@ -1,0 +1,84 @@
+﻿@inherits BComponentBase
+@if (items == null)
+{
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+}
+else
+{
+    <div role="tree" class="el-tree">
+        @{
+            var rootNodes = DataFormat == DataFormat.List ? items.Where(x => x.ParentId == 0).ToList() : items;
+            foreach (var rootNode in rootNodes)
+            {
+                var treeItems = new Stack<TreeItemBase>(FindChildren(rootNode));
+                if (!treeItems.Any())
+                {
+                    rootNode.Direction = string.Empty;
+                }
+                else if (treeItems.Any())
+                {
+                    if (rootNode.Expanded)
+                    {
+                        rootNode.Direction = "expanded";
+
+                    }
+                    else
+                    {
+                        rootNode.Direction = string.Empty;
+                    }
+                }
+                var styleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                    .Add("el-tree-node__expand-icon", "el-icon-caret-right", rootNode.Direction)
+                    .AddIf(!treeItems.Any(), "is-leaf");
+                <div @key="rootNode.Id" role="treeitem" tabindex="-1" aria-disabled="" draggable="false" class="el-tree-node is-focusable">
+                    <div class="el-tree-node__content" style="padding-left: 0px;"  @onclick="e=>SelectNodeAsync(rootNode)">
+                        <span class="@styleBuilder.ToString()"  @onclick="e=>ToggleAsync(rootNode)"  @onclick:stopPropagation></span>
+                        <span class="el-tree-node__label">@rootNode.Text</span>
+                    </div>
+                </div>
+                if (rootNode.Expanded)
+                {
+                    while (treeItems.Any())
+                    {
+                        var current = treeItems.Pop();
+                        var children = FindChildren(current);
+                        if (children.Any())
+                        {
+                            if (current.Expanded)
+                            {
+                                current.Direction = "expanded";
+                                foreach (var child in children)
+                                {
+                                    treeItems.Push(child);
+                                }
+                            }
+                            else
+                            {
+                                current.Direction = string.Empty;
+                            }
+                        }
+                        else
+                        {
+                            current.Direction = string.Empty;
+                        }
+                        styleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                           .Add("el-tree-node__expand-icon", "el-icon-caret-right", current.Direction)
+                           .AddIf(!children.Any(), "is-leaf");
+                        <div @key="current.Id" role="group" class="el-tree-node__children" aria-expanded="true" data-old-padding-top="" data-old-padding-bottom="" data-old-overflow="" style="">
+                            <div role="treeitem" tabindex="-1" aria-disabled="" draggable="false" class="el-tree-node is-expanded is-focusable" aria-expanded="true">
+                                <div class="el-tree-node__content" style="padding-left: @(18 * current.Level)px;" @onclick="e=>SelectNodeAsync(current)">
+                                    <span class="@styleBuilder.ToString()" @onclick="e => ToggleAsync(current)" @onclick:stopPropagation></span>
+                                    <span class="el-tree-node__label">@current.Text</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            <div class="el-tree__drop-indicator" style="display: none;"></div>
+        }
+
+    </div>
+}

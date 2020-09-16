@@ -19,7 +19,7 @@ namespace Blazui.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditorBase editor)
+        public async Task HandleAsync(BMarkdownEditor editor)
         {
             var model = await dialogService.ShowDialogAsync<CreateTable, CreateTableModel>("插入表格", 400);
             if(model.Result!=null&&model.Result.Columns>0)
