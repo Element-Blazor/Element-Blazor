@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <title>Blazui, Element的blazor版本，用 .NET 写前端的 UI 框架，开箱即用，WebAssembly 版本，非PWA模式</title>
+    <base href="/" />
+
+    <link href="manifest.json" rel="manifest" />
+
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
+    <link href="/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
+    <style>
+        html {
+            display: flex;
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            background-color: lightblue;
+            font-family: 'Open Sans';
+            font-weight: 100;
+            font-size: 100%;
+            margin: 0em;
+            display: flex;
+            flex: 1;
+            padding: 0em;
+        }
+
+            body > app {
+                flex: 1;
+                display: flex;
+            }
+    </style>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?68404524efb8917aacde222c05799f80";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+
+<body>
+    <app>
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;display:block;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+            <g transform="translate(26.666666666666668,26.666666666666668)">
+                <rect x="-20" y="-20" width="40" height="40" fill="#e15b64" transform="scale(1.04545 1.04545)">
+                    <animateTransform attributeName="transform" type="scale" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="1.1500000000000001;1" begin="-0.3s"></animateTransform>
+                </rect>
+            </g>
+            <g transform="translate(73.33333333333333,26.666666666666668)">
+                <rect x="-20" y="-20" width="40" height="40" fill="#f47e60" transform="scale(1.06045 1.06045)">
+                    <animateTransform attributeName="transform" type="scale" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="1.1500000000000001;1" begin="-0.2s"></animateTransform>
+                </rect>
+            </g>
+            <g transform="translate(26.666666666666668,73.33333333333333)">
+                <rect x="-20" y="-20" width="40" height="40" fill="#f8b26a" transform="scale(1.09045 1.09045)">
+                    <animateTransform attributeName="transform" type="scale" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="1.1500000000000001;1" begin="0s"></animateTransform>
+                </rect>
+            </g>
+            <g transform="translate(73.33333333333333,73.33333333333333)">
+                <rect x="-20" y="-20" width="40" height="40" fill="#abbd81" transform="scale(1.07545 1.07545)">
+                    <animateTransform attributeName="transform" type="scale" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="1.1500000000000001;1" begin="-0.1s"></animateTransform>
+                </rect>
+            </g>
+        </svg>
+    </app>
+    <script src="/_content/Blazui.Component/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/addons.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
+    <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Blazui.Markdown/js/dom.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+</body>
+
+</html>
