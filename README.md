@@ -1,25 +1,29 @@
-# Blazui
-![LOGO][1]
+# Element-Blazor
+![LOGO](LOGO.png)
 
-[中文][37] - [English][36] 
-
-[加入群聊【.NET Blazor (C#)交流群 74522853】][2]
-
-[加入 Blazor 社区][3]
-
-[参观 Blazor 社区后台，用户名：admin，密码：88888888][4]
-
-## 介绍
+## Introduction
 Element的blazor版本
 
 API 模仿 Element，CSS 直接使用 Element的样式，HTML 结构直接使用 Element 的 HTML 结构
 
 Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 
-## 演示地址及相关案例
+
+
+[加入群聊【.NET Blazor (C#)交流群 74522853】][2]
+
+[加入群聊【Element-Blazor 782678626】][38]
+
+[加入 Blazor 社区][3]
+
+[Blazor 社区后台，用户名：admin，密码：88888888][4]
+
+
+
+## Samples
 |地址 | 内容 | 服务器位置|
 | :----------- | :----------                       | --|
-|https://www.blazor.group | 基于 Blazui 开发的 Blazor 社区，Server  渲染 |国内| 
+|https://www.blazor.group | 基于 Blazui 开发的 Blazor 社区，Server  渲染 |国内|
 |http://blazui.com| Blazor Server 渲染版本 | 国内 |
 |http://wasm.blazui.com| Blazor WASM 渲染版本 | 国内 |
 |http://pwawasm.blazui.com| Blazor WASM  PWA 渲染版本 | 国内 |
@@ -52,25 +56,22 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 |          |                  |                         | [Blazui.ClientRender][20]                  | WASM 模式                              |                                                                                                                                      |
 |          |                  |                         | [Blazui.ServerRender][21]                  | Server模式                             |                                                                                                                                      |
 
+ 
 
-## 主要更新仓库
+## Contribute
 
-https://github.com/wzxinchen/Blazui
+ Please read  [CONTRIBUTING.md](https://github.com/Element-Blazor/Element-Blazor/blob/master/CONTRIBUTING.md)
 
-## 贡献说明
-
-Fork 一份代码到自己的仓库，然后基于 develop 分支拉出新分支，在这个分支上开发，开发完成后发起PR合并至develop
-
-## 使用文档
+## Document
 
 https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 
-## 更新日志
+## History
 
 ### 版本 0.0.7.3, 2020.05.06发布
 1. BLayout 组件新增键盘事件
 2. Extension 扩展类多语言默认为空以解决报错问题
-    
+   
 ### 版本 0.0.7.2, 2020.04.24发布
     Blazor 升级 preview 5
 
@@ -113,40 +114,42 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 15. 修复 tab标签页只能关闭当前的
 
 
-  [1]: http://static.zybuluo.com/wzxinchen/c9qvwe1agljfwvqm1j34x1fw/BLAZUI%20128.png
-  [2]: https://jq.qq.com/?_wv=1027&k=5jdzC6m
-  [3]: https://www.blazor.group
-  [4]: https://admin.blazor.group
-  [5]: https://github.com/wzxinchen/Blazui/tree/master/src
-  [6]: https://github.com/wzxinchen/Blazui/tree/master/src/Admin
-  [7]: https://github.com/wzxinchen/Blazui/tree/master/src/Admin/Admin.ClientRender
-  [8]: https://github.com/wzxinchen/Blazui/tree/master/src/Admin/Admin.ServerRender
-  [9]: https://github.com/wzxinchen/Blazui/tree/master/src/Admin/Admin
-  [10]: https://github.com/wzxinchen/Blazui/tree/master/src/Components
-  [11]: https://github.com/wzxinchen/Blazui/tree/master/src/Components/Lang
-  [12]: https://github.com/wzxinchen/Blazui/tree/master/src/Markdown
-  [13]: https://github.com/wzxinchen/Blazui/tree/master/src/Markdown/IconHandlers
-  [14]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples
-  [15]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Admin
-  [16]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ClientRender.PWA
-  [17]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ServerRender
-  [18]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Blazui
-  [19]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Blazui/Blazui.ClientRender.PWA
-  [20]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Blazui/Blazui.ClientRender
-  [21]: https://github.com/wzxinchen/Blazui/tree/master/src/Samples/Blazui/Blazui.ServerRender
-  [22]: https://github.com/wzxinchen/Blazui/issues/90
-  [23]: https://github.com/wzxinchen/Blazui/issues/87
-  [24]: https://github.com/wzxinchen/Blazui/issues/88
-  [25]: https://github.com/wzxinchen/Blazui/issues/89
-  [26]: https://github.com/wzxinchen/Blazui/issues/85
-  [27]: https://github.com/wzxinchen/Blazui/issues/79
-  [28]: https://github.com/wzxinchen/Blazui/issues/80
-  [29]: https://github.com/wzxinchen/Blazui/issues/83
-  [30]: https://github.com/wzxinchen/Blazui/issues/75
-  [31]: https://github.com/wzxinchen/Blazui/issues/77
-  [32]: https://github.com/wzxinchen/Blazui/issues/78
-  [33]: https://github.com/wzxinchen/Blazui/issues/74
-  [34]: https://github.com/wzxinchen/Blazui/issues/73
-  [35]: https://github.com/wzxinchen/Blazui/issues/71
-  [36]: https://github.com/wzxinchen/Blazui/blob/master/README.en.md
-  [37]: https://github.com/wzxinchen/Blazui/blob/master/README.md
+[1]: http://static.zybuluo.com/wzxinchen/c9qvwe1agljfwvqm1j34x1fw/BLAZUI%20128.png
+[2]: https://jq.qq.com/?_wv=1027&k=5jdzC6m
+[3]: https://www.blazor.group
+[4]: https://admin.blazor.group
+[5]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src
+[6]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Admin
+[7]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Admin/Admin.ClientRender
+[8]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Admin/Admin.ServerRender
+[9]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Admin/Admin
+[10]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Components
+[11]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Components/Lang
+[12]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Markdown
+[13]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Markdown/IconHandlers
+[14]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples
+[15]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin
+[16]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ClientRender.PWA
+[17]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ServerRender
+[18]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui
+[19]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ClientRender.PWA
+[20]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ClientRender
+[21]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ServerRender
+[22]: https://github.com/Element-Blazor/Element-Blazor/issues/90
+[23]: https://github.com/Element-Blazor/Element-Blazor/issues/87
+[24]: https://github.com/Element-Blazor/Element-Blazor/issues/88
+[25]: https://github.com/Element-Blazor/Element-Blazor/issues/89
+[26]: https://github.com/Element-Blazor/Element-Blazor/issues/85
+[27]: https://github.com/Element-Blazor/Element-Blazor/issues/79
+[28]: https://github.com/Element-Blazor/Element-Blazor/issues/80
+[29]: https://github.com/Element-Blazor/Element-Blazor/issues/83
+[30]: https://github.com/Element-Blazor/Element-Blazor/issues/75
+[31]: https://github.com/Element-Blazor/Element-Blazor/issues/77
+[32]: https://github.com/Element-Blazor/Element-Blazor/issues/78
+[33]: https://github.com/Element-Blazor/Element-Blazor/issues/74
+[34]: https://github.com/Element-Blazor/Element-Blazor/issues/73
+[35]: https://github.com/Element-Blazor/Element-Blazor/issues/71
+[36]: https://github.com/Element-Blazor/Element-Blazor/blob/master/README.en.md
+[37]: https://github.com/Element-Blazor/Element-Blazor/blob/master/README.md3
+[38]: https://jq.qq.com/?_wv=1027&k=YXKJVlKW
+

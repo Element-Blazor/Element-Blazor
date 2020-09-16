@@ -1,4 +1,4 @@
-# Blazui
+# Element-Blazor
 ![LOGO][1]
 
 [中文][37] - [English][36] 
