@@ -34,7 +34,7 @@ namespace Blazui.Admin.Sample.ServerRender
                 options.UseInMemoryDatabase("docs");
             });
             services.AddScoped<DbContext, DocsDbContext>();
-            services.AddAdminAsync<UserService>().Wait();
+            services.AddAdmin<UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,7 +10,7 @@ namespace Blazui.Admin.Sample.ServerRender
 {
     public static class ExtensionBuilder
     {
-        public static async System.Threading.Tasks.Task<IServiceCollection> AddAdminAsync<TUserService>(this IServiceCollection services)
+        public static  IServiceCollection  AddAdmin<TUserService>(this IServiceCollection services)
             where TUserService : class, IUserService
         {
             services.AddRazorPages();
