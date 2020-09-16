@@ -12,14 +12,12 @@ namespace Blazui.Admin
 {
     public class BAdminBase : BAdminPageBase
     {
-        internal BTabBase tab;
-        internal BBreadcrumbBase breadcrumb;
+        internal BTab tab;
+        internal BBreadcrumb breadcrumb;
         [Inject]
         private RouteService routeService { get; set; }
 
         protected BForm form;
-        [Inject]
-        private MessageService MessageService { get; set; }
 
         [Inject]
         private MessageBox MessageBox { get; set; }
@@ -104,7 +102,7 @@ namespace Blazui.Admin
         [Parameter]
         public ObservableCollection<TabOption> Tabs { get; set; } = new ObservableCollection<TabOption>();
 
-        protected void OnTabPanelChanging(BChangeEventArgs<BTabPanelBase> args)
+        protected void OnTabPanelChanging(BChangeEventArgs<BTabPanel> args)
         {
             args.DisallowChange = true;
             NavigationManager.NavigateTo(args.NewValue.Name);

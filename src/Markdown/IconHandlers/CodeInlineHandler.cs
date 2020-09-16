@@ -16,7 +16,7 @@ namespace Blazui.Markdown.IconHandlers
             this.jSRuntime = jSRuntime;
         }
 
-        public async Task HandleAsync(BMarkdownEditorBase editor)
+        public async Task HandleAsync(BMarkdownEditor editor)
         {
             await jSRuntime.InvokeVoidAsync("wrapSelection", editor.Textarea, "``", "``");
         }

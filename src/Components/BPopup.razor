@@ -1,14 +1,34 @@
-﻿@inherits BPopupBase
-@using System.Globalization;
+﻿@using System.Globalization;
 @{
+    foreach (var item in PopupOptions)
+    {
+        <div @key="item.ZIndex" style="position:absolute;left:@(item.Position.X)px;top:@(item.Position.Y)px;z-index:@item.ZIndex;">
+            @item.Content
+        </div>
+    }
     for (int i = 0; i < Messages.Count; i++)
     {
         var message = Messages[i];
         var index = message.ZIndex;
-        <div role="alert" class="el-message el-message--@(message.Type.ToString().ToLower())" @ref="message.Element" style="top: @(message.BeginTop)px;opacity:0;transition:top 0.5s,opacity 0.5s;z-index:@index;">
-            <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
-            <p class="el-message__content">@message.Message</p>
-        </div>
+        var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+           .Add("el-message", $"el-message--{message.Type.ToString().ToLower()}");
+        var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.BeginTop}px", "opacity:0", $"z-index:{index}");
+        var firstStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.EndTop}px")
+            .Add("opacity:1");
+        var secondStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"top:{message.BeginTop}px", "opacity:0");
+        <BTransition role="alert" Cls="@clsBuilder.ToString()" OnAllEnd="e=>DisposeMessage(message)" InitialStyle="@styleBuilder.ToString()">
+            <Path>
+                <BTransitionPath Style="@firstStyleBuilder.ToString()" Delay="200" Duration="300"></BTransitionPath>
+                <BTransitionPath Style="@secondStyleBuilder.ToString()" Delay="3000" Duration="300"></BTransitionPath>
+            </Path>
+            <Content>
+                <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
+                <p class="el-message__content">@message.Message</p>
+            </Content>
+        </BTransition>
     }
     for (int i = 0; i < LoadingOptions.Count; i++)
     {
@@ -35,77 +55,127 @@
         var option = DialogOptions[i];
         var shadowIndex = option.ShadowZIndex;
         var index = option.ZIndex;
+
         if (option.IsDialog)
         {
             var width = string.Empty;
-       
-             if (option.Width > 0)
+
+            if (option.Width > 0)
             {
                 width = $"width:{option.Width}px;";
             }
-            <div class="el-dialog__wrapper" style="z-index: @index;">
-                <div role="dialog" aria-modal="true" @ref="option.Element" aria-label="@option.Title" class="el-dialog @(option.FullScreen?"is-fullscreen":"")" style="margin-top:15vh;opacity:0;@width ">
-                    <div class="el-dialog__header">
-                        <span class="el-dialog__title">@option.Title</span>
-                        <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option,
-                                        new DialogResult() {
-                              }))">
-                        </BButton>
-                    </div>
-                    <div class="el-dialog__body">
-                        <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
-                    </div>
-                    @if (option.Buttons.Any())
-                    {
-                        <div class="el-dialog__footer">
-                            <span class="dialog-footer">
-                                @foreach (var button in option.Buttons)
-                                {
-                                    @button
-                                }
-                            </span>
+            var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add("el-dialog")
+                .AddIf(option.FullScreen, "is-fullscrren");
+            var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                .Add("opacity:0", "top:10px")
+                .Add(width);
+            <div @key="option" class="el-dialog__wrapper" style="z-index: @index;">
+                <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
+                    <Path>
+                        <BTransitionPath top="10vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
+                        <BTransitionPath top="10px" opacity="0" Duration="300" Pause="true"></BTransitionPath>
+                    </Path>
+                    <Content>
+                        <div class="el-dialog__header">
+                            <span class="el-dialog__title">@option.Title</span>
+                            <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
+                                            new DialogResult()
+                                            {
+                                            }))">
+                            </BButton>
                         </div>
-                    }
-                </div>
+                        <div class="el-dialog__body">
+                            <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
+                        </div>
+                        @if (option.Buttons.Any())
+                        {
+                            <div class="el-dialog__footer">
+                                <span class="dialog-footer">
+                                    @foreach (var button in option.Buttons)
+                                    {
+                                        @button
+                                    }
+                                </span>
+                            </div>
+                        }
+                    </Content>
+                </BTransition>
             </div>
+            @if (option.IsModal)
+            {
+                ShadowCount++;
+                var shadowStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                    .Add("opacity:0", "position:fixed")
+                    .Add($"z-index:{shadowIndex}");
+                var firstStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                    .Add($"opacity:{(ShadowCount == 0 ? 0 : 0.5)}");
+                <BTransition InitialStyle="@shadowStyle.ToString()" @ref="option.ShadowElement" Cls="v-modal">
+                    <Path>
+                        <BTransitionPath Style="@firstStyle.ToString()" Delay="300" Duration="200"></BTransitionPath>
+                        <BTransitionPath opacity="0" Duration="300" Pause="true"></BTransitionPath>
+                    </Path>
+                    <Content></Content>
+                </BTransition>
+            }
         }
         else
         {
+            ShadowCount++;
+            var layerSyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+   .AddIf(option.Point != System.Drawing.Point.Empty, $"left:{option.Point.X}px;", $"top:{option.Point.Y}px");
+            var messageBoxStyleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .AddIf(option.Point == System.Drawing.Point.Empty, "el-message-box");
+
             <div tabindex="-1" role="dialog" aria-modal="true" aria-label="@option.Title" class="el-message-box__wrapper" style="z-index: @index">
-                <div class="el-message-box" style="opacity:0;" @ref="option.Element">
-                    <div class="el-message-box__header">
-                        <div class="el-message-box__title">
-                            <!---->
-                            <span>@option.Title</span>
-                        </div>
-                        <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e=>CloseDialogAsync(option, new DialogResult() {
-                                         Result= MessageBoxResult.Close
-                              }))">
-                        </BButton>
-                    </div>
-                    <div class="el-message-box__content">
-                        <!---->
-                        <div class="el-message-box__message">
-                            <p><BDynamicComponent Component="option.Content"></BDynamicComponent></p>
-                        </div>
-                        <div class="el-message-box__input" style="display: none;">
-                            <div class="el-input">
+                <div class="@messageBoxStyleBuilder.ToString()" style="@layerSyleBuilder.ToString()">
+                    @if (!string.IsNullOrWhiteSpace(option.Title))
+                    {
+                        <div class="el-message-box__header">
+                            <div class="el-message-box__title">
                                 <!---->
-                                <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+                                <span>@option.Title</span>
                             </div>
-                            <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+                            <BButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option, new DialogResult()
+                                                                                                                                                 {
+                                                                                                                                                     Result = MessageBoxResult.Close
+                                                                                                                                                 }))">
+                            </BButton>
                         </div>
-                    </div>
-                    <div class="el-message-box__btns">
-                        @foreach (var button in option.Buttons)
-                        {
-                            @button
-                        }
-                    </div>
+                    }
+                    @if (option.Point == System.Drawing.Point.Empty)
+                    {
+                        <div class="el-message-box__content">
+                            <!---->
+                            <div class="el-message-box__message">
+                                <p><BDynamicComponent Component="option.Content"></BDynamicComponent></p>
+                            </div>
+                            <div class="el-message-box__input" style="display: none;">
+                                <div class="el-input">
+                                    <!---->
+                                    <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+                                </div>
+                                <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+                            </div>
+                        </div>
+                        <div class="el-message-box__btns">
+                            @foreach (var button in option.Buttons)
+                            {
+                                @button
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <BDynamicComponent Component="option.Content"></BDynamicComponent>
+                    }
                 </div>
             </div>
+            @if (option.IsModal)
+            {
+                <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount == 0 ? "0" : "0.5");position:fixed;"></div>
+            }
         }
-        <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount==0 ? "0":"0.5");position:fixed;" @ref="@option.ShadowElement"></div>
     }
 
     for (int i = 0; i < DateTimePickerOptions.Count; i++)
@@ -333,14 +403,26 @@
         {
             style = "";
         }
+        var listClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-scrollbar__view", "el-select-dropdown__list")
+            .AddIf(option.IsTree, "blazor-dropdown-tree");
         <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
         <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(index);" x-placement="bottom-start">
             <div class="el-scrollbar" style="">
-                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -17px; margin-right: -17px;">
-                    <ul class="el-scrollbar__view el-select-dropdown__list">
-                        <CascadingValue Value="option">
-                            @option.OptionContent
-                        </CascadingValue>
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap">
+                    <ul class="@listClsBuilder.ToString()">
+                        @if (option.IsTree)
+                        {
+                            <CascadingValue Value="(BTreeSingleSelect)option.Select">
+                                @option.OptionContent
+                            </CascadingValue>
+                        }
+                        else
+                        {
+                            <CascadingValue Value="option">
+                                @option.OptionContent
+                            </CascadingValue>
+                        }
                     </ul>
                 </div>
                 <div class="el-scrollbar__bar is-horizontal">

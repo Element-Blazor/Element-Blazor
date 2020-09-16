@@ -48,6 +48,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ClientR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin", "src\Admin\Admin\Blazui.Admin.csproj", "{36BBE899-CF01-4ECF-B4F4-627D63531005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSExtension", "src\VSExtension\VSExtension.csproj", "{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{36BBE899-CF01-4ECF-B4F4-627D63531005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36BBE899-CF01-4ECF-B4F4-627D63531005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36BBE899-CF01-4ECF-B4F4-627D63531005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{EE404089-CDFB-4699-9997-8166D6B3A6DA} = {B81231A0-5776-4D5B-8ACF-9B1590E92804}
 		{6BC48A0B-D72D-4ED7-8C83-B0208D535A36} = {B81231A0-5776-4D5B-8ACF-9B1590E92804}
 		{36BBE899-CF01-4ECF-B4F4-627D63531005} = {E36A034A-83C5-4649-90AF-CC4FA1C594E2}
+		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140} = {BA4616F9-78F9-4486-B264-A1FD8C0871AE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4766835C-4DA4-4A53-97D8-CBA1E51E1082}

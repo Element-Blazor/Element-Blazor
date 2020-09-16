@@ -7,13 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BComponentBase : ComponentBase
+    public class BComponentBase : ComponentBase, IDisposable
     {
-        protected bool RequireRender { get; set; }
+        [CascadingParameter(Name ="Page")]
+        public BComponentBase Page { get; set; }
+        protected bool RequireRender { get; set; } = true;
+
+        [Parameter(CaptureUnmatchedValues = true)]
+        public IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
         /// 若该项为 true，则该组件会始终允许刷新，不受 <seealso cref="BComponentBase.MarkAsRequireRender"/> 方法控制
@@ -37,9 +43,6 @@ namespace Blazui.Component
         [Inject]
         public LoadingService LoadingService { get; set; }
 
-        [Inject]
-        protected BLang Lang { get; set; }
-
         [Parameter]
         public Func<object, Task> OnRenderCompleted { get; set; }
 
@@ -50,22 +53,13 @@ namespace Blazui.Component
         public virtual string Cls { get; set; }
 
         [CascadingParameter]
-        public BBadgeBase Badge { get; set; }
+        public BBadge Badge { get; set; }
         /// <summary>
         /// 设置自定义样式
         /// </summary>
         [Parameter]
         public string Style { get; set; } = string.Empty;
 
-        /// <summary>
-        /// 获取国际化的文本
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public string T(string text)
-        {
-            return Lang.T(text);
-        }
         /// <summary>
         /// 弹出 Alert 消息
         /// </summary>
@@ -74,6 +68,15 @@ namespace Blazui.Component
         {
             _ = MessageBox.AlertAsync(text);
         }
+
+        protected override void OnInitialized()
+        {
+            if (DialogContainer != null)
+            {
+                DialogContainer.OnShow += OnDialogShowAsync;
+            }
+        }
+
         /// <summary>
         /// 弹出 Confirm 消息
         /// </summary>
@@ -86,14 +89,25 @@ namespace Blazui.Component
         /// <summary>
         /// 默认情况下所有复杂组件都只进行一次渲染，该方法将组件置为需要再次渲染
         /// </summary>
-        public void MarkAsRequireRender()
+        public virtual void MarkAsRequireRender()
         {
             RequireRender = true;
         }
 
+        [CascadingParameter]
+        public BDialogBase DialogContainer { get; set; }
+
+        protected virtual Task OnDialogShowAsync()
+        {
+            return Task.CompletedTask;
+        }
         public void Toast(string text)
         {
             MessageService.Show(text);
+        }
+        public void Toast(string text, MessageType type)
+        {
+            MessageService.Show(text, type);
         }
         public async Task<MessageBoxResult> AlertAsync(string text)
         {
@@ -111,6 +125,7 @@ namespace Blazui.Component
             {
                 return;
             }
+
             if (OnRenderCompleted != null)
             {
                 await OnRenderCompleted(this);
@@ -118,14 +133,24 @@ namespace Blazui.Component
             RequireRender = false;
         }
 
-        public void Refresh()
+        public virtual void Refresh()
         {
+            MarkAsRequireRender();
             StateHasChanged();
         }
 
         protected override bool ShouldRender()
         {
             return RequireRender || EnableAlwaysRender;
+        }
+
+        public virtual void Dispose()
+        {
+            if (DialogContainer == null)
+            {
+                return;
+            }
+            DialogContainer.OnShow -= OnDialogShowAsync;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Blazui.Component
         [Parameter]
         public string Name { get; set; }
         [CascadingParameter]
-        public BFormItemBase<TValue> FormItem { get; set; }
+        public BFormItem<TValue> FormItem { get; set; }
 
         protected void SetFieldValue(TValue value, bool validate)
         {
@@ -21,11 +21,11 @@ namespace Blazui.Component
             }
             if (TypeHelper.Equal(FormItem.Value, value))
             {
+                FormItem.MarkAsRequireRender();
                 return;
             }
             Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             FormItem.Value = value;
-
             if (!validate)
             {
                 return;
@@ -38,6 +38,7 @@ namespace Blazui.Component
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
             if (FormItem != null)
             {
                 FormItem.OnReset += FormItem_OnReset;
@@ -50,8 +51,9 @@ namespace Blazui.Component
 
         }
 
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             if (FormItem != null)
             {
                 FormItem.OnReset -= FormItem_OnReset;

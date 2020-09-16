@@ -15,13 +15,13 @@
     <PackageIcon>LOGO.png</PackageIcon>
     <RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
     <PackageTags>blazor,blazui,admin</PackageTags>
-    <Version>0.0.2</Version>
+    <Version>0.0.2.1</Version>
     <AssemblyVersion>0.0.2.0</AssemblyVersion>
     <FileVersion>0.0.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0-preview.3.20215.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

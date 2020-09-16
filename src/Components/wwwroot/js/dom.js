@@ -312,3 +312,28 @@ window.setTransitionAsync = function (el, value) {
     }
     el.style.transition = value;
 };
+window.getDomGuid = function (el) {
+    for (var index in el.attributes) {
+        var guid = el.attributes[index].name;
+        if (!guid) {
+            continue;
+        }
+        if (guid.indexOf("_bl_") == 0) {
+            return guid;
+        }
+    }
+};
+window.onblazortransitionend = function (e) {
+    var instance = window[getDomGuid(e.target)];
+    if (!instance) {
+        return;
+    }
+    console.log("end:");
+    console.dir(instance)
+
+    return instance.invokeMethodAsync('AnimationEnd', e.propertyName);
+}
+window.RegisterAnimationBegin = function (transitionRef, el) {
+    window[getDomGuid(el)] = transitionRef;
+    el.addEventListener('transitionend', onblazortransitionend);
+}

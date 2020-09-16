@@ -169,42 +169,42 @@
   {
     "name": "form",
     "demos": [
-      {
-        "title": "基础用法",
-        "name": "Form",
-        "files": [
-          "BasicForm.razor",
-          "BasicFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "行内表单",
-        "name": "Form",
-        "files": [
-          "InlineForm.razor",
-          "InlineFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "表单对齐",
-        "name": "Form",
-        "files": [
-          "AlignForm.razor",
-          "BasicFormBase.cs",
-          "Activity.cs"
-        ]
-      },
-      {
-        "title": "表单双向绑定",
-        "name": "Form",
-        "files": [
-          "InitilizeForm.razor",
-          "InitilizeFormBase.cs",
-          "Activity.cs"
-        ]
-      },
+      //{
+      //  "title": "基础用法",
+      //  "name": "Form",
+      //  "files": [
+      //    "BasicForm.razor",
+      //    "BasicFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "行内表单",
+      //  "name": "Form",
+      //  "files": [
+      //    "InlineForm.razor",
+      //    "InlineFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "表单对齐",
+      //  "name": "Form",
+      //  "files": [
+      //    "AlignForm.razor",
+      //    "BasicFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
+      //{
+      //  "title": "表单双向绑定",
+      //  "name": "Form",
+      //  "files": [
+      //    "InitilizeForm.razor",
+      //    "InitilizeFormBase.cs",
+      //    "Activity.cs"
+      //  ]
+      //},
       {
         "title": "隐藏表单项",
         "name": "Form",
@@ -212,6 +212,15 @@
           "HiddenFormItem.razor",
           "BasicFormBase.cs",
           "Activity.cs"
+        ]
+      },
+      {
+        "title": "自动生成表单",
+        "name": "Form",
+        "files": [
+          "AutoGenerateFieldsInitilizeForm.razor",
+          "AutoGenerateFieldsInitilizeForm.razor.cs",
+          "AutoGenerateFieldsActvity.cs"
         ]
       }
     ]
@@ -334,6 +343,47 @@
           "UpdatePageSize.razor",
           "UpdatePageSizeBase.cs",
           "AutoGenerateColumnTestData.cs"
+        ]
+      },
+      {
+        "title": "自定义列顺序",
+        "name": "Table",
+        "files": [
+          "CustomTableOrder.razor",
+          "CustomTableOrder.razor.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "tag",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Tag",
+        "files": [
+          "Basic.razor"
+        ]
+      },
+      {
+        "title": "可移除",
+        "name": "Tag",
+        "files": [
+          "Removeable.razor"
+        ]
+      },
+      {
+        "title": "不同尺寸",
+        "name": "Tag",
+        "files": [
+          "Size.razor"
+        ]
+      },
+      {
+        "title": "不同主题",
+        "name": "Tag",
+        "files": [
+          "Theme.razor"
         ]
       }
     ]
@@ -723,6 +773,26 @@
           "UploadActivity.cs",
           "UploadFormBase.cs",
           "TestController.cs"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "tree",
+    "demos": [
+      {
+        "title": "基础用法",
+        "name": "Tree",
+        "files": [
+          "SimpleTree.razor"
+        ]
+      },
+      {
+        "title": "远程加载",
+        "name": "Tree",
+        "files": [
+          "LoadTree.razor",
+          "TreeController.cs"
         ]
       }
     ]

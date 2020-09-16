@@ -19,15 +19,15 @@ namespace Blazui.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditorBase editor)
+        public async Task HandleAsync(BMarkdownEditor editor)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.Add(nameof(File.UploadUrl), editor.UploadUrl);
-            parameters.Add(nameof(File.MaxSize), editor.FileMaxSize);
-            parameters.Add(nameof(File.AllowExtensions), editor.AllowFileExtensions);
-            parameters.Add(nameof(File.DisableUpload), editor.DisableFileUpload);
-            parameters.Add(nameof(File.Tip), editor.FileUploadTip);
-            var result = await dialogService.ShowDialogAsync<File, FileModel>("插入文件", parameters);
+            parameters.Add(nameof(FileUpload.UploadUrl), editor.UploadUrl);
+            parameters.Add(nameof(FileUpload.MaxSize), editor.FileMaxSize);
+            parameters.Add(nameof(FileUpload.AllowExtensions), editor.AllowFileExtensions);
+            parameters.Add(nameof(FileUpload.DisableUpload), editor.DisableFileUpload);
+            parameters.Add(nameof(FileUpload.Tip), editor.FileUploadTip);
+            var result = await dialogService.ShowDialogAsync<FileUpload, FileModel>("插入文件", parameters);
             var fileModel = result.Result;
             if(fileModel!=null)
             {

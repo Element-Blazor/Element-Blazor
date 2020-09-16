@@ -7,11 +7,7 @@ namespace Blazui.Component
 {
     public class FormControlAttribute : Attribute
     {
-        public FormControlAttribute(Type controlType)
-        {
-            ControlType = controlType;
-        }
-
-        public Type ControlType { get; }
+        public int SortNo { get; set; }
+        public float LabelWidth { get; set; }
     }
 }
