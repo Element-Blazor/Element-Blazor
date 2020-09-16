@@ -46,7 +46,7 @@ namespace Blazui.Component
             }
         }
 
-        protected virtual void FormItem_OnReset(object value, bool requireRerender)
+        protected virtual void FormItem_OnReset(object value, bool requireRender)
         {
 
         }

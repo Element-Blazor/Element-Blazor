@@ -83,7 +83,7 @@ namespace Blazui.Component
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             SelectedValue = TypeHelper.ChangeType<TValue>(value);
         }

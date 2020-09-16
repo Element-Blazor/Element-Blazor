@@ -171,7 +171,7 @@ namespace Blazui.Component
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             if (value == null)
             {

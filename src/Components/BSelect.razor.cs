@@ -263,7 +263,7 @@ namespace Blazui.Component
             PopupService.SelectDropDownOptions.Add(dropDownOption);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             var enumValue = (TValue)value;
             if (nullable != null && value == null)

@@ -95,7 +95,7 @@ namespace Blazui.Component
 
         internal HashSet<IFileModel> Files { get; set; } = new HashSet<IFileModel>();
 
-        protected override void FormItem_OnReset(object value, bool requireRerender)
+        protected override void FormItem_OnReset(object value, bool requireRender)
         {
             RequireRender = true;
             if (value == null)
