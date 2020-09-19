@@ -2,7 +2,7 @@
 ![LOGO](LOGO.png)
 
 ## Introduction
-Element的blazor版本
+A Desktop UI Library based on Element and Blazor WebAssembly.
 
 API 模仿 Element，CSS 直接使用 Element的样式，HTML 结构直接使用 Element 的 HTML 结构
 
@@ -22,7 +22,7 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 |  :---------- | --|
 |基于 Blazui 开发的 Blazor 社区，Server  渲染 |[国内](https://www.blazor.group)|
 | Blazor Server 渲染版本 | [国内](http://blazui.com) |
-| Blazor WASM 渲染版本 | [国内](https://element-blazor.gitee.io/) |
+| Blazor WASM 渲染版本 | [国内](https://element-blazor.gitee.io/) [国外](https://element-blazor.github.io/) |
 | Blazor WASM  PWA 渲染版本 | [国内](http://pwawasm.blazui.com) |
 | Blazor 社区后台，基于 Blazui.Admin 开发 |[国内](https://admin.blazor.group)|
 |Blazor WebAssembly 渲染版本|[国外](https://blazorwasm.github.io)|
