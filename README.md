@@ -22,13 +22,13 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 |  :---------- | --|
 |基于 Blazui 开发的 Blazor 社区，Server  渲染 |[国内](https://www.blazor.group)|
 | Blazor Server 渲染版本 | [国内](http://blazui.com) |
-| Blazor WASM 渲染版本 | [国内](http://wasm.blazui.com) |
+| Blazor WASM 渲染版本 | [国内](https://element-blazor.gitee.io/) |
 | Blazor WASM  PWA 渲染版本 | [国内](http://pwawasm.blazui.com) |
 | Blazor 社区后台，基于 Blazui.Admin 开发 |[国内](https://admin.blazor.group)|
 |Blazor WebAssembly 渲染版本|[国外](https://blazorwasm.github.io)|
 | Blazor WebAssembly 渲染版本 PWA模式|[国外](https://pwawasm.github.io)|
  
-## Contribute
+## CONTRIBUTING
 
  Please read  [CONTRIBUTING.md](https://github.com/Element-Blazor/Element-Blazor/blob/master/CONTRIBUTING.md)
 
