@@ -173,7 +173,7 @@ namespace Blazui.Component
                 object destValue = formItem.GetType().GetProperty("Value").GetValue(formItem);
                 try
                 {
-                    property.SetValue(value, destValue);
+                    property.SetValue(value, property.PropertyType == typeof(string) ? destValue?.ToString().Trim() : destValue);
                 }
                 catch (ArgumentException ex)
                 {
