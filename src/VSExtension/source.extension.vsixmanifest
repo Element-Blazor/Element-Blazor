@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="BlazuiVSExtension.6c6f1492-2563-4142-a520-706ff4c3f9ca" Version="1.0" Language="zh-CN" Publisher="上海轻然教育科技有限责任公司" />
-        <DisplayName>Blazui</DisplayName>
-        <Description xml:space="preserve">One-click creation of projects based on Blazui series components to maximize your development efficiency</Description>
+        <Identity Id="ElementVSExtension.6c6f1492-2563-4142-a520-706ff4c3f9ca" Version="1.0" Language="zh-CN" Publisher="上海轻然教育科技有限责任公司" />
+        <DisplayName> Element-Blazor</DisplayName>
+        <Description xml:space="preserve">One-click creation of projects based on Element-Blazor series components to maximize your development efficiency</Description>
         <GettingStartedGuide>https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1</GettingStartedGuide>
         <Icon>BLAZUI PNG高清.png</Icon>
         <PreviewImage>BLAZUI PNG高清.png</PreviewImage>
-        <Tags>blazui;blazor;admin</Tags>
+        <Tags>blazui;blazor;admin; Element</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.PWA.Demo.MessageBox
+namespace Element.ClientRender.PWA.Demo.MessageBox
 {
     public class ConfirmMessageBoxBase : ComponentBase
     {

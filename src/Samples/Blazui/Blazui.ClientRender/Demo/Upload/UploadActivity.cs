@@ -1,12 +1,12 @@
 ﻿
-using Blazui.ClientRender.Demo.Form;
+using Element.ClientRender.Demo.Form;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.Demo.Upload
+namespace Element.ClientRender.Demo.Upload
 {
     public class UploadActivity
     {

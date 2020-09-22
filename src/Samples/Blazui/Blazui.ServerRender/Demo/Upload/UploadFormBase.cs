@@ -1,6 +1,6 @@
 ﻿
 
-using Blazui.ServerRender.Demo.Form;
+using Element.ServerRender.Demo.Form;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ServerRender.Demo.Upload
+namespace Element.ServerRender.Demo.Upload
 {
     public class UploadFormBase : ComponentBase
     {

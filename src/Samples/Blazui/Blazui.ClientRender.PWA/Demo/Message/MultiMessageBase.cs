@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.PWA.Demo.Message
+namespace Element.ClientRender.PWA.Demo.Message
 {
     public class MultiMessageBase : ComponentBase
     {

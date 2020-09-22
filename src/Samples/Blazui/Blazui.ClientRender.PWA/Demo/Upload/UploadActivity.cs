@@ -1,12 +1,12 @@
 ﻿
-using Blazui.ClientRender.PWA.Demo.Form;
+using Element.ClientRender.PWA.Demo.Form;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.PWA.Demo.Upload
+namespace Element.ClientRender.PWA.Demo.Upload
 {
     public class UploadActivity
     {

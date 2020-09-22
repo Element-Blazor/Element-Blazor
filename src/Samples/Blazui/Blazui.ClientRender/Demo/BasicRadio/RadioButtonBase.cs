@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.Demo.BasicRadio
+namespace Element.ClientRender.Demo.BasicRadio
 {
     public class RadioButtonBase : ComponentBase
     {

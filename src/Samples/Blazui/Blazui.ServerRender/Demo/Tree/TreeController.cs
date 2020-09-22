@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Tree
+namespace Element.ServerRender.Demo.Tree
 {
     [Route("api/tree")]
     public class TreeController : ControllerBase

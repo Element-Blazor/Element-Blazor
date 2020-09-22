@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.Tab
+namespace Element.ClientRender.PWA.Demo.Tab
 {
     public class EditableTabBase : ComponentBase
     {

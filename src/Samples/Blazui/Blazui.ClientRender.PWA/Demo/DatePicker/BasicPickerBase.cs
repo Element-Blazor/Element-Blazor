@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.DatePicker
+namespace Element.ClientRender.PWA.Demo.DatePicker
 {
     public class BasicPickerBase : ComponentBase
     {

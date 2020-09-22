@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ServerRender.Demo.Dialog
+namespace Element.ServerRender.Demo.Dialog
 {
     public class NestDialogBase : BDialogBase
     {

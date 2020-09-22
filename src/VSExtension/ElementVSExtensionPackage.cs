@@ -4,7 +4,7 @@ using System.Threading;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace BlazuiVSExtension
+namespace Element
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -24,8 +24,8 @@ namespace BlazuiVSExtension
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(BlazuiVSExtensionPackage.PackageGuidString)]
-    public sealed class BlazuiVSExtensionPackage : AsyncPackage
+    [Guid(ElementVSExtensionPackage.PackageGuidString)]
+    public sealed class ElementVSExtensionPackage : AsyncPackage
     {
          /// <summary>
         /// Blazui.VSExtensionPackage GUID string.

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.PWA.Demo.Table
+namespace Element.ClientRender.PWA.Demo.Table
 {
     public class UpdatePageSizeBase : ElementComponentBase
     {

@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.MarkdownEditor
+namespace Element.ServerRender.Demo.MarkdownEditor
 {
     [Route("api/md")]
     public class TestController : ControllerBase

@@ -10,10 +10,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
-using Blazui.ClientRender.Model;
+using Element.ClientRender.Model;
 using System.Reflection;
 
-namespace Blazui.ClientRender.Pages
+namespace Element.ClientRender.Pages
 {
     public class PageBase : ComponentBase
     {
@@ -767,7 +767,7 @@ namespace Blazui.ClientRender.Pages
             {
                 var demoModel = new DemoModel()
                 {
-                    Type = "Blazui.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
+                    Type = "Element.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
                 demos.Add(demoModel);

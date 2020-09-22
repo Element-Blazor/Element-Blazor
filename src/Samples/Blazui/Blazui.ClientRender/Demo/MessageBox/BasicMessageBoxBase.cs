@@ -6,7 +6,7 @@ using System.Linq;
 using Element;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.Demo.MessageBox
+namespace Element.ClientRender.Demo.MessageBox
 {
     public class BasicMessageBoxBase : ComponentBase
     {

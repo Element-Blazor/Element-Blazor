@@ -102,9 +102,9 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 [16]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ClientRender.PWA
 [17]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ServerRender
 [18]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui
-[19]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ClientRender.PWA
-[20]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ClientRender
-[21]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Blazui.ServerRender
+[19]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ClientRender.PWA
+[20]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ClientRender
+[21]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ServerRender
 [22]: https://github.com/Element-Blazor/Element-Blazor/issues/90
 [23]: https://github.com/Element-Blazor/Element-Blazor/issues/87
 [24]: https://github.com/Element-Blazor/Element-Blazor/issues/88

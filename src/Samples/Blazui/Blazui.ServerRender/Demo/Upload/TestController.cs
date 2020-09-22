@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Upload
+namespace Element.ServerRender.Demo.Upload
 {
     [Route("api/test")]
     public class Test2Controller : ControllerBase

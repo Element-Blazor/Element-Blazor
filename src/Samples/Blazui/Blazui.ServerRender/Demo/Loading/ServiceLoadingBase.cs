@@ -6,7 +6,7 @@ using System.Linq;
 using Element;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Demo.Loading
+namespace Element.ServerRender.Demo.Loading
 {
     public class ServiceLoadingBase : ComponentBase
     {

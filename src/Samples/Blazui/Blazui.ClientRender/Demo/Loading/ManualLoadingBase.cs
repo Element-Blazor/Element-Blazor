@@ -1,6 +1,6 @@
 ﻿
 
-using Blazui.ClientRender.Demo.Table;
+using Element.ClientRender.Demo.Table;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.Demo.Loading
+namespace Element.ClientRender.Demo.Loading
 {
     public class ManualLoadingBase : ComponentBase
     {

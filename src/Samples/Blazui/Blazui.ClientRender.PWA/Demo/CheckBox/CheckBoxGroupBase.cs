@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Element;
-namespace Blazui.ClientRender.PWA.Demo.CheckBox
+namespace Element.ClientRender.PWA.Demo.CheckBox
 {
     public class CheckBoxGroupBase : ComponentBase
     {

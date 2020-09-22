@@ -13,8 +13,8 @@
     <ProjectGuid>{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BlazuiVSExtension</RootNamespace>
-    <AssemblyName>BlazuiVSExtension</AssemblyName>
+    <RootNamespace>Element.VSExtension</RootNamespace>
+    <AssemblyName>Element.VSExtension</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
@@ -46,14 +46,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BlazuiVSExtensionPackage.cs" />
+    <Compile Include="ElementVSExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BLAZUI PNG高清.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\服务端渲染.zip">
+    <Content Include="ProjectTemplates\ServerRender.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -65,7 +65,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\Blazor 组件（代码后置）.zip">
+    <Content Include="ItemTemplates\BlazorComponent.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

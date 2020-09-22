@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Data
+namespace Element.ServerRender.Data
 {
     public class WeatherForecastService
     {

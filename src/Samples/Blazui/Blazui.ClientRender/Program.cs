@@ -10,7 +10,7 @@ using Element.Markdown;
 using System.Net.Http;
 using Element;
 
-namespace Blazui.ClientRender
+namespace Element.ClientRender
 {
     public class Program
     {

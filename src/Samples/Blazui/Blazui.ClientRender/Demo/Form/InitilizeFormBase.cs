@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.Demo.Form
+namespace Element.ClientRender.Demo.Form
 {
     public class InitilizeFormBase : ComponentBase
     {

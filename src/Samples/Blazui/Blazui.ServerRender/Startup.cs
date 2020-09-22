@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Blazui.ServerRender.Data;
+using Element.ServerRender.Data;
 using Element;
 using Element.Lang;
 using Element.Markdown;
 using System.Net.Http;
 
-namespace Blazui.ServerRender
+namespace Element.ServerRender
 {
     public class Startup
     {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.Demo.Lang
+namespace Element.ClientRender.Demo.Lang
 {
     public class BasicLangInjectBase : ComponentBase
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.PWA.Demo.Table
+namespace Element.ClientRender.PWA.Demo.Table
 {
     public class SearchTableBase : ComponentBase
     {

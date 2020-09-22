@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.Demo.Message
+namespace Element.ClientRender.Demo.Message
 {
     public class StatusMessageBase : ComponentBase
     {

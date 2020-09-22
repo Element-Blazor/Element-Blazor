@@ -1,4 +1,4 @@
-﻿using Blazui.ServerRender.Model;
+﻿using Element.ServerRender.Model;
 
 using Element;
 using Microsoft.AspNetCore.Components;
@@ -12,7 +12,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Net;
 
-namespace Blazui.ServerRender.Pages
+namespace Element.ServerRender.Pages
 {
     public class PageBase : ComponentBase
     {
@@ -31,7 +31,7 @@ namespace Blazui.ServerRender.Pages
                 var razorPath = Path.Combine(location, item.Name + ".razor");
                 var demoModel = new DemoModel()
                 {
-                    Type = "Blazui.ServerRender.Demo." + item.Name,
+                    Type = "Element.ServerRender.Demo." + item.Name,
                     Title = item.Title
                 };
                 if (System.IO.File.Exists(razorPath))

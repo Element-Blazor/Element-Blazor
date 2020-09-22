@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.ServerRender.Model
+namespace Element.ServerRender.Model
 {
     public class CodeModel
     {

@@ -10,10 +10,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.IO;
 using System.Net;
-using Blazui.ClientRender.PWA.Model;
+using Element.ClientRender.PWA.Model;
 using System.Reflection;
 
-namespace Blazui.ClientRender.PWA.Pages
+namespace Element.ClientRender.PWA.Pages
 {
     public class PageBase : ComponentBase
     {
@@ -767,7 +767,7 @@ namespace Blazui.ClientRender.PWA.Pages
             {
                 var demoModel = new DemoModel()
                 {
-                    Type = "Blazui.ClientRender.PWA.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
+                    Type = "Element.ClientRender.PWA.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
                 demos.Add(demoModel);

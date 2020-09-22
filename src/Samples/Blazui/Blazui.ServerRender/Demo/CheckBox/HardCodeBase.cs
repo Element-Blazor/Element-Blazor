@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Element;
-namespace Blazui.ServerRender.Demo.CheckBox
+namespace Element.ServerRender.Demo.CheckBox
 {
     public class HardCodeBase : ComponentBase
     {

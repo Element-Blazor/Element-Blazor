@@ -9,7 +9,7 @@ using Element.Lang;
 using Element.Markdown;
 using System.Net.Http;
 
-namespace Blazui.ClientRender.PWA
+namespace Element.ClientRender.PWA
 {
     public class Program
     {

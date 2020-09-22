@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ClientRender.PWA.Demo.Transfer
+namespace Element.ClientRender.PWA.Demo.Transfer
 {
     public class BasicTransferBase : ComponentBase
     {

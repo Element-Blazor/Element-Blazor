@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Threading.Tasks;
 
-namespace Blazui.ClientRender.Demo.Lang
+namespace Element.ClientRender.Demo.Lang
 {
     public class BasicLangBaseInject : ComponentBase
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Element;
 
-namespace Blazui.ServerRender.Demo.Form
+namespace Element.ServerRender.Demo.Form
 {
     public partial class AutoGenerateFieldsInitilizeForm
     {

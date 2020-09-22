@@ -1,6 +1,6 @@
 using System;
 
-namespace Blazui.ServerRender.Data
+namespace Element.ServerRender.Data
 {
     public class WeatherForecast
     {
