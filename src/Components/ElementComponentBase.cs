@@ -12,17 +12,17 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BComponentBase : ComponentBase, IDisposable
+    public class ElementComponentBase : ComponentBase, IDisposable
     {
         [CascadingParameter(Name ="Page")]
-        public BComponentBase Page { get; set; }
+        public ElementComponentBase Page { get; set; }
         protected bool RequireRender { get; set; } = true;
 
         [Parameter(CaptureUnmatchedValues = true)]
         public IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
-        /// 若该项为 true，则该组件会始终允许刷新，不受 <seealso cref="BComponentBase.MarkAsRequireRender"/> 方法控制
+        /// 若该项为 true，则该组件会始终允许刷新，不受 <seealso cref="ElementComponentBase.MarkAsRequireRender"/> 方法控制
         /// </summary>
         [Parameter]
         public bool EnableAlwaysRender { get; set; }

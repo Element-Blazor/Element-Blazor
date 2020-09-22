@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.ClientRender.PWA.Demo.Lang
 {
-    public class BasicLangBase : BComponentBase
+    public class BasicLangBase : ElementComponentBase
     {
         [Inject]
         public Component.Lang.BLang Lang { get; set; }

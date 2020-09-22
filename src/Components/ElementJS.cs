@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class Element
+    public class ElementJS
     {
         private readonly ElementReference elementReference;
         private readonly IJSRuntime jSRuntime;
         public Style Style { get; }
 
-        public Element(ElementReference elementReference, IJSRuntime jSRuntime)
+        public ElementJS(ElementReference elementReference, IJSRuntime jSRuntime)
         {
             this.elementReference = elementReference;
             this.jSRuntime = jSRuntime;

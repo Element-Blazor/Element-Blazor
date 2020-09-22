@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Admin
 {
-    public class BAdminPageBase : BComponentBase
+    public class BAdminPageBase : ElementComponentBase
     {
         /// <summary>
         /// 是否超级管理员

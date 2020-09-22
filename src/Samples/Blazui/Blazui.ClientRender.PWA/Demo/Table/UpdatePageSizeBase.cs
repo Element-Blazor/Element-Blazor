@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.ClientRender.PWA.Demo.Table
 {
-    public class UpdatePageSizeBase : BComponentBase
+    public class UpdatePageSizeBase : ElementComponentBase
     {
         protected List<AutoGenerateColumnTestData> AllDatas = new List<AutoGenerateColumnTestData>();
         protected List<AutoGenerateColumnTestData> Datas = new List<AutoGenerateColumnTestData>();

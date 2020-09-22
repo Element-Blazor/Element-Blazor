@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public partial class BForm : BComponentBase, IContainerComponent
+    public partial class BForm : ElementComponentBase, IContainerComponent
     {
         private List<FormItemConfig> formItemConfigs;
         [Inject]

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Blazui.Component;
 namespace Blazui.ClientRender.Demo.Transfer
 {
-    public class FormTransferBase : BComponentBase
+    public class FormTransferBase : ElementComponentBase
     {
         internal BForm form;
         internal TransferModel value;

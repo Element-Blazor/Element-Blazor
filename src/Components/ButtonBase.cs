@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    internal class ButtonBase : BComponentBase
+    internal class ButtonBase : ElementComponentBase
     {
         internal HtmlPropertyBuilder cssClassBuilder;
         protected virtual async Task OnButtonClickedAsync(MouseEventArgs e)

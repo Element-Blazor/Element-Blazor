@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.ServerRender.Demo.MarkdownEditor
 {
-    public class FormMarkdownBase : BComponentBase
+    public class FormMarkdownBase : ElementComponentBase
     {
         internal BForm form;
 

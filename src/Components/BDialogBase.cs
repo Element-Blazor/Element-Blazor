@@ -9,7 +9,7 @@ namespace Blazui.Component
     /// <summary>
     /// 对话框基类，提供对话框常用方法
     /// </summary>
-    public class BDialogBase : BComponentBase
+    public class BDialogBase : ElementComponentBase
     {
         /// <summary>
         /// 可用于操作当前窗口

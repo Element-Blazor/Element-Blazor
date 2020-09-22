@@ -9,9 +9,9 @@ namespace Blazui.Component
 {
     public static class ElementExtension
     {
-        public static Element Dom(this ElementReference elementReference  , IJSRuntime jSRuntime)
+        public static ElementJS Dom(this ElementReference elementReference  , IJSRuntime jSRuntime)
         {
-            return new Element(elementReference, jSRuntime);
+            return new ElementJS(elementReference, jSRuntime);
         }
 
         public static async Task<IJSRuntime> AlertAsync(this IJSRuntime jSRuntime, string message)

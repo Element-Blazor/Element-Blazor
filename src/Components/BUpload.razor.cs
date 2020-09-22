@@ -217,7 +217,7 @@ namespace Blazui.Component
             }
         }
 
-        private async Task UploadFilesAsync(Element input)
+        private async Task UploadFilesAsync(ElementJS input)
         {
             foreach (var item in Files)
             {

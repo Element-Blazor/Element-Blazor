@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BFieldComponentBase<TValue> : BComponentBase, IDisposable
+    public class BFieldComponentBase<TValue> : ElementComponentBase, IDisposable
     {
         [Parameter]
         public string Name { get; set; }

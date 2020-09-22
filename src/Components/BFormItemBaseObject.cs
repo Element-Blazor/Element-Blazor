@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public abstract class BFormItemObject : BComponentBase
+    public abstract class BFormItemObject : ElementComponentBase
     {
         /// <summary>
         /// 是否应用样式，如果不应用，则该组件本身不生成任何 HTML

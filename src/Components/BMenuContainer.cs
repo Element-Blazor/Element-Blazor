@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blazui.Component
 {
-    public class BMenuContainer : BComponentBase, IContainerComponent
+    public class BMenuContainer : ElementComponentBase, IContainerComponent
     {
         internal List<IMenuItem> Children { get; set; } = new List<IMenuItem>();
 
