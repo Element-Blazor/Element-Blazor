@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component.ControlConfigs
+namespace Element.ControlConfigs
 {
     public class CheckBoxAttribute : BaseAttribute
     {

@@ -19,12 +19,12 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>obj\Debug\netstandard2.1\Blazui.Component.xml</DocumentationFile>
+		<DocumentationFile>obj\Debug\netstandard2.1\Element.xml</DocumentationFile>
 		<NoWarn>1701;1702;1591</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Component.xml</DocumentationFile>
+		<DocumentationFile>obj\Debug\netcoreapp3.1\Element.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

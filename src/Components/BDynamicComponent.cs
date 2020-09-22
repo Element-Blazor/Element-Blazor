@@ -1,5 +1,5 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.ControlRender;
+﻿using Element.ControlConfigs;
+using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// 提供动态加载组件的功能

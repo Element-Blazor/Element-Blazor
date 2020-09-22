@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Blazui.Component.Test.CheckBoxTests
+namespace Element.Test.CheckBoxTests
 {
     [TestName("Checkbox 多选框", "硬编码")]
     public class Test1 : IDemoTester

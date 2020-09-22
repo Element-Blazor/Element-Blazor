@@ -7,7 +7,7 @@ namespace Blazui.ClientRender.PWA.Demo.Lang
     public class BasicLangBaseInject : ComponentBase
     {
         [Inject]
-        public Component.Lang.BLang Lang { get; set; }
+        public Element.Lang.BLang Lang { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

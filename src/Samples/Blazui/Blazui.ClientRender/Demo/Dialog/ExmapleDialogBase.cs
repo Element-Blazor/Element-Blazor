@@ -5,14 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazui.Component;
+using Element;
 
 namespace Blazui.ClientRender.Demo.Dialog
 {
     public class ExmapleDialogBase : BDialogBase
     {
         [Inject]
-        Component.MessageBox MessageService { get; set; }
+        Element.MessageBox MessageService { get; set; }
         public async Task ShowDialog(MouseEventArgs eventArgs)
         {
             var result = await DialogService.ShowDialogAsync<ExampleDialog>("测试窗口");

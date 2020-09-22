@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     internal static class TypeHelper
     {

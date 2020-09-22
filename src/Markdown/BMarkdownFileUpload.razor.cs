@@ -1,4 +1,4 @@
-﻿using Blazui.Component;
+﻿using Element;
 
 using Microsoft.AspNetCore.Components;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public partial class BMarkdownFileUpload
     {

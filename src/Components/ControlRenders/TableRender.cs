@@ -1,5 +1,5 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.Model;
+﻿using Element.ControlConfigs;
+using Element.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -12,7 +12,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     public class TableRender : ITableRender
     {

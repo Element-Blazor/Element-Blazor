@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public class BFieldComponentBase<TValue> : ElementComponentBase, IDisposable
     {

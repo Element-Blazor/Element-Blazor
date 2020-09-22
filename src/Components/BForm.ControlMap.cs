@@ -1,6 +1,6 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.ControlRender;
-using Blazui.Component.ControlRenders;
+﻿using Element.ControlConfigs;
+using Element.ControlRender;
+using Element.ControlRenders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     public class FormFieldControlMap
     {

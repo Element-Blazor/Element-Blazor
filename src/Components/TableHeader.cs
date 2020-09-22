@@ -4,11 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Blazui.Component.ControlRender;
+using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace Blazui.Component
+namespace Element
 {
     public class TableHeader
     {

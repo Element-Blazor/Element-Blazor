@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BRibbon
     {

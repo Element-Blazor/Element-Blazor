@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Markdown.IconHandlers
+namespace Element.Markdown.IconHandlers
 {
     public class Heading5Handler : IIconHandler
     {

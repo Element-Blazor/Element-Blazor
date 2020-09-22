@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTransition
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Blazui.Component.Test.TabTests
+namespace Element.Test.TabTests
 {
     [TestName("Tabs 标签页", "选项卡样式的标签页")]
     public class Test2 : IDemoTester

@@ -1,13 +1,13 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.ControlRender;
-using Blazui.Component.ControlRenders;
+﻿using Element.ControlConfigs;
+using Element.ControlRender;
+using Element.ControlRenders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     public class TableEditorMap
     {

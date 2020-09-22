@@ -1,5 +1,5 @@
 ﻿
-using Blazui.Component;
+using Element;
 
 using Markdig;
 using Microsoft.AspNetCore.Components;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public partial class BMarkdownEditor
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Blazui.Component;
+using Element;
 
 namespace Blazui.Admin.Sample.ServerRender
 {

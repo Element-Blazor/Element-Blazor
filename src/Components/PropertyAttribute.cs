@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// 设置读取当前实体的指定属性值对象的指定属性值

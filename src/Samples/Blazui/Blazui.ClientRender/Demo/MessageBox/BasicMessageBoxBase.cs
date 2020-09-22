@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Blazui.Component;
+using Element;
 using System.Threading.Tasks;
 
 namespace Blazui.ClientRender.Demo.MessageBox
@@ -13,7 +13,7 @@ namespace Blazui.ClientRender.Demo.MessageBox
         [Inject]
         MessageService MessageService { get; set; }
         [Inject]
-        Component.MessageBox MessageBox { get; set; }
+        Element.MessageBox MessageBox { get; set; }
         public async Task ShowMessageAsync()
         {
             var result = await MessageBox.AlertAsync("测试消息");

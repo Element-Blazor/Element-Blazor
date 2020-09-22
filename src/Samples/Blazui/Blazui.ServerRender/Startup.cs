@@ -10,9 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Blazui.ServerRender.Data;
-using Blazui.Component;
-using Blazui.Component.Lang;
-using Blazui.Markdown;
+using Element;
+using Element.Lang;
+using Element.Markdown;
 using System.Net.Http;
 
 namespace Blazui.ServerRender

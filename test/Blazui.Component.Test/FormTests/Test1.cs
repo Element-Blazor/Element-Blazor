@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Blazui.Component.Test.FormTests
+namespace Element.Test.FormTests
 {
     [TestName("Form 表单", "基础用法")]
     public class Test1 : IDemoTester

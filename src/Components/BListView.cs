@@ -1,11 +1,11 @@
-﻿using Blazui.Component.Model;
+﻿using Element.Model;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public class BListView<ItemType> : BTable
     {

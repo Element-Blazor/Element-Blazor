@@ -1,4 +1,4 @@
-﻿using Blazui.Component;
+﻿using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -11,7 +11,7 @@ namespace Blazui.ClientRender.Demo.Lang
     public class BasicLangInjectBase : ComponentBase
     {
         [Inject]
-        protected Component.Lang.BLang Lang { get; set; }
+        protected Element.Lang.BLang Lang { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

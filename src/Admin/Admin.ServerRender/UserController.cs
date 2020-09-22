@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Blazui.Component;
+using Element;
 using System.Threading.Tasks;
 
 namespace Blazui.Admin.ServerRender

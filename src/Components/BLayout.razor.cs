@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BLayout : IContainerComponent
     {

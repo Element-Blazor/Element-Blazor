@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Blazui.Component;
-using Blazui.Component.Lang;
-using Blazui.Markdown;
+using Element;
+using Element.Lang;
+using Element.Markdown;
 using System.Net.Http;
 
 namespace Blazui.ClientRender.PWA

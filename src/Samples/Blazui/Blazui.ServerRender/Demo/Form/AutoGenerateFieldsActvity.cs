@@ -1,8 +1,8 @@
 ﻿
 
 
-using Blazui.Component;
-using Blazui.Component.ControlConfigs;
+using Element;
+using Element.ControlConfigs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

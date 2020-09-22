@@ -1,9 +1,9 @@
-﻿using Blazui.Component.ControlRender;
+﻿using Element.ControlRender;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     internal interface ISwitchRender : IControlRender
     {

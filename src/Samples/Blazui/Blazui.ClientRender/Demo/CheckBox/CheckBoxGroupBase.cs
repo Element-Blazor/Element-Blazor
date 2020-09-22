@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Blazui.Component;
+using Element;
 namespace Blazui.ClientRender.Demo.CheckBox
 {
     public class CheckBoxGroupBase : ComponentBase

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     internal class PopupLayerOption
     {

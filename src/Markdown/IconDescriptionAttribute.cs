@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public class IconDescriptionAttribute : Attribute
     {

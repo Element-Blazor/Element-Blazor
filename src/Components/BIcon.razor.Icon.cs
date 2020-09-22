@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// https://element.eleme.cn/#/zh-CN/component/icon

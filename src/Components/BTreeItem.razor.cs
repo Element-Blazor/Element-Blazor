@@ -1,10 +1,10 @@
-﻿using Blazui.Component.Model;
+﻿using Element.Model;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTreeItem
     {

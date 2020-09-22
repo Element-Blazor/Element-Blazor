@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Components;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// Tab 选项

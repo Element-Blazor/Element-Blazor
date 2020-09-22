@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// 树控件数据源的格式

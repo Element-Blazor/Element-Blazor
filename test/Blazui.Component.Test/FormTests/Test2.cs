@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Blazui.Component.Test.FormTests
+namespace Element.Test.FormTests
 {
     [TestName("Form 表单", "表单双向绑定")]
     public class Test2 : IDemoTester

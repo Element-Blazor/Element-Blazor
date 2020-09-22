@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Blazui.Component.DisplayRenders
+namespace Element.DisplayRenders
 {
     public interface IDisplayRender
     {

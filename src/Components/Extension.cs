@@ -1,7 +1,7 @@
-﻿using Blazui.Component.ControlRender;
-using Blazui.Component.ControlRenders;
-using Blazui.Component.DisplayRenders;
-using Blazui.Component.Lang;
+﻿using Element.ControlRender;
+using Element.ControlRenders;
+using Element.DisplayRenders;
+using Element.Lang;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public static class Extension
     {

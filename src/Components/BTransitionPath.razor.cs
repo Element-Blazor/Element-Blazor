@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTransitionPath
     {

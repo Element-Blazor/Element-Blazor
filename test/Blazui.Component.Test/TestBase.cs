@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.Test
+namespace Element.Test
 {
     public class TestBase
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Blazui.Component.DisplayRenders
+namespace Element.DisplayRenders
 {
     internal class DisplayRenderFactory
     {

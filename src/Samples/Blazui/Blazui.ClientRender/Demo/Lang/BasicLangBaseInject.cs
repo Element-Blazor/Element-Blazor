@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Element.Lang;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace Blazui.ClientRender.Demo.Lang
     public class BasicLangBaseInject : ComponentBase
     {
         [Inject]
-        public Component.Lang.BLang Lang { get; set; }
+        public  BLang Lang { get; set; }
 
         protected override async Task OnInitializedAsync()
         {

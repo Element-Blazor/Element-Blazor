@@ -1,6 +1,6 @@
 ﻿
 
-using Blazui.Component.Lang;
+using Element.Lang;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public class ElementComponentBase : ComponentBase, IDisposable
     {

@@ -1,5 +1,5 @@
 ﻿using Blazui.Admin.Abstract;
-using Blazui.Component;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;

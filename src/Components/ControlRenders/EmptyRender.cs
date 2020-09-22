@@ -1,4 +1,4 @@
-﻿using Blazui.Component.ControlRender;
+﻿using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     internal class EmptyRender : IControlRender, IDatePickerRender
     {

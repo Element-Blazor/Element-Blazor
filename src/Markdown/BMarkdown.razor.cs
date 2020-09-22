@@ -1,11 +1,11 @@
-﻿using Blazui.Component;
+﻿using Element;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public partial class BMarkdown
     {

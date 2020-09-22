@@ -1,12 +1,12 @@
-﻿using Blazui.Component;
+﻿using Element;
 
-using Blazui.Markdown.IconHandlers;
+using Element.Markdown.IconHandlers;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public partial class FileUpload
     {

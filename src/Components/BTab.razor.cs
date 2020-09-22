@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTab
     {

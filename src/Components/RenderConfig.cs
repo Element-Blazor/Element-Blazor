@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Blazui.Component
+namespace Element
 {
     public class RenderConfig
     {

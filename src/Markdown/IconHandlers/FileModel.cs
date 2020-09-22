@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Markdown.IconHandlers
+namespace Element.Markdown.IconHandlers
 {
     public class FileModel
     {

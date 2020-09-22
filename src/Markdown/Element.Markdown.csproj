@@ -51,7 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Components\Blazui.Component.csproj" />
+	  <ProjectReference Include="..\Components\Element.csproj" />
 	</ItemGroup>
 
 </Project>

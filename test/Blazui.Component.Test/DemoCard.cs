@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component.Test
+namespace Element.Test
 {
     public class DemoCard
     {

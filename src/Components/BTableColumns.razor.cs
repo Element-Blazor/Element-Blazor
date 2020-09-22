@@ -1,4 +1,4 @@
-﻿using Blazui.Component.DisplayRenders;
+﻿using Element.DisplayRenders;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTableColumns
     {

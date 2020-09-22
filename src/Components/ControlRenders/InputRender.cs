@@ -1,5 +1,5 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.ControlRender;
+﻿using Element.ControlConfigs;
+using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.CompilerServices;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     internal class InputRender : RenderBase, IInputRender
     {

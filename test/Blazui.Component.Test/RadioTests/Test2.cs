@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Blazui.Component.Test.RadioTests
+namespace Element.Test.RadioTests
 {
     [TestName("Radio 单选框", "禁用状态")]
     public class Test2 : IDemoTester

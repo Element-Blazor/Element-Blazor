@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     /// <summary>
     /// 全局配置

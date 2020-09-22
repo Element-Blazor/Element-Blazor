@@ -1,5 +1,5 @@
 ﻿using Blazui.ClientRender.Pages;
-using Blazui.Component;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -12,7 +12,7 @@ namespace Blazui.ClientRender.Demo.Lang
     public class BasicLangBase : ElementComponentBase
     {
         [Inject]
-        public Component.Lang.BLang Lang { get; set; }
+        public Element.Lang.BLang Lang { get; set; }
         public async Task SetEnLang(MouseEventArgs eventArgs)
         {
             await Lang.SetLangAsync("en-US");

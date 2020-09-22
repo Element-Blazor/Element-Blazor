@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.ClientRender", "src\Samples\Blazui\Blazui.ClientRender\Blazui.ClientRender.csproj", "{065EF687-733A-4289-BA4B-C3D459F44931}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Component", "src\Components\Blazui.Component.csproj", "{94DF9FD2-B254-4071-A082-49CF652D0066}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element", "src\Components\Element.csproj", "{94DF9FD2-B254-4071-A082-49CF652D0066}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Component.Test", "test\Blazui.Component.Test\Blazui.Component.Test.csproj", "{6A70E72D-6B16-4520-B21E-2FAC1593FBEA}"
 EndProject
@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{E36A034A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.ClientRender.PWA", "src\Samples\Blazui\Blazui.ClientRender.PWA\Blazui.ClientRender.PWA.csproj", "{BC6E4E31-5037-4389-A4F9-FACE948C090F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Markdown", "src\Markdown\Blazui.Markdown.csproj", "{76FD7947-A9C1-4449-B2D2-B0E59265E879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Markdown", "src\Markdown\Element.Markdown.csproj", "{76FD7947-A9C1-4449-B2D2-B0E59265E879}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{32AEC62D-CC2E-4F5A-B921-548B011FCBFD}"
 EndProject

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Blazui.Component
+namespace Element
 {
     public class TreeItemBase
     {

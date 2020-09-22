@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     public class RenderBase
     {

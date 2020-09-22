@@ -1,4 +1,4 @@
-﻿using Blazui.Component.Model;
+﻿using Element.Model;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using System;
@@ -13,7 +13,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTree
     {

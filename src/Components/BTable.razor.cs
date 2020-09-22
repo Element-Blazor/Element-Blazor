@@ -1,8 +1,8 @@
-﻿using Blazui.Component.ControlConfigs;
-using Blazui.Component.ControlRender;
-using Blazui.Component.ControlRenders;
-using Blazui.Component.DisplayRenders;
-using Blazui.Component.Model;
+﻿using Element.ControlConfigs;
+using Element.ControlRender;
+using Element.ControlRenders;
+using Element.DisplayRenders;
+using Element.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
@@ -25,7 +25,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BTable : IContainerComponent
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public class ElementJS
     {

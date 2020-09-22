@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component.ControlRender
+namespace Element.ControlRender
 {
     internal interface IInputRender : IControlRender
     {

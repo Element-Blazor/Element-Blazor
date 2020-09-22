@@ -1,4 +1,4 @@
-﻿using Blazui.Component.ControlConfigs;
+﻿using Element.ControlConfigs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Blazui.Component.ControlRenders
+namespace Element.ControlRenders
 {
     internal class SelectRender : RenderBase, ISelectRender
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Component.ControlRender
+namespace Element.ControlRender
 {
     public interface IControlRender
     {

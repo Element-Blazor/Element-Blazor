@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Blazui.Component.Test
+namespace Element.Test
 {
     public class FormTest : SetupTest
     {

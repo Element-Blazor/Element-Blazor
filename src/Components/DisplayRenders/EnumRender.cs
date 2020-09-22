@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Blazui.Component.DisplayRenders
+namespace Element.DisplayRenders
 {
     internal class EnumRender : IDisplayRender
     {

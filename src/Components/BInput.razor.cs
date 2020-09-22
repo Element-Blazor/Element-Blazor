@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Web;
 
-namespace Blazui.Component
+namespace Element
 {
     public partial class BInput<TValue> : IDisposable
     {

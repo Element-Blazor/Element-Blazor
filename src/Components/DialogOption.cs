@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Component
+namespace Element
 {
     public class DialogOption
     {

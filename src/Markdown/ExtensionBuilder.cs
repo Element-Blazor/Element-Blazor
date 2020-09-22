@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blazui.Markdown
+namespace Element.Markdown
 {
     public static class ExtensionBuilder
     {

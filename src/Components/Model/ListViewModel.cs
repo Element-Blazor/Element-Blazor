@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Component.Model
+namespace Element.Model
 {
     public class ListViewModel<T>
     {

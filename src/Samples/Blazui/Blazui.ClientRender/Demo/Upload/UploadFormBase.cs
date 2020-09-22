@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazui.Component;
+using Element;
 
 namespace Blazui.ClientRender.Demo.Upload
 {
@@ -14,7 +14,7 @@ namespace Blazui.ClientRender.Demo.Upload
     {
         internal LabelAlign formAlign;
         [Inject]
-        Component.MessageBox MessageBox { get; set; }
+        Element.MessageBox MessageBox { get; set; }
 
         internal object value;
         protected BForm demoForm;
