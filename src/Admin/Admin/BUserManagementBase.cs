@@ -4,9 +4,9 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using Element;
-using Element;
+using Element.Admin;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BUserManagementBase : BAdminPageBase
     {

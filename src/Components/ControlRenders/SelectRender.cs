@@ -28,7 +28,7 @@ namespace Element.ControlRenders
             var finalValueType = nullValueType ?? valueType;
             if (renderConfig.InputControlType.IsGenericTypeDefinition && !finalValueType.IsEnum)
             {
-                throw new BlazuiException("下拉框生成只支持List或枚举类型");
+                throw new ElementException("下拉框生成只支持List或枚举类型");
             }
             else if (renderConfig.InputControlType.IsGenericTypeDefinition)
             {
@@ -61,7 +61,7 @@ namespace Element.ControlRenders
                 }
                 if (!valueType.IsEnum)
                 {
-                    throw new BlazuiException("下拉框生成只支持List或枚举类型");
+                    throw new ElementException("下拉框生成只支持List或枚举类型");
                 }
 
                 renderTreeBuilder.AddAttribute(6, nameof(BFormItemObject.ChildContent), (RenderFragment)(contentBuilder =>

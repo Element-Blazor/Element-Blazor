@@ -1,4 +1,4 @@
-﻿using Blazui.Admin.Abstract;
+﻿using Element.Admin.Abstract;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public static class ExtensionBuilder
     {

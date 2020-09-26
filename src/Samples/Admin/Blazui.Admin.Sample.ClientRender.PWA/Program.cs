@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Blazui.Admin.Abstract;
+using Element.Admin.Abstract;
 
-namespace Blazui.Admin.Sample.ClientRender.PWA
+namespace Element.Admin.Sample.ClientRender.PWA
 {
     public class Program
     {

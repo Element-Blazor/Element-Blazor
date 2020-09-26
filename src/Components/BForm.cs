@@ -158,7 +158,7 @@ namespace Element
         {
             if (!IsValid())
             {
-                throw new BlazuiException("表单验证不通过，此时无法获取表单输入的值");
+                throw new ElementException("表单验证不通过，此时无法获取表单输入的值");
             }
             var value = Activator.CreateInstance<T>();
             var properties = typeof(T).GetProperties();
@@ -177,7 +177,7 @@ namespace Element
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new BlazuiException($"字段 {formItem.Name} 输入的类型为 {destValue.GetType()}，但实体 {typeof(T)} 对应的属性的类型为 {property.PropertyType}", ex);
+                    throw new ElementException($"字段 {formItem.Name} 输入的类型为 {destValue.GetType()}，但实体 {typeof(T)} 对应的属性的类型为 {property.PropertyType}", ex);
                 }
             }
             return value;

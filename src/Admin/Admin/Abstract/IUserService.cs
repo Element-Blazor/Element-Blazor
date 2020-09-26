@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin.Abstract
+namespace Element.Admin.Abstract
 {
     public interface IUserService
     {

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BUserEditBase : BAdminPageBase
     {

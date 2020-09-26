@@ -1,11 +1,11 @@
-﻿using Blazui.Admin.ServerRender;
+﻿using Element.Admin.ServerRender;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Admin.Sample.ServerRender
+namespace Element.Admin.Sample.ServerRender
 {
     public class DocsDbContext : IdentityDbContext
     {

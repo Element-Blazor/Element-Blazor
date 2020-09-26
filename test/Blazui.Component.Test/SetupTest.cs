@@ -1,4 +1,4 @@
-﻿using Blazui.Admin.Sample.ServerRender;
+﻿using Element.Admin.Sample.ServerRender;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Hosting;
 using PuppeteerSharp;

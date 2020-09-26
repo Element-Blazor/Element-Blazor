@@ -41,15 +41,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{B81231A0-5776-4D5B-8ACF-9B1590E92804}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.ServerRender", "src\Admin\Admin.ServerRender\Blazui.Admin.ServerRender.csproj", "{6AD8C624-183A-4747-8621-E45F9763DD09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.ServerRender", "src\Admin\Admin.ServerRender\Element.Admin.ServerRender.csproj", "{6AD8C624-183A-4747-8621-E45F9763DD09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.ClientRender", "src\Admin\Admin.ClientRender\Blazui.Admin.ClientRender.csproj", "{8DF962DB-2A47-4931-A158-89A61A44F635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.ClientRender", "src\Admin\Admin.ClientRender\Element.Admin.ClientRender.csproj", "{8DF962DB-2A47-4931-A158-89A61A44F635}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ServerRender", "src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Blazui.Admin.Sample.ServerRender.csproj", "{EE404089-CDFB-4699-9997-8166D6B3A6DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ServerRender", "src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj", "{EE404089-CDFB-4699-9997-8166D6B3A6DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Blazui.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazui.Admin", "src\Admin\Admin\Blazui.Admin.csproj", "{36BBE899-CF01-4ECF-B4F4-627D63531005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin", "src\Admin\Admin\Element.Admin.csproj", "{36BBE899-CF01-4ECF-B4F4-627D63531005}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Element.VSExtension", "src\VSExtension\Element.VSExtension.csproj", "{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}"
 EndProject

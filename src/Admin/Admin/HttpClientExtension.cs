@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public static class HttpClientExtension
     {
@@ -29,7 +29,7 @@ namespace Blazui.Admin
         {
             if (httpResponse.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                throw new BlazuiException("服务器端发生内部错误");
+                throw new ElementException("服务器端发生内部错误");
             }
             if (httpResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

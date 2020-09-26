@@ -1,12 +1,13 @@
 ﻿using Element;
 using Element;
+using Element.Admin;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BRoleManagementBase : BAdminPageBase
     {

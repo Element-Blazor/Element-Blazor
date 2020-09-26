@@ -1,5 +1,5 @@
 ﻿using Element;
-
+using Element.Admin;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BAdminBase : BAdminPageBase
     {
@@ -44,7 +44,7 @@ namespace Blazui.Admin
         /// 导航菜单栏标题
         /// </summary>
         [Parameter]
-        public string NavigationTitle { get; set; } = "Blazui.Admin 后台模板";
+        public string NavigationTitle { get; set; } = "Element.Admin 后台模板";
 
         /// <summary>
         /// 面包屑标题

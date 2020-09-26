@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public class RevalidatingIdentityAuthenticationStateProvider<TUser>
         : RevalidatingServerAuthenticationStateProvider where TUser : class

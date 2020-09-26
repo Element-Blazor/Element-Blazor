@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public class UserService : UserServiceBase<IdentityUser, IdentityRole>
     {

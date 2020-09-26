@@ -1,6 +1,6 @@
 {
-  "name": "Blazui.Admin.Sample.ClientRender.PWA",
-  "short_name": "Blazui.Admin.Sample.ClientRender.PWA",
+  "name": "Element.Admin.Sample.ClientRender.PWA",
+  "short_name": "Element.Admin.Sample.ClientRender.PWA",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

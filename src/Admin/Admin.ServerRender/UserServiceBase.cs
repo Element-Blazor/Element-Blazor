@@ -1,4 +1,4 @@
-﻿using Blazui.Admin.Abstract;
+﻿using Element.Admin.Abstract;
 using Element;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public abstract class UserServiceBase<TUser, TRole> : IUserService
            where TUser : IdentityUser

@@ -16,11 +16,11 @@ namespace Element
     public static class Extension
     {
         /// <summary>
-        /// 添加 Blazui 相关服务
+        /// 添加 Element 相关服务
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
+        public static IServiceCollection AddElementServices(this IServiceCollection services)
         {
             services.AddSingleton<FormFieldControlMap>();
             services.AddSingleton<TableEditorMap>();

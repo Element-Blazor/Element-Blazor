@@ -1,7 +1,7 @@
 ﻿using Element;
 using Microsoft.AspNetCore.Components;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BCreateSuperUserBase : BAdminPageBase
     {

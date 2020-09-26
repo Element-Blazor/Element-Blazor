@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     [Resources]
     public enum AdminResources

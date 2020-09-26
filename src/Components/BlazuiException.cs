@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public class BlazuiException : Exception
+    public class ElementException : Exception
     {
-        public BlazuiException(string message)
+        public ElementException(string message)
             : base(message)
         {
 
         }
 
-        public BlazuiException(int code, string message):base(message)
+        public ElementException(int code, string message):base(message)
         {
             Code = code;
         }
 
-        public BlazuiException(string message, Exception exception)
+        public ElementException(string message, Exception exception)
             : base(message, exception)
         {
         }

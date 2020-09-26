@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public class AdminDbContext : IdentityDbContext
     {

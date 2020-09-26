@@ -89,7 +89,7 @@ namespace Element
                 }
                 if (controlType == null)
                 {
-                    throw new BlazuiException($"类型 {property.PropertyType.FullName} 没有配置对应的组件，表单无法生成");
+                    throw new ElementException($"类型 {property.PropertyType.FullName} 没有配置对应的组件，表单无法生成");
                 }
                 var formControl = property.GetCustomAttribute<FormControlAttribute>() ?? new FormControlAttribute()
                 {
@@ -136,7 +136,7 @@ namespace Element
                 var uploadAttr = propertyInfo.GetCustomAttribute<UploadAttribute>();
                 if (uploadAttr == null)
                 {
-                    throw new BlazuiException("IFileModel[] 类型的属性必须标记 UploadAttribute 特性");
+                    throw new ElementException("IFileModel[] 类型的属性必须标记 UploadAttribute 特性");
                 }
                 return uploadAttr;
             }
@@ -148,7 +148,7 @@ namespace Element
                 }
                 if (controlType.GetGenericTypeDefinition() == typeof(BCheckBox<>))
                 {
-                    return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new BlazuiException($"复选框组件所对应的属性必须标记 {nameof(CheckBoxAttribute)} 特性");
+                    return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new ElementException($"复选框组件所对应的属性必须标记 {nameof(CheckBoxAttribute)} 特性");
                 }
             }
             if (propertyInfo.PropertyType == typeof(IDictionary<string, string>)
@@ -179,7 +179,7 @@ namespace Element
                 {
                     return this.provider.GetRequiredService<ICheckBoxRender>();
                 }
-                throw new BlazuiException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
+                throw new ElementException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
             }
             var genericDefine = controlType.GetGenericTypeDefinition();
             if (genericDefine == typeof(BInput<>))
@@ -200,7 +200,7 @@ namespace Element
             {
                 return this.provider.GetRequiredService<ISelectRender>();
             }
-            throw new BlazuiException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
+            throw new ElementException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Blazui.Admin.Abstract;
+﻿using Element.Admin.Abstract;
 using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BAdminDialogBase : BAdminPageBase
     {

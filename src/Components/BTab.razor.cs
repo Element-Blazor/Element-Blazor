@@ -144,7 +144,7 @@ namespace Element
             {
                 if (IsAddable)
                 {
-                    throw new BlazuiException("标签页组件启用可编辑模式时必须指定 DataSource 属性，硬编码无效");
+                    throw new ElementException("标签页组件启用可编辑模式时必须指定 DataSource 属性，硬编码无效");
                 }
             }
             else
@@ -176,7 +176,7 @@ namespace Element
             var repeatKeys = DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
             if (repeatKeys.Any())
             {
-                throw new BlazuiException($"Tab 页以下 Name 重复 {string.Join(",", repeatKeys)}");
+                throw new ElementException($"Tab 页以下 Name 重复 {string.Join(",", repeatKeys)}");
             }
         }
 

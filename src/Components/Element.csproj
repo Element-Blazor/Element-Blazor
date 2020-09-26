@@ -9,13 +9,13 @@
 		<Authors>wzxinchen</Authors>
 		<IsPackable>true</IsPackable>
 		<Description>Element的blazor版本，无JS，无TS，用 .NET 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
-		<RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
-		<PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/wzxinchen/Element</RepositoryUrl>
+		<PackageProjectUrl>http://Element.com:9000</PackageProjectUrl>
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Company>上海轻然教育责任有限公司</Company>
 		<PackageIcon>LOGO.png</PackageIcon>
-		<PackageTags>blazor,blazui</PackageTags>
+		<PackageTags>blazor,Element</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

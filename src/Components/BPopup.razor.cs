@@ -456,7 +456,7 @@ namespace Element
                 option.Left = documentWidth - width - 10;
             }
             option.IsShow = true;
-            if (GlobalBlazuiSettings.DisableAnimation)
+            if (GlobalElementSettings.DisableAnimation)
             {
                 StateHasChanged();
                 return;
@@ -471,7 +471,7 @@ namespace Element
         internal async Task CloseDropDownAsync(DropDownOption option)
         {
             option.IsShow = false;
-            if (GlobalBlazuiSettings.DisableAnimation)
+            if (GlobalElementSettings.DisableAnimation)
             {
                 PopupService.SelectDropDownOptions.Remove(option);
                 PopupService.DropDownMenuOptions.Remove(option);
@@ -499,7 +499,7 @@ namespace Element
                     return;
                 }
                 option.IsShow = false;
-                if (GlobalBlazuiSettings.DisableAnimation)
+                if (GlobalElementSettings.DisableAnimation)
                 {
                     await InvokeAsync(option.SubMenu.DeActivate);
                     PopupService.SubMenuOptions.Remove(option);
@@ -586,7 +586,7 @@ namespace Element
             option.Top = top + rect.Height;
             var style = option.Element.Dom(JSRuntime).Style;
             await style.SetAsync("left", $"{rect.Left}px");
-            if (!GlobalBlazuiSettings.DisableAnimation)
+            if (!GlobalElementSettings.DisableAnimation)
             {
                 await style.SetAsync("top", $"{option.Top + 10}px");
                 await style.ClearAsync("display");

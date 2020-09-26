@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class BModifyPasswordBase : BAdminPageBase
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Admin.ClientRender
+namespace Element.Admin.ClientRender
 {
     public class ServerOptions
     {

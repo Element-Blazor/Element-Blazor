@@ -11,10 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Blazui.Admin.Sample.ServerRender;
-using Blazui.Admin.ServerRender;
+using Element.Admin.Sample.ServerRender;
+using Element.Admin.ServerRender;
 
-namespace Blazui.Admin.Sample.ServerRender
+namespace Element.Admin.Sample.ServerRender
 {
     public class Startup
     {

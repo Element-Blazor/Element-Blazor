@@ -1,6 +1,6 @@
 web:
-  image: registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/blazui:latest
+  image: registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/Element:latest
   ports:
     - "9000:80"
   restart: always
-  hostname: blazui
+  hostname: Element

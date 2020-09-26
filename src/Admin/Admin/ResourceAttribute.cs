@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     /// <summary>
     /// 为组件指定资源名

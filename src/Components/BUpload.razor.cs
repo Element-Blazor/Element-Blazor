@@ -114,7 +114,7 @@ namespace Element
             base.OnInitialized();
             if (string.IsNullOrWhiteSpace(Url))
             {
-                throw new BlazuiException("文件上传地址未指定");
+                throw new ElementException("文件上传地址未指定");
             }
         }
 

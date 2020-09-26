@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Admin\Blazui.Admin.csproj" />
+    <ProjectReference Include="..\Admin\Element.Admin.csproj" />
   </ItemGroup>
 
 </Project>

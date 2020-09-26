@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Admin\Admin.ServerRender\Blazui.Admin.ServerRender.csproj" />
+    <ProjectReference Include="..\..\..\Admin\Admin.ServerRender\Element.Admin.ServerRender.csproj" />
   </ItemGroup>
 
 </Project>

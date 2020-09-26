@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin.Sample.ServerRender
+namespace Element.Admin.Sample.ServerRender
 {
     public class MainLayoutBase : LayoutComponentBase
     {

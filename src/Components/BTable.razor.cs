@@ -575,7 +575,7 @@ namespace Element
                         }));
                         if (Page == null)
                         {
-                            throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
+                            throw new ElementException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
                         }
                         builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
                         {
@@ -809,7 +809,7 @@ namespace Element
             {
                 if (DataSource == null)
                 {
-                    throw new BlazuiException(2, "DataType 或 DataSource 必须设置一个");
+                    throw new ElementException(2, "DataType 或 DataSource 必须设置一个");
                 }
                 DataType = DataSource.GetType().GetGenericArguments()[0];
             }

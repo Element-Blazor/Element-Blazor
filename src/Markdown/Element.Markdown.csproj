@@ -8,23 +8,23 @@
 		<Version>0.0.2</Version>
 		<Authors>wzxinchen</Authors>
 		<Company>上海轻然教育责任有限公司</Company>
-		<Description>基于 Blazui 和 Markdig 的 Markdown 编辑器</Description>
-		<PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
+		<Description>基于 Element 和 Markdig 的 Markdown 编辑器</Description>
+		<PackageProjectUrl>http://Element.com:9000</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/wzxinchen/Element</RepositoryUrl>
 		<RepositoryType></RepositoryType>
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Product>Blazui.Markdown</Product>
+		<Product>Element.Markdown</Product>
 		<PackageIcon>LOGO.png</PackageIcon>
-		<PackageTags>blazor,blazui,markdown</PackageTags>
+		<PackageTags>blazor,Element,markdown</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Markdown.xml</DocumentationFile>
+		<DocumentationFile>obj\Debug\netcoreapp3.1\Element.Markdown.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Markdown.xml</DocumentationFile>
+		<DocumentationFile>obj\Debug\netcoreapp3.1\Element.Markdown.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

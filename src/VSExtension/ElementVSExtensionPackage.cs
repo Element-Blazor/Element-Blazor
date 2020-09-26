@@ -28,7 +28,7 @@ namespace Element
     public sealed class ElementVSExtensionPackage : AsyncPackage
     {
          /// <summary>
-        /// Blazui.VSExtensionPackage GUID string.
+        /// Element.VSExtensionPackage GUID string.
         /// </summary>
         public const string PackageGuidString = "dd528736-4feb-49ab-8b51-a012aa0648f4";
 

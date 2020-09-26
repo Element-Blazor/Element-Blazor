@@ -20,11 +20,11 @@ Element 地址：https://element.eleme.cn/#/zh-CN/component/layout
 ## Samples
 | 内容 | 服务器位置|
 |  :---------- | --|
-|基于 Blazui 开发的 Blazor 社区，Server  渲染 |[国内](https://www.blazor.group)|
-| Blazor Server 渲染版本 | [国内](http://blazui.com) |
+|基于 Element 开发的 Blazor 社区，Server  渲染 |[国内](https://www.blazor.group)|
+| Blazor Server 渲染版本 | [国内](http://Element.com) |
 | Blazor WASM 渲染版本 | [国内](https://element-blazor.gitee.io/) [国外](https://element-blazor.github.io/) |
-| Blazor WASM  PWA 渲染版本 | [国内](http://pwawasm.blazui.com) |
-| Blazor 社区后台，基于 Blazui.Admin 开发 |[国内](https://admin.blazor.group)|
+| Blazor WASM  PWA 渲染版本 | [国内](http://pwawasm.Element.com) |
+| Blazor 社区后台，基于 Element.Admin 开发 |[国内](https://admin.blazor.group)|
 |Blazor WebAssembly 渲染版本|[国外](https://blazorwasm.github.io)|
 | Blazor WebAssembly 渲染版本 PWA模式|[国外](https://pwawasm.github.io)|
  
@@ -46,7 +46,7 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
     Blazor 升级 preview 5
 
 ### 版本 0.0.7.0，2020.04.24发布
-1. 调整 [将 Blazui 基础组件, BlazAdmin, MarkDown Editor 移动到一个仓库][22]
+1. 调整 [将 Element 基础组件, BlazAdmin, MarkDown Editor 移动到一个仓库][22]
 2. 修复 [Table checkbox-SelectedRowsChanged 外部传入EventCallBack后，会使得列表checkbox无法勾选][23]
 3. 增加 [Dialog全屏弹窗扩展][24]
 4. 增加 [国际化支持(Internationalization support) ][25]
@@ -84,7 +84,7 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 15. 修复 tab标签页只能关闭当前的
 
 
-[1]: http://static.zybuluo.com/wzxinchen/c9qvwe1agljfwvqm1j34x1fw/BLAZUI%20128.png
+[1]: http://static.zybuluo.com/wzxinchen/c9qvwe1agljfwvqm1j34x1fw/Element%20128.png
 [2]: https://jq.qq.com/?_wv=1027&k=5jdzC6m
 [3]: https://www.blazor.group
 [4]: https://admin.blazor.group
@@ -99,12 +99,12 @@ https://www.blazor.group/topic/be1450fd-1703-4a21-b6c9-d2ed442e4db1
 [13]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Markdown/IconHandlers
 [14]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples
 [15]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin
-[16]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ClientRender.PWA
-[17]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Blazui.Admin.Sample.ServerRender
-[18]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui
-[19]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ClientRender.PWA
-[20]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ClientRender
-[21]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Blazui/Element.ServerRender
+[16]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Element.Admin.Sample.ClientRender.PWA
+[17]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Admin/Element.Admin.Sample.ServerRender
+[18]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Element
+[19]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Element/Element.ClientRender.PWA
+[20]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Element/Element.ClientRender
+[21]: https://github.com/Element-Blazor/Element-Blazor/tree/master/src/Samples/Element/Element.ServerRender
 [22]: https://github.com/Element-Blazor/Element-Blazor/issues/90
 [23]: https://github.com/Element-Blazor/Element-Blazor/issues/87
 [24]: https://github.com/Element-Blazor/Element-Blazor/issues/88

@@ -148,7 +148,7 @@
                                     {
                                         if (treeRow == null)
                                         {
-                                            throw new BlazuiException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
+                                            throw new ElementException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
                                         }
                                         var hasChild = treeRow.HasChildren || rows.Cast<TreeItemBase>().Any(x => x.ParentId == rowId);
                                         <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">

@@ -1,4 +1,4 @@
-﻿using Blazui.Admin.Abstract;
+﻿using Element.Admin.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using Element;
 using System.Threading.Tasks;
 
-namespace Blazui.Admin.ServerRender
+namespace Element.Admin.ServerRender
 {
     public class UserController : ControllerBase
     {

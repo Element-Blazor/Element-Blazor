@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Blazui.Admin
+namespace Element.Admin
 {
     public class RouteService
     {

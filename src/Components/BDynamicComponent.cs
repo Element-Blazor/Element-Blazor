@@ -48,7 +48,7 @@ namespace Element
             {
                 if (Config == null)
                 {
-                    throw new BlazuiException("Component 类型为 IControlRender 时，必须指定 Config 参数");
+                    throw new ElementException("Component 类型为 IControlRender 时，必须指定 Config 参数");
                 }
 
                 render.Render(builder, Config);
