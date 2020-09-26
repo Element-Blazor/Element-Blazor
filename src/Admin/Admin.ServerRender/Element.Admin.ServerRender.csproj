@@ -6,14 +6,14 @@
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <Description>基于Element的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用</Description>
-    <Authors>wzxinchen</Authors>
+    <Authors>wzxinchen;Element-Blazor</Authors>
     <StartupObject />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Company>上海轻然教育责任有限公司</Company>
+    <Company>Element-Blazor</Company>
     <PackageProjectUrl>https://github.com/wzxinchen/Element</PackageProjectUrl>
     <PackageIcon>LOGO.png</PackageIcon>
-    <RepositoryUrl>https://github.com/wzxinchen/Element</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
     <PackageTags>blazor,Element,admin</PackageTags>
     <Version>0.0.2.1</Version>
     <AssemblyVersion>0.0.2.0</AssemblyVersion>

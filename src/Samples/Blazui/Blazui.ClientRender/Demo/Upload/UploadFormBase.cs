@@ -2,11 +2,6 @@
 
 using Element.ClientRender.Demo.Form;
 using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Element;
 
 namespace Element.ClientRender.Demo.Upload
 {

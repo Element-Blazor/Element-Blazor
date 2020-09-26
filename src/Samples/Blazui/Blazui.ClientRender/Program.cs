@@ -8,7 +8,6 @@ using Element;
 using Element.Lang;
 using Element.Markdown;
 using System.Net.Http;
-using Element;
 
 namespace Element.ClientRender
 {

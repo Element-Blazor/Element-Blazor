@@ -6,14 +6,14 @@
 		<OutputType>Library</OutputType>
 		<Version>0.0.7.2</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Authors>wzxinchen</Authors>
+		<Authors>wzxinchen;Element-Blazor</Authors>
 		<IsPackable>true</IsPackable>
-		<Description>Element的blazor版本，无JS，无TS，用 .NET 写前端的 UI 框架，非 Silverlight，非 WebForm，开箱即用</Description>
-		<RepositoryUrl>https://github.com/wzxinchen/Element</RepositoryUrl>
-		<PackageProjectUrl>http://Element.com:9000</PackageProjectUrl>
+		<Description>A Web UI Library based on Element and Blazor WebAssembly.</Description>
+		<RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/Element-Blazor/</PackageProjectUrl>
 		<RazorLangVersion>3.0</RazorLangVersion>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<Company>上海轻然教育责任有限公司</Company>
+		<Company>Element-Blazor</Company>
 		<PackageIcon>LOGO.png</PackageIcon>
 		<PackageTags>blazor,Element</PackageTags>
 	</PropertyGroup>

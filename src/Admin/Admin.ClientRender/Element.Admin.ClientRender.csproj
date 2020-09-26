@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+	  <Version>0.0.1</Version>
+	  <Authors>wzxinchen;Element-Blazor</Authors>
+	  <Company>Element-Blazor</Company>
+	  <Description>基于Element的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用。该包为界面组件包</Description>
+	  <PackageIcon>LOGO.png</PackageIcon>
+	  <RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
+	  <PackageTags>Element,blazor,admin</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

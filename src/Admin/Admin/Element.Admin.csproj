@@ -10,11 +10,11 @@
     <RazorLangVersion>3.0</RazorLangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
-    <Authors>wzxinchen</Authors>
-    <Company>上海轻然教育责任有限公司</Company>
+    <Authors>wzxinchen;Element-Blazor</Authors>
+    <Company>Element-Blazor</Company>
     <Description>基于Element的后台管理模板，无JS，无TS，非 Silverlight，非 WebForm，一个标签即可使用。该包为界面组件包</Description>
     <PackageIcon>LOGO.png</PackageIcon>
-    <RepositoryUrl>https://github.com/wzxinchen/Element</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
     <PackageTags>Element,blazor,admin</PackageTags>
   </PropertyGroup>
 
