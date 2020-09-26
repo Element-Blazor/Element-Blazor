@@ -1,5 +1,5 @@
 # Element-Blazor
-![LOGO](LOGO.png)
+![LOGO](docs/LOGO.png)
 
 ## Introduction
 A Desktop UI Library based on Element and Blazor WebAssembly.
