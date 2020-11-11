@@ -1,6 +1,5 @@
 ﻿using Element.ControlRenders;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

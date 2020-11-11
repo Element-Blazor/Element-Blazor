@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net5</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
 		<Version>0.0.7.2</Version>
@@ -50,8 +50,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="CompareNETObjects" Version="4.67.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
 		<PackageReference Include="System.Collections" Version="4.3.0" />
 		<PackageReference Include="System.Net.Http.Json" Version="5.0.0" />

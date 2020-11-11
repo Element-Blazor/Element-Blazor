@@ -12,7 +12,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2A9865EB-C969-47C7-BC21-E870F75C3AC4}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
 		Jenkinsfile = Jenkinsfile
 		kubernetes.yml = kubernetes.yml
 		LOGO.png = LOGO.png
