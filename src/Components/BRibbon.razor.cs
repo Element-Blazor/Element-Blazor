@@ -59,14 +59,14 @@ namespace Element
 
         private async System.Threading.Tasks.Task PreventMenuSwitchAsync(BChangeEventArgs<BTabPanel> eventArg)
         {
-            if (eventArg.NewValue.Title == MenuText)
-            {
-                await ShowMenuAsync(eventArg);
-            }
-            else if (string.IsNullOrWhiteSpace(MenuText) && eventArg.NewValue.Title == "开始")
-            {
-                await ShowMenuAsync(eventArg);
-            }
+            //if (eventArg.NewValue.Title == MenuText)
+            //{
+            //    await ShowMenuAsync(eventArg);
+            //}
+            //else if (string.IsNullOrWhiteSpace(MenuText) && eventArg.NewValue.Title == "开始")
+            //{
+            //    await ShowMenuAsync(eventArg);
+            //}
         }
 
         private async Task ShowMenuAsync(BChangeEventArgs<BTabPanel> eventArg)

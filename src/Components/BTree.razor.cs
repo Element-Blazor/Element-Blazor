@@ -1,6 +1,7 @@
 ﻿using Element.Model;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,10 +24,16 @@ namespace Element
         private HttpClient httpClient { get; set; }
 
         /// <summary>
+        /// 所有的节点都在内存一次提供了，可直接渲染所有
+        /// </summary>
+        [Parameter]
+        public bool NodeInMemory { get; set; }
+
+        /// <summary>
         /// 一次性加载所有节点
         /// </summary>
         [Parameter]
-        public bool? LoadFullTree { get; set; }
+        public bool? AsyncLoadFullTree { get; set; }
         /// <summary>
         /// 选择节点后触发
         /// </summary>
@@ -75,6 +82,10 @@ namespace Element
             if (DataSource != null)
             {
                 items = DataSource;
+                foreach (var item in items)
+                {
+                    Initilize(FindChildren(item), item);
+                }
                 return;
             }
         }
@@ -99,10 +110,6 @@ namespace Element
             Console.WriteLine(ItemType);
             var responseObj = (IEnumerable)await httpClient.GetFromJsonAsync(Url, typeof(List<>).MakeGenericType(ItemType));
             DataSource = items = responseObj.Cast<TreeItemBase>().ToList();
-            foreach (var item in DataSource)
-            {
-                Console.WriteLine(item.Id);
-            }
             var rootNodes = FindChildren(new TreeItemModel()
             {
                 Children = items
@@ -160,7 +167,7 @@ namespace Element
                 return;
             }
             treeItem.Expanded = true;
-            if (LoadFullTree != null && LoadFullTree.Value)
+            if (AsyncLoadFullTree != null && AsyncLoadFullTree.Value)
             {
                 var children = FindChildren(treeItem);
                 await ExpandAsync(children, false);
@@ -189,6 +196,10 @@ namespace Element
 
         private async Task AutoExpandAllAsync()
         {
+            if (NodeInMemory)
+            {
+                return;
+            }
             if (DataSource == null)
             {
                 return;
@@ -198,9 +209,9 @@ namespace Element
                 return;
             }
             var dataSource = DataSource.ToList();
-            if (LoadFullTree == null && dataSource.Any(x => x.Children != null && x.Children.Any()))
+            if (AsyncLoadFullTree == null && dataSource.Any(x => x.Children != null && x.Children.Any()))
             {
-                LoadFullTree = true;
+                AsyncLoadFullTree = true;
             }
             await ExpandAsync(dataSource);
         }
@@ -224,7 +235,6 @@ namespace Element
             {
                 await ExpandAsync(item);
             }
-            item.Expanded = !item.Expanded;
         }
 
         private List<TreeItemBase> FindChildren(TreeItemBase treeItem)
@@ -249,7 +259,7 @@ namespace Element
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (firstRender)
+            if (firstRender && !NodeInMemory)
             {
                 Refresh();
                 return;

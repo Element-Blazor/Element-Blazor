@@ -16,6 +16,12 @@ namespace Element
         [Inject]
         internal Document Document { get; set; }
         internal ElementReference hdnField;
+        
+        /// <summary>
+        /// 按钮文字
+        /// </summary>
+        [Parameter]
+        public string ButtonText { get; set; }
 
         private bool eventRegistered = false;
         /// <summary>
