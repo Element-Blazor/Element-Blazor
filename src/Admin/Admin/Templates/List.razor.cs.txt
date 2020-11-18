@@ -1,0 +1,39 @@
+﻿using AutoMapper;
+using Element;
+using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace {{ProjectName}}.{{ModuleName}}
+{
+    public partial class List : BComponentBase
+    {
+        [Inject]
+        private DbContext dbContext { get; set; }
+
+        [Inject]
+        private IMapper mapper { get; set; }
+
+        private DbSet<{{Model}}> dbset
+        {
+            get
+            {
+                return dbContext.Set<{{Model}}>();
+            }
+        }
+        private List<{{ViewModel}}> dataSources = new List<{{ViewModel}}>();
+
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+            var list = await dbset.ToListAsync();
+            dataSources = list.Select(x => mapper.Map<{{ViewModel}}>(x)).ToList();
+            await InvokeAsync(Refresh);
+        }
+    }
+}

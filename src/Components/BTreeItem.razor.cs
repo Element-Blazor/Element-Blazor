@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Element
 {
-    public partial class BTreeItem
+    public partial class BTreeItem 
     {
         private int level;
         private List<TreeItemBase> children = new List<TreeItemBase>();

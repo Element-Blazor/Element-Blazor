@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdownEditor
+    public partial class BMarkdownEditor : BFieldComponentBase<string>
     {
         internal static IDictionary<Icon, IconDescriptionAttribute> allIcons = new Dictionary<Icon, IconDescriptionAttribute>();
 
@@ -153,7 +153,7 @@ namespace Element.Markdown
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             Value = value?.ToString();
             if (ValueChanged.HasDelegate)

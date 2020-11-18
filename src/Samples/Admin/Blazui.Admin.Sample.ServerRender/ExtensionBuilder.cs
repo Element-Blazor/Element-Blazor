@@ -10,16 +10,16 @@ namespace Element.Admin.Sample.ServerRender
 {
     public static class ExtensionBuilder
     {
-        public static  IServiceCollection  AddAdmin<TUserService>(this IServiceCollection services)
+        public static async System.Threading.Tasks.Task<IServiceCollection> AddAdminAsync<TUserService>(this IServiceCollection services)
             where TUserService : class, IUserService
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddHttpClient();
-            services.AddElementServices();
+            services.AddBlazuiServices();
             services.AddSingleton<RouteService>();
             services.AddScoped<IUserService, TUserService>();
-            services.AddAdmin<DocsDbContext>();
+            services.AddAdmin<DocsDbContext, IdentityUser>();
             return services;
         }
 

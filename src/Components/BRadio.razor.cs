@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BRadio<TValue> 
+    public partial class BRadio<TValue> : BFieldComponentBase<TValue>
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -83,7 +83,7 @@ namespace Element
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             SelectedValue = TypeHelper.ChangeType<TValue>(value);
         }

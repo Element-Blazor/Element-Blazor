@@ -1,4 +1,5 @@
-﻿<p>
+﻿@inherits BComponentBase
+<p>
     <BInput Value="123" ></BInput>
 </p>
 
@@ -7,8 +8,5 @@
 </p>
 
 <p>
-    <BInput @bind-Value="a" IsClearable="true"></BInput>
+    <BInput @bind-Value="Abcde" IsClearable="true"></BInput>
 </p>
-@code{
-    private string a;
-}

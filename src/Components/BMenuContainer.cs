@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public class BMenuContainer : ElementComponentBase, IContainerComponent
+    public class BMenuContainer : BComponentBase, IContainerComponent
     {
         internal List<IMenuItem> Children { get; set; } = new List<IMenuItem>();
 

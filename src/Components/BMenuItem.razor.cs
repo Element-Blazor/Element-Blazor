@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BMenuItem :  IMenuItem
+    public partial class BMenuItem : BComponentBase, IMenuItem
     {
         [Parameter]
         public string Index { get; set; }
@@ -37,10 +37,11 @@ namespace Element
         [CascadingParameter]
         public MenuOptions Options { get; set; }
 
-        protected string textColor;
-        protected string borderColor;
+        public virtual string TextColor { get; set; }
+        public virtual string BorderColor { get; set; }
 
-        protected bool isActive { get; set; }
+        public virtual bool IsActive { get; set; }
+        public virtual string BackgroundColor { get; set; }
 
         private string currentRoute;
         public void Activate()
@@ -49,9 +50,9 @@ namespace Element
             {
                 return;
             }
-            isActive = true;
-            textColor = Options.ActiveTextColor;
-            borderColor = Options.ActiveTextColor;
+            IsActive = true;
+            TextColor = Options.ActiveTextColor;
+            BorderColor = Options.ActiveTextColor;
             BackgroundColor = Options.HoverColor;
 
         }
@@ -61,15 +62,14 @@ namespace Element
             {
                 return;
             }
-            isActive = false;
-            textColor = Options.TextColor;
-            borderColor = "transparent";
+            IsActive = false;
+            TextColor = Options.TextColor;
+            BorderColor = "transparent";
             BackgroundColor = Options.BackgroundColor;
         }
 
         [Parameter]
         public EventCallback<BChangeEventArgs<string>> OnRouteChanging { get; set; }
-        protected string BackgroundColor { get; set; }
 
         protected override void OnInitialized()
         {
@@ -82,10 +82,6 @@ namespace Element
             if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == Index) || matchFunc(Route))
             {
                 TopMenu.ActivateItem(this);
-                RequireRender = true;
-                ParentMenu?.MarkAsRequireRender();
-                TopMenu.MarkAsRequireRender();
-                TopMenu.Refresh();
             }
         }
 
@@ -133,7 +129,7 @@ namespace Element
                 BackgroundColor = Options.BackgroundColor;
                 return;
             }
-            BackgroundColor = isActive ? Options.HoverColor : Options.BackgroundColor;
+            BackgroundColor = IsActive ? Options.HoverColor : Options.BackgroundColor;
             RequireRender = true;
         }
 
@@ -154,7 +150,7 @@ namespace Element
                 return;
             }
             BackgroundColor = Options.BackgroundColor;
-            textColor = Options.TextColor;
+            TextColor = Options.TextColor;
         }
 
         public async Task OnClickAsync()

@@ -1,0 +1,17 @@
+﻿@inherits BComponentBase
+@page "/gen/table"
+<BSelect TValue="Microsoft.EntityFrameworkCore.Metadata.IEntityType" ValueChanged="LoadTableStructure">
+    @foreach (var table in tables)
+    {
+        <BSelectOption Value="table.Value" Text="@table.Key"></BSelectOption>
+    }
+</BSelect>
+<BTable IsEditable="true" DataSource="fields" AutoGenerateColumns="false">
+    <BTableColumns>
+        <BTableColumn Text="字段名" Property="@nameof(TableFieldGen.Name)"></BTableColumn>
+        <BTableCheckBoxColumn Text="启用生成" Property="@nameof(TableFieldGen.Enable)"></BTableCheckBoxColumn>
+        <BTableCheckBoxColumn Text="创建表单" Property="@nameof(TableFieldGen.EnableCreate)"></BTableCheckBoxColumn>
+        <BTableCheckBoxColumn Text="更新表单" Property="@nameof(TableFieldGen.EnableUpdate)"></BTableCheckBoxColumn>
+        <BTableCheckBoxColumn Text="列表展示" Property="@nameof(TableFieldGen.EnableList)"></BTableCheckBoxColumn>
+    </BTableColumns>
+</BTable>

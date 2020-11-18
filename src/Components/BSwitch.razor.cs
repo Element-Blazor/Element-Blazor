@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BSwitch<TValue> 
+    public partial class BSwitch<TValue> : BFieldComponentBase<TValue>
     {
         [Parameter]
         public TValue ActiveValue { get; set; }
@@ -99,7 +99,7 @@ namespace Element
             SetFieldValue(Value, false);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (value == null)
             {

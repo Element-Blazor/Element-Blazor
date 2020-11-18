@@ -18,7 +18,7 @@ namespace Element
 
         public static void Throw(int errCode, string message)
         {
-            throw new ElementException(errCode, message);
+            throw new BlazuiException(errCode, message);
         }
     }
 }

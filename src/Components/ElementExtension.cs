@@ -9,9 +9,9 @@ namespace Element
 {
     public static class ElementExtension
     {
-        public static ElementJS Dom(this ElementReference elementReference  , IJSRuntime jSRuntime)
+        public static ElementHelper Dom(this ElementReference elementReference  , IJSRuntime jSRuntime)
         {
-            return new ElementJS(elementReference, jSRuntime);
+            return new ElementHelper(elementReference, jSRuntime);
         }
 
         public static async Task<IJSRuntime> AlertAsync(this IJSRuntime jSRuntime, string message)

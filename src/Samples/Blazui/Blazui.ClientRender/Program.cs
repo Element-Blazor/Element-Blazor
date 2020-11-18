@@ -19,7 +19,7 @@ namespace Element.ClientRender
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddElementServices();
+            builder.Services.AddBlazuiServices();
             builder.Services.AddMarkdown();
             await builder.Build().RunAsync();
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTableColumn
+    public partial class BTableColumn : BComponentBase
     {
         internal virtual bool IsCheckBox { get; set; }
         [Parameter]

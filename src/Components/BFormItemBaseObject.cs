@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public abstract class BFormItemObject : ElementComponentBase
+    public abstract class BFormItemObject : BComponentBase
     {
         /// <summary>
         /// 是否应用样式，如果不应用，则该组件本身不生成任何 HTML
@@ -91,9 +91,15 @@ namespace Element
                 InvokeAsync(StateHasChanged);
             });
         }
-        public abstract void Validate();
+        public virtual void Validate()
+        {
+
+        }
 
 
-        public abstract void Reset();
+        public virtual void Reset()
+        {
+
+        }
     }
 }

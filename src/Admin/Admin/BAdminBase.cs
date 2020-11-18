@@ -1,5 +1,5 @@
 ﻿using Element;
-using Element.Admin;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -20,7 +20,7 @@ namespace Element.Admin
         protected BForm form;
 
         [Inject]
-        private MessageBox MessageBox { get; set; }
+        private Element.MessageBox MessageBox { get; set; }
 
         protected string defaultMenuIndex;
 
@@ -39,6 +39,9 @@ namespace Element.Admin
 
         [Parameter]
         public float NavigationWidth { get; set; } = 250;
+
+        [Parameter]
+        public bool EnableCodeGen { get; set; }
 
         /// <summary>
         /// 导航菜单栏标题
@@ -149,6 +152,25 @@ namespace Element.Admin
                 Menus.Add(permissionMenu);
             }
 
+            if (EnableCodeGen)
+            {
+                var codeGenMenu = new MenuModel()
+                {
+                    Label = "代码生成器",
+                    Name = "代码生成器"
+                };
+                codeGenMenu.Children.Add(new MenuModel()
+                {
+                    Label = "一键整站"
+                });
+                codeGenMenu.Children.Add(new MenuModel()
+                {
+                    Label = "一键单表",
+                    Title = "一键生成单表CRUD",
+                    Route = "/gen/table"
+                });
+                Menus.Add(codeGenMenu);
+            }
             FindMenuName(Menus, path);
         }
 
@@ -159,6 +181,10 @@ namespace Element.Admin
         /// <returns></returns>
         internal bool RequireHide(MenuModel menu)
         {
+            if (menu.Route == null)
+            {
+                return false;
+            }
             var type = routeService.GetComponent(menu.Route);
             if (type == null)
             {

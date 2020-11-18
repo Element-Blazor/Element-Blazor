@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTransfer
+    public partial class BTransfer : BFieldComponentBase<List<string>>
     {
         protected HtmlPropertyBuilder CheckBoxGroupCssBuilder;
         protected string list1KeyWords = string.Empty;
@@ -70,7 +70,7 @@ namespace Element
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             ResetList2(value);
         }

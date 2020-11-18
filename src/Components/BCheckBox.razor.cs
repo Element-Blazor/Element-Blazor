@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BCheckBox<TValue>
+    public partial class BCheckBox<TValue> : BFieldComponentBase<TValue>
     {
         internal string _isChecked = string.Empty;
         internal string _isIndeterminate = string.Empty;
@@ -69,7 +69,7 @@ namespace Element
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             RequireRender = true;
             if (CheckBoxGroup != null)

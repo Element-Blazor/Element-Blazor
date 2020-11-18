@@ -1,4 +1,5 @@
 ﻿using Element.Admin.ServerRender;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Element.Admin.Sample.ServerRender
 {
-    public class DocsDbContext : IdentityDbContext
+    public class DocsDbContext : IdentityDbContext<IdentityUser>
     {
         public DocsDbContext(DbContextOptions<DocsDbContext> options) : base(options)
         {

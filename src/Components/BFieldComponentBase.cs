@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public class BFieldComponentBase<TValue> : ElementComponentBase, IDisposable
+    public class BFieldComponentBase<TValue> : BComponentBase, IDisposable
     {
         [Parameter]
         public string Name { get; set; }
@@ -46,7 +46,7 @@ namespace Element
             }
         }
 
-        protected virtual void FormItem_OnReset(object value, bool requireRender)
+        protected virtual void FormItem_OnReset(object value, bool requireRerender)
         {
 
         }

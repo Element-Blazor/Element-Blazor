@@ -8,7 +8,6 @@ namespace Element
 {
     public partial class BBadge 
     {
-        internal BHtml html;
         [Parameter]
         public int Value { get; set; }
         /// <summary>
@@ -20,10 +19,5 @@ namespace Element
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        internal void SetValue(int value)
-        {
-            html.SetHtml(value.ToString());
-            html.Refresh();
-        }
     }
 }

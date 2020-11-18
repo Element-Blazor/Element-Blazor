@@ -29,7 +29,7 @@ namespace Element.Admin.ClientRender
         {
             if (httpResponse.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                throw new ElementException("服务器端发生内部错误");
+                throw new BlazuiException("服务器端发生内部错误");
             }
             if (httpResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

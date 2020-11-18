@@ -23,7 +23,7 @@
     <None Include="Demo\Tab\BasicTab.razor" />
     <None Include="Demo\Tab\BorderCardTab.razor" />
     <None Include="Demo\BasicButton\ButtonGroup.razor" />
-    <None Include="Demo\BasicButton\ButtonSize.razor" />
+    <None Include="Demo\BasicButton\ButtonSizeDemo.razor" />
     <None Include="Demo\Tab\CardTab.razor" />
     <None Include="Demo\BasicButton\DisabledButton.razor" />
     <None Include="Demo\BasicRadio\DisabledRadio.razor" />
@@ -295,7 +295,7 @@
     <Content Update="Demo\BasicButton\ButtonGroup.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Demo\BasicButton\ButtonSize.razor">
+    <Content Update="Demo\BasicButton\ButtonSizeDemo.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="Demo\Tab\CardTab.razor">

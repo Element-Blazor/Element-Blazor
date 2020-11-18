@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<ApplicationIcon />
+		<OutputType>Library</OutputType>
+		<IsPackable>true</IsPackable>
+		<Version>0.0.2</Version>
+		<Authors>wzxinchen</Authors>
+		<Company>上海轻然教育责任有限公司</Company>
+		<Description>基于 Blazui 和 Markdig 的 Markdown 编辑器</Description>
+		<PackageProjectUrl>http://blazui.com:9000</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/wzxinchen/Blazui</RepositoryUrl>
+		<RepositoryType></RepositoryType>
+		<RazorLangVersion>3.0</RazorLangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Product>Blazui.Markdown</Product>
+		<PackageIcon>LOGO.png</PackageIcon>
+		<PackageTags>blazor,blazui,markdown</PackageTags>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Markdown.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>obj\Debug\netcoreapp3.1\Blazui.Markdown.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\LOGO.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		</None>
+		<None Include="wwwroot\css\editor.css" />
+		<None Include="wwwroot\css\editormd.min.css" />
+		<None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
+		<None Include="wwwroot\images\loading.gif" />
+		<None Include="wwwroot\js\addons.min.js" />
+		<None Include="wwwroot\js\continuelist.js" />
+		<None Include="wwwroot\js\dom.js" />
+		<None Include="wwwroot\js\modes.min.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Markdig" Version="0.22.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Components\Blazui.Component.csproj" />
+	</ItemGroup>
+
+</Project>

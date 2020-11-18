@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BSelect<TValue> : IDisposable
+    public partial class BSelect<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
         protected internal bool isTree;
         private HtmlPropertyBuilder warpperClsBuilder;
@@ -263,7 +263,7 @@ namespace Element
             PopupService.SelectDropDownOptions.Add(dropDownOption);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             var enumValue = (TValue)value;
             if (nullable != null && value == null)

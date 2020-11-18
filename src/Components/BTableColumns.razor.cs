@@ -23,11 +23,11 @@ namespace Element
         {
             if (Table.DataType == null)
             {
-                throw new ElementException($"表格 {Table.GetType().Name} 没有设置 {nameof(BTable.DataSource)} 属性或该属性为空");
+                throw new BlazuiException($"表格 {Table.GetType().Name} 没有设置 {nameof(BTable.DataSource)} 属性或该属性为空");
             }
             if (column.Property == null && !(column is BTableTemplateColumn))
             {
-                throw new ElementException($"列 {column.Text} 没有设置 {nameof(BTableColumn.Property)} 属性");
+                throw new BlazuiException($"列 {column.Text} 没有设置 {nameof(BTableColumn.Property)} 属性");
             }
 
             PropertyInfo property = null;
@@ -36,7 +36,7 @@ namespace Element
                 property = Table.DataType.GetProperty(column.Property);
                 if (property == null)
                 {
-                    throw new ElementException($"属性 {column.Property} 在 {Table.DataType.Name} 中不存在");
+                    throw new BlazuiException($"属性 {column.Property} 在 {Table.DataType.Name} 中不存在");
                 }
             }
             var columnConfig = new TableHeader
@@ -58,7 +58,7 @@ namespace Element
             };
             if (columnConfig.Property != null)
             {
-                columnConfig.Eval = displayRender.CreateRenderFactory(columnConfig).CreateRender(columnConfig);
+                columnConfig.Eval = displayRender.CreateRenderFactory(columnConfig)?.CreateRender(columnConfig);
             }
             Table.Headers.Add(columnConfig);
         }

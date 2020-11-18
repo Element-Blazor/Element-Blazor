@@ -9,7 +9,7 @@
 <input type="hidden" @ref="hdnField" />
 <div class="el-upload el-upload--text" onclick="window.upload(this)">
     <BButton Size="@ButtonSize.Small" Type="ButtonType.Primary">
-        @ButtonText ?? "点击上传"
+        点击上传
     </BButton>
     <input type="file" name="file" @ref="Input" multiple="multiple" @onchange="ScanFileAsync" class="el-upload__input" />
 </div>

@@ -11,17 +11,11 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BUpload
+    public partial class BUpload : BFieldComponentBase<IFileModel[]>
     {
         [Inject]
         internal Document Document { get; set; }
         internal ElementReference hdnField;
-        
-        /// <summary>
-        /// 按钮文字
-        /// </summary>
-        [Parameter]
-        public string ButtonText { get; set; }
 
         private bool eventRegistered = false;
         /// <summary>
@@ -101,7 +95,7 @@ namespace Element
 
         internal HashSet<IFileModel> Files { get; set; } = new HashSet<IFileModel>();
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             RequireRender = true;
             if (value == null)
@@ -120,7 +114,7 @@ namespace Element
             base.OnInitialized();
             if (string.IsNullOrWhiteSpace(Url))
             {
-                throw new ElementException("文件上传地址未指定");
+                throw new BlazuiException("文件上传地址未指定");
             }
         }
 
@@ -223,7 +217,7 @@ namespace Element
             }
         }
 
-        private async Task UploadFilesAsync(ElementJS input)
+        private async Task UploadFilesAsync(ElementHelper input)
         {
             foreach (var item in Files)
             {
@@ -270,7 +264,7 @@ namespace Element
                     _ = OnFileUploadFailure.InvokeAsync(model);
                 }
             }
-           
+
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

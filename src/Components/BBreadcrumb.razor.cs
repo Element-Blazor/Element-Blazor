@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Element
 {
-    public partial class BBreadcrumb
+    public partial class BBreadcrumb : BComponentBase
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }

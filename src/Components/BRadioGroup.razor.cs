@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BRadioGroup<TValue> 
+    public partial class BRadioGroup<TValue> : BFieldComponentBase<TValue>
     {
         [Parameter]
         public EventCallback<TValue> SelectedValueChanged { get; set; }
@@ -26,7 +26,7 @@ namespace Element
             SetFieldValue(SelectedValue, false);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (value == null)
             {

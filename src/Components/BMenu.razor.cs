@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BMenu 
+    public partial class BMenu : BMenuContainer
     {
         internal SemaphoreSlim SemaphoreSlim { get; private set; } = new SemaphoreSlim(1, 1);
         [Parameter]

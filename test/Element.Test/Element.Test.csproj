@@ -23,8 +23,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Admin\Admin.ClientRender\Element.Admin.ClientRender.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Admin\Element.Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Admin\Element.Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj" />
   </ItemGroup>
 
 </Project>

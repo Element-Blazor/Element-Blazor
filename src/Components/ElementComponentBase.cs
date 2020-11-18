@@ -1,13 +1,9 @@
-﻿
-
-using Element.Lang;
+﻿using Element;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Element
@@ -27,7 +23,7 @@ namespace Element
         [Parameter]
         public bool EnableAlwaysRender { get; set; }
         [Inject]
-        MessageBox MessageBox { get; set; }
+        Element.MessageBox MessageBox { get; set; }
 
         [Inject]
         public DialogService DialogService { get; set; }

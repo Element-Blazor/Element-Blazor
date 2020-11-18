@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdownFileUpload
+    public partial class BMarkdownFileUpload : BFieldComponentBase<string[]>
     {
         /// <summary>
         /// 上传地址

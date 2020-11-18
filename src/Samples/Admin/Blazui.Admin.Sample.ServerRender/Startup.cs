@@ -34,7 +34,7 @@ namespace Element.Admin.Sample.ServerRender
                 options.UseInMemoryDatabase("docs");
             });
             services.AddScoped<DbContext, DocsDbContext>();
-            services.AddAdmin<UserService>();
+            services.AddAdminAsync<UserService>().Wait();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -18,6 +18,7 @@ namespace Element.DisplayRenders
             renderMap.Add(x => x.Property.PropertyType == typeof(DateTime), typeof(DateTimeRender));
             renderMap.Add(x => x.Property.PropertyType == typeof(int?), typeof(GenericRender));
             renderMap.Add(x => x.Property.PropertyType == typeof(DateTime?), typeof(DateTimeRender));
+            renderMap.Add(x => x.Property.PropertyType == typeof(bool), typeof(DateTimeRender));
             renderMap.Add(x => x.Property.PropertyType.IsEnum, typeof(EnumRender));
             renderMap.Add(x => x.Property.PropertyType.IsGenericType && (Nullable.GetUnderlyingType(x.Property.PropertyType) ?? x.Property.PropertyType).IsEnum, typeof(EnumRender));
         }
@@ -28,6 +29,10 @@ namespace Element.DisplayRenders
         public IDisplayRender CreateRenderFactory(TableHeader tableHeader)
         {
             var type = renderMap.FirstOrDefault(x => x.Key(tableHeader)).Value;
+            if (type == null)
+            {
+                return null;
+            }
             return (IDisplayRender)provider.GetRequiredService(type);
         }
     }

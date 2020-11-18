@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BCard :  IContainerComponent
+    public partial class BCard : BComponentBase, IContainerComponent
     {
         internal HtmlPropertyBuilder wrapperClassBuilder;
         internal HtmlPropertyBuilder bodyClassBuilder;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element.ClientRender.Demo.Table
 {
-    public partial class CustomTableOrder
+    public partial class CustomTableOrder : ComponentBase
     {
         protected List<AutoGenerateColumnTestData> Datas = new List<AutoGenerateColumnTestData>();
 

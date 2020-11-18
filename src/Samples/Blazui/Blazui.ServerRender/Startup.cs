@@ -30,11 +30,12 @@ namespace Element.ServerRender
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+            services.AddControllers();
             services.AddHttpClient();
+            services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddElementServices();
-            GlobalElementSettings.DisableAnimation = true;
+            services.AddBlazuiServices();
+            GlobalBlazuiSettings.DisableAnimation = true;
             services.AddMarkdown();
             services.AddSingleton<WeatherForecastService>();
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element.ClientRender.PWA.Demo.MarkdownEditor
 {
-    public class FormMarkdownBase : ElementComponentBase
+    public class FormMarkdownBase : BComponentBase
     {
         internal BForm form;
 

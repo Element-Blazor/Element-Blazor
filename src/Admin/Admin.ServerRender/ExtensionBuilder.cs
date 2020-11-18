@@ -11,15 +11,22 @@ namespace Element.Admin.ServerRender
     public static class ExtensionBuilder
     {
         public static IServiceCollection AddAdmin<TDbContext>(this IServiceCollection services)
-            where TDbContext : IdentityDbContext
+            where TDbContext : IdentityDbContext<IdentityUser>
         {
             services.AddAdmin<IdentityUser, UserService, TDbContext>(null);
+            return services;
+        }
+        public static IServiceCollection AddAdmin<TDbContext, TUser>(this IServiceCollection services)
+            where TUser : IdentityUser
+            where TDbContext : IdentityDbContext<TUser>
+        {
+            services.AddAdmin<TUser, UserService, TDbContext>(null);
             return services;
         }
 
         public static IServiceCollection AddAdmin<TUser, TUserService, TDbContext>(this IServiceCollection services, Action<IdentityOptions> optionConfigure)
             where TUser : IdentityUser
-            where TDbContext : IdentityDbContext
+            where TDbContext : IdentityDbContext<TUser>
             where TUserService : class, IUserService
         {
             services.AddControllers();
@@ -39,7 +46,7 @@ namespace Element.Admin.ServerRender
               {
                   o.Stores.MaxLengthForKeys = 128;
               }).AddRoles<IdentityRole>()
-              .AddSignInManager()
+              .AddSignInManager<SignInManager<TUser>>()
               .AddDefaultTokenProviders()
               .AddEntityFrameworkStores<TDbContext>();
 

@@ -6,16 +6,16 @@ metadata:
   creationTimestamp: '2019-11-02T06:43:03Z'
   generation: 2
   labels:
-    app: Element
-  name: Element
-  namespace: Element
+    app: blazui
+  name: blazui
+  namespace: blazui
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: Element
+      app: blazui
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -24,12 +24,12 @@ spec:
   template:
     metadata:
       labels:
-        app: Element
+        app: blazui
     spec:
       containers:
-        - image: 'registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/Element:latest'
+        - image: 'registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/blazui:latest'
           imagePullPolicy: Always
-          name: Element
+          name: blazui
           ports:
             - containerPort: 80
               name: http
@@ -56,8 +56,8 @@ metadata:
     service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: 'true'
     service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-uf6gtmhishceu658flynw
   creationTimestamp: '2019-11-02T07:16:00Z'
-  name: Element-svc
-  namespace: Element
+  name: blazui-svc
+  namespace: blazui
 spec:
   externalTrafficPolicy: Local
   ports:
@@ -65,11 +65,7 @@ spec:
       port: 9000
       protocol: TCP
       targetPort: 80
-    - name: http1
-      port: 80
-      protocol: TCP
-      targetPort: 80
   selector:
-    app: Element
+    app: blazui
   sessionAffinity: None
   type: LoadBalancer

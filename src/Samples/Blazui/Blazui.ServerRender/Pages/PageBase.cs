@@ -16,6 +16,10 @@ namespace Element.ServerRender.Pages
 {
     public class PageBase : ComponentBase
     {
+        public PageBase()
+        {
+
+        }
         private IList<DemoModel> Code(string name)
         {
             var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "Demo");

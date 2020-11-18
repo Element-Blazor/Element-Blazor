@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BSubMenu :  IMenuItem
+    public partial class BSubMenu : BMenuContainer, IMenuItem
     {
         internal SemaphoreSlim SemaphoreSlim { get; private set; } = new SemaphoreSlim(1, 1);
         protected ElementReference Element { get; set; }

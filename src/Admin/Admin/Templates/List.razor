@@ -1,0 +1,8 @@
+﻿@typeparam TModel
+@typeparam TViewModel
+@inherits BComponentBase
+<BButtonGroup>
+    <BButton Type="ButtonType.Primary" Size="ButtonSize.Medium" Icon="el-icon-plus">创建</BButton>
+</BButtonGroup>
+<BTable DataType="typeof(TViewModel)" AutoGenerateColumns="true" DataSource="dataSources">
+</BTable>

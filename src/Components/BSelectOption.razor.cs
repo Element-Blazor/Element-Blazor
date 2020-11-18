@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BSelectOption<TValue>
+    public partial class BSelectOption<TValue> 
     {
         private SelectResultModel<TValue> currentResultModel;
 

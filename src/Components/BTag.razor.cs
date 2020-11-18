@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Element
 {
-    public partial class BTag
+    public partial class BTag : BComponentBase
     {
         private bool isClosed = false;
         private HtmlPropertyBuilder iconCssBuilder;

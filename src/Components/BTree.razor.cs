@@ -3,18 +3,14 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTree
+    public partial class BTree : BComponentBase
     {
         private List<TreeItemBase> selectedNodes = new List<TreeItemBase>();
         private List<TreeItemBase> items;
@@ -22,16 +18,10 @@ namespace Element
         private HttpClient httpClient { get; set; }
 
         /// <summary>
-        /// 所有的节点都在内存一次提供了，可直接渲染所有
-        /// </summary>
-        [Parameter]
-        public bool NodeInMemory { get; set; }
-
-        /// <summary>
         /// 一次性加载所有节点
         /// </summary>
         [Parameter]
-        public bool? AsyncLoadFullTree { get; set; }
+        public bool? LoadFullTree { get; set; }
         /// <summary>
         /// 选择节点后触发
         /// </summary>
@@ -80,10 +70,6 @@ namespace Element
             if (DataSource != null)
             {
                 items = DataSource;
-                foreach (var item in items)
-                {
-                    Initilize(FindChildren(item), item);
-                }
                 return;
             }
         }
@@ -108,6 +94,10 @@ namespace Element
             Console.WriteLine(ItemType);
             var responseObj = (IEnumerable)await httpClient.GetFromJsonAsync(Url, typeof(List<>).MakeGenericType(ItemType));
             DataSource = items = responseObj.Cast<TreeItemBase>().ToList();
+            foreach (var item in DataSource)
+            {
+                Console.WriteLine(item.Id);
+            }
             var rootNodes = FindChildren(new TreeItemModel()
             {
                 Children = items
@@ -165,7 +155,7 @@ namespace Element
                 return;
             }
             treeItem.Expanded = true;
-            if (AsyncLoadFullTree != null && AsyncLoadFullTree.Value)
+            if (LoadFullTree != null && LoadFullTree.Value)
             {
                 var children = FindChildren(treeItem);
                 await ExpandAsync(children, false);
@@ -194,10 +184,6 @@ namespace Element
 
         private async Task AutoExpandAllAsync()
         {
-            if (NodeInMemory)
-            {
-                return;
-            }
             if (DataSource == null)
             {
                 return;
@@ -207,9 +193,9 @@ namespace Element
                 return;
             }
             var dataSource = DataSource.ToList();
-            if (AsyncLoadFullTree == null && dataSource.Any(x => x.Children != null && x.Children.Any()))
+            if (LoadFullTree == null && dataSource.Any(x => x.Children != null && x.Children.Any()))
             {
-                AsyncLoadFullTree = true;
+                LoadFullTree = true;
             }
             await ExpandAsync(dataSource);
         }
@@ -233,6 +219,7 @@ namespace Element
             {
                 await ExpandAsync(item);
             }
+            item.Expanded = !item.Expanded;
         }
 
         private List<TreeItemBase> FindChildren(TreeItemBase treeItem)
@@ -257,7 +244,7 @@ namespace Element
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (firstRender && !NodeInMemory)
+            if (firstRender)
             {
                 Refresh();
                 return;

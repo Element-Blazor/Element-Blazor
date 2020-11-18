@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BPopupLayer
+    public partial class BPopupLayer : BComponentBase
     {
         private ElementReference container;
         private bool rendered = false;

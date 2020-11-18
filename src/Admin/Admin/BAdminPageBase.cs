@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element.Admin
 {
-    public class BAdminPageBase : ElementComponentBase
+    public class BAdminPageBase : BComponentBase
     {
         /// <summary>
         /// 是否超级管理员

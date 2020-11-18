@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdown
+    public partial class BMarkdown : BComponentBase
     {
         private MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         /// <summary>

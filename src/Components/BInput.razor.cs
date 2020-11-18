@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Element
 {
-    public partial class BInput<TValue> : IDisposable
+    public partial class BInput<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
         internal HtmlPropertyBuilder wrapperClsBuilder;
         /// <summary>
@@ -171,7 +171,7 @@ namespace Element
             }
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (value == null)
             {

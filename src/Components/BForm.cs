@@ -1,15 +1,12 @@
-﻿using Element.ControlRenders;
-using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BForm : ElementComponentBase, IContainerComponent
+    public partial class BForm : BComponentBase, IContainerComponent
     {
         private List<FormItemConfig> formItemConfigs;
         [Inject]
@@ -157,7 +154,7 @@ namespace Element
         {
             if (!IsValid())
             {
-                throw new ElementException("表单验证不通过，此时无法获取表单输入的值");
+                throw new BlazuiException("表单验证不通过，此时无法获取表单输入的值");
             }
             var value = Activator.CreateInstance<T>();
             var properties = typeof(T).GetProperties();
@@ -172,11 +169,11 @@ namespace Element
                 object destValue = formItem.GetType().GetProperty("Value").GetValue(formItem);
                 try
                 {
-                    property.SetValue(value, property.PropertyType == typeof(string) ? destValue?.ToString().Trim() : destValue);
+                    property.SetValue(value, destValue);
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new ElementException($"字段 {formItem.Name} 输入的类型为 {destValue.GetType()}，但实体 {typeof(T)} 对应的属性的类型为 {property.PropertyType}", ex);
+                    throw new BlazuiException($"字段 {formItem.Name} 输入的类型为 {destValue.GetType()}，但实体 {typeof(T)} 对应的属性的类型为 {property.PropertyType}", ex);
                 }
             }
             return value;

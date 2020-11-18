@@ -29,8 +29,6 @@ namespace Element
         [Display(Prompt = "delete")]
         Delete = 8,
         [Display(Prompt = "close")]
-        Close = 9,
-        [Display(Prompt = "folder-opened")]
-        Opend = 10
+        Close = 9
     }
 }

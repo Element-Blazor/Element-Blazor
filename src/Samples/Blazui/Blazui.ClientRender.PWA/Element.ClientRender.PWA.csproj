@@ -31,9 +31,6 @@
     <Content Update="Demo\Table\CustomTableOrder.razor">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Pages\FetchData.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
     <Content Update="Pages\Form.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
@@ -108,7 +105,6 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Demo\BasicButton\BasicButton.razor" />
     <_ContentIncludedByDefault Remove="Demo\BasicButton\ButtonGroup.razor" />
-    <_ContentIncludedByDefault Remove="Demo\BasicButton\ButtonSize.razor" />
     <_ContentIncludedByDefault Remove="Demo\BasicButton\DisabledButton.razor" />
     <_ContentIncludedByDefault Remove="Demo\BasicButton\LoadingButton.razor" />
     <_ContentIncludedByDefault Remove="Demo\BasicButton\TextButton.razor" />
@@ -140,8 +136,6 @@
     <_ContentIncludedByDefault Remove="Demo\Form\HiddenFormItem.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\InitilizeForm.razor" />
     <_ContentIncludedByDefault Remove="Demo\Form\InlineForm.razor" />
-    <_ContentIncludedByDefault Remove="Demo\Lang\BasicLang.razor" />
-    <_ContentIncludedByDefault Remove="Demo\Lang\BasicLangInject.razor" />
     <_ContentIncludedByDefault Remove="Demo\Layout\BasicLayout.razor" />
     <_ContentIncludedByDefault Remove="Demo\Layout\Layout.razor" />
     <_ContentIncludedByDefault Remove="Demo\Layout\NestedLayout.razor" />
@@ -200,12 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Demo\BasicButton\ButtonGroup.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Demo\BasicButton\ButtonSize.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Demo\BasicButton\ButtonSize.razor" />
   </ItemGroup>
   <ItemGroup>
     <Watch Remove="Demo\BasicButton\DisabledButton.razor" />
@@ -386,18 +374,6 @@
   </ItemGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="Demo\Form\InlineForm.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Demo\Lang\BasicLang.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Demo\Lang\BasicLang.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <Watch Remove="Demo\Lang\BasicLangInject.razor" />
-  </ItemGroup>
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Demo\Lang\BasicLangInject.razor" />
   </ItemGroup>
   <ItemGroup>
     <Watch Remove="Demo\Layout\BasicLayout.razor" />

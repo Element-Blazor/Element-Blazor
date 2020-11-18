@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTableCheckBoxColumn
+    public partial class BTableCheckBoxColumn : BTableColumn
     {
         internal override bool IsCheckBox { get; set; } = true;
     }

@@ -1,31 +1,25 @@
-﻿using Element.ControlConfigs;
-using Element.ControlRender;
+﻿using Element.ControlRender;
 using Element.ControlRenders;
 using Element.DisplayRenders;
 using Element.Model;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTable : IContainerComponent
+    public partial class BTable : BComponentBase, IContainerComponent
     {
         private SaveAction saveAction = SaveAction.Create;
         private TaskCompletionSource<int> editingTaskCompletionSource;
@@ -293,6 +287,9 @@ namespace Element
         [Parameter]
         public int Height { get; set; }
 
+        [Parameter]
+        public bool EnableMarkupString { get; set; }
+
         /// <summary>
         /// 启用斑马纹
         /// </summary>
@@ -321,6 +318,8 @@ namespace Element
         [Parameter]
         public Func<int, Task<PagerResult>> OnLoadDataSource { get; set; }
         public ElementReference Container { get; set; }
+        [Inject]
+        public LoadingService LoadingService { get; set; }
 
         internal Task OnRowCheckBoxRenderCompleted(object row, BCheckBox<bool> chk)
         {
@@ -371,20 +370,8 @@ namespace Element
                     await DataSourceChanged.InvokeAsync(DataSource);
                 }
 
-                SyncFieldValue();
             }
             await InitlizeDataSourceAsync(0, "up", autoExpand);
-        }
-
-        private void SyncFieldValue()
-        {
-            if (FormItem == null)
-            {
-                return;
-            }
-            var dyncmicDataSource = (List<KeyValueModel>)DataSource;
-            var fieldValue = dyncmicDataSource.ToDictionary(x => x.Key, x => x.Value);
-            SetFieldValue(fieldValue, true);
         }
 
         public override async Task SetParametersAsync(ParameterView parameters)
@@ -535,7 +522,10 @@ namespace Element
                     }
                     InitilizeHeaderEditor(header.Property, header.Property.GetCustomAttribute<EditorGeneratorAttribute>() ?? new EditorGeneratorAttribute(), header);
                 }
-                CreateOperationColumn();
+                if (IsEditable)
+                {
+                    CreateOperationColumn();
+                }
                 Refresh();
             }
         }
@@ -573,7 +563,7 @@ namespace Element
                         }));
                         if (Page == null)
                         {
-                            throw new ElementException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
+                            throw new BlazuiException(1, "表格启用可编辑功能后必须在外面套一层 CascadingValue，值为 BDialogBase(this)，名称为 Page");
                         }
                         builder.AddAttribute(6, nameof(BButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(Page, async (e) =>
                         {
@@ -795,7 +785,6 @@ namespace Element
                 {
                     await DataSourceChanged.InvokeAsync(DataSource);
                 }
-                SyncFieldValue();
                 return;
             }
             await SaveDataAsync(saveAction);
@@ -807,7 +796,7 @@ namespace Element
             {
                 if (DataSource == null)
                 {
-                    throw new ElementException(2, "DataType 或 DataSource 必须设置一个");
+                    throw new BlazuiException(2, "DataType 或 DataSource 必须设置一个");
                 }
                 DataType = DataSource.GetType().GetGenericArguments()[0];
             }
@@ -873,7 +862,6 @@ namespace Element
                 dataSourceUpdated = true;
                 await RefreshDataSourceAsync(false);
                 editingTaskCompletionSource.TrySetResult(0);
-                SyncFieldValue();
             }
             else
             {
@@ -889,7 +877,6 @@ namespace Element
                     dataSourceUpdated = true;
                     await RefreshDataSourceAsync(false);
                     editingTaskCompletionSource?.TrySetResult(0);
-                    SyncFieldValue();
                     return;
                 }
                 editingTaskCompletionSource?.TrySetResult(-1);
@@ -963,7 +950,6 @@ namespace Element
                     {
                         await DataSourceChanged.InvokeAsync(DataSource);
                     }
-                    SyncFieldValue();
                     treeRow.Direction = "up";
                 }
                 else
@@ -1019,7 +1005,6 @@ namespace Element
             {
                 await DataSourceChanged.InvokeAsync(DataSource);
             }
-            SyncFieldValue();
         }
 
         private async Task<IEnumerable> FetchChildrenAsync(TreeItemBase treeRow)

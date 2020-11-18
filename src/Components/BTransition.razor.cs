@@ -3,13 +3,12 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTransition
+    public partial class BTransition : BComponentBase
     {
         private ElementReference animationElement;
         private bool animationBegined = false;

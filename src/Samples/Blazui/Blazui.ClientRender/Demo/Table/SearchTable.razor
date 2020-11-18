@@ -5,7 +5,7 @@
         <BInput TValue="string"></BInput>
     </BFormItem>
     <BFormActionItem>
-        <BButton Type="@ButtonType.Primary" OnClick="e=>SubmitAsync()">搜索</BButton>
+        <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">搜索</BButton>
     </BFormActionItem>
 </BForm>
 <BTable DataSource="Datas" @ref="table">

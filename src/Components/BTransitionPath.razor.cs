@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Element
 {
-    public partial class BTransitionPath
+    public partial class BTransitionPath : BComponentBase
     {
         [CascadingParameter]
         public BTransition Transition { get; set; }

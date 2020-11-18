@@ -1,17 +1,17 @@
-FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/aspnet:5.0-buster-slim AS base
+FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/sdk:5.00-buster AS build
+FROM registry.cn-shanghai.aliyuncs.com/wzyuchen/sdk:3.1-buster AS build
 COPY . .
-RUN dotnet restore "src/Samples/Element/Element.ServerRender/Element.ServerRender.csproj"
-RUN dotnet build "src/Samples/Element/Element.ServerRender/Element.ServerRender.csproj" -c Release -o /app/build
+RUN dotnet restore "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj"
+RUN dotnet build "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "src/Samples/Element/Element.ServerRender/Element.ServerRender.csproj" -c Release -o /app/publish
+RUN dotnet publish "src/Samples/Blazui/Blazui.ServerRender/Blazui.ServerRender.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Element.ServerRender.dll"]
+ENTRYPOINT ["dotnet", "Blazui.ServerRender.dll"]

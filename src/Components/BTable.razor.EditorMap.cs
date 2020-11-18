@@ -94,7 +94,7 @@ namespace Element
             var renderType = editorRenderMap.FirstOrDefault(x => x.Key(propertyInfo, control)).Value;
             if (renderType == null)
             {
-                throw new ElementException($"属性 {propertyInfo.Name} 类型为 {propertyInfo.PropertyType} 对应的渲染器不存在");
+                throw new BlazuiException($"属性 {propertyInfo.Name} 类型为 {propertyInfo.PropertyType} 对应的渲染器不存在");
             }
             Type dataSourceLoader = null;
             if (control.IsGenericType)

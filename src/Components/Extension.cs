@@ -1,7 +1,9 @@
 ﻿using Element.ControlRender;
 using Element.ControlRenders;
+using Element.Core;
 using Element.DisplayRenders;
 using Element.Lang;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,11 +18,11 @@ namespace Element
     public static class Extension
     {
         /// <summary>
-        /// 添加 Element 相关服务
+        /// 添加 Blazui 相关服务
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddElementServices(this IServiceCollection services)
+        public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
         {
             services.AddSingleton<FormFieldControlMap>();
             services.AddSingleton<TableEditorMap>();
@@ -41,7 +43,6 @@ namespace Element
             services.AddSingleton<EnumRender>();
             services.AddSingleton<GenericRender>();
             return services;
-
         }
 
     }

@@ -1,0 +1,730 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+    <BlazorCacheBootResources>false</BlazorCacheBootResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Demo\Form\AutoGenerateFieldsInitilizeFormBase.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.2.0-preview3.20168.3" />
+  </ItemGroup>
+  <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
+  <ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
+    <Content Remove="wwwroot\service-worker.js" />
+    <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="App.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Demo\Table\CustomTableOrder.razor">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Pages\FetchData.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Form.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Input.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Lang.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Layout.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Loading.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Menu.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Message.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\MessageBox.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Pagination.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Radio.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Select.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Switch.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Table.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Tabs.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Transfer.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Pages\Upload.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Shared\MainLayout.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="Shared\NavMenu.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+    <Content Update="wwwroot\.nojekyll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\index.html">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="_Imports.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\BasicButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\BasicButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\BasicButton.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\ButtonGroup.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\ButtonSize.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\DisabledButton.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\LoadingButton.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicButton\TextButton.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicInput\BasicInput.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicInput\SizeInput.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\BasicRadio.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\BorderedRadio.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\DisabledRadio.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\DisallowChangeRadio.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\RadioButton.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicRadio\RadioGroup.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicSelect\BasicSelect.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicSelect\BindEnum.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicSelect\BindNullableEnum.razor" />
+    <_ContentIncludedByDefault Remove="Demo\BasicSelect\ItemDisabledSelect.razor" />
+    <_ContentIncludedByDefault Remove="Demo\CheckBox\CheckBoxButtonGroup.razor" />
+    <_ContentIncludedByDefault Remove="Demo\CheckBox\CheckBoxGroup.razor" />
+    <_ContentIncludedByDefault Remove="Demo\CheckBox\HardCode.razor" />
+    <_ContentIncludedByDefault Remove="Demo\DatePicker\BasicPicker.razor" />
+    <_ContentIncludedByDefault Remove="Demo\demos.json" />
+    <_ContentIncludedByDefault Remove="Demo\Dialog\BasicDialog.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Dialog\ExampleDialog.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Dialog\NestDialog.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Dialog\PassParameter.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Dialog\TestContent.razor" />
+    <_ContentIncludedByDefault Remove="Demo\DropDown\BasicDropDown.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Form\AlignForm.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Form\HiddenFormItem.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Form\InitilizeForm.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Form\InlineForm.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Lang\BasicLang.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Lang\BasicLangInject.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Layout\BasicLayout.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Layout\Layout.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Layout\NestedLayout.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\BasicLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\CardLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\CustomLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\ManualLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\MenuLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Loading\ServiceLoading.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Menu\CustomBackgroundMenu.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Menu\HorizontalMenu.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Menu\VerticalMenu.razor" />
+    <_ContentIncludedByDefault Remove="Demo\MessageBox\BasicMessageBox.razor" />
+    <_ContentIncludedByDefault Remove="Demo\MessageBox\ConfirmMessageBox.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Message\BasicMessage.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Message\MultiMessage.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Message\StatusMessage.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Pagination\BackgroundPagination.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Pagination\BasicPagination.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Switch\BasicSwitch.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Switch\DisabledSwitch.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Switch\TextSwitch.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\AutoGenerateColumnTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\BasicTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\CheckBoxTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\CustomColumnTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\FixHeaderTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\IgnoreColumnTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\PaginationTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\SearchTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\StripeTable.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Table\UpdatePageSize.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\BasicTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\BindingEditableTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\BorderCardTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\CardTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\EditableTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\LeftTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Tab\TestCheckBoxInTab.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Transfer\BasicTransfer.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Transfer\FormTransfer.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Upload\BasicUpload.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Upload\BUploadLimit.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Upload\ImageUpload.razor" />
+    <_ContentIncludedByDefault Remove="Demo\Upload\UploadForm.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Button.razor" />
+    <_ContentIncludedByDefault Remove="Pages\CheckBox.razor" />
+    <_ContentIncludedByDefault Remove="Pages\DatePicker.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Demo.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Dialog.razor" />
+    <_ContentIncludedByDefault Remove="Pages\DropDown.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Error.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\ButtonGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\ButtonGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\ButtonSize.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\ButtonSize.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\DisabledButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\DisabledButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\LoadingButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\LoadingButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicButton\TextButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicButton\TextButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicInput\BasicInput.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicInput\BasicInput.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicInput\SizeInput.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicInput\SizeInput.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\BasicRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\BasicRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\BorderedRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\BorderedRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\DisabledRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\DisabledRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\DisallowChangeRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\DisallowChangeRadio.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\RadioButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\RadioButton.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicRadio\RadioGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicRadio\RadioGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicSelect\BasicSelect.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicSelect\BasicSelect.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicSelect\BindEnum.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicSelect\BindEnum.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicSelect\BindNullableEnum.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicSelect\BindNullableEnum.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\BasicSelect\ItemDisabledSelect.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\BasicSelect\ItemDisabledSelect.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\CheckBox\CheckBoxButtonGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\CheckBox\CheckBoxButtonGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\CheckBox\CheckBoxGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\CheckBox\CheckBoxGroup.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\CheckBox\HardCode.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\CheckBox\HardCode.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\DatePicker\BasicPicker.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\DatePicker\BasicPicker.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Dialog\BasicDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Dialog\BasicDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Dialog\ExampleDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Dialog\ExampleDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Dialog\NestDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Dialog\NestDialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Dialog\PassParameter.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Dialog\PassParameter.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Dialog\TestContent.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Dialog\TestContent.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\DropDown\BasicDropDown.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\DropDown\BasicDropDown.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Form\AlignForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Form\AlignForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Form\AutoGenerateFieldsInitilizeForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Form\HiddenFormItem.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Form\HiddenFormItem.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Form\InitilizeForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Form\InitilizeForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Form\InlineForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Form\InlineForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Lang\BasicLang.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Lang\BasicLang.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Lang\BasicLangInject.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Lang\BasicLangInject.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Layout\BasicLayout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Layout\BasicLayout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Layout\Layout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Layout\Layout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Layout\NestedLayout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Layout\NestedLayout.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\BasicLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\BasicLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\CardLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\CardLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\CustomLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\CustomLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\ManualLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\ManualLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\MenuLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\MenuLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Loading\ServiceLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Loading\ServiceLoading.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Menu\CustomBackgroundMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Menu\CustomBackgroundMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Menu\HorizontalMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Menu\HorizontalMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Menu\VerticalMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Menu\VerticalMenu.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Message\BasicMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Message\BasicMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Message\MultiMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Message\MultiMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Message\StatusMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Message\StatusMessage.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\MessageBox\BasicMessageBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\MessageBox\BasicMessageBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\MessageBox\ConfirmMessageBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\MessageBox\ConfirmMessageBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Pagination\BackgroundPagination.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Pagination\BackgroundPagination.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Pagination\BasicPagination.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Pagination\BasicPagination.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Switch\BasicSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Switch\BasicSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Switch\DisabledSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Switch\DisabledSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Switch\TextSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Switch\TextSwitch.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\BasicTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\BasicTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\BindingEditableTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\BindingEditableTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\BorderCardTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\BorderCardTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\CardTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\CardTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\EditableTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\EditableTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\LeftTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\LeftTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Tab\TestCheckBoxInTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Tab\TestCheckBoxInTab.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\AutoGenerateColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\AutoGenerateColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\BasicTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\BasicTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\CheckBoxTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\CheckBoxTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\CustomColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\CustomColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\FixHeaderTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\FixHeaderTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\IgnoreColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\IgnoreColumnTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\PaginationTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\PaginationTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\SearchTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\SearchTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\StripeTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\StripeTable.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Table\UpdatePageSize.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Table\UpdatePageSize.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Transfer\BasicTransfer.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Transfer\BasicTransfer.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Transfer\FormTransfer.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Transfer\FormTransfer.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Upload\BasicUpload.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Upload\BasicUpload.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Upload\BUploadLimit.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Upload\BUploadLimit.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Upload\ImageUpload.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Upload\ImageUpload.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Demo\Upload\UploadForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Demo\Upload\UploadForm.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\Button.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Button.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\CheckBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\CheckBox.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\DatePicker.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\DatePicker.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\Demo.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Demo.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\Dialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Dialog.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\DropDown.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\DropDown.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Watch Remove="Pages\Error.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Error.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Demo\MarkdownEditor\BasicEditor.razor" />
+    <None Include="Demo\MarkdownEditor\FormMarkdown.razor" />
+    <None Include="Demo\MarkdownEditor\Markdown.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Markdown\Blazui.Markdown.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Demo\Table\CustomTableOrder.razor.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>

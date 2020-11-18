@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BTabPanel : IDisposable
+    public partial class BTabPanel : BComponentBase, IDisposable
     {
         [Parameter]
         public EventCallback<BChangeEventArgs<BTabPanel>> OnTabPanelChanging { get; set; }

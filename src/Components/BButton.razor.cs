@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BButton
+    public partial class BButton : BComponentBase
     {
         internal HtmlPropertyBuilder cssClassBuilder;
         protected async Task OnButtonClickedAsync(MouseEventArgs e)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BCheckBoxGroup<TValue>
+    public partial class BCheckBoxGroup<TValue> : BFieldComponentBase<IEnumerable<TValue>>
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -55,7 +55,7 @@ namespace Element
             SetFieldValue(SelectedItems.ToList(), true);
         }
 
-        protected override void FormItem_OnReset(object value, bool requireRender)
+        protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             SelectedItems.CollectionChanged -= SelectedItems_CollectionChanged;
             if (value != null)

@@ -10,20 +10,9 @@ namespace Element.Lang
     /// </summary>
     public class BLang
     {
-        public static async Task<BLang> CreateBLangAsync(string locale, Func<HttpClient, string, Task<IConfiguration>> refreshConfiguration, HttpClient httpClient)
+        public BLang(IConfiguration configuration, string locale, Func<HttpClient, string, Task<IConfiguration>> refreshConfiguration, HttpClient httpClient)
         {
-            if (string.IsNullOrWhiteSpace(locale))
-            {
-                locale = DefaultLang;
-            }
-
-            var bLang = new BLang(locale, refreshConfiguration, httpClient);
-            await bLang.SetLangAsync(locale);
-            return bLang;
-        }
-
-        private BLang(string locale, Func<HttpClient, string, Task<IConfiguration>> refreshConfiguration, HttpClient httpClient)
-        {
+            this.configuration = configuration;
             this.CurrentLang = locale;
             this.refreshConfiguration = refreshConfiguration;
             this.httpClient = httpClient;
@@ -33,11 +22,6 @@ namespace Element.Lang
         /// </summary>
         private IConfiguration configuration { get; set; }
         private HttpClient httpClient;
-
-        /// <summary>
-        /// 默认语言，中文
-        /// </summary>
-        public const string DefaultLang = "zh-CN";
 
         /// <summary>
         /// 当前语言，默认中文

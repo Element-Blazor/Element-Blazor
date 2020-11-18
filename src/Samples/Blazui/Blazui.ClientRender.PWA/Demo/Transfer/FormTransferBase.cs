@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Element;
 namespace Element.ClientRender.PWA.Demo.Transfer
 {
-    public class FormTransferBase : ElementComponentBase
+    public class FormTransferBase : BComponentBase
     {
         internal BForm form;
         internal TransferModel value;

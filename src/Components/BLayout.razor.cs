@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Element
 {
-    public partial class BLayout : IContainerComponent
+    public partial class BLayout : BComponentBase, IContainerComponent
     {
         [Parameter]
         public bool Fit { get; set; } = true;
