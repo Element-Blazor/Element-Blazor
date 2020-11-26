@@ -1,0 +1,10 @@
+﻿<BForm Inline="true" @ref="searchForm">
+    <BFormItem TValue="string" Label="名称" Name="@nameof(SearchCondition.Name)" IsRequired="true">
+        <BInput TValue="string"></BInput>
+    </BFormItem>
+    <BFormActionItem>
+        <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">搜索</BButton>
+    </BFormActionItem>
+</BForm>
+<BTable DataSource="Datas" @ref="table">
+</BTable>

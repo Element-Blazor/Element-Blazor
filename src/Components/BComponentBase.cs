@@ -11,12 +11,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Element
-{
-    public class BComponentBase<TViewModel> : BComponentBase
-    {
-        public virtual TViewModel ViewModel { get; }
-    }
-    public class BComponentBase : ComponentBase, IDisposable
+{    public class BComponentBase : ComponentBase, IDisposable
     {
         internal bool allowRefresh;
         [CascadingParameter(Name = "Page")]
@@ -149,7 +144,7 @@ namespace Element
 
         protected override bool ShouldRender()
         {
-            return RequireRender || EnableAlwaysRender;
+            return true;
         }
 
         public virtual void Dispose()

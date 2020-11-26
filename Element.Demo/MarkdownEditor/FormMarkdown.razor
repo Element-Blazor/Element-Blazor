@@ -1,0 +1,12 @@
+﻿@inherits BComponentBase
+<BForm @ref="form" Value="article">
+    <BFormItem TValue="string" Label="标题" IsRequired="true" Name="@nameof(ArticleModel.Title)">
+        <BInput TValue="string"></BInput>
+    </BFormItem>
+    <BFormItem TValue="string" Label="内容" IsRequired="true" Name="@nameof(ArticleModel.Content)">
+        <BMarkdownEditor UploadUrl="/api/md/upload" DisableFileUpload="true" DisableImageUpload="true"></BMarkdownEditor>
+    </BFormItem>
+    <BFormActionItem Style="text-align:right">
+        <BButton Type="@ButtonType.Primary" OnClick="Submit">创建</BButton>
+    </BFormActionItem>
+</BForm>

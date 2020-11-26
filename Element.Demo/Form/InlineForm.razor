@@ -1,0 +1,18 @@
+﻿<BForm Inline="true" @ref="demoForm">
+    <BFormItem TValue="string" Label="活动名称" Name="@nameof(Activity.Name)" IsRequired="true">
+        <BInput TValue="string"></BInput>
+    </BFormItem>
+    <BFormItem TValue="DateTime?" Label="活动时间" IsRequired="true" Name="@nameof(Activity.Time)">
+        <BDatePicker></BDatePicker>
+    </BFormItem>
+    <BFormItem TValue="bool" Label="即时配送" IsRequired="true" Name="@nameof(Activity.Delivery)">
+        <BSwitch TValue="bool" ActiveValue="true" InactiveValue="false"></BSwitch>
+    </BFormItem>
+    <BFormItem TValue="string" Label="活动形式" IsRequired="true" Name="@nameof(Activity.Description)">
+        <BInput TValue="string" Type="@InputType.Textarea"></BInput>
+    </BFormItem>
+    <BFormItem TValue="object">
+        <BButton Type="@ButtonType.Primary" OnClick="e=>Submit()">立即创建</BButton>
+        <BButton OnClick="e=>Reset()">重置</BButton>
+    </BFormItem>
+</BForm>

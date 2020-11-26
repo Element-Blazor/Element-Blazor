@@ -22,7 +22,7 @@ namespace Element.ServerRender.Pages
         }
         private IList<DemoModel> Code(string name)
         {
-            var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location), "Demo");
+             var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location));
             var demoInfos = JsonConvert.DeserializeObject<IEnumerable<DemoPageModel>>(System.IO.File.ReadAllText(Path.Combine(location, "demos.json")));
             var demoInfo = demoInfos.SingleOrDefault(x => x.Name == name);
             if (demoInfo == null)
@@ -35,7 +35,7 @@ namespace Element.ServerRender.Pages
                 var razorPath = Path.Combine(location, item.Name + ".razor");
                 var demoModel = new DemoModel()
                 {
-                    Type = "Element.ServerRender.Demo." + item.Name,
+                    Type = "Element.Demo." + item.Name,
                     Title = item.Title
                 };
                 if (System.IO.File.Exists(razorPath))
