@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -7,14 +7,12 @@
     <BlazorCacheBootResources>false</BlazorCacheBootResources>
   </PropertyGroup>
 
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
-  </ItemGroup>
-  <!-- When publishing, swap service-worker.published.js in place of service-worker.js -->
-  <ItemGroup Condition="'$(DesignTimeBuild)' != 'true'">
-    <Content Remove="wwwroot\service-worker.js" />
-    <Content Update="wwwroot\service-worker.published.js" Link="wwwroot\service-worker.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="App.razor">

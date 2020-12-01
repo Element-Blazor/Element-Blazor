@@ -52,7 +52,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Element.VSExtension", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Test", "test\Element.Test\Element.Test.csproj", "{D9F69E27-BF1F-4088-AD24-5961B09F9D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Element.Demo", "Element.Demo\Element.Demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Demo", "Element.Demo\Element.Demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp2", "BlazorApp2\BlazorApp2.csproj", "{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,6 +114,10 @@ Global
 		{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +140,7 @@ Global
 		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140} = {BA4616F9-78F9-4486-B264-A1FD8C0871AE}
 		{D9F69E27-BF1F-4088-AD24-5961B09F9D32} = {6DB71671-F11C-44B8-BAE2-1A200AE42CD2}
 		{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57} = {32AEC62D-CC2E-4F5A-B921-548B011FCBFD}
+		{F248180B-D2D7-44EE-9C0F-6BE4FE82D41D} = {32AEC62D-CC2E-4F5A-B921-548B011FCBFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4766835C-4DA4-4A53-97D8-CBA1E51E1082}

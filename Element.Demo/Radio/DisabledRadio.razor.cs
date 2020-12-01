@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Element.ServerRender.Demo.BasicRadio
+namespace Element.Demo.Radio
 {
     public partial class DisabledRadio : BComponentBase
     {

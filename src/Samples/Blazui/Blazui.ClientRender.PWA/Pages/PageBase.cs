@@ -29,7 +29,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicButton.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="基础用法"
                  },
                  new DemoInfoModel
@@ -37,7 +37,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "ButtonGroup.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="按钮组"
                  },
                  new DemoInfoModel
@@ -45,7 +45,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "ButtonSize.razor"
                       },
-                       Name="BasicButton",
+                       Name="SimpleButton",
                         Title="按钮尺寸"
                  },
                  new DemoInfoModel
@@ -53,7 +53,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "DisabledButton.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="禁用的按钮"
                  },
                  new DemoInfoModel
@@ -61,7 +61,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "LoadingButton.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="按钮加载中"
                  },
                  new DemoInfoModel
@@ -69,7 +69,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "TextButton.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="文字按钮"
                  }
                  }
@@ -84,7 +84,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicInput.razor"
                       },
-                       Name="BasicInput",
+                       Name="Input",
                         Title="基础用法"
                  },
                  new DemoInfoModel
@@ -92,7 +92,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "SizeInput.razor"
                       },
-                       Name="BasicInput",
+                       Name="Input",
                         Title="输入框尺寸"
                  }
                  }
@@ -107,7 +107,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicRadio.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="基础用法"
                  },
                  new DemoInfoModel
@@ -115,7 +115,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BorderedRadio.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="有边框"
                  },
                  new DemoInfoModel
@@ -123,7 +123,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "DisabledRadio.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="禁用的单选框"
                  },
                  new DemoInfoModel
@@ -131,7 +131,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "DisallowChangeRadio.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="不允许变更的单选框"
                  },
                  new DemoInfoModel
@@ -139,7 +139,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "RadioButton.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="单选按钮"
                  },
                  new DemoInfoModel
@@ -147,7 +147,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "RadioGroup.razor"
                       },
-                       Name="BasicRadio",
+                       Name="Radio",
                         Title="单选框组"
                  }
                  }
@@ -162,7 +162,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BasicSelect.razor"
                       },
-                       Name="BasicSelect",
+                       Name="Select",
                         Title="基础用法"
                  },
                  new DemoInfoModel
@@ -170,7 +170,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "BindEnum.razor"
                       },
-                       Name="BasicSelect",
+                       Name="Select",
                         Title="绑定枚举(可空)"
                  },
                  new DemoInfoModel
@@ -178,7 +178,7 @@ namespace Element.ClientRender.PWA.Pages
                       Files=new List<string>(){
                       "ItemDisabledSelect.razor"
                       },
-                       Name="BasicSelect",
+                       Name="Select",
                         Title="选项被禁用"
                  }
                  }

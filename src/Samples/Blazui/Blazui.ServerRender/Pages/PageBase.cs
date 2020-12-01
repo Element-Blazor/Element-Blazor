@@ -22,7 +22,7 @@ namespace Element.ServerRender.Pages
         }
         private IList<DemoModel> Code(string name)
         {
-             var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location));
+            var location = Path.Combine(Path.GetDirectoryName(typeof(Startup).Assembly.Location));
             var demoInfos = JsonConvert.DeserializeObject<IEnumerable<DemoPageModel>>(System.IO.File.ReadAllText(Path.Combine(location, "demos.json")));
             var demoInfo = demoInfos.SingleOrDefault(x => x.Name == name);
             if (demoInfo == null)
@@ -32,25 +32,16 @@ namespace Element.ServerRender.Pages
             var demos = new List<DemoModel>();
             foreach (var item in demoInfo.Demos)
             {
+                if (string.IsNullOrWhiteSpace(item.Name))
+                {
+
+                }
                 var razorPath = Path.Combine(location, item.Name + ".razor");
                 var demoModel = new DemoModel()
                 {
                     Type = "Element.Demo." + item.Name,
                     Title = item.Title
                 };
-                if (System.IO.File.Exists(razorPath))
-                {
-                    var code = System.IO.File.ReadAllText(razorPath);
-                    demoModel.Options.Add(new TabOption()
-                    {
-                        Content = GetCode(WebUtility.HtmlEncode(code), "razor"),
-                        Name = item.Name,
-                        Title = item.Name + ".razor",
-                        OnRenderCompletedAsync = TabCode_OnRenderCompleteAsync
-                    });
-                    demos.Add(demoModel);
-                    continue;
-                }
                 var codeFiles = Directory.EnumerateFiles(Path.Combine(location, item.Name))
                     .Where(x => item.Files.Contains(Path.GetFileName(x)))
                     .OrderBy(x => item.Files.IndexOf(Path.GetFileName(x)));
@@ -107,7 +98,7 @@ namespace Element.ServerRender.Pages
             demos = Code(router);
             foreach (var item in demos)
             {
-                item.Demo = Type.GetType(item.Type);
+                item.Demo = Type.GetType(item.Type + ", Element.Demo");
             }
         }
 

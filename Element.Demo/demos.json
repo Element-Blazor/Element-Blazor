@@ -15,7 +15,7 @@
         "name": "MarkdownEditor",
         "files": [
           "FormMarkdown.razor",
-          "FormMarkdownBase.cs",
+          "FormMarkdownrazor.cs",
           "ArticleModel.cs"
         ]
       },
@@ -43,7 +43,7 @@
         "name": "Transfer",
         "files": [
           "FormTransfer.razor",
-          "FormTransferBase.cs",
+          "FormTransferrazor.cs",
           "TransferModel.cs"
         ]
       }
@@ -93,7 +93,7 @@
         "name": "Tab",
         "files": [
           "BindingEditableTab.razor",
-          "BindingEditableTabBase.cs",
+          "BindingEditableTabrazor.cs",
           "TestCheckBoxInTab.razor"
         ]
       }
@@ -107,7 +107,7 @@
         "name": "MessageBox",
         "files": [
           "BasicMessageBox.razor",
-          "BasicMessageBoxBase.cs"
+          "BasicMessageBoxrazor.cs"
         ]
       },
       {
@@ -115,7 +115,7 @@
         "name": "MessageBox",
         "files": [
           "ConfirmMessageBox.razor",
-          "ConfirmMessageBoxBase.cs"
+          "ConfirmMessageBoxrazor.cs"
         ]
       }
     ]
@@ -128,7 +128,7 @@
         "name": "Dialog",
         "files": [
           "BasicDialog.razor",
-          "BasicDialogBase.cs"
+          "BasicDialograzor.cs"
         ]
       },
       {
@@ -136,9 +136,9 @@
         "name": "Dialog",
         "files": [
           "NestDialog.razor",
-          "NestDialogBase.cs",
+          "NestDialograzor.cs",
           "ExampleDialog.razor",
-          "ExmapleDialogBase.cs"
+          "ExmapleDialograzor.cs"
         ]
       },
       {
@@ -146,9 +146,9 @@
         "name": "Dialog",
         "files": [
           "PassParameter.razor",
-          "BasicDialogBase.cs",
+          "BasicDialograzor.cs",
           "TestContent.razor",
-          "TestContentBase.cs"
+          "TestContentrazor.cs"
         ]
       }
     ]
@@ -161,7 +161,7 @@
         "name": "DatePicker",
         "files": [
           "BasicPicker.razor",
-          "BasicPickerBase.cs"
+          "BasicPickerrazor.cs"
         ]
       }
     ]
@@ -174,7 +174,7 @@
       //  "name": "Form",
       //  "files": [
       //    "BasicForm.razor",
-      //    "BasicFormBase.cs",
+      //    "BasicFormrazor.cs",
       //    "Activity.cs"
       //  ]
       //},
@@ -183,7 +183,7 @@
       //  "name": "Form",
       //  "files": [
       //    "InlineForm.razor",
-      //    "InlineFormBase.cs",
+      //    "InlineFormrazor.cs",
       //    "Activity.cs"
       //  ]
       //},
@@ -192,7 +192,7 @@
       //  "name": "Form",
       //  "files": [
       //    "AlignForm.razor",
-      //    "BasicFormBase.cs",
+      //    "BasicFormrazor.cs",
       //    "Activity.cs"
       //  ]
       //},
@@ -201,7 +201,7 @@
       //  "name": "Form",
       //  "files": [
       //    "InitilizeForm.razor",
-      //    "InitilizeFormBase.cs",
+      //    "InitilizeFormrazor.cs",
       //    "Activity.cs"
       //  ]
       //},
@@ -210,7 +210,7 @@
         "name": "Form",
         "files": [
           "HiddenFormItem.razor",
-          "BasicFormBase.cs",
+          "BasicFormrazor.cs",
           "Activity.cs"
         ]
       },
@@ -259,7 +259,7 @@
         "name": "Table",
         "files": [
           "BasicTable.razor",
-          "BasicTableBase.cs",
+          "BasicTablerazor.cs",
           "TestData.cs"
         ]
       },
@@ -268,7 +268,7 @@
         "name": "Table",
         "files": [
           "StripeTable.razor",
-          "BasicTableBase.cs",
+          "BasicTablerazor.cs",
           "TestData.cs"
         ]
       },
@@ -277,7 +277,7 @@
         "name": "Table",
         "files": [
           "FixHeaderTable.razor",
-          "BasicTableBase.cs",
+          "BasicTablerazor.cs",
           "TestData.cs"
         ]
       },
@@ -286,7 +286,7 @@
         "name": "Table",
         "files": [
           "CheckBoxTable.razor",
-          "BasicTableBase.cs",
+          "BasicTablerazor.cs",
           "TestData.cs"
         ]
       },
@@ -295,7 +295,7 @@
         "name": "Table",
         "files": [
           "CustomColumnTable.razor",
-          "BasicTableBase.cs",
+          "BasicTablerazor.cs",
           "TestData.cs"
         ]
       },
@@ -304,7 +304,7 @@
         "name": "Table",
         "files": [
           "AutoGenerateColumnTable.razor",
-          "AutoGenerateColumnTableBase.cs",
+          "AutoGenerateColumnTablerazor.cs",
           "AutoGenerateColumnTestData.cs"
         ]
       },
@@ -313,7 +313,7 @@
         "name": "Table",
         "files": [
           "PaginationTable.razor",
-          "PaginationTableBase.cs",
+          "PaginationTablerazor.cs",
           "AutoGenerateColumnTestData.cs"
         ]
       },
@@ -322,7 +322,7 @@
         "name": "Table",
         "files": [
           "IgnoreColumnTable.razor",
-          "PaginationTableBase.cs",
+          "PaginationTablerazor.cs",
           "AutoGenerateColumnTestData.cs"
         ]
       },
@@ -331,7 +331,7 @@
         "name": "Table",
         "files": [
           "SearchTable.razor",
-          "SearchTableBase.cs",
+          "SearchTablerazor.cs",
           "AutoGenerateColumnTestData.cs",
           "SearchCondition.cs"
         ]
@@ -341,7 +341,7 @@
         "name": "Table",
         "files": [
           "UpdatePageSize.razor",
-          "UpdatePageSizeBase.cs",
+          "UpdatePageSizerazor.cs",
           "AutoGenerateColumnTestData.cs"
         ]
       },
@@ -396,7 +396,7 @@
         "name": "Loading",
         "files": [
           "BasicLoading.razor",
-          "BasicLoadingBase.cs"
+          "BasicLoadingrazor.cs"
         ]
       },
       {
@@ -404,7 +404,7 @@
         "name": "Loading",
         "files": [
           "CustomLoading.razor",
-          "CustomLoadingBase.cs"
+          "CustomLoadingrazor.cs"
         ]
       },
       {
@@ -412,7 +412,7 @@
         "name": "Loading",
         "files": [
           "ServiceLoading.razor",
-          "ServiceLoadingBase.cs"
+          "ServiceLoadingrazor.cs"
         ]
       },
       {
@@ -420,7 +420,7 @@
         "name": "Loading",
         "files": [
           "ManualLoading.razor",
-          "ManualLoadingBase.cs"
+          "ManualLoadingrazor.cs"
         ]
       },
       {
@@ -428,7 +428,7 @@
         "name": "Loading",
         "files": [
           "CardLoading.razor",
-          "CardLoadingBase.cs"
+          "CardLoadingrazor.cs"
         ]
       },
       {
@@ -436,7 +436,7 @@
         "name": "Loading",
         "files": [
           "MenuLoading.razor",
-          "MenuLoadingBase.cs"
+          "MenuLoadingrazor.cs"
         ]
       }
     ]
@@ -460,7 +460,7 @@
         "title": "基础用法",
         "name": "Button",
         "files": [
-          "BasicButton.razor"
+          "SimpleButton.razor"
         ]
       },
       {
@@ -553,7 +553,7 @@
         "name": "Radio",
         "files": [
           "BasicRadio.razor",
-          "BasicRadioBase.cs"
+          "BasicRadio.razor.cs"
         ]
       },
       {
@@ -561,7 +561,7 @@
         "name": "Radio",
         "files": [
           "DisabledRadio.razor",
-          "DisabledRadioBase.cs"
+          "DisabledRadio.razor.cs"
         ]
       },
       {
@@ -569,7 +569,7 @@
         "name": "Radio",
         "files": [
           "DisallowChangeRadio.razor",
-          "DisallowChangeRadioBase.cs"
+          "DisallowChangeRadiorazor.cs"
         ]
       },
       {
@@ -577,7 +577,7 @@
         "name": "Radio",
         "files": [
           "RadioGroup.razor",
-          "RadioGroupBase.cs"
+          "RadioGrouprazor.cs"
         ]
       },
       {
@@ -585,7 +585,7 @@
         "name": "Radio",
         "files": [
           "RadioButton.razor",
-          "RadioButtonBase.cs"
+          "RadioButtonrazor.cs"
         ]
       },
       {
@@ -605,7 +605,7 @@
         "name": "Select",
         "files": [
           "BasicSelect.razor",
-          "BasicSelectBase.cs"
+          "BasicSelectrazor.cs"
         ]
       },
       {
@@ -621,7 +621,7 @@
         "files": [
           "BindEnum.razor",
           "Option.cs",
-          "BasicSelectBase.cs"
+          "BasicSelectrazor.cs"
         ]
       },
       {
@@ -630,7 +630,7 @@
         "files": [
           "BindNullableEnum.razor",
           "Option.cs",
-          "BasicSelectBase.cs"
+          "BasicSelectrazor.cs"
         ]
       }
     ]
@@ -688,7 +688,7 @@
         "name": "Message",
         "files": [
           "BasicMessage.razor",
-          "BasicMessageBase.cs"
+          "BasicMessagerazor.cs"
         ]
       },
       {
@@ -696,7 +696,7 @@
         "name": "Message",
         "files": [
           "StatusMessage.razor",
-          "StatusMessageBase.cs"
+          "StatusMessagerazor.cs"
         ]
       },
       {
@@ -704,7 +704,7 @@
         "name": "Message",
         "files": [
           "MultiMessage.razor",
-          "MultiMessageBase.cs"
+          "MultiMessagerazor.cs"
         ]
       }
     ]
@@ -717,7 +717,7 @@
         "name": "CheckBox",
         "files": [
           "HardCode.razor",
-          "HardCodeBase.cs"
+          "HardCoderazor.cs"
         ]
       },
       {
@@ -725,7 +725,7 @@
         "name": "CheckBox",
         "files": [
           "CheckBoxGroup.razor",
-          "CheckBoxGroupBase.cs"
+          "CheckBoxGrouprazor.cs"
         ]
       },
       {
@@ -733,7 +733,7 @@
         "name": "CheckBox",
         "files": [
           "CheckBoxButtonGroup.razor",
-          "CheckBoxGroupBase.cs"
+          "CheckBoxGrouprazor.cs"
         ]
       }
     ]
@@ -771,7 +771,7 @@
         "files": [
           "UploadForm.razor",
           "UploadActivity.cs",
-          "UploadFormBase.cs",
+          "UploadFormrazor.cs",
           "TestController.cs"
         ]
       }
@@ -805,7 +805,7 @@
         "name": "Lang",
         "files": [
           "BasicLangInject.razor",
-          "BasicLangInjectBase.cs"
+          "BasicLangInjectrazor.cs"
         ]
       },
       {
@@ -813,7 +813,7 @@
         "name": "Lang",
         "files": [
           "BasicLang.razor",
-          "BasicLangBase.cs"
+          "BasicLangrazor.cs"
         ]
       }
     ]
