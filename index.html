@@ -4,16 +4,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
-    <title>Blazui, Element的blazor版本，用 .NET 写前端的 UI 框架，开箱即用，WebAssembly 版本，非PWA模式</title>
+    <title>Blazui, Element的blazor版本，用 .NET 写前端的 UI 框架，开箱即用，WebAssembly 版本，PWA模式</title>
     <base href="/" />
 
     <link href="manifest.json" rel="manifest" />
 
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/fix.css" />
-    <link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
-    <link href="/_content/Blazui.Markdown/css/editormd.min.css" rel="stylesheet" />
-    <link href="/_content/Blazui.Markdown/css/editor.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/_content/Element/css/fix.css" />
+    <link rel="stylesheet" href="/_content/Element/css/index.css" />
+    <link href="/_content/Element.Markdown/css/editormd.min.css" rel="stylesheet" />
+    <link href="/_content/Element.Markdown/css/editor.css" rel="stylesheet" />
     <link href="https://cdn.bootcss.com/codemirror/5.48.4/addon/fold/foldgutter.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.css" rel="stylesheet">
     <style>
@@ -44,16 +43,17 @@
         var _hmt = _hmt || [];
         (function () {
             var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?68404524efb8917aacde222c05799f80";
+            hm.src = "https://hm.baidu.com/hm.js?072ff1516a038c8f36b82b5c819ae4d4";
             var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(hm, s);
         })();
     </script>
+
 </head>
 
 <body>
     <app>
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;display:block;" width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;display:block;" width="500px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
             <g transform="translate(26.666666666666668,26.666666666666668)">
                 <rect x="-20" y="-20" width="40" height="40" fill="#e15b64" transform="scale(1.04545 1.04545)">
                     <animateTransform attributeName="transform" type="scale" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="1.1500000000000001;1" begin="-0.3s"></animateTransform>
@@ -76,14 +76,16 @@
             </g>
         </svg>
     </app>
-    <script src="/_content/Blazui.Component/js/dom.js"></script>
-    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
-    <script src="/_content/Blazui.Markdown/js/addons.min.js"></script>
-    <script src="/_content/Blazui.Markdown/js/continuelist.js"></script>
-    <script src="/_content/Blazui.Markdown/js/modes.min.js"></script>
-    <script src="/_content/Blazui.Markdown/js/dom.js"></script>
-    <script src="_framework/blazor.webassembly.js"></script>
 
+    <script src="/_content/Element/js/dom.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.min.js"></script>
+    <script src="/_content/Element.Markdown/js/addons.min.js"></script>
+    <script src="/_content/Element.Markdown/js/continuelist.js"></script>
+    <script src="/_content/Element.Markdown/js/modes.min.js"></script>
+    <script src="/_content/Element.Markdown/js/dom.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script type="text/javascript" src="//js.users.51.la/20745795.js"></script>
 </body>
 
 </html>
