@@ -152,5 +152,10 @@ namespace Element
         {
             return intString?.StringValue;
         }
+
+        public override bool Equals(object obj)
+        {
+            return  ToString() == obj.ToString();
+        }
     }
 }
