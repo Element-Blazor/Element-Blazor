@@ -15,7 +15,7 @@ namespace Element.Test.RadioTests
             await TestRadioList(await demoCard.Body.QuerySelectorAsync("div.el-radio-group"), 1);
         }
 
-        private async Task TestRadioList(ElementHandle p, int defaultIndex)
+        private async Task TestRadioList(IElementHandle p, int defaultIndex)
         {
             var radios = await p.QuerySelectorAllAsync("label.el-radio");
             await AssertRadiosAsync(radios, defaultIndex, true);
@@ -30,13 +30,13 @@ namespace Element.Test.RadioTests
             }
         }
 
-        async Task AssertRadiosAsync(ElementHandle[] radios, int checkedIndex, bool isInit)
+        async Task AssertRadiosAsync(IElementHandle[] radios, int checkedIndex, bool isInit)
         {
             for (int i = 0; i < radios.Length; i++)
             {
                 var radio = radios[i];
                 var cls = await radio.EvaluateFunctionAsync<string>("x=>x.className");
-                ElementHandle el = null;
+                IElementHandle el = null;
                 if (i == checkedIndex)
                 {
                     Assert.Equal("el-radio is-checked   el-radio-button--default", cls);

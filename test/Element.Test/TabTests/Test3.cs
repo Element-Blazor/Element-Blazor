@@ -44,7 +44,7 @@ namespace Element.Test.TabTests
             }
         }
 
-        private async Task AssertHoverAsync(ElementHandle tabHeader)
+        private async Task AssertHoverAsync(IElementHandle tabHeader)
         {
             await tabHeader.HoverAsync();
             await Task.Delay(200);
@@ -52,13 +52,13 @@ namespace Element.Test.TabTests
             Assert.Equal("rgb(64, 158, 255)", textColor);
         }
 
-        private async Task AssertBodyAsync(ElementHandle body, string text)
+        private async Task AssertBodyAsync(IElementHandle body, string text)
         {
             var bodyText = await body.EvaluateFunctionAsync<string>("x=>x.innerText");
             Assert.Equal(text, bodyText?.Trim());
         }
 
-        private async Task AssertHeaderAsync(ElementHandle[] tabHeaders, int index)
+        private async Task AssertHeaderAsync(IElementHandle[] tabHeaders, int index)
         {
             var activeTab = tabHeaders[index];
             var activeBoxModel = await activeTab.BoundingBoxAsync();

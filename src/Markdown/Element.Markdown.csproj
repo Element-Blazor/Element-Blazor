@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
@@ -47,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Markdig" Version="0.26.0" />
+	  <PackageReference Include="Markdig" Version="0.30.4" />
 	</ItemGroup>
 
 	<ItemGroup>

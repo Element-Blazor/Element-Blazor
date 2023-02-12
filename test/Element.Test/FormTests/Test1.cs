@@ -11,9 +11,9 @@ namespace Element.Test.FormTests
     [TestName("Form 表单", "基础用法")]
     public class Test1 : IDemoTester
     {
-        private ElementHandle submitButton;
-        private ElementHandle resetButton;
-        private ElementHandle[] formItems;
+        private IElementHandle submitButton;
+        private IElementHandle resetButton;
+        private IElementHandle[] formItems;
         private string expectedDate;
 
         public async Task TestAsync(DemoCard demoCard)
@@ -328,7 +328,7 @@ namespace Element.Test.FormTests
             }
         }
 
-        private static async Task AssertErrorAsync(bool showRequired, ElementHandle error, string expectedRrrorText)
+        private static async Task AssertErrorAsync(bool showRequired, IElementHandle error, string expectedRrrorText)
         {
             if (showRequired)
             {

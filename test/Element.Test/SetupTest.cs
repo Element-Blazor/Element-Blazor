@@ -52,7 +52,7 @@ namespace Element.Test
             {
                 await TestSemaphoreSlim.WaitAsync();
                 await RunBrowserAsync();
-                Page = await Browser.NewPageAsync();
+                Page = (Page)await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 return;
             }
@@ -63,7 +63,7 @@ namespace Element.Test
                 {
                     await TestSemaphoreSlim.WaitAsync();
                     await RunBrowserAsync();
-                    Page = await Browser.NewPageAsync();
+                    Page = (Page)await Browser.NewPageAsync();
                     await Page.GoToAsync("https://localhost:5001");
                     return;
                 }
@@ -92,7 +92,7 @@ namespace Element.Test
                 var fetcher = new BrowserFetcher();
                 if (!File.Exists(fetcher.DownloadsFolder))
                 {
-                    await fetcher.DownloadAsync(BrowserFetcher.DefaultRevision);
+                    await fetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace Element.Test
                 }
                 await TestSemaphoreSlim.WaitAsync();
                 await RunBrowserAsync();
-                Page = await Browser.NewPageAsync();
+                Page = (Page)await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 Output.WriteLine("初始化完成");
                 initilized = true;
@@ -113,7 +113,7 @@ namespace Element.Test
 
         private async ValueTask RunBrowserAsync()
         {
-            Browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            Browser = (Browser)await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = false,
                 DefaultViewport = new ViewPortOptions()

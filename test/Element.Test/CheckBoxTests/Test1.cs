@@ -27,13 +27,13 @@ namespace Element.Test.CheckBoxTests
             await AssertCheckBoxesAsync(checkboxes, checkedIndexes.ToArray(), disabledIndexes.ToArray());
         }
 
-        private async Task AssertCheckBoxesAsync(ElementHandle[] checkboxes, int[] checkedIndexes, int[] disabledIndexes)
+        private async Task AssertCheckBoxesAsync(IElementHandle[] checkboxes, int[] checkedIndexes, int[] disabledIndexes)
         {
             for (int i = 0; i < checkboxes.Length; i++)
             {
                 var checkbox = checkboxes[i];
                 var cls = await checkbox.EvaluateFunctionAsync<string>("x=>x.className");
-                ElementHandle el;
+                IElementHandle el;
                 if (checkedIndexes.Contains(i))
                 {
                     if (disabledIndexes.Contains(i))

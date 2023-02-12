@@ -11,9 +11,9 @@ namespace Element.Test.FormTests
     [TestName("Form 表单", "表单双向绑定")]
     public class Test2 : IDemoTester
     {
-        private ElementHandle submitButton;
-        private ElementHandle resetButton;
-        private ElementHandle[] formItems;
+        private IElementHandle submitButton;
+        private IElementHandle resetButton;
+        private IElementHandle[] formItems;
         private string expectedDate;
 
         public async Task TestAsync(DemoCard demoCard)
@@ -322,9 +322,9 @@ namespace Element.Test.FormTests
                 if (index == 8)
                 {
                     Assert.True(string.IsNullOrWhiteSpace(labelText));
-                    submitButton = await content.QuerySelectorAsync("button.el-button.el-button--primary");
+                    submitButton = (ElementHandle)await content.QuerySelectorAsync("button.el-button.el-button--primary");
                     Assert.NotNull(submitButton);
-                    resetButton = await content.QuerySelectorAsync("button.el-button.el-button--default");
+                    resetButton = (ElementHandle)await content.QuerySelectorAsync("button.el-button.el-button--default");
                     Assert.NotNull(resetButton);
                     continue;
                 }
@@ -333,7 +333,7 @@ namespace Element.Test.FormTests
             }
         }
 
-        private static async Task AssertErrorAsync(bool showRequired, ElementHandle error, string expectedRrrorText)
+        private static async Task AssertErrorAsync(bool showRequired, IElementHandle error, string expectedRrrorText)
         {
             if (showRequired)
             {

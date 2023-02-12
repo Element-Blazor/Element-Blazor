@@ -57,7 +57,7 @@ namespace Element.Test.CheckBoxTests
             await AssertCheckBoxesAsync(checkboxes, checkedIndexes.ToArray());
         }
 
-        private async Task AssertCheckBoxesAsync(ElementHandle[] checkboxes, params int[] checkedIndexes)
+        private async Task AssertCheckBoxesAsync(IElementHandle[] checkboxes, params int[] checkedIndexes)
         {
             for (int i = 0; i < checkboxes.Length; i++)
             {
@@ -66,10 +66,10 @@ namespace Element.Test.CheckBoxTests
             }
         }
 
-        private static async Task AssertCheckBoxAsync(bool isChecked, ElementHandle checkbox)
+        private static async Task AssertCheckBoxAsync(bool isChecked, IElementHandle checkbox)
         {
             var cls = await checkbox.EvaluateFunctionAsync<string>("x=>x.className");
-            ElementHandle el;
+            IElementHandle el;
             if (isChecked)
             {
                 Assert.Equal("el-checkbox is-checked ", cls);

@@ -46,20 +46,20 @@ namespace Element.Test.TabTests
             }
         }
 
-        private static async Task AssertHoverAsync(ElementHandle tabHeader)
+        private static async Task AssertHoverAsync(IElementHandle tabHeader)
         {
             await tabHeader.HoverAsync();
             var textColor = await tabHeader.EvaluateFunctionAsync<string>("x=>window.getComputedStyle(x,null).color");
             Assert.Equal("rgb(64, 158, 255)", textColor);
         }
 
-        private static async Task AssertBodyAsync(ElementHandle body, string text)
+        private static async Task AssertBodyAsync(IElementHandle body, string text)
         {
             var bodyText = await body.EvaluateFunctionAsync<string>("x=>x.innerText");
             Assert.Equal(text, bodyText?.Trim());
         }
 
-        private static async Task AssertHeaderAsync(ElementHandle navElement, ElementHandle[] tabHeaders, int index)
+        private static async Task AssertHeaderAsync(IElementHandle navElement, IElementHandle[] tabHeaders, int index)
         {
             var shadow = await navElement.QuerySelectorAsync("div.el-tabs__active-bar");
             Assert.NotNull(shadow);

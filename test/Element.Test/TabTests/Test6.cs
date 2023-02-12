@@ -11,16 +11,16 @@ namespace Element.Test.TabTests
     [TestName("Tabs 标签页", "双向绑定实现可编辑的标签页")]
     public class Test6 : TestBase, IDemoTester
     {
-        async Task<List<(string Title, ElementHandle Header)>> GetHeadersAsync(DemoCard card)
+        async Task<List<(string Title, IElementHandle Header)>> GetHeadersAsync(DemoCard card)
         {
             var header = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__header.is-top");
             Assert.NotNull(header);
             var tabHeaders = await header.QuerySelectorAllAsync("div.el-tabs__nav-wrap.is-top > div.el-tabs__nav-scroll > div.el-tabs__nav.is-top > div.el-tabs__item.is-top.is-closable");
             var tasks = tabHeaders.Select(async x => ((await x.EvaluateFunctionAsync<string>("m=>m.innerText")).Trim(), x));
-            List<(string Title, ElementHandle Header)> headers = (await Task.WhenAll(tasks)).ToList();
+            List<(string Title, IElementHandle Header)> headers = (await Task.WhenAll(tasks)).ToList();
             return headers;
         }
-        async Task<List<(string Title, ElementHandle Header)>> AssertTabAsync(DemoCard card, List<string> tabs, int activeIndex)
+        async Task<List<(string Title, IElementHandle Header)>> AssertTabAsync(DemoCard card, List<string> tabs, int activeIndex)
         {
             var body = await card.Body.QuerySelectorAsync("div.el-tabs.el-tabs--card.el-tabs--top > div.el-tabs__content");
             Assert.NotNull(body);
@@ -63,7 +63,7 @@ namespace Element.Test.TabTests
             var headers = await GetHeadersAsync(card);
             await headers[0].Header.ClickAsync();
             await Task.Delay(200);
-            ElementHandle closeIcon = null;
+            IElementHandle closeIcon = null;
             while (true)
             {
                 var headerItem = headers.FirstOrDefault();
@@ -141,7 +141,7 @@ namespace Element.Test.TabTests
             Assert.True(string.IsNullOrWhiteSpace(bodyContent));
         }
 
-        private async Task AssertHoverAsync(ElementHandle[] tabHeaders, int activeIndex)
+        private async Task AssertHoverAsync(IElementHandle[] tabHeaders, int activeIndex)
         {
             foreach (var header in tabHeaders)
             {
@@ -154,7 +154,7 @@ namespace Element.Test.TabTests
             }
         }
 
-        private async Task AssertBodyAsync(ElementHandle body, string text)
+        private async Task AssertBodyAsync(IElementHandle body, string text)
         {
             if (text != "Component")
             {
@@ -208,7 +208,7 @@ namespace Element.Test.TabTests
             }
         }
 
-        private async Task AssertHeaderAsync(ElementHandle[] tabHeaders, int index)
+        private async Task AssertHeaderAsync(IElementHandle[] tabHeaders, int index)
         {
             var activeTab = tabHeaders[index];
             var activeBoxModel = await activeTab.BoundingBoxAsync();

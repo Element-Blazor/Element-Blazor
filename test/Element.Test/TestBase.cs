@@ -25,7 +25,7 @@ namespace Element.Test
                 demoCards.Add(new DemoCard()
                 {
                     Title = text,
-                    Body = await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content"),
+                    Body = (ElementHandle)await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content"),
                     Page = Page
                 });
             }

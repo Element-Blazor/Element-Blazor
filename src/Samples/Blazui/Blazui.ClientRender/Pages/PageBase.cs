@@ -767,7 +767,7 @@ namespace Element.ClientRender.Pages
             {
                 var demoModel = new DemoModel()
                 {
-                    Type = "Element.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
+                   // Type = "Element.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
                 demos.Add(demoModel);
