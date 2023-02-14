@@ -32,15 +32,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{7046
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{573B6835-A85C-4C92-95FE-4AB516CF1EE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ClientRender", "src\Samples\Blazui\Blazui.ClientRender\Element.ClientRender.csproj", "{065EF687-733A-4289-BA4B-C3D459F44931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ClientRender", "src\Samples\Renders\ClientRender\Element.ClientRender.csproj", "{065EF687-733A-4289-BA4B-C3D459F44931}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element", "src\Components\Element.csproj", "{94DF9FD2-B254-4071-A082-49CF652D0066}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ServerRender", "src\Samples\Blazui\Blazui.ServerRender\Element.ServerRender.csproj", "{81F107DE-A118-4AB2-BB42-E432E54E859F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ServerRender", "src\Samples\Renders\ServerRender\Element.ServerRender.csproj", "{81F107DE-A118-4AB2-BB42-E432E54E859F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Admin", "Admin", "{E36A034A-83C5-4649-90AF-CC4FA1C594E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ClientRender.PWA", "src\Samples\Blazui\Blazui.ClientRender.PWA\Element.ClientRender.PWA.csproj", "{BC6E4E31-5037-4389-A4F9-FACE948C090F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.ClientRender.PWA", "src\Samples\Renders\ClientRender.PWA\Element.ClientRender.PWA.csproj", "{BC6E4E31-5037-4389-A4F9-FACE948C090F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Markdown", "src\Markdown\Element.Markdown.csproj", "{76FD7947-A9C1-4449-B2D2-B0E59265E879}"
 EndProject
@@ -52,9 +52,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.ServerRender"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.ClientRender", "src\Admin\Admin.ClientRender\Element.Admin.ClientRender.csproj", "{8DF962DB-2A47-4931-A158-89A61A44F635}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ServerRender", "src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj", "{EE404089-CDFB-4699-9997-8166D6B3A6DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ServerRender", "src\Samples\Admin\Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj", "{EE404089-CDFB-4699-9997-8166D6B3A6DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin.Sample.ClientRender.PWA", "src\Samples\Admin\Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj", "{6BC48A0B-D72D-4ED7-8C83-B0208D535A36}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Admin", "src\Admin\Admin\Element.Admin.csproj", "{36BBE899-CF01-4ECF-B4F4-627D63531005}"
 EndProject
