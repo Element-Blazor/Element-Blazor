@@ -28,6 +28,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="PopupRenders\**" />
+	  <Content Remove="PopupRenders\**" />
+	  <EmbeddedResource Remove="PopupRenders\**" />
+	  <None Remove="PopupRenders\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Remove="BStepBase.cs" />
 	</ItemGroup>
 
@@ -68,10 +75,6 @@
 	  <Content Update="wwwroot\lang\zh-CN.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="PopupRenders\" />
 	</ItemGroup>
 
 
