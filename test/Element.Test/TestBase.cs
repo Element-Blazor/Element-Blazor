@@ -10,7 +10,7 @@ namespace Element.Test
     {
         protected IDictionary<string, Dictionary<string, Type>> demoTesterTypes;
 
-        public Page Page { get; set; }
+        public IPage Page { get; set; }
 
         protected async Task<List<DemoCard>> WaitForDemoCardsAsync()
         {
@@ -25,7 +25,7 @@ namespace Element.Test
                 demoCards.Add(new DemoCard()
                 {
                     Title = text,
-                    Body = (ElementHandle)await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content"),
+                    Body = await card.QuerySelectorAsync(".el-card__body > .el-tabs > .el-tabs__content"),
                     Page = Page
                 });
             }

@@ -12,6 +12,7 @@ using System.IO;
 using System.Net;
 using Element.ClientRender.Model;
 using System.Reflection;
+using Element.Demo.Button;
 
 namespace Element.ClientRender.Pages
 {
@@ -27,9 +28,9 @@ namespace Element.ClientRender.Pages
                  new DemoInfoModel
                  {
                       Files=new List<string>(){
-                      "BasicButton.razor"
+                      "SimpleButton.razor"
                       },
-                       Name="BasicButton",
+                       Name="Button",
                         Title="基础用法"
                  },
                  new DemoInfoModel
@@ -767,7 +768,7 @@ namespace Element.ClientRender.Pages
             {
                 var demoModel = new DemoModel()
                 {
-                   // Type = "Element.ClientRender.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
+                    Type = "Element.Demo." + item.Name + "." + item.Files.FirstOrDefault().Replace(".razor", string.Empty),
                     Title = item.Title
                 };
                 demos.Add(demoModel);
@@ -789,7 +790,7 @@ namespace Element.ClientRender.Pages
 
             foreach (var item in demos)
             {
-                item.Demo = Assembly.GetExecutingAssembly().GetType(item.Type);
+                item.Demo = typeof(SimpleButton).Assembly.GetType(item.Type);
             }
         }
 

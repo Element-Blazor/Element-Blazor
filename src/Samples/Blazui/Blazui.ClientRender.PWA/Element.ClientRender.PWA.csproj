@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     <BlazorCacheBootResources>false</BlazorCacheBootResources>

@@ -322,9 +322,9 @@ namespace Element.Test.FormTests
                 if (index == 8)
                 {
                     Assert.True(string.IsNullOrWhiteSpace(labelText));
-                    submitButton = (ElementHandle)await content.QuerySelectorAsync("button.el-button.el-button--primary");
+                    submitButton = await content.QuerySelectorAsync("button.el-button.el-button--primary");
                     Assert.NotNull(submitButton);
-                    resetButton = (ElementHandle)await content.QuerySelectorAsync("button.el-button.el-button--default");
+                    resetButton = await content.QuerySelectorAsync("button.el-button.el-button--default");
                     Assert.NotNull(resetButton);
                     continue;
                 }

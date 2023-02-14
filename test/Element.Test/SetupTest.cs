@@ -30,7 +30,7 @@ namespace Element.Test
         }
 
         public ITestOutputHelper Output { get; }
-        public Browser Browser { get; private set; }
+        public IBrowser Browser { get; private set; }
 
         protected async ValueTask TestCaseAsync(string tabName, string caseName)
         {
@@ -52,7 +52,7 @@ namespace Element.Test
             {
                 await TestSemaphoreSlim.WaitAsync();
                 await RunBrowserAsync();
-                Page = (Page)await Browser.NewPageAsync();
+                Page = await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 return;
             }
@@ -63,7 +63,7 @@ namespace Element.Test
                 {
                     await TestSemaphoreSlim.WaitAsync();
                     await RunBrowserAsync();
-                    Page = (Page)await Browser.NewPageAsync();
+                    Page = await Browser.NewPageAsync();
                     await Page.GoToAsync("https://localhost:5001");
                     return;
                 }
@@ -100,7 +100,7 @@ namespace Element.Test
                 }
                 await TestSemaphoreSlim.WaitAsync();
                 await RunBrowserAsync();
-                Page = (Page)await Browser.NewPageAsync();
+                Page = await Browser.NewPageAsync();
                 await Page.GoToAsync("https://localhost:5001");
                 Output.WriteLine("初始化完成");
                 initilized = true;
@@ -113,7 +113,7 @@ namespace Element.Test
 
         private async ValueTask RunBrowserAsync()
         {
-            Browser = (Browser)await Puppeteer.LaunchAsync(new LaunchOptions
+            Browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = false,
                 DefaultViewport = new ViewPortOptions()
