@@ -1,36 +1,68 @@
-# blazui
+# Element-Blazor
 
-#### Description
-layui的blazor版本
+[![NuGet](https://img.shields.io/nuget/dt/Element.svg)](https://www.nuget.org/packages/Element/)
 
-#### Software Architecture
-Software architecture description
+Element-Blazor is a Blazor UI component library inspired by the Element design style.
 
-#### Installation
+## Positioning
 
-1. xxxx
-2. xxxx
-3. xxxx
+- A Blazor component set focused on business back-office scenarios
+- Prioritizes practical usability and development efficiency for common components
+- Evolves with demo-driven development
 
-#### Instructions
+The project is currently under continuous refactoring and upgrade. See [ROADMAP.md](ROADMAP.md) for details.
 
-1. xxxx
-2. xxxx
-3. xxxx
+## Current Status
 
-#### Contribution
+- Main component project: `src/Components/Element.csproj`
+- Current target framework: `.NET 7` (planned upgrade to LTS)
+- Samples and demos: `src/Samples`, `Element.Demo`
+- Test projects: `test/Element.Test`, `test/Blazui.Component.Test`
 
-1. Fork the repository
-2. Create Feat_xxx branch
-3. Commit your code
-4. Create Pull Request
+## Quick Start
 
+### Run local samples
 
-#### Gitee Feature
+1. Open the repository with Visual Studio 2022 or `dotnet` CLI
+2. Restore dependencies and build the solution
+3. Start a sample project (recommended: `Element.ServerRender`)
 
-1. You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2. Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3. Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4. The most valuable open source project [GVP](https://gitee.com/gvp)
-5. The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6. The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+```powershell
+dotnet restore
+dotnet build Element-Blazor.sln
+```
+
+### Install from NuGet
+
+```powershell
+dotnet add package Element
+```
+
+## Docs and Examples
+
+- Online demo (GitHub): https://element-blazor.github.io/
+- Online demo (Gitee): https://element-blazor.gitee.io/
+- Demo source: `Element.Demo`
+
+## Versioning and Plan
+
+- Version history: see [CHANGELOG.md](CHANGELOG.md)
+- Project roadmap: see [ROADMAP.md](ROADMAP.md)
+
+## Contributing
+
+Issues and pull requests are welcome:
+
+- GitHub Issues: https://github.com/Element-Blazor/Element-Blazor/issues
+- Contribution guide: `CONTRIBUTING.md`
+
+Before submitting a PR, please:
+
+1. Keep the change scope minimal and avoid unrelated refactoring
+2. Add examples and necessary tests for new features
+3. Update relevant documentation and change notes
+
+## Acknowledgements
+
+- Element UI design concepts and interaction patterns
+- All contributors and community users
