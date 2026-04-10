@@ -16,7 +16,7 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 
 - Main component project: `src/Components/Element.csproj`
 - Current target framework: `.NET 7` (planned upgrade to LTS)
-- Samples and demos: `src/Samples`, `demo`
+- Samples and demos: `template/Samples`, `demo`
 - Test project: `test/Element.Test`
 
 ## Quick Start
