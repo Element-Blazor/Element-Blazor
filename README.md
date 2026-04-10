@@ -16,8 +16,8 @@ Element-Blazor 是一个基于 Blazor 的 UI 组件库，设计风格参考 Elem
 
 - 组件库主项目：`src/Components/Element.csproj`
 - 当前目标框架：`.NET 7`（后续将升级到 LTS）
-- 示例与演示：`src/Samples`、`Element.Demo`
-- 测试工程：`test/Element.Test`、`test/Blazui.Component.Test`
+- 示例与演示：`src/Samples`、`demo`
+- 测试工程：`test/Element.Test`
 
 ## 快速开始
 
@@ -42,7 +42,7 @@ dotnet add package Element
 
 - 在线示例（GitHub）：https://element-blazor.github.io/
 - 在线示例（Gitee）：https://element-blazor.gitee.io/
-- 演示源码：`Element.Demo`
+- 演示源码：`demo`
 
 ## 版本与计划
 

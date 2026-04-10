@@ -16,8 +16,8 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 
 - Main component project: `src/Components/Element.csproj`
 - Current target framework: `.NET 7` (planned upgrade to LTS)
-- Samples and demos: `src/Samples`, `Element.Demo`
-- Test projects: `test/Element.Test`, `test/Blazui.Component.Test`
+- Samples and demos: `src/Samples`, `demo`
+- Test project: `test/Element.Test`
 
 ## Quick Start
 
@@ -42,7 +42,7 @@ dotnet add package Element
 
 - Online demo (GitHub): https://element-blazor.github.io/
 - Online demo (Gitee): https://element-blazor.gitee.io/
-- Demo source: `Element.Demo`
+- Demo source: `demo`
 
 ## Versioning and Plan
 

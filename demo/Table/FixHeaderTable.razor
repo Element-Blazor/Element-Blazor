@@ -1,0 +1,12 @@
+﻿@inherits BasicTable
+
+<br />
+只要在 BTable 元素中定义了 Height 属性，即可实现固定表头的表格，而不需要额外的代码。
+<br />
+<BTable DataSource="LargeDatas" Height="300" AutoGenerateColumns="false">
+    <BTableColumns>
+        <BTableColumn Width="100" Property="@nameof(TestData.Name)" Text="姓名"></BTableColumn>
+        <BTableDateTimeColumn Width="200" Format="yyyy-MM-dd" Property="@nameof(TestData.Time)" Text="时间"></BTableDateTimeColumn>
+        <BTableColumn Width="300" Property="@nameof(TestData.Address)" Text="地址"></BTableColumn>
+    </BTableColumns>
+</BTable>

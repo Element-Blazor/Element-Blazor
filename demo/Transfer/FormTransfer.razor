@@ -1,0 +1,9 @@
+﻿@inherits BComponentBase
+<BForm @ref="form" Value="value">
+    <BFormItem TValue="List<string>" Label="选项" Name="@nameof(TransferModel.Items)" IsRequired="true">
+        <BTransfer List1="List1"></BTransfer>
+    </BFormItem>
+    <BFormActionItem>
+        <BButton Type="@ButtonType.Primary" OnClick="Submit">提交</BButton>
+    </BFormActionItem>
+</BForm>
