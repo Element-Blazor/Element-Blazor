@@ -7,11 +7,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6DB71671-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2A9865EB-C969-47C7-BC21-E870F75C3AC4}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		CHANGELOG.md = CHANGELOG.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+		LICENSE = LICENSE
 		LOGO.png = LOGO.png
+		nuget.config = nuget.config
+		README.en.md = README.en.md
 		README.md = README.md
+		RELEASE_TEMPLATE.md = RELEASE_TEMPLATE.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{70466228-3662-45F3-8304-6EF755D5A863}"
+	ProjectSection(SolutionItems) = preProject
+		demo\demos.json = demo\demos.json
+		demo\README.md = demo\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{573B6835-A85C-4C92-95FE-4AB516CF1EE9}"
 EndProject
@@ -42,6 +57,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo", "demo\demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "template", "template", "{4D725962-C122-4791-81F8-029A04FC9CA1}"
+	ProjectSection(SolutionItems) = preProject
+		template\README.md = template\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
