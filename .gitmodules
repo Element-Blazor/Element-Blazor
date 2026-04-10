@@ -2,7 +2,7 @@
 	path = demo
 	url = https://github.com/Element-Blazor/element-blazor.github.io
 	branch = main
-[submodule "template/ElementBlazorTemplate"]
-	path = template/ElementBlazorTemplate
+[submodule "template"]
+	path = template
 	url = https://github.com/Element-Blazor/ElementBlazorTemplate
 	branch = main
