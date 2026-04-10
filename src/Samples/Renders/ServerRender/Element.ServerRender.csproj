@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
+	  <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>3f581a13-a2d9-4111-b6fb-a972af542a96</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Element.Demo\Element.Demo.csproj" />
+    <ProjectReference Include="..\..\..\..\demo\demo.csproj" />
     <ProjectReference Include="..\..\..\Components\Element.csproj" />
     <ProjectReference Include="..\..\..\Markdown\Element.Markdown.csproj" />
   </ItemGroup>

@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
+	  <TargetFramework>net10.0</TargetFramework>
 	  <Version>0.0.1</Version>
 	  <Authors>wzxinchen;Element-Blazor</Authors>
 	  <Company>Element-Blazor</Company>

@@ -7,18 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BA4616F9-78F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6DB71671-F11C-44B8-BAE2-1A200AE42CD2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{E2D20D07-0EEF-477D-85F6-415974ECA79F}"
-	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		CONTRIBUTING.md = CONTRIBUTING.md
-		image.png = image.png
-		LICENSE = LICENSE
-		LOGO.png = LOGO.png
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{2A9865EB-C969-47C7-BC21-E870F75C3AC4}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
@@ -62,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Element.VSExtension", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Test", "test\Element.Test\Element.Test.csproj", "{D9F69E27-BF1F-4088-AD24-5961B09F9D32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Demo", "Element.Demo\Element.Demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo", "demo\demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,9 +99,7 @@ Global
 		{36BBE899-CF01-4ECF-B4F4-627D63531005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36BBE899-CF01-4ECF-B4F4-627D63531005}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CF6A3B4-11BC-49EA-B6E2-D41ADBB3A140}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9F69E27-BF1F-4088-AD24-5961B09F9D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9F69E27-BF1F-4088-AD24-5961B09F9D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9F69E27-BF1F-4088-AD24-5961B09F9D32}.Release|Any CPU.ActiveCfg = Release|Any CPU

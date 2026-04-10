@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net7.0</TargetFramework>
+	  <TargetFramework>net10.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -24,10 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Admin\Admin.ClientRender\Element.Admin.ClientRender.csproj" />
     <ProjectReference Include="..\..\src\Admin\Admin.ServerRender\Element.Admin.ServerRender.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Admin\Blazui.Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Admin\Blazui.Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Blazui\Blazui.ClientRender.PWA\Element.ClientRender.PWA.csproj" />
-    <ProjectReference Include="..\..\src\Samples\Blazui\Blazui.ClientRender\Element.ClientRender.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Admin\Admin.Sample.ClientRender.PWA\Element.Admin.Sample.ClientRender.PWA.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Admin\Admin.Sample.ServerRender\Element.Admin.Sample.ServerRender.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Renders\ClientRender.PWA\Element.ClientRender.PWA.csproj" />
+    <ProjectReference Include="..\..\src\Samples\Renders\ClientRender\Element.ClientRender.csproj" />
   </ItemGroup>
 
 </Project>
