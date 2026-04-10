@@ -21,6 +21,23 @@ Element-Blazor 是一个基于 Blazor 的 UI 组件库，设计风格参考 Elem
 
 ## 快速开始
 
+### 初始化子模块
+
+本仓库已将 `demo` 与 `template` 拆分为 Git 子模块。
+
+首次克隆请使用：
+
+```powershell
+git clone --recurse-submodules https://github.com/Element-Blazor/Element-Blazor.git
+```
+
+如果你已经克隆过仓库，请执行：
+
+```powershell
+git submodule sync --recursive
+git submodule update --init --recursive
+```
+
 ### 运行本地示例
 
 1. 使用 Visual Studio 2022 或 `dotnet` CLI 打开仓库

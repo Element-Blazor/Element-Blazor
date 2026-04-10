@@ -21,6 +21,23 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 
 ## Quick Start
 
+### Initialize submodules
+
+This repository now uses Git submodules for `demo` and `template`.
+
+For a fresh clone, use:
+
+```powershell
+git clone --recurse-submodules https://github.com/Element-Blazor/Element-Blazor.git
+```
+
+If you already cloned the repository, run:
+
+```powershell
+git submodule sync --recursive
+git submodule update --init --recursive
+```
+
 ### Run local samples
 
 1. Open the repository with Visual Studio 2022 or `dotnet` CLI
