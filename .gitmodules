@@ -6,3 +6,7 @@
 	path = template
 	url = https://github.com/Element-Blazor/ElementBlazorTemplate
 	branch = main
+[submodule "community"]
+	path = community
+	url = https://github.com/Element-Blazor/BlazorCommunity
+	branch = master
