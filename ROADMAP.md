@@ -22,7 +22,7 @@
 | 旧公开组件 | 🔴 | `Button`、`Input`、`Table` 等旧公开名必须删除；demo/template/community 同步迁移。 |
 | 内部实现 | 🟡 | `B*` 可短期作为内部实现层，但不再作为公开路线；后续逐步内聚或重命名。 |
 | 样式基线 | 🟡 | 当前样式更接近旧 Element UI theme-chalk，需要迁移到 Element Plus 2.14 CSS 变量体系。 |
-| 子模块 | 🟢 | `demo`、`template`、`community` 已作为 Git 子模块存在；`community` 用于 DiscuzX 类社区展示站。 |
+| 子模块 | 🟢 | `demo`、`template`、`community` 已作为 Git 子模块存在；`community` 走彻底重构主线，旧项目只作为业务素材库。 |
 | 构建基线 | 🟢 | `dotnet build src/Components/Element.csproj` 可通过；当前仍有 15 个 warning。 |
 
 ## 命名规则
@@ -138,13 +138,14 @@
 
 ### P6 社区展示站 🔵
 
-目标：把 `community` 打造成类似 DiscuzX 的真实业务展示站。
+目标：把 `community` 按 [community-rebuild-plan.md](docs/community-rebuild-plan.md) 重写成类似 DiscuzX 的真实业务展示站，不保留旧 UI、旧组件名、旧包名、旧启动方式。
 
 | 任务 | 状态 | 验收 |
 | --- | --- | --- |
-| 社区基线审计 | 🔵 | 明确前台、后台、API、WASM、数据库、登录、发帖、回帖链路。 |
-| 目标框架升级 | 🔵 | 从旧 .NET 目标框架迁移到当前仓库可维护版本。 |
-| Element Plus 主题融合 | 🔵 | 前台、后台、移动端统一使用 Element-Blazor 2.14 主题。 |
+| 社区基线审计 | 🟢 | 已明确旧 `BlazorCommunity.*` 为 .NET Core 3.1/netstandard2.1 时代项目，只作为业务参考。 |
+| 新主线骨架 | 🔵 | 新建 `ElementCommunity.*`，先跑通前台主站、主题详情、发帖页。 |
+| 数据与账号 | 🔵 | 新建 DbContext、Identity、种子数据，跑通登录、发帖、回帖。 |
+| Element Plus 主题融合 | 🔵 | 前台、后台、移动端统一使用 Element-Blazor 2.14 主题和 `El*` 控件。 |
 | DiscuzX 信息架构 | 🔵 | 首页、版块、主题列表、帖子详情、回复、用户中心、通知、管理后台完整。 |
 | 本地一键启动 | 🔵 | 提供启动脚本和说明，能本地跑通核心流程。 |
 
@@ -171,7 +172,7 @@
 8. 🔵 P3-2：对齐 ElSelect、ElTable、ElDialog、ElTabs、ElMenu。
 9. 🔵 P4-1：建设组件总览和文档站模板。
 10. 🔵 P5：按组件矩阵补齐缺口。
-11. 🔵 P6：社区展示站升级为真实业务门面。
+11. 🔵 P6：按重构蓝图新建社区展示站主线，旧 `BlazorCommunity.*` 只读参考。
 12. 🔵 P7：测试、NuGet、发布稳定化。
 
 ## 任务提示词
@@ -221,7 +222,7 @@
 ### P6 社区展示站
 
 ```text
-请审计 `community` 子模块，把它规划为类似 DiscuzX 的 Element-Blazor 社区展示站。先梳理前台、后台、API、WASM、数据库、登录、发帖、回帖、用户中心和管理后台的启动链路；再迁移到 `El*` 控件名和 Element Plus 2.14 主题。不要保留旧组件名。
+请按 `docs/community-rebuild-plan.md` 在 community 内建立新的 ElementCommunity 主线。旧 BlazorCommunity 项目只作为业务素材参考，不保留旧 UI、旧组件名、旧包名、旧启动方式。第一步建立可运行 Host、Domain、Infrastructure、Components 骨架，页面只使用 `El*` 控件，先做首页、帖子详情、发帖页静态骨架。
 ```
 
 ### P7 发布稳定化
