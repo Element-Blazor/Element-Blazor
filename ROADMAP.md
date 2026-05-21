@@ -11,19 +11,22 @@
 - 🟠 需要技术验证
 - 🔴 阻塞
 
+文档约定：所有文档中代表完成状态的任务，统一使用 `🟢 已完成`；不要只写“完成”或只放无说明图标。
+
 ## 当前结论
 
 | 项目 | 状态 | 说明 |
 | --- | --- | --- |
-| 官方基线 | 🟢 | npm `element-plus` latest 当前为 `2.14.0`，项目以它作为视觉、组件矩阵和版本基线。 |
-| 版本线 | 🟡 | 组件库与 Element 相关包进入 `2.14.0-alpha.1`，后续按 alpha/beta/stable 推进。 |
-| DOM class | 🟢 | 必须保持官方 `el-*` 与 `is-*`：例如 `el-button`、`el-input__inner`、`el-table__row`。 |
+| 官方基线 | 🟢 已完成 | npm `element-plus` latest 当前为 `2.14.0`，项目以它作为视觉、组件矩阵和版本基线。 |
+| 版本线 | 🟢 已完成 | 组件库与 Element 相关包进入 `2.14.0-alpha.1`，后续按 alpha/beta/stable 推进。 |
+| DOM class | 🟢 已完成 | 必须保持官方 `el-*` 与 `is-*`：例如 `el-button`、`el-input__inner`、`el-table__row`。 |
 | Razor 控件名 | 🟣 | 公开控件统一为 `ElButton`、`ElInput`、`ElTable`。不采用 `<el-button>`，因为 Razor 会把它当普通 custom element。 |
 | 旧公开组件 | 🔴 | `Button`、`Input`、`Table` 等旧公开名必须删除；demo/template/community 同步迁移。 |
 | 内部实现 | 🟡 | `B*` 可短期作为内部实现层，但不再作为公开路线；后续逐步内聚或重命名。 |
 | 样式基线 | 🟡 | 当前样式更接近旧 Element UI theme-chalk，需要迁移到 Element Plus 2.14 CSS 变量体系。 |
-| 子模块 | 🟢 | `demo`、`template`、`community` 已作为 Git 子模块存在；`community` 走彻底重构主线，旧项目只作为业务素材库。 |
-| 构建基线 | 🟢 | `dotnet build src/Components/Element.csproj` 可通过；当前仍有 15 个 warning。 |
+| 子模块 | 🟢 已完成 | `demo`、`template`、`community` 已作为 Git 子模块存在；`community` 走彻底重构主线，旧项目只作为业务素材库。 |
+| 构建基线 | 🟢 已完成 | `dotnet build src/Components/Element.csproj` 可通过；当前 build 汇总打印 28 个 warning，去重后有 18 个构建 warning。 |
+| .NET 主线 | 🟢 已完成 | `src/Components/Element.csproj` 保持 `net10.0`；新增项目使用 .NET 10，历史子模块不做原地全面升级。 |
 
 ## 命名规则
 
@@ -64,17 +67,18 @@
 
 ## 阶段路线
 
-### P0 门面与版本基线 🟡
+### P0 门面与版本基线 🟢 已完成
 
 目标：把项目方向、版本线、子模块和构建状态定准。
 
 | 任务 | 状态 | 验收 |
 | --- | --- | --- |
-| 切换目标为 `element-plus/element-plus` | 🟢 | README、路线图、对齐文档均写明 Element Plus 2.14。 |
-| 设置 `2.14.0-alpha.1` 版本线 | 🟢 | `Element.csproj` 与 Element Markdown 包进入 2.14 alpha。 |
-| 纳入 `community` 子模块 | 🟢 | `community` 与 `demo`、`template` 同级作为 Git 子模块。 |
-| 验证组件库构建 | 🟢 | `dotnet build src/Components/Element.csproj` 成功。 |
-| 建立 warning 清单 | 🔵 | NU1510、NU1902、CS、BL、CA warning 分类并排序。 |
+| 切换目标为 `element-plus/element-plus` | 🟢 已完成 | README、路线图、对齐文档均写明 Element Plus 2.14。 |
+| 设置 `2.14.0-alpha.1` 版本线 | 🟢 已完成 | `Element.csproj` 与 Element Markdown 包进入 2.14 alpha。 |
+| 确认 .NET 10 主线 | 🟢 已完成 | 组件库主项目保持 `net10.0`；新增项目以 .NET 10 为基线，历史子模块不阻塞 P1/P2。 |
+| 纳入 `community` 子模块 | 🟢 已完成 | `community` 与 `demo`、`template` 同级作为 Git 子模块。 |
+| 验证组件库构建 | 🟢 已完成 | `dotnet build src/Components/Element.csproj` 成功。 |
+| 建立 warning 清单 | 🟢 已完成 | 已按 NuGet 安全、过期依赖、C# 编译、Blazor analyzer、文档注释分类，见 [docs/p0-warning-inventory.md](docs/p0-warning-inventory.md)。 |
 
 ### P1 Element Plus 主题与设计令牌 🔵
 
@@ -142,7 +146,7 @@
 
 | 任务 | 状态 | 验收 |
 | --- | --- | --- |
-| 社区基线审计 | 🟢 | 已明确旧 `BlazorCommunity.*` 为 .NET Core 3.1/netstandard2.1 时代项目，只作为业务参考。 |
+| 社区基线审计 | 🟢 已完成 | 已明确旧 `BlazorCommunity.*` 为 .NET Core 3.1/netstandard2.1 时代项目，只作为业务参考。 |
 | 新主线骨架 | 🔵 | 新建 `ElementCommunity.*`，先跑通前台主站、主题详情、发帖页。 |
 | 数据与账号 | 🔵 | 新建 DbContext、Identity、种子数据，跑通登录、发帖、回帖。 |
 | Element Plus 主题融合 | 🔵 | 前台、后台、移动端统一使用 Element-Blazor 2.14 主题和 `El*` 控件。 |
@@ -162,8 +166,8 @@
 
 ## 执行顺序
 
-1. 🟡 P0-1：路线图、README、对齐文档、版本线定稿。
-2. 🔵 P0-2：整理 warning 清单和依赖安全清单。
+1. 🟢 已完成 P0-1：路线图、README、对齐文档、版本线定稿。
+2. 🟢 已完成 P0-2：整理 warning 清单和依赖安全清单。
 3. 🔵 P1-1：建立 Element Plus 2.14 CSS 变量层。
 4. 🔵 P2-1：新增核心 `El*` 控件入口。
 5. 🔵 P2-2：删除旧无前缀公开组件入口。

@@ -23,6 +23,7 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 - Community showcase: `community`, a DiscuzX-like Blazor community site used to demonstrate Element-Blazor in a real product surface
 - Test project: `test/Element.Test`
 - `demo`, `template`, and `community` are Git submodules. If they are not initialized, build the component library project directly; the full solution will fail because sample projects are missing.
+- `.NET 10` is the baseline for the component library mainline and new projects. Legacy `demo`, `template`, and `community` submodules do not need a full in-place .NET 10 upgrade before P1/P2 can continue.
 
 ## Naming Strategy
 
@@ -95,16 +96,19 @@ dotnet add package Element --prerelease
 - Version history: see [CHANGELOG.md](CHANGELOG.md)
 - Project roadmap: see [ROADMAP.md](ROADMAP.md)
 - Element Plus alignment notes: [docs/element-plus-alignment.md](docs/element-plus-alignment.md)
+- P0 project baseline: [docs/p0-project-baseline.md](docs/p0-project-baseline.md)
+- P0 warning inventory: [docs/p0-warning-inventory.md](docs/p0-warning-inventory.md)
 
 ## Current Track
 
-- 🟡 P0: project facade, build baseline, submodules, version baseline, and warning inventory
-- 🔵 P1: Element Plus 2.14 design tokens, CSS variables, and core component alignment
+- 🟢 Done P0: project facade, build baseline, submodules, version baseline, and warning inventory
+- 🔵 P1: add the Element Plus 2.14 CSS variable layer
 - 🔵 P2: remove legacy public component names and switch to Element Plus `El*` control names
-- 🔵 P3: documentation site and component overview
-- 🔵 P4: DiscuzX-like community facade and real product showcase
+- 🔵 P3: align visual design and APIs starting with `ElButton`, `ElInput`, and `ElForm`
+- 🔵 P4: documentation site and component overview
 - 🔵 P5: Element Plus component matrix gap filling
-- 🔵 P6: testing, release, and long-term maintenance
+- 🔵 P6: DiscuzX-like community facade and real product showcase
+- 🔵 P7: testing, release, and long-term maintenance
 
 ## Contributing
 
@@ -118,6 +122,7 @@ Before submitting a PR, please:
 1. Keep the change scope minimal and avoid unrelated refactoring
 2. Add examples and necessary tests for new features
 3. Update relevant documentation and change notes
+4. Update roadmap progress; completed items must use the `🟢 Done` marker
 
 ## Acknowledgements
 

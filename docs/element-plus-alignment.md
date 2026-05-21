@@ -8,6 +8,8 @@
 | --- | --- |
 | 目标仓库 | `element-plus/element-plus` |
 | 当前最新基线 | `2.14.0` |
+| Element-Blazor 版本线 | `2.14.0-alpha.1`，P0 已定稿 |
+| .NET 主线 | `src/Components/Element.csproj` 保持 `net10.0`；新增项目使用 .NET 10，历史子模块不阻塞 P1/P2 |
 | 官网组件总数 | Basic 12、Configuration 1、Form 25、Data 23、Navigation 9、Feedback 10、Others 2 |
 | 历史关系 | Element UI `2.15.x` 是 Vue 2 时代旧线，只作为历史参考，不作为当前目标 |
 | 版本策略 | Element-Blazor 进入 `2.14.0-alpha.*` 线，命名与组件矩阵完整对齐后再发布 beta/stable |
@@ -82,6 +84,15 @@ Element Plus 2.x 使用 `--el-*` CSS 变量作为主题覆盖入口；这和 Ele
 5. 浮层组件统一 z-index、阴影、边框、圆角、关闭策略和键盘行为。
 6. 每个组件必须同步 demo、API 文档和测试，避免只改样式。
 
+## P0 交付状态
+
+| 项目 | 状态 | 文档 |
+| --- | --- | --- |
+| 版本基线 | 🟢 已完成 | [p0-project-baseline.md](p0-project-baseline.md) |
+| 文档门面 | 🟢 已完成 | README、README.en、ROADMAP 与本文已同步。 |
+| warning 清单 | 🟢 已完成 | [p0-warning-inventory.md](p0-warning-inventory.md) |
+| 进度标记约定 | 🟢 已完成 | 已完成项统一使用 `🟢 已完成`。 |
+
 ## 第一批要改的文件区域
 
 | 区域 | 动作 |
@@ -109,4 +120,4 @@ Element Plus 2.x 使用 `--el-*` CSS 变量作为主题覆盖入口；这和 Ele
 
 ## 下一步建议
 
-先完成 P0：版本基线、文档门面和警告清单。随后进入 P1：新增 Element Plus CSS 变量层，再进入 P2：破坏性删除旧公开组件名并建立 `El*` 控件名。第三步从 ElButton、ElInput、ElForm 三个最基础组件开始做视觉和 API 对齐。
+P0：版本基线、文档门面和警告清单已经 🟢 已完成。下一步进入 P1：新增 Element Plus CSS 变量层；随后进入 P2：破坏性删除旧公开组件名并建立 `El*` 控件名；第三步从 ElButton、ElInput、ElForm 三个最基础组件开始做视觉和 API 对齐。

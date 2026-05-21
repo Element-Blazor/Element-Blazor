@@ -10,3 +10,7 @@ Any users can report bugs to us through the [github issue tracker](https://githu
 ## Submit your code
 
 Before submitting your code, make sure to [read the contributor license agreement](#read-the-contributor-license-agreement) beforehand. If you don't accept the aggreement, please stop submitting. Your submission means you have accepted the agreement. Your submission should solve an issue or add a feature registered in the [github issue tracker](https://github.com/Element-Blazor/Element-Blazor/issues). If no corresponding issue or feature is found in the issue tracker, please create one. When submitting your code to our repository, please create a pull request with the issue number included.
+
+## Documentation progress markers
+
+When updating roadmap or planning documents, mark completed work with `🟢 已完成` in Chinese documents or `🟢 Done` in English documents. Keep the status marker in the same row or line as the completed task so progress is easy to scan.
