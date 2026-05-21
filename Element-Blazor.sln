@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.en.md = README.en.md
 		README.md = README.md
 		RELEASE_TEMPLATE.md = RELEASE_TEMPLATE.md
+		ROADMAP.md = ROADMAP.md
+		docs\element-plus-alignment.md = docs\element-plus-alignment.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{70466228-3662-45F3-8304-6EF755D5A863}"
@@ -55,6 +57,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Element.Test", "test\Element.Test.csproj", "{D9F69E27-BF1F-4088-AD24-5961B09F9D32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "demo", "demo\demo.csproj", "{A2E9E67A-FB99-46CF-81B3-A169CE0A5B57}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "community", "community", "{9F1F1E63-7005-4D82-9DDA-8B622DD5C342}"
+	ProjectSection(SolutionItems) = preProject
+		community\README.md = community\README.md
+		community\src\BlazorCommunity.sln = community\src\BlazorCommunity.sln
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "template", "template", "{4D725962-C122-4791-81F8-029A04FC9CA1}"
 	ProjectSection(SolutionItems) = preProject

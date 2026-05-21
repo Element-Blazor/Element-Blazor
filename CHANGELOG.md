@@ -8,14 +8,17 @@
 
 ### Added
 
-- 新增 `ROADMAP.md`，明确 2026 分阶段规划
+- 新增 `ROADMAP.md`，明确 Element Plus 对齐路线、进度标记、阶段任务和可复用任务提示词
+- 新增 `docs/element-plus-alignment.md`，沉淀 Element Plus 2.14.0 设计语言、现状审计和改造原则
+- 新增 `community` Git 子模块，接入 `Element-Blazor/BlazorCommunity` 作为 DiscuzX 类社区展示站基础
 - 新增 `CHANGELOG.md`，建立版本变更记录基线
 - 新增 `RELEASE_TEMPLATE.md`，提供统一发布说明模板
 
 ### Changed
 
-- 重写 `README.md`，补充项目定位、快速开始、版本与计划说明
-- 重写 `README.en.md`，并与中文 README 结构保持一致
+- 更新 `README.md`，补充 Element Plus 对齐目标、组件库本体构建方式、子模块状态和阶段路线
+- 更新 `README.en.md`，并与中文 README 结构保持一致
+- 更新解决方案 Solution Items，增加 `community` 子模块入口
 
 ## [0.0.7.2] - 2023-02-14
 
