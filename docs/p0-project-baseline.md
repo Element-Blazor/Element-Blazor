@@ -11,6 +11,7 @@
 | 构建基线 | 🟢 已完成 | `dotnet build src/Components/Element.csproj` 可通过。 |
 | 警告清单 | 🟢 已完成 | 详见 [p0-warning-inventory.md](p0-warning-inventory.md)。 |
 | 进度标记约定 | 🟢 已完成 | 所有文档中代表完成状态的任务必须使用 `🟢 已完成` 标记。 |
+| 任务提示词约定 | 🟢 已完成 | 所有规划文档的任务提示词只保留未执行任务；完成一个就删除一个。 |
 
 ## .NET 10 主线决策
 

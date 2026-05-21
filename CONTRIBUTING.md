@@ -14,3 +14,5 @@ Before submitting your code, make sure to [read the contributor license agreemen
 ## Documentation progress markers
 
 When updating roadmap or planning documents, mark completed work with `🟢 已完成` in Chinese documents or `🟢 Done` in English documents. Keep the status marker in the same row or line as the completed task so progress is easy to scan.
+
+Task prompts in planning documents are a working queue, not an archive. Once a task prompt is completed, delete that prompt from the document and record the result in the relevant documentation or changelog.
