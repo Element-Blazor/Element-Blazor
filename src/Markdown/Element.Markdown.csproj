@@ -5,10 +5,10 @@
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
 		<IsPackable>true</IsPackable>
-		<Version>0.0.2</Version>
+		<Version>2.14.0-alpha.1</Version>
 		<Authors>wzxinchen;Element-Blazor</Authors>
 		<Company>Element-Blazor</Company>
-		<Description>基于 Element 和 Markdig 的 Markdown 编辑器</Description>
+		<Description>基于 Element-Blazor 和 Markdig 的 Markdown 编辑器，跟随 Element Plus 2.14 版本线。</Description>
 		<PackageProjectUrl>https://github.com/Element-Blazor/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
 		<RepositoryType></RepositoryType>
@@ -16,7 +16,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Product>Element.Markdown</Product>
 		<PackageIcon>LOGO.png</PackageIcon>
-		<PackageTags>blazor,Element,markdown</PackageTags>
+		<PackageTags>blazor,Element,Element Plus,Element-Plus,markdown</PackageTags>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

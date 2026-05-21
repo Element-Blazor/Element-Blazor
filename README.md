@@ -2,14 +2,15 @@
 
 [![NuGet](https://img.shields.io/nuget/dt/Element.svg)](https://www.nuget.org/packages/Element/)
 
-Element-Blazor 是一个基于 Blazor 的 UI 组件库，目标是对齐 Element Plus 的后台产品设计语言、组件结构和交互体验。
+Element-Blazor 是一个基于 Blazor 的 UI 组件库。当前主线目标已经切换为对齐 [element-plus/element-plus](https://github.com/element-plus/element-plus)：复刻 Element Plus 的后台产品设计语言、组件结构、交互反馈和文档体验。
 
 ## 项目定位
 
 - 面向中文业务后台场景的 Blazor 组件集
 - 优先保证常用组件可用性与开发效率
-- 以示例驱动组件演进
-- 以 Element Plus 2.14.0 作为当前视觉与组件矩阵对齐基准
+- 以示例、文档站和真实业务站点共同驱动组件演进
+- 以 Element Plus `2.14.0` 作为当前视觉、组件矩阵和版本基线
+- 旧 Element UI `2.15.x` 仅作为历史参考，不再作为目标路线
 
 当前版本仍处于持续整理和升级阶段，详见 [ROADMAP.md](ROADMAP.md)。
 
@@ -17,10 +18,19 @@ Element-Blazor 是一个基于 Blazor 的 UI 组件库，目标是对齐 Element
 
 - 组件库主项目：`src/Components/Element.csproj`
 - 当前目标框架：`.NET 10`
+- 当前对齐版本线：`2.14.0-alpha.1`
 - 示例与演示：`template/Samples`、`demo`
 - 社区展示站：`community`，定位为类似 DiscuzX 的 Blazor 社区网站，用来展示 Element-Blazor 在真实业务站点中的使用方式
 - 测试工程：`test/Element.Test`
 - 当前仓库中 `demo`、`template` 与 `community` 是 Git 子模块；未初始化时只能构建组件库本体，完整解决方案会因示例项目缺失而失败。
+
+## 命名策略
+
+- DOM/CSS class 必须保持 Element Plus 官方契约：`el-button`、`el-input`、`el-table`、`is-disabled`、`el-button--primary`。
+- 公开 Razor 组件统一使用 Element Plus 风格的 PascalCase `El*` 名称，例如 `<ElButton>`、`<ElInput>`、`<ElTable>`。
+- `<el-button>` 带连字符，在 Razor 中会被当作普通 HTML/custom element，不适合作为 Blazor 组件类型；`el_` 也不符合 .NET 命名习惯，因此不采用。
+- 旧公开组件名 `Button`、`Input`、`Table` 等直接删除，不保留兼容、不保留过渡别名。
+- `B*` 仅允许作为临时内部实现名存在；路线目标是逐步内聚或重命名为 `El*` 实现。
 
 ## 快速开始
 
@@ -69,11 +79,12 @@ dotnet build Element-Blazor.sln
 ### 引用组件库（NuGet）
 
 ```powershell
-dotnet add package Element
+dotnet add package Element --prerelease
 ```
 
 ## 文档与示例
 
+- Element Plus 官方组件总览：https://element-plus.org/zh-CN/component/overview
 - 在线示例（GitHub）：https://element-blazor.github.io/
 - 在线示例（Gitee）：https://element-blazor.gitee.io/
 - 演示源码：`demo`
@@ -87,12 +98,13 @@ dotnet add package Element
 
 ## 当前路线
 
-- 🟡 P0：门面、构建基线、子模块和警告清单
-- 🔵 P1：Element Plus 2.x 设计令牌与核心组件对齐
-- 🔵 P2：文档站与组件总览
-- 🔵 P3：DiscuzX 类社区门面与真实业务示例
-- 🔵 P4：补齐组件矩阵缺口
-- 🔵 P5：测试、发布和长期维护
+- 🟡 P0：门面、构建基线、子模块、版本基线和警告清单
+- 🔵 P1：Element Plus 2.14 设计令牌、CSS 变量和核心组件对齐
+- 🔵 P2：删除旧公开组件名，切换到 Element Plus `El*` 控件命名
+- 🔵 P3：文档站与组件总览
+- 🔵 P4：DiscuzX 类社区门面与真实业务示例
+- 🔵 P5：补齐 Element Plus 组件矩阵缺口
+- 🔵 P6：测试、发布和长期维护
 
 ## 参与贡献
 
@@ -109,5 +121,6 @@ dotnet add package Element
 
 ## 致谢
 
-- Element UI 设计思想与交互规范
+- Element Plus 设计思想、组件规范与交互模式
+- Element UI 历史生态提供的参考基础
 - 所有历史贡献者与社区用户

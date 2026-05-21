@@ -2,14 +2,15 @@
 
 [![NuGet](https://img.shields.io/nuget/dt/Element.svg)](https://www.nuget.org/packages/Element/)
 
-Element-Blazor is a Blazor UI component library aiming to align with the Element Plus design language, component structure, and interaction patterns.
+Element-Blazor is a Blazor UI component library. The project now targets [element-plus/element-plus](https://github.com/element-plus/element-plus) as its primary design and component baseline.
 
 ## Positioning
 
 - A Blazor component set focused on business back-office scenarios
 - Prioritizes practical usability and development efficiency for common components
-- Evolves with demo-driven development
-- Uses Element Plus 2.14.0 as the current visual and component-matrix alignment baseline
+- Evolves through demos, documentation, and real product surfaces
+- Uses Element Plus `2.14.0` as the current visual, component-matrix, and version baseline
+- Element UI `2.15.x` is kept only as a historical reference
 
 The project is currently under continuous refactoring and upgrade. See [ROADMAP.md](ROADMAP.md) for details.
 
@@ -17,10 +18,19 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 
 - Main component project: `src/Components/Element.csproj`
 - Current target framework: `.NET 10`
+- Current alignment version line: `2.14.0-alpha.1`
 - Samples and demos: `template/Samples`, `demo`
 - Community showcase: `community`, a DiscuzX-like Blazor community site used to demonstrate Element-Blazor in a real product surface
 - Test project: `test/Element.Test`
 - `demo`, `template`, and `community` are Git submodules. If they are not initialized, build the component library project directly; the full solution will fail because sample projects are missing.
+
+## Naming Strategy
+
+- DOM/CSS classes must keep the official Element Plus contract: `el-button`, `el-input`, `el-table`, `is-disabled`, `el-button--primary`.
+- Public Razor components use Element Plus-style PascalCase `El*` names, such as `<ElButton>`, `<ElInput>`, and `<ElTable>`.
+- Hyphenated `<el-button>` is treated as a plain HTML/custom element by Razor and is not suitable as a Blazor component type. `el_` is also not idiomatic for .NET, so it is not used.
+- Legacy public component names such as `Button`, `Input`, and `Table` are removed directly. There is no compatibility layer and no transition alias.
+- `B*` names may remain only as temporary internal implementation names. The roadmap target is to internalize or rename them into `El*` implementations.
 
 ## Quick Start
 
@@ -69,11 +79,12 @@ dotnet build Element-Blazor.sln
 ### Install from NuGet
 
 ```powershell
-dotnet add package Element
+dotnet add package Element --prerelease
 ```
 
 ## Docs and Examples
 
+- Element Plus component overview: https://element-plus.org/en-US/component/overview
 - Online demo (GitHub): https://element-blazor.github.io/
 - Online demo (Gitee): https://element-blazor.gitee.io/
 - Demo source: `demo`
@@ -87,12 +98,13 @@ dotnet add package Element
 
 ## Current Track
 
-- 🟡 P0: project facade, build baseline, submodules, and warning inventory
-- 🔵 P1: Element Plus 2.x design tokens and core component alignment
-- 🔵 P2: documentation site and component overview
-- 🔵 P3: DiscuzX-like community facade and real product showcase
-- 🔵 P4: component matrix gap filling
-- 🔵 P5: testing, release, and long-term maintenance
+- 🟡 P0: project facade, build baseline, submodules, version baseline, and warning inventory
+- 🔵 P1: Element Plus 2.14 design tokens, CSS variables, and core component alignment
+- 🔵 P2: remove legacy public component names and switch to Element Plus `El*` control names
+- 🔵 P3: documentation site and component overview
+- 🔵 P4: DiscuzX-like community facade and real product showcase
+- 🔵 P5: Element Plus component matrix gap filling
+- 🔵 P6: testing, release, and long-term maintenance
 
 ## Contributing
 
@@ -109,5 +121,6 @@ Before submitting a PR, please:
 
 ## Acknowledgements
 
-- Element UI design concepts and interaction patterns
+- Element Plus design concepts, component specs, and interaction patterns
+- Element UI historical ecosystem as reference material
 - All contributors and community users
