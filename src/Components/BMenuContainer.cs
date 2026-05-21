@@ -10,6 +10,24 @@ namespace Element
     {
         internal List<IMenuItem> Children { get; set; } = new List<IMenuItem>();
 
+        internal void AddMenuItem(IMenuItem item)
+        {
+            if (item == null || Children.Contains(item))
+            {
+                return;
+            }
+            Children.Add(item);
+        }
+
+        internal void RemoveMenuItem(IMenuItem item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+            Children.Remove(item);
+        }
+
         [CascadingParameter]
         public BMenu TopMenu { get; set; }
         public ElementReference Container { get; set; }

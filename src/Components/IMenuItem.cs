@@ -8,10 +8,12 @@ namespace Element
     public interface IMenuItem
     {
         string Icon { get; set; }
+        string Index { get; set; }
         BMenuContainer Menu { get; set; }
 
         object Model { get; set; }
         MenuOptions Options { get; set; }
+        bool Disabled { get; set; }
 
         void Activate();
 

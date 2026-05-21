@@ -1,0 +1,48 @@
+@inherits BComponentBase
+@{
+    var dialogClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+        .Add("el-dialog")
+        .Add(Cls)
+        .AddIf(Fullscreen, "is-fullscreen")
+        .AddIf(Draggable, "is-draggable");
+    var dialogStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+        .AddIf(!string.IsNullOrWhiteSpace(Width), $"width:{Width}")
+        .AddIf(!string.IsNullOrWhiteSpace(Top), $"margin-top:{Top}")
+        .Add(Style);
+    var wrapperStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+        .AddIf(ZIndex.HasValue, $"z-index:{ZIndex.Value}");
+}
+@if (ModelValue)
+{
+    @if (Modal)
+    {
+        <div class="v-modal el-overlay" style="@wrapperStyleBuilder.ToString()" @onclick="CloseOnModalClickAsync"></div>
+    }
+    <div class="el-overlay-dialog el-dialog__wrapper" style="@wrapperStyleBuilder.ToString()" tabindex="-1" role="presentation" @onclick="CloseOnModalClickAsync" @onkeydown="OnKeyDownAsync">
+        <div class="@dialogClsBuilder.ToString()" style="@dialogStyleBuilder.ToString()" role="dialog" aria-modal="@Modal" aria-label="@Title" @onclick:stopPropagation>
+            <div class="el-dialog__header">
+                @if (Header != null)
+                {
+                    @Header
+                }
+                else
+                {
+                    <span class="el-dialog__title">@Title</span>
+                }
+                @if (ShowClose)
+                {
+                    <ElButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="CloseAsync"></ElButton>
+                }
+            </div>
+            <div class="el-dialog__body">
+                @ChildContent
+            </div>
+            @if (Footer != null)
+            {
+                <div class="el-dialog__footer">
+                    @Footer
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -10,9 +10,10 @@ namespace Element
     public partial class BButton : BComponentBase
     {
         internal HtmlPropertyBuilder cssClassBuilder;
+        internal HtmlPropertyBuilder buttonStyleBuilder;
         protected async Task OnButtonClickedAsync(MouseEventArgs e)
         {
-            if (IsDisabled)
+            if (Disabled || Loading)
             {
                 return;
             }
@@ -37,10 +38,22 @@ namespace Element
         private string showingImage;
 
         /// <summary>
-        /// 文本
+        /// 文本按钮外观。Element Plus 对齐参数。
         /// </summary>
         [Parameter]
-        public string Text { get; set; }
+        public bool Text { get; set; }
+
+        /// <summary>
+        /// 文本内容。Razor 推荐直接使用 ChildContent。
+        /// </summary>
+        [Parameter]
+        public string Content { get; set; }
+
+        /// <summary>
+        /// 文本内容别名。
+        /// </summary>
+        [Parameter]
+        public string Label { get; set; }
 
         /// <summary>
         /// 按钮图片
@@ -72,16 +85,44 @@ namespace Element
         public ButtonType Type { get; set; } = ButtonType.Default;
 
         [Parameter]
-        public bool IsPlain { get; set; }
+        public bool Plain { get; set; }
 
         [Parameter]
-        public bool IsRound { get; set; }
+        public bool IsPlain
+        {
+            get => Plain;
+            set => Plain = value;
+        }
 
         [Parameter]
-        public bool IsDisabled { get; set; }
+        public bool Round { get; set; }
 
         [Parameter]
-        public bool IsCircle { get; set; }
+        public bool IsRound
+        {
+            get => Round;
+            set => Round = value;
+        }
+
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
+
+        [Parameter]
+        public bool Circle { get; set; }
+
+        [Parameter]
+        public bool IsCircle
+        {
+            get => Circle;
+            set => Circle = value;
+        }
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -93,7 +134,40 @@ namespace Element
         public string Icon { get; set; }
 
         [Parameter]
-        public bool IsLoading { get; set; }
+        public bool Loading { get; set; }
+
+        [Parameter]
+        public bool IsLoading
+        {
+            get => Loading;
+            set => Loading = value;
+        }
+
+        [Parameter]
+        public string LoadingIcon { get; set; } = "el-icon-loading";
+
+        [Parameter]
+        public string NativeType { get; set; } = "button";
+
+        [Parameter]
+        public bool Link { get; set; }
+
+        [Parameter]
+        public bool Bg { get; set; }
+
+        [Parameter]
+        public bool Dashed { get; set; }
+
+        [Parameter]
+        public bool Autofocus { get; set; }
+
+        [Parameter]
+        public string Color { get; set; }
+
+        [Parameter]
+        public bool Dark { get; set; }
+
+        protected string ButtonTextContent => Content ?? Label;
 
         protected override bool ShouldRender()
         {
@@ -125,29 +199,41 @@ namespace Element
             {
                 showingImage = Image;
             }
-            IsDisabled = IsLoading;
             cssClassBuilder = HtmlPropertyBuilder.CreateCssClassBuilder();
+            buttonStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                .Add(Style)
+                .AddIf(!string.IsNullOrWhiteSpace(Color), $"--el-button-bg-color:{Color}", $"--el-button-border-color:{Color}");
             if (string.IsNullOrWhiteSpace(Cls) || AppendCustomCls)
             {
-                cssClassBuilder.Add($"el-button", $"el-button--{Type.ToString().ToLower()}", Cls)
+                cssClassBuilder.Add("el-button", Cls)
+                .AddIf(Type != ButtonType.Default, $"el-button--{Type.ToString().ToLower()}")
                 .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
-                .AddIf(IsPlain, "is-plain")
-                .AddIf(IsRound, "is-round")
-                .AddIf(IsDisabled, "is-disabled")
-                .AddIf(IsLoading, "is-loading")
-                .AddIf(IsCircle, "is-circle");
+                .AddIf(Plain, "is-plain")
+                .AddIf(Round, "is-round")
+                .AddIf(Disabled, "is-disabled")
+                .AddIf(Loading, "is-loading")
+                .AddIf(Circle, "is-circle")
+                .AddIf(Text, "is-text")
+                .AddIf(Link, "is-link")
+                .AddIf(Bg, "is-has-bg")
+                .AddIf(Dashed, "is-dashed");
                 return;
             }
             cssClassBuilder.AddIf(!string.IsNullOrWhiteSpace(Cls), Cls);
             if (string.IsNullOrWhiteSpace(Cls))
             {
-                cssClassBuilder.Add($"el-button", $"el-button--{Type.ToString().ToLower()}")
+                cssClassBuilder.Add("el-button")
+                    .AddIf(Type != ButtonType.Default, $"el-button--{Type.ToString().ToLower()}")
                     .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
-                    .AddIf(IsPlain, "is-plain")
-                    .AddIf(IsRound, "is-round")
-                    .AddIf(IsDisabled, "is-disabled")
-                    .AddIf(IsLoading, "is-loading")
-                    .AddIf(IsCircle, "is-circle");
+                    .AddIf(Plain, "is-plain")
+                    .AddIf(Round, "is-round")
+                    .AddIf(Disabled, "is-disabled")
+                    .AddIf(Loading, "is-loading")
+                    .AddIf(Circle, "is-circle")
+                    .AddIf(Text, "is-text")
+                    .AddIf(Link, "is-link")
+                    .AddIf(Bg, "is-has-bg")
+                    .AddIf(Dashed, "is-dashed");
             }
         }
     }

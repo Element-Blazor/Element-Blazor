@@ -27,7 +27,7 @@
         bodyStyle = activeOption?.BodyStyle;
     }
 }
-<div class="@classBuilder.ToString()" style="@Style">
+<div class="@classBuilder.ToString()" style="@Style" @onkeydown="OnKeyDownAsync">
     @if (TabPosition == TabPosition.Bottom)
     {
         <div class="el-tabs__content" style="@bodyStyle" @ref="Content">
@@ -44,14 +44,14 @@
                 <div role="tablist" class="el-tabs__nav @headerPosition" style="transform: translateX(0px);">
                     @if (Type == TabType.Normal)
                     {
-                        <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
+                    <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
                     }
                     <CascadingValue Value=this>
                         @if (DataSource != null)
                         {
                             @foreach (var item in DataSource)
                             {
-                                <BTabPanel @key="item.Name" IsClosable="@item.IsClosable" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
+                                <BTabPanel @key="item.Name" IsClosable="@item.IsClosable" Disabled="@item.IsDisabled" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
                                     <BDynamicComponent Component="@item.Content"></BDynamicComponent>
                                 </BTabPanel>
                             }

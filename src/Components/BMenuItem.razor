@@ -3,7 +3,9 @@
     @onclick="OnClickAsync"
     @onmouseover="OnOver"
     @onmouseout="OnOut"
-    class="el-menu-item @(IsActive?"is-active":"")"
+    @onkeydown="OnKeyDownAsync"
+    class="el-menu-item @(IsActive?"is-active":"") @(Disabled ? "is-disabled" : "")"
+    aria-disabled="@Disabled"
     style="background-color:@BackgroundColor;color:@TextColor; border-bottom-color:@BorderColor;">
     <i class="@(Icon ?? "el-icon-menu")"></i>
     @ChildContent

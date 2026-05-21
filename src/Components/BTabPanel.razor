@@ -1,28 +1,24 @@
 ﻿@inherits BComponentBase
 @{
-    var isActive = string.Empty;
-    var ariaSelected = string.Empty;
-
     var isActiveTab = TabContainer.ActiveTab?.Name == this.Name;
     if (TabContainer.DataSource != null)
     {
         isActiveTab = TabContainer.DataSource.Any(x => x.Name == this.Name && x.IsActive);
-    }
-    if (isActiveTab && TabContainer.Type != TabType.Normal)
-    {
-        isActive = "is-active";
-        ariaSelected = "true";
     }
 
     var name = Name;
     var position = TabContainer.GetPosition();
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
-    var isClosableCls = IsClosable ? "is-closable" : string.Empty;
+    var classBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+        .Add("el-tabs__item", headerPosition)
+        .AddIf(IsClosable, "is-closable")
+        .AddIf(isActiveTab, "is-active")
+        .AddIf(Disabled, "is-disabled");
 }
-<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(IsActive ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="el-tabs__item @headerPosition @isClosableCls @isActive" aria-selected="@ariaSelected">
+<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(isActiveTab && !Disabled ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="@classBuilder.ToString()" aria-selected="@(isActiveTab ? "true" : "false")" aria-disabled="@Disabled">
     @Title
-    @if (IsClosable)
+    @if (IsClosable && !Disabled)
     {
         <span class="el-icon-close" @onclick="OnInternalTabCloseAsync" @onclick:stopPropagation></span>
     }

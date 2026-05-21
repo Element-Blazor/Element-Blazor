@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,10 @@ namespace Element
 
         public void Activate()
         {
+            if (Disabled)
+            {
+                return;
+            }
             isActive = true;
             IsOpened = true;
         }
@@ -78,6 +83,7 @@ namespace Element
         {
             backgroundColor = Options.BackgroundColor;
             textColor = Options.TextColor;
+            Menu?.AddMenuItem(this);
             if (!TopMenu.CanCollapse)
             {
                 IsOpened = true;
@@ -87,6 +93,10 @@ namespace Element
 
         protected async Task OnOverAsync()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (TopMenu.Mode == MenuMode.Horizontal)
             {
                 await SemaphoreSlim.WaitAsync();
@@ -188,6 +198,10 @@ namespace Element
 
         protected async Task OnOutAsync()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (isActive || IsOpened)
             {
                 backgroundColor = Options.BackgroundColor;
@@ -226,10 +240,30 @@ namespace Element
 
         protected void OnClick()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (IsVertical && TopMenu.CanCollapse)
             {
                 IsOpened = !IsOpened;
             }
+        }
+
+        protected Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key != "Enter" && e.Key != " ")
+            {
+                return Task.CompletedTask;
+            }
+            OnClick();
+            return Task.CompletedTask;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Menu?.RemoveMenuItem(this);
         }
         protected override bool ShouldRender()
         {

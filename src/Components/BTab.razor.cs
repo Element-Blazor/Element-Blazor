@@ -27,10 +27,24 @@ namespace Element
         [Parameter]
         public bool IsAddable { get; set; }
 
+        [Parameter]
+        public bool Addable
+        {
+            get => IsAddable;
+            set => IsAddable = value;
+        }
+
         /// <summary>
         /// 是否可关闭
         /// </summary>
         public bool IsRemovable { get; set; }
+
+        [Parameter]
+        public bool Closable
+        {
+            get => IsRemovable;
+            set => IsRemovable = value;
+        }
         /// <summary>
         /// 渲染后的内容区域
         /// </summary>
@@ -44,6 +58,12 @@ namespace Element
 
         [Parameter]
         public bool IsEditable { get; set; }
+
+        [Parameter]
+        public string ModelValue { get; set; }
+
+        [Parameter]
+        public EventCallback<string> ModelValueChanged { get; set; }
 
         [Parameter]
         public TabPosition TabPosition { get; set; }
@@ -316,6 +336,10 @@ namespace Element
         }
         internal async Task<bool> SetActivateTabAsync(BTabPanel tab)
         {
+            if (tab == null || tab.Disabled)
+            {
+                return false;
+            }
             if (OnActiveTabChanging.HasDelegate)
             {
                 var arg = new BChangeEventArgs<BTabPanel>();
@@ -355,11 +379,43 @@ namespace Element
             {
                 await OnActiveTabChanged.InvokeAsync(eventArgs);
             }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(tab.Name);
+            }
             else
             {
                 StateHasChanged();
             }
             return true;
+        }
+
+        protected async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key != "ArrowRight" && e.Key != "ArrowDown" && e.Key != "ArrowLeft" && e.Key != "ArrowUp" && e.Key != "Home" && e.Key != "End")
+            {
+                return;
+            }
+            var enabledTabs = tabPanels.Where(x => !x.Disabled).ToList();
+            if (!enabledTabs.Any())
+            {
+                return;
+            }
+            var currentIndex = ActiveTab == null ? -1 : enabledTabs.IndexOf(ActiveTab);
+            if (e.Key == "Home")
+            {
+                currentIndex = 0;
+            }
+            else if (e.Key == "End")
+            {
+                currentIndex = enabledTabs.Count - 1;
+            }
+            else
+            {
+                var step = e.Key == "ArrowLeft" || e.Key == "ArrowUp" ? -1 : 1;
+                currentIndex = (currentIndex + step + enabledTabs.Count) % enabledTabs.Count;
+            }
+            await SetActivateTabAsync(enabledTabs[currentIndex]);
         }
 
         protected override void OnParametersSet()
@@ -369,6 +425,10 @@ namespace Element
                 throw new NotSupportedException("TabType为Card的情况下才能进行移除");
             }
             base.OnParametersSet();
+            if (!string.IsNullOrWhiteSpace(ModelValue))
+            {
+                _ = SetActivateTabAsync(ModelValue);
+            }
         }
     }
 }

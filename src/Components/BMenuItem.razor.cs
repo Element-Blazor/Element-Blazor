@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,10 +47,6 @@ namespace Element
         private string currentRoute;
         public void Activate()
         {
-            if (string.IsNullOrWhiteSpace(Route))
-            {
-                return;
-            }
             IsActive = true;
             TextColor = Options.ActiveTextColor;
             BorderColor = Options.ActiveTextColor;
@@ -58,10 +55,6 @@ namespace Element
         }
         public void DeActivate()
         {
-            if (string.IsNullOrWhiteSpace(Route))
-            {
-                return;
-            }
             IsActive = false;
             TextColor = Options.TextColor;
             BorderColor = "transparent";
@@ -74,6 +67,7 @@ namespace Element
         protected override void OnInitialized()
         {
             base.OnInitialized();
+            Menu?.AddMenuItem(this);
             Func<string, bool> matchFunc = TopMenu.Match;
             if (matchFunc == null)
             {
@@ -110,6 +104,10 @@ namespace Element
 
         public void OnOver()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (Options.Mode == MenuMode.Horizontal && ParentMenu != null)
             {
                 ParentMenu.KeepSubMenuOpen();
@@ -124,6 +122,10 @@ namespace Element
 
         public void OnOut()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (Options.Mode == MenuMode.Horizontal)
             {
                 BackgroundColor = Options.BackgroundColor;
@@ -155,6 +157,10 @@ namespace Element
 
         public async Task OnClickAsync()
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (ParentMenu != null && TopMenu.Mode == MenuMode.Horizontal)
             {
                 await ParentMenu.CloseAsync();
@@ -189,6 +195,21 @@ namespace Element
         protected override bool ShouldRender()
         {
             return true;
+        }
+
+        protected async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key != "Enter" && e.Key != " ")
+            {
+                return;
+            }
+            await OnClickAsync();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Menu?.RemoveMenuItem(this);
         }
     }
 }

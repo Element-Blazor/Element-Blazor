@@ -8,6 +8,7 @@ namespace Element.Model
     {
         public TKey Key { get; set; }
         public string Text { get; set; }
+        public bool Disabled { get; set; }
     }
 
     public class SelectResultModel : SelectResultModel<int>

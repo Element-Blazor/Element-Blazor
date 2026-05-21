@@ -11,7 +11,7 @@ namespace Element
     {
         internal virtual bool IsCheckBox { get; set; }
         [Parameter]
-        public virtual string? Width { get; set; }
+        public virtual string Width { get; set; }
 
         internal virtual bool IsTree { get; set; }
         /// <summary>
@@ -27,6 +27,8 @@ namespace Element
 
         [CascadingParameter]
         public BTableColumns Columns { get; set; }
+        [CascadingParameter]
+        public BTable Table { get; set; }
 
         [Parameter]
         public virtual RenderFragment<object> ChildContent { get; set; }
@@ -49,7 +51,16 @@ namespace Element
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            Columns.AddColumn(this);
+            if (Columns != null)
+            {
+                Columns.AddColumn(this);
+                return;
+            }
+            if (Table == null)
+            {
+                throw new BlazuiException($"列 {GetType().Name} 必须放在 BTable/ElTable 或 BTableColumns/ElTableColumns 内");
+            }
+            Table.AddColumn(this);
         }
     }
 }

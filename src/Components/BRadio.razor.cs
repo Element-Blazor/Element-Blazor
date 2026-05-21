@@ -20,6 +20,13 @@ namespace Element
         [Parameter]
         public TValue Value { get; set; }
 
+        [Parameter]
+        public TValue Model
+        {
+            get => Value;
+            set => Value = value;
+        }
+
         /// <summary>
         /// 多个单选组件选择的值
         /// </summary>
@@ -53,6 +60,12 @@ namespace Element
         public bool IsBordered { get; set; }
         [Parameter]
         public bool IsDisabled { get; set; }
+        [Parameter]
+        public bool Disabled
+        {
+            get => IsDisabled;
+            set => IsDisabled = value;
+        }
 
         protected override void OnInitialized()
         {

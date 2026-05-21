@@ -282,7 +282,7 @@ namespace Element
             {
                 option.Parameters = new Dictionary<string, object>();
             }
-            option.Parameters.Add("Dialog", option);
+            option.Parameters["Dialog"] = option;
             Dialogs.Add(option);
         }
     }

@@ -3,12 +3,32 @@
 @{
     var suffixIconClsList = new List<string>();
     suffixIconClsList.Add("el-select__caret");
-    suffixIconClsList.Add("el-icon-arrow-up");
-    if (dropDownOption != null && dropDownOption.IsShow)
+    suffixIconClsList.Add(Loading ? "el-icon-loading" : "el-icon-arrow-up");
+    if (!Loading && dropDownOption != null && dropDownOption.IsShow)
     {
         suffixIconClsList.Add("is-reverse");
     }
 }
-<div class="@warpperClsBuilder.ToString()" @onclick="OnSelectClick" @ref="elementSelect">
-    <BInput TValue="string" IsClearable="isClearable" @bind-EnableClearButton="EnableClearButton" SuffixIcon="@string.Join(" ",suffixIconClsList)" Placeholder="@Placeholder" ValueChanged="UpdateValue" Value="@Label" AdditionalClearIcon="el-select__caret"></BInput>
+<div class="@warpperClsBuilder.ToString()"
+     @onclick="OnSelectClick"
+     @onkeydown="OnKeyDownAsync"
+     @ref="elementSelect"
+     role="combobox"
+     aria-haspopup="listbox"
+     aria-expanded="@IsDropDownOpen"
+     aria-disabled="@Disabled"
+     tabindex="@(Disabled ? -1 : 0)">
+    <BInput TValue="string"
+            Clearable="Clearable"
+            Disabled="Disabled"
+            Readonly="@(!Filterable)"
+            Size="@Size"
+            @bind-EnableClearButton="EnableClearButton"
+            SuffixIcon="@string.Join(" ",suffixIconClsList)"
+            Placeholder="@Placeholder"
+            ValueChanged="UpdateValue"
+            Value="@DisplayLabel"
+            AdditionalClearIcon="el-select__caret"
+            ValidateEvent="false">
+    </BInput>
 </div>

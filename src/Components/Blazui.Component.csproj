@@ -4,6 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<ApplicationIcon />
 		<OutputType>Library</OutputType>
+		<RootNamespace>Element</RootNamespace>
 		<Version>0.0.7.2</Version>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>wzxinchen</Authors>
@@ -45,6 +46,7 @@
 	  <None Include="wwwroot\css\fonts\element-icons.ttf" />
 	  <None Include="wwwroot\css\fonts\element-icons.woff" />
 	  <None Include="wwwroot\css\index.css" />
+	  <None Include="wwwroot\css\theme.css" />
 	  <None Include="wwwroot\js\dom.js" />
 	</ItemGroup>
 

@@ -1,24 +1,22 @@
 ﻿@inherits BFieldComponentBase<TValue>
 @typeparam TValue
 @{
-    string isDisabledClass = string.Empty;
-    if (IsDisabled)
-    {
-        isDisabledClass = " is-disabled";
-    }
-
     var text = Formatter(Value);
-    var isClearable = Value != null && IsClearable && (IsFocus || IsMouseOver);
+    var nativeValue = text ?? string.Empty;
+    var isClearable = Value != null && Clearable && !Disabled && !Readonly && (IsFocus || IsMouseOver);
+    var hasSuffix = isClearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPassword || ShowWordLimit || HasValidationStatusIcon;
+    var inputStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+        .Add(InputStyle)
+        .AddIf(!string.IsNullOrWhiteSpace(Image), "background: transparent", "border: transparent")
+        .ToString();
+    var textareaStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+        .Add(InputStyle)
+        .AddIf(!string.IsNullOrWhiteSpace(Image), "background: transparent", "border: transparent")
+        .AddIf(!string.IsNullOrWhiteSpace(Resize), $"resize:{Resize}")
+        .ToString();
 }
 <div class="@wrapperClsBuilder" @ref="Content" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(Style).AddIf(!string.IsNullOrWhiteSpace(Image),$"background:url('{Image}') center center no-repeat")" @onclick="OnClick" @onmouseover="e => IsMouseOver = true" @onmouseout="e=>IsMouseOver=false">
-
-    @if (!string.IsNullOrWhiteSpace(PrefixIcon))
-    {
-        <span class="el-input__prefix">
-            <i class="el-input__icon @PrefixIcon" @onclick="OnPrefixIconClick"></i>
-        </span>
-    }
-    else if (Prepend != null)
+    @if (Prepend != null && Type != InputType.Textarea)
     {
         <div class="el-input-group__prepend">
             @Prepend
@@ -26,34 +24,61 @@
     }
     @if (Type == InputType.Textarea)
     {
-        <textarea style="@HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(!string.IsNullOrWhiteSpace(Image),"background: transparent;border: transparent;").Add("height: 60px;","overflow-y: hidden; ").ToString()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
+        <textarea id="@Id" style="@textareaStyle" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" name="@Name" disabled="@Disabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" rows="@Rows" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" />
+        @if (isClearable)
+        {
+            <i class="el-textarea__icon el-textarea__clear el-icon-circle-close @(AdditionalClearIcon ?? string.Empty)" @onclick="ClearOnClick"></i>
+        }
+        @if (ShowWordLimit && Maxlength != null)
+        {
+            <span class="el-input__count">@TextLength / @Maxlength</span>
+        }
     }
     else
     {
-        <input type="@Type.ToString().ToLower()" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().AddIf(!string.IsNullOrWhiteSpace(Image),"background: transparent;border: transparent;").ToString()" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@text" class="el-input__inner " @onfocus="e=>_=OnFocusAsync()" @onblur="e=>IsFocus=false" @oninput="OnChangeEventArgs" name="@Name" disabled="@IsDisabled" />
-    }
-
-    @if (isClearable)
-    {
-        <span class="el-input__suffix">
-            <span class="el-input__suffix-inner">
-                <!---->
-                <i class="el-input__icon el-icon-circle-close @(AdditionalClearIcon ?? "el-input__clear")" @onclick="ClearOnClick">
-                </i><!----><!---->
-            </span><!---->
-        </span>
-    }
-    else
-    {
-        @if (!string.IsNullOrWhiteSpace(SuffixIcon))
+        @if (!string.IsNullOrWhiteSpace(PrefixIcon))
+        {
+            <span class="el-input__prefix">
+                <span class="el-input__prefix-inner">
+                    <i class="el-input__icon @PrefixIcon" @onclick="OnPrefixIconClick"></i>
+                </span>
+            </span>
+        }
+        <input id="@Id" type="@NativeInputType" style="@inputStyle" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" @onkeydown="OnKeyDown" name="@Name" disabled="@Disabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" />
+        @if (hasSuffix)
         {
             <span class="el-input__suffix">
                 <span class="el-input__suffix-inner">
-                    <!---->
-                    <i class="el-input__icon @SuffixIcon" @onclick="OnSuffixIconClick">
-                    </i><!----><!---->
-                </span><!---->
+                    @if (isClearable)
+                    {
+                        <i class="el-input__icon el-input__clear el-icon-circle-close @(AdditionalClearIcon ?? string.Empty)" @onclick="ClearOnClick"></i>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(SuffixIcon))
+                    {
+                        <i class="el-input__icon @SuffixIcon" @onclick="OnSuffixIconClick"></i>
+                    }
+                    @if (ShowPassword)
+                    {
+                        <i class="el-input__icon el-input__password el-icon-view" @onclick="TogglePasswordVisibility"></i>
+                    }
+                    @if (ShowWordLimit && Maxlength != null)
+                    {
+                        <span class="el-input__count">
+                            <span class="el-input__count-inner">@TextLength / @Maxlength</span>
+                        </span>
+                    }
+                    @if (HasValidationStatusIcon)
+                    {
+                        <i class="@ValidationStatusIconClass"></i>
+                    }
+                </span>
             </span>
+        }
+        @if (Append != null)
+        {
+            <div class="el-input-group__append">
+                @Append
+            </div>
         }
     }
 </div>

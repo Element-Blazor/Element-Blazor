@@ -27,21 +27,40 @@ namespace Element
         public string Text { get; set; }
 
         [Parameter]
-        public bool IsDisabled { get; set; }
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
 
         protected override void OnInitialized()
         {
             currentResultModel = new SelectResultModel<TValue>()
             {
                 Key = Value,
-                Text = Text
+                Text = Text ?? Convert.ToString(Value),
+                Disabled = Disabled
             };
-            ((BSelect<TValue>)Option.Select).Options.Add(currentResultModel);
+            ((BSelect<TValue>)Option.Select).RegisterOption(currentResultModel);
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (currentResultModel != null)
+            {
+                currentResultModel.Key = Value;
+                currentResultModel.Text = Text ?? Convert.ToString(Value);
+                currentResultModel.Disabled = Disabled;
+            }
         }
 
         public async Task SelectItemAsync(MouseEventArgs e)
         {
-            if (IsDisabled)
+            if (Disabled)
             {
                 return;
             }
@@ -51,5 +70,11 @@ namespace Element
         {
             return true;
         }
+
+        private bool IsSelected => Option?.Select is BSelect<TValue> select && select.IsOptionSelected(currentResultModel);
+
+        private bool IsHover => Option?.Select is BSelect<TValue> select && select.IsOptionHover(currentResultModel);
+
+        private bool IsVisible => Option?.Select is not BSelect<TValue> select || select.IsOptionVisible(currentResultModel);
     }
 }

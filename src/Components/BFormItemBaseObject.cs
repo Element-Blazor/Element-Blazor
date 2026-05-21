@@ -25,6 +25,9 @@ namespace Element
         [Parameter]
         public string Label { get; set; }
 
+        [Parameter]
+        public string For { get; set; }
+
         /// <summary>
         /// 设置字段 Label 为图片地址
         /// </summary>
@@ -35,13 +38,45 @@ namespace Element
         /// 标签宽度
         /// </summary>
         [Parameter]
-        public float LabelWidth { get; set; } = 100;
+        public object LabelWidth { get; set; }
 
         [Parameter]
         public string Name { get; set; }
 
         [Parameter]
-        public bool IsRequired { get; set; }
+        public string Prop
+        {
+            get => Name;
+            set => Name = value;
+        }
+
+        [Parameter]
+        public bool Required { get; set; }
+
+        [Parameter]
+        public bool IsRequired
+        {
+            get => Required;
+            set => Required = value;
+        }
+
+        [Parameter]
+        public string Error { get; set; }
+
+        [Parameter]
+        public string ValidateStatus { get; set; }
+
+        [Parameter]
+        public string LabelPosition { get; set; }
+
+        [Parameter]
+        public bool? InlineMessage { get; set; }
+
+        [Parameter]
+        public bool ShowMessage { get; set; } = true;
+
+        [Parameter]
+        public InputSize? Size { get; set; }
 
         [Parameter]
         public string RequiredMessage { get; set; }
@@ -69,7 +104,7 @@ namespace Element
             {
                 Rules = validation.Rules;
             }
-            if (IsRequired && !Rules.OfType<RequiredRule>().Any())
+            if (Required && !Rules.OfType<RequiredRule>().Any())
             {
                 var requiredRule = new RequiredRule();
                 requiredRule.ErrorMessage = RequiredMessage ?? $"请确认{Label}";

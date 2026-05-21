@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,8 @@ namespace Element
         {
             if (item == null)
                 return;
+            if (item.Disabled)
+                return;
             if (item == activeItem)
                 return;
 
@@ -97,6 +100,38 @@ namespace Element
         protected override bool ShouldRender()
         {
             return true;
+        }
+
+        protected async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key != "ArrowDown" && e.Key != "ArrowRight" && e.Key != "ArrowUp" && e.Key != "ArrowLeft" && e.Key != "Home" && e.Key != "End" && e.Key != "Enter" && e.Key != " ")
+            {
+                return;
+            }
+            var enabledItems = Children.Where(x => !x.Disabled).ToList();
+            if (!enabledItems.Any())
+            {
+                return;
+            }
+            var currentIndex = activeItem == null ? -1 : enabledItems.IndexOf(activeItem);
+            if (e.Key == "Home")
+            {
+                currentIndex = 0;
+            }
+            else if (e.Key == "End")
+            {
+                currentIndex = enabledItems.Count - 1;
+            }
+            else
+            {
+                var isPrev = e.Key == "ArrowUp" || e.Key == "ArrowLeft";
+                currentIndex = (currentIndex + (isPrev ? -1 : 1) + enabledItems.Count) % enabledItems.Count;
+            }
+            ActivateItem(enabledItems[currentIndex]);
+            if (ActiveItemChanged.HasDelegate)
+            {
+                await ActiveItemChanged.InvokeAsync(activeItem);
+            }
         }
     }
 }

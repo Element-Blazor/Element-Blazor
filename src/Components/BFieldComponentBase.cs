@@ -24,7 +24,6 @@ namespace Element
                 FormItem.MarkAsRequireRender();
                 return;
             }
-            Console.WriteLine($"设置 FormItem {Name} 值:" + value);
             FormItem.Value = value;
             if (!validate)
             {

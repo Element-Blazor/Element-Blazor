@@ -92,18 +92,18 @@ namespace Element
 
         protected override bool ThrowOnInvalidValue { get; } = false;
 
-        protected override void OnChangeEventArgs(ChangeEventArgs input)
+        protected override async Task OnChangeEventArgs(ChangeEventArgs input)
         {
             try
             {
-                base.OnChangeEventArgs(input);
+                await base.OnChangeEventArgs(input);
             }
             catch (FormatException)
             {
                 Value = DateTime.Today;
                 if (ValueChanged.HasDelegate)
                 {
-                    _ = ValueChanged.InvokeAsync(Value);
+                    await ValueChanged.InvokeAsync(Value);
                 }
                 SetFieldValue(Value, true);
             }

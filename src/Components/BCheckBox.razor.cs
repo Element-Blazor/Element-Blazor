@@ -25,6 +25,12 @@ namespace Element
         [Parameter]
         public TValue Value { get; set; }
         [Parameter]
+        public TValue Model
+        {
+            get => Value;
+            set => Value = value;
+        }
+        [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
         [Parameter]
         public EventCallback<Status> StatusChanged { get; set; }
@@ -173,6 +179,13 @@ namespace Element
                     isDisabled = null;
                 }
             }
+        }
+
+        [Parameter]
+        public bool Disabled
+        {
+            get => IsDisabled;
+            set => IsDisabled = value;
         }
 
         [Parameter]

@@ -59,6 +59,24 @@ namespace Element
             await option.TaskCompletionSource.Task;
         }
 
+        protected async Task CloseDialogOnModalClickAsync(DialogOption option)
+        {
+            if (!option.IsModal || !option.CloseOnClickModal)
+            {
+                return;
+            }
+            await CloseDialogAsync(option, new DialogResult());
+        }
+
+        protected async Task OnDialogKeyDownAsync(DialogOption option, KeyboardEventArgs e)
+        {
+            if (!option.CloseOnPressEscape || e.Key != "Escape")
+            {
+                return;
+            }
+            await CloseDialogAsync(option, new DialogResult());
+        }
+
         private async Task OnPauseAsync(DialogOption option)
         {
             if (option.OnShow == null)
@@ -283,7 +301,7 @@ namespace Element
                 option.IsNew = true;
                 option.Instance = this;
                 option.ShadowZIndex = ZIndex++;
-                option.ZIndex = ZIndex++;
+                option.ZIndex = option.CustomZIndex ?? ZIndex++;
                 DialogOptions.Add(option);
                 StateHasChanged();
             }
@@ -448,16 +466,33 @@ namespace Element
             var top = await targetEl.GetTopRelativeBodyAsync();
             option.Left = rect.Left;
             option.Top = top + rect.Height;
-            if (autoWidth)
+            if (autoWidth || option.FitInputWidth)
             {
                 option.Width = rect.Width;
             }
             var dropDownEl = option.Element.Dom(JSRuntime);
             var width = await dropDownEl.GetClientWidthAsync();
+            var height = await dropDownEl.GetClientHeightAsync();
             var documentWidth = await Document.GetClientWidthAsync();
+            var documentHeight = await Document.GetClientHeightAsync();
             if (option.Left + width >= documentWidth)
             {
                 option.Left = documentWidth - width - 10;
+            }
+            if (option.Left < 0)
+            {
+                option.Left = 10;
+            }
+            if (rect.Bottom + height > documentHeight && rect.Top > height)
+            {
+                option.Top = top - height;
+                option.Placement = "top-start";
+                option.TransformOrigin = "center bottom 0px";
+            }
+            else
+            {
+                option.Placement = "bottom-start";
+                option.TransformOrigin = "center top 0px";
             }
             option.IsShow = true;
             if (GlobalBlazuiSettings.DisableAnimation)

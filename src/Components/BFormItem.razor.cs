@@ -32,7 +32,7 @@ namespace Element
             {
                 if (GetType() != typeof(BFormActionItem))
                 {
-                    ExceptionHelper.Throw(ExceptionHelper.FormItemMustHaveName, "BFormItem 组件必须指定 Name 属性");
+                    ExceptionHelper.Throw(ExceptionHelper.FormItemMustHaveName, "ElFormItem 组件必须指定 Prop 或 Name 属性");
                 }
                 return;
             }
@@ -44,7 +44,6 @@ namespace Element
             if (Form.Values.TryGetValue(Name, out var value))
             {
                 OriginValue = (TValue)value;
-                Console.WriteLine($"设置 FormItem {Name} 值:" + value);
                 Value = (TValue)value;
             }
             OriginValueHasRendered = false;
@@ -52,6 +51,15 @@ namespace Element
 
         public override void Validate()
         {
+            if (!string.IsNullOrWhiteSpace(Error))
+            {
+                ValidateStatus = "error";
+                ValidationResult = new ValidationResult();
+                ValidationResult.ErrorMessages.Add(Error);
+                ValidationResult.IsValid = false;
+                StateHasChanged();
+                return;
+            }
             ValidationResult = new ValidationResult();
             foreach (var item in Rules)
             {
@@ -62,6 +70,7 @@ namespace Element
                 ValidationResult.ErrorMessages.Add(item.ErrorMessage);
             }
             ValidationResult.IsValid = !ValidationResult.ErrorMessages.Any();
+            ValidateStatus = ValidationResult.IsValid ? "success" : "error";
             StateHasChanged();
         }
 
@@ -69,7 +78,6 @@ namespace Element
 
         public override void Reset()
         {
-            Console.WriteLine($"设置 FormItem {Name} 值:" + OriginValue);
             Value = OriginValue;
             if (OnReset != null)
             {
@@ -77,6 +85,7 @@ namespace Element
                 OnReset(OriginValue, true);
             }
             ValidationResult = null;
+            ValidateStatus = string.Empty;
         }
     }
 }

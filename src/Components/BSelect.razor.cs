@@ -17,15 +17,17 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class BSelect<TValue> : BFieldComponentBase<TValue>, IDisposable
+    public partial class BSelect<TValue> : BFieldComponentBase<TValue>, ISelectDropDownContext, IDisposable
     {
         protected internal bool isTree;
         private HtmlPropertyBuilder warpperClsBuilder;
         internal ElementReference elementSelect;
         private Type valueType;
         private Type nullable;
-        internal bool isClearable = true;
         internal bool EnableClearButton { get; set; }
+        private int hoveredIndex = -1;
+        private string filterText;
+        internal bool OptionsRendered { get; private set; }
 
         [Parameter]
         public string Label { get; set; }
@@ -41,6 +43,63 @@ namespace Element
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
 
+        [Parameter]
+        public EventCallback<TValue> ModelValueChanged { get; set; }
+
+        [Parameter]
+        public TValue ModelValue
+        {
+            get => Value;
+            set => Value = value;
+        }
+
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
+
+        [Parameter]
+        public bool Clearable { get; set; } = true;
+
+        [Parameter]
+        public bool IsClearable
+        {
+            get => Clearable;
+            set => Clearable = value;
+        }
+
+        [Parameter]
+        public bool Loading { get; set; }
+
+        [Parameter]
+        public string LoadingText { get; set; } = "加载中";
+
+        [Parameter]
+        public string NoDataText { get; set; } = "暂无数据";
+
+        [Parameter]
+        public string NoMatchText { get; set; } = "无匹配数据";
+
+        [Parameter]
+        public bool Filterable { get; set; }
+
+        [Parameter]
+        public bool FitInputWidth { get; set; } = true;
+
+        [Parameter]
+        public int PopperMaxHeight { get; set; } = 274;
+
+        [Parameter]
+        public string PopperClass { get; set; }
+
+        [Parameter]
+        public InputSize Size { get; set; } = InputSize.Normal;
+
         /// <summary>
         /// 当绑定为枚举时，指定哪些枚举名需要忽略
         /// </summary>
@@ -50,8 +109,22 @@ namespace Element
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            if (FormItem?.Form != null)
+            {
+                Disabled = Disabled || FormItem.Form.Disabled;
+                if (Size == InputSize.Normal && FormItem.Size != null)
+                {
+                    Size = FormItem.Size.Value;
+                }
+            }
             warpperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-                .Add("el-select", Cls);
+                .Add("el-select", Cls)
+                .AddIf(Disabled, "is-disabled")
+                .AddIf(Loading, "is-loading")
+                .AddIf(Filterable, "is-filterable")
+                .AddIf(Clearable, "is-clearable")
+                .AddIf(IsDropDownOpen, "is-focus")
+                .AddIf(Size != InputSize.Normal, $"el-select--{Size.ToString().ToLower()}");
             if (valueType == null)
             {
                 InitilizeEnumValues(FormItem != null);
@@ -83,7 +156,7 @@ namespace Element
         {
             valueType = typeof(TValue);
             nullable = Nullable.GetUnderlyingType(valueType);
-            isClearable = nullable != null;
+            Clearable = Clearable && nullable != null;
             valueType = nullable ?? valueType;
             var valueSet = false;
             if (valueType.IsEnum)
@@ -135,24 +208,28 @@ namespace Element
 
         public void UpdateValue(string text)
         {
+            if (!Filterable)
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    ClearSelection();
+                }
+                return;
+            }
+            filterText = text;
             var option = Options.FirstOrDefault(x => x.Text == text);
             if (option == null)
             {
-                Value = default;
+                if (string.IsNullOrEmpty(text))
+                {
+                    ClearSelection();
+                }
             }
             else
             {
-                Value = option.Key;
+                _ = SelectValueAsync(option);
             }
-            if (ValueChanged.HasDelegate)
-            {
-                _ = ValueChanged.InvokeAsync(Value);
-            }
-            if (TypeHelper.Equal(Value, default))
-            {
-                SelectedOption = null;
-            }
-            SetFieldValue(Value, true);
+            StateHasChanged();
         }
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -196,6 +273,10 @@ namespace Element
                 {
                     _ = ValueChanged.InvokeAsync(Value);
                 }
+                if (ModelValueChanged.HasDelegate)
+                {
+                    _ = ModelValueChanged.InvokeAsync(Value);
+                }
 
             }
         }
@@ -205,6 +286,11 @@ namespace Element
         private Dictionary<TValue, string> dict;
 
         internal async Task OnInternalSelectAsync(SelectResultModel<TValue> item)
+        {
+            await SelectValueAsync(item);
+        }
+
+        private async Task SelectValueAsync(SelectResultModel<TValue> item)
         {
             var args = new BChangeEventArgs<SelectResultModel<TValue>>();
             args.NewValue = item;
@@ -218,7 +304,10 @@ namespace Element
                 }
             }
 
-            await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
+            if (dropDownOption?.Instance != null)
+            {
+                await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
+            }
             SelectedOption = item;
             SetFieldValue(item.Key, true);
             Value = item.Key;
@@ -231,29 +320,47 @@ namespace Element
             {
                 await OnChange.InvokeAsync(args);
             }
-            Console.WriteLine(Label);
             EnableClearButton = false;
+            filterText = null;
             StateHasChanged();
         }
 
-        internal void OnSelectClick(MouseEventArgs e)
+        internal async Task OnSelectClick(MouseEventArgs e)
         {
+            await ToggleDropDownAsync();
+        }
+
+        private async Task ToggleDropDownAsync()
+        {
+            if (Disabled || Loading)
+            {
+                return;
+            }
             if (EnableClearButton)
             {
                 EnableClearButton = false;
+                ClearSelection();
                 return;
             }
-            if (PopupService.SelectDropDownOptions.Any(x => x.Target.Id == elementSelect.Id))
+            if (IsDropDownOpen)
             {
+                if (dropDownOption?.Instance != null)
+                {
+                    await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
+                }
                 return;
             }
 
+            hoveredIndex = FindSelectedIndex();
             dropDownOption = new DropDownOption()
             {
                 IsTree = isTree,
                 Select = this,
                 Target = elementSelect,
                 OptionContent = ChildContent,
+                PopperClass = PopperClass,
+                MaxHeight = PopperMaxHeight,
+                FitInputWidth = FitInputWidth,
                 Refresh = () =>
                 {
                     StateHasChanged();
@@ -262,6 +369,157 @@ namespace Element
             };
             PopupService.SelectDropDownOptions.Add(dropDownOption);
         }
+
+        private void ClearSelection()
+        {
+            SelectedOption = null;
+            filterText = null;
+            SetFieldValue(Value, true);
+        }
+
+        private async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (Disabled)
+            {
+                return;
+            }
+            switch (e.Key)
+            {
+                case "ArrowDown":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    MoveHover(1);
+                    break;
+                case "ArrowUp":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    MoveHover(-1);
+                    break;
+                case "Enter":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    await SelectHoveredOptionAsync();
+                    break;
+                case "Escape":
+                    if (dropDownOption?.Instance != null)
+                    {
+                        await dropDownOption.Instance.CloseDropDownAsync(dropDownOption);
+                    }
+                    break;
+                case "Backspace":
+                    if (Clearable && !Filterable && !TypeHelper.Equal(Value, default))
+                    {
+                        ClearSelection();
+                    }
+                    break;
+            }
+        }
+
+        private async Task OpenDropDownAsync()
+        {
+            if (IsDropDownOpen)
+            {
+                return;
+            }
+            await ToggleDropDownAsync();
+        }
+
+        private void MoveHover(int step)
+        {
+            var enabledOptions = FilteredOptions.Where(x => !x.Disabled).ToList();
+            if (!enabledOptions.Any())
+            {
+                hoveredIndex = -1;
+                return;
+            }
+            var currentOption = hoveredIndex >= 0 && hoveredIndex < Options.Count ? Options[hoveredIndex] : null;
+            var currentIndex = currentOption == null ? -1 : enabledOptions.IndexOf(currentOption);
+            currentIndex = (currentIndex + step + enabledOptions.Count) % enabledOptions.Count;
+            hoveredIndex = Options.IndexOf(enabledOptions[currentIndex]);
+            StateHasChanged();
+        }
+
+        private async Task SelectHoveredOptionAsync()
+        {
+            if (hoveredIndex < 0 || hoveredIndex >= Options.Count)
+            {
+                return;
+            }
+            var option = Options[hoveredIndex];
+            if (option.Disabled)
+            {
+                return;
+            }
+            await SelectValueAsync(option);
+        }
+
+        internal bool IsOptionSelected(SelectResultModel<TValue> option)
+        {
+            return option != null && TypeHelper.Equal(option.Key, Value);
+        }
+
+        internal bool IsOptionHover(SelectResultModel<TValue> option)
+        {
+            return option != null && hoveredIndex >= 0 && hoveredIndex < Options.Count && Options[hoveredIndex] == option;
+        }
+
+        internal bool IsOptionVisible(SelectResultModel<TValue> option)
+        {
+            if (!Filterable || string.IsNullOrWhiteSpace(filterText))
+            {
+                return true;
+            }
+            return (option.Text ?? string.Empty).IndexOf(filterText, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
+        private int FindSelectedIndex()
+        {
+            for (var i = 0; i < Options.Count; i++)
+            {
+                if (IsOptionSelected(Options[i]))
+                {
+                    return i;
+                }
+            }
+            return Options.Count > 0 ? 0 : -1;
+        }
+
+        private IReadOnlyList<SelectResultModel<TValue>> FilteredOptions => Options.Where(IsOptionVisible).ToList();
+
+        internal void RegisterOption(SelectResultModel<TValue> option)
+        {
+            OptionsRendered = true;
+            if (Options.Contains(option))
+            {
+                return;
+            }
+            Options.Add(option);
+        }
+
+        internal bool IsDropDownOpen => dropDownOption != null && dropDownOption.IsShow;
+
+        internal string DisplayLabel => Filterable && IsDropDownOpen && filterText != null ? filterText : Label;
+
+        string ISelectDropDownContext.LoadingText => LoadingText;
+
+        string ISelectDropDownContext.EmptyText => ShouldShowNoMatch ? NoMatchText : NoDataText;
+
+        bool ISelectDropDownContext.ShouldShowEmpty => ShouldShowEmpty;
+
+        bool ISelectDropDownContext.ShouldShowNoMatch => ShouldShowNoMatch;
+
+        private bool ShouldShowEmpty => !Loading && (OptionsRendered || ChildContent == null) && !FilteredOptions.Any();
+
+        private bool ShouldShowNoMatch => !Loading && Options.Any() && Filterable && !string.IsNullOrWhiteSpace(filterText) && !FilteredOptions.Any();
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {

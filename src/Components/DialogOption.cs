@@ -43,6 +43,22 @@ namespace Element
         /// </summary>
         public bool IsModal { get; set; } = true;
 
+        public bool ShowClose { get; set; } = true;
+
+        public bool CloseOnClickModal { get; set; } = true;
+
+        public bool CloseOnPressEscape { get; set; } = true;
+
+        public bool DestroyOnClose { get; set; }
+
+        public bool Draggable { get; set; }
+
+        public string Top { get; set; } = "10vh";
+
+        public string CustomClass { get; set; }
+
+        public int? CustomZIndex { get; set; }
+
         /// <summary>
         /// 窗口显示位置
         /// </summary>

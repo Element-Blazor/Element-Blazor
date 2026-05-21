@@ -66,24 +66,29 @@
             }
             var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-dialog")
-                .AddIf(option.FullScreen, "is-fullscrren");
+                .Add(option.CustomClass)
+                .AddIf(option.FullScreen, "is-fullscreen")
+                .AddIf(option.Draggable, "is-draggable");
             var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("opacity:0", "top:10px")
                 .Add(width);
-            <div @key="option" class="el-dialog__wrapper" style="z-index: @index;">
-                <BTransition role="dialog" OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
+            <div @key="option" class="el-overlay-dialog el-dialog__wrapper" style="z-index: @index;" @onclick="async e => await CloseDialogOnModalClickAsync(option)" @onkeydown="async e => await OnDialogKeyDownAsync(option, e)" tabindex="-1">
+                <BTransition role="dialog" @onclick:stopPropagation OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
                     <Path>
-                        <BTransitionPath top="10vh" opacity="1" Delay="200" Duration="300"></BTransitionPath>
+                        <BTransitionPath top="@option.Top" opacity="1" Delay="200" Duration="300"></BTransitionPath>
                         <BTransitionPath top="10px" opacity="0" Duration="300" Pause="true"></BTransitionPath>
                     </Path>
                     <Content>
                         <div class="el-dialog__header">
                             <span class="el-dialog__title">@option.Title</span>
-                            <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
+                            @if (option.ShowClose)
+                            {
+                                <BButton Icon="el-dialog__close el-icon el-icon-close" Cls="el-dialog__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option,
                                             new DialogResult()
                                             {
                                             }))">
-                            </BButton>
+                                </BButton>
+                            }
                         </div>
                         <div class="el-dialog__body">
                             <BDynamicComponent Component="option.Content" Parameters="option.Parameters"></BDynamicComponent>
@@ -403,27 +408,47 @@
         {
             style = "";
         }
+        var dropdownClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-select-dropdown", "el-popper")
+            .Add(option.PopperClass);
+        var wrapperStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"max-height:{(option.MaxHeight > 0 ? option.MaxHeight : 274)}px");
+        var context = option.Select as ISelectDropDownContext;
         var listClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
             .Add("el-scrollbar__view", "el-select-dropdown__list")
             .AddIf(option.IsTree, "blazor-dropdown-tree");
         <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <div class="el-select-dropdown el-popper" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: center top 0px; z-index:@(index);" x-placement="bottom-start">
+        <div class="@dropdownClsBuilder.ToString()" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: @option.TransformOrigin; z-index:@(index);" x-placement="@option.Placement">
             <div class="el-scrollbar" style="">
-                <div class="el-select-dropdown__wrap el-scrollbar__wrap">
-                    <ul class="@listClsBuilder.ToString()">
-                        @if (option.IsTree)
-                        {
-                            <CascadingValue Value="(BTreeSingleSelect)option.Select">
-                                @option.OptionContent
-                            </CascadingValue>
-                        }
-                        else
-                        {
-                            <CascadingValue Value="option">
-                                @option.OptionContent
-                            </CascadingValue>
-                        }
-                    </ul>
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="@wrapperStyleBuilder.ToString()">
+                    @if (context != null && context.Loading)
+                    {
+                        <p class="el-select-dropdown__empty">
+                            <i class="el-icon-loading"></i>
+                            @context.LoadingText
+                        </p>
+                    }
+                    else if (context != null && context.ShouldShowEmpty)
+                    {
+                        <p class="el-select-dropdown__empty">@context.EmptyText</p>
+                    }
+                    else
+                    {
+                        <ul class="@listClsBuilder.ToString()" role="listbox">
+                            @if (option.IsTree)
+                            {
+                                <CascadingValue Value="(BTreeSingleSelect)option.Select">
+                                    @option.OptionContent
+                                </CascadingValue>
+                            }
+                            else
+                            {
+                                <CascadingValue Value="option">
+                                    @option.OptionContent
+                                </CascadingValue>
+                            }
+                        </ul>
+                    }
                 </div>
                 <div class="el-scrollbar__bar is-horizontal">
                     <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
@@ -498,7 +523,7 @@
             transform = "transform:scaleY(0);";
             opacity = "0";
         }
-        <div class="el-menu--horizontal" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
+        <div class="el-menu--horizontal el-popper" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
             <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
                 <CascadingValue Value="option.SubMenu">
                     <CascadingValue Value="option.Options">

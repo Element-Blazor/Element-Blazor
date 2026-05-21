@@ -21,6 +21,61 @@ namespace Element
         [Parameter]
         public bool Inline { get; set; }
 
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public InputSize? Size { get; set; }
+
+        [Parameter]
+        public bool InlineMessage { get; set; }
+
+        [Parameter]
+        public bool StatusIcon { get; set; }
+
+        [Parameter]
+        public bool ShowMessage { get; set; } = true;
+
+        [Parameter]
+        public bool ValidateOnRuleChange { get; set; } = true;
+
+        [Parameter]
+        public bool HideRequiredAsterisk { get; set; }
+
+        [Parameter]
+        public bool ScrollToError { get; set; }
+
+        [Parameter]
+        public object LabelPosition
+        {
+            get => LabelAlign.ToString().ToLower();
+            set
+            {
+                if (value == null)
+                {
+                    return;
+                }
+                if (value is LabelAlign directAlign)
+                {
+                    LabelAlign = directAlign;
+                    return;
+                }
+                if (Enum.TryParse<LabelAlign>(Convert.ToString(value), true, out var labelAlign))
+                {
+                    LabelAlign = labelAlign;
+                }
+            }
+        }
+
+        [Parameter]
+        public object LabelWidth { get; set; } = string.Empty;
+
+        [Parameter]
+        public string LabelSuffix { get; set; } = string.Empty;
+
+        [Parameter]
+        public string RequireAsteriskPosition { get; set; } = "left";
+
         /// <summary>
         /// 是否是创建
         /// </summary>
@@ -65,6 +120,13 @@ namespace Element
         [Parameter]
         public object Value { get; set; }
 
+        [Parameter]
+        public object Model
+        {
+            get => Value;
+            set => Value = value;
+        }
+
 
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)
         {
@@ -72,6 +134,10 @@ namespace Element
             if (Inline)
             {
                 clsList.Add("el-form--inline");
+            }
+            if (Disabled)
+            {
+                clsList.Add("is-disabled");
             }
             switch (LabelAlign)
             {
@@ -86,6 +152,10 @@ namespace Element
                     break;
             }
             clsList.Add("el-form");
+            if (Size != null)
+            {
+                clsList.Add($"el-form--{Size.Value.ToString().ToLower()}");
+            }
 
             builder.OpenElement(0, "form");
             builder.AddAttribute(1, "class", string.Join(" ", clsList));
@@ -251,6 +321,20 @@ namespace Element
                 ShowErrorMessage();
             }
             return isValid;
+        }
+
+        internal string ResolveLabelWidth(object itemLabelWidth)
+        {
+            var width = itemLabelWidth ?? LabelWidth;
+            if (width == null)
+            {
+                return string.Empty;
+            }
+            if (width is string stringWidth)
+            {
+                return stringWidth;
+            }
+            return $"{width}px";
         }
     }
 

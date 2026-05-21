@@ -18,6 +18,12 @@ namespace Element
         [Parameter]
         public bool IsDisabled { get; set; }
         [Parameter]
+        public bool Disabled
+        {
+            get => IsDisabled;
+            set => IsDisabled = value;
+        }
+        [Parameter]
         public string ActiveText { get; set; }
 
         [Parameter]
@@ -30,6 +36,12 @@ namespace Element
         public string InactiveColor { get; set; } = "#C0CCDA";
         [Parameter]
         public TValue Value { get; set; }
+        [Parameter]
+        public TValue Model
+        {
+            get => Value;
+            set => Value = value;
+        }
 
         [Parameter]
         public EventCallback<MouseEventArgs> OnChanged { get; set; }

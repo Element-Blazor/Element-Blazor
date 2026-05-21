@@ -3,31 +3,70 @@
     var styles = new List<string>();
     var tableClsList = new List<string>();
     tableClsList.Add("el-table");
-    tableClsList.Add("el-table--fit");
+    if (Fit)
+    {
+        tableClsList.Add("el-table--fit");
+    }
     tableClsList.Add("el-table--enable-row-hover");
     tableClsList.Add("el-table--enable-row-transition");
-    if (IsStripe)
+    if (Stripe)
     {
         tableClsList.Add("el-table--striped");
     }
+    if (Border)
+    {
+        tableClsList.Add("el-table--border");
+    }
+    if (Loading)
+    {
+        tableClsList.Add("is-loading");
+    }
+    if (Size != InputSize.Normal)
+    {
+        tableClsList.Add($"el-table--{Size.ToString().ToLower()}");
+    }
 
     styles.Add("width:100%");
-    if (Height > 0)
+    var fixedHeight = Height > 0 ? Height : MaxHeight;
+    if (fixedHeight > 0)
     {
         tableClsList.Add("el-table--scrollable-y");
-        styles.Add("height:" + Height + "px");
+        styles.Add((Height > 0 ? "height:" : "max-height:") + fixedHeight + "px");
     }
 
     styles.AddRange(Style?.Split(';') ?? new string[0]);
 
     <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
+        @if (Loading)
+        {
+            <div class="el-loading-mask" style="background-color:@(LoadingBackground ?? "var(--el-mask-color)")">
+                <div class="el-loading-spinner">
+                    @if (string.IsNullOrWhiteSpace(LoadingIconClass))
+                    {
+                        <svg viewBox="25 25 50 50" class="circular">
+                            <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                        </svg>
+                    }
+                    else
+                    {
+                        <i class="@LoadingIconClass"></i>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(LoadingText))
+                    {
+                        <p class="el-loading-text">@LoadingText</p>
+                    }
+                </div>
+            </div>
+        }
         @if (headerRendered)
         {
 
             Headers = Headers.OrderBy(x => x.SortNo).ToList();
             var validColumnCount = Headers.Count();
-            <div class="el-table__header-wrapper" @ref="headerElement">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" width="100%">
+            @if (ShowHeader)
+            {
+                <div class="el-table__header-wrapper" @ref="headerElement">
+                    <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="@TableWidthStyle">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -71,16 +110,18 @@
                             <th class="gutter" style="width: 0px; display: none;"></th>
                         </tr>
                     </thead>
-                </table>
-            </div>
+                    </table>
+                </div>
+            }
 
             var bodyStyleList = new List<string>();
-            if (Height > 0)
+            if (fixedHeight > 0)
             {
-                bodyStyleList.Add("height:" + (Height - headerHeight) + "px");
+                var bodyHeight = Math.Max(0, fixedHeight - (ShowHeader ? headerHeight : 0));
+                bodyStyleList.Add((Height > 0 ? "height:" : "max-height:") + bodyHeight + "px");
             }
             <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
-                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" width="100%">
+                <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="@TableWidthStyle">
                     <colgroup>
                         @if (HasSelectionColumn)
                         {
@@ -102,11 +143,15 @@
                         {
                             var clsList = new List<string>();
                             clsList.Add("el-table__row");
-                            if (IsStripe && i % 2 == 1)
+                            if (Stripe && i % 2 == 1)
                             {
                                 clsList.Add("el-table__row--striped");
                             }
                             var row = rows.ElementAt(i);
+                            if (row == CurrentRow)
+                            {
+                                clsList.Add("current-row");
+                            }
                             if (hiddenRows.Contains(row))
                             {
                                 continue;
@@ -117,7 +162,7 @@
                                 clsList.Add("el-table__row--level-0");
                             }
                             var rowId = treeRow?.Id ?? 0;
-                            <tr @key="row" class="@string.Join(" ", clsList)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync">
+                            <tr @key="row" class="@string.Join(" ", clsList)" @onclick="e=>SetCurrentRowAsync(row)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync">
                                 @if (HasSelectionColumn)
                                 {
                                     <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
@@ -269,7 +314,7 @@
                                         {
                                             <div class="el-table__empty-block" style="height:60px;">
                                                 <span class="el-table__empty-text">
-                                                    @(string.IsNullOrWhiteSpace(EmptyMessage) ? "暂无数据" : EmptyMessage)
+                                                    @(string.IsNullOrWhiteSpace(EmptyText) ? "暂无数据" : EmptyText)
                                                 </span>
                                             </div>
                                         }

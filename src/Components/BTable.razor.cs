@@ -49,6 +49,47 @@ namespace Element
         internal List<object> rows = new List<object>();
         internal List<object> hiddenRows = new List<object>();
 
+        internal void AddColumn(BTableColumn column)
+        {
+            if (DataType == null)
+            {
+                throw new BlazuiException($"表格 {GetType().Name} 没有设置 {nameof(DataSource)} 属性或该属性为空");
+            }
+            if (column.Property == null && !(column is BTableTemplateColumn))
+            {
+                throw new BlazuiException($"列 {column.Text} 没有设置 {nameof(BTableColumn.Property)} 属性");
+            }
+
+            PropertyInfo property = null;
+            if (!string.IsNullOrWhiteSpace(column.Property))
+            {
+                property = DataType.GetProperty(column.Property);
+                if (property == null)
+                {
+                    throw new BlazuiException($"属性 {column.Property} 在 {DataType.Name} 中不存在");
+                }
+            }
+
+            var columnConfig = new TableHeader
+            {
+                EvalRaw = row => property?.GetValue(row),
+                Property = property,
+                Text = column.Text,
+                SortNo = column.SortNo,
+                Width = column.Width,
+                IsCheckBox = column.IsCheckBox,
+                Template = column.ChildContent,
+                Format = column.Format,
+                IsTree = column.IsTree,
+                IsEditable = column.IsEditable
+            };
+            if (columnConfig.Property != null)
+            {
+                columnConfig.Eval = displayRender.CreateRenderFactory(columnConfig)?.CreateRender(columnConfig);
+            }
+            Headers.Add(columnConfig);
+        }
+
         /// <summary>
         /// 自动展开所有节点
         /// </summary>
@@ -196,6 +237,13 @@ namespace Element
         /// </summary>
         [Parameter]
         public string EmptyMessage { get; set; }
+
+        [Parameter]
+        public string EmptyText
+        {
+            get => EmptyMessage;
+            set => EmptyMessage = value;
+        }
         /// <summary>
         /// 总数据条数
         /// </summary>
@@ -288,13 +336,51 @@ namespace Element
         public int Height { get; set; }
 
         [Parameter]
+        public int MaxHeight { get; set; }
+
+        [Parameter]
         public bool EnableMarkupString { get; set; }
 
         /// <summary>
         /// 启用斑马纹
         /// </summary>
         [Parameter]
-        public bool IsStripe { get; set; }
+        public bool Stripe { get; set; }
+
+        [Parameter]
+        public bool IsStripe
+        {
+            get => Stripe;
+            set => Stripe = value;
+        }
+
+        [Parameter]
+        public bool Border { get; set; }
+
+        [Parameter]
+        public bool IsBordered
+        {
+            get => Border;
+            set => Border = value;
+        }
+
+        [Parameter]
+        public bool Fit { get; set; } = true;
+
+        [Parameter]
+        public bool ShowHeader { get; set; } = true;
+
+        [Parameter]
+        public InputSize Size { get; set; } = InputSize.Normal;
+
+        [Parameter]
+        public bool Loading { get; set; }
+
+        [Parameter]
+        public object CurrentRow { get; set; }
+
+        [Parameter]
+        public EventCallback<object> CurrentRowChanged { get; set; }
 
         /// <summary>
         /// 加载中状态背景颜色
@@ -311,6 +397,7 @@ namespace Element
         /// <summary>
         /// 加载中状态文字
         /// </summary>
+        [Parameter]
         public string LoadingText { get; set; }
         /// <summary>
         /// 当加载数据源时触发，传入参数为当前页
@@ -320,6 +407,17 @@ namespace Element
         public ElementReference Container { get; set; }
         [Inject]
         public LoadingService LoadingService { get; set; }
+
+        protected string TableWidthStyle => Fit ? "width:100%" : "min-width:100%";
+
+        protected async Task SetCurrentRowAsync(object row)
+        {
+            CurrentRow = row;
+            if (CurrentRowChanged.HasDelegate)
+            {
+                await CurrentRowChanged.InvokeAsync(row);
+            }
+        }
 
         internal Task OnRowCheckBoxRenderCompleted(object row, BCheckBox<bool> chk)
         {

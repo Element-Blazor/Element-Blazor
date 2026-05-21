@@ -4,51 +4,88 @@
 
     var clsList = new List<string>();
     clsList.Add("el-form-item");
-    if (IsRequired)
+    if (Required)
     {
         clsList.Add("is-required");
     }
-    var isError = ValidationResult != null && !ValidationResult.IsValid;
+    var isError = (!string.IsNullOrWhiteSpace(Error)) || ValidateStatus == "error" || (ValidationResult != null && !ValidationResult.IsValid);
     if (isError)
     {
         clsList.Add("is-error");
     }
+    if (ValidateStatus == "validating")
+    {
+        clsList.Add("is-validating");
+    }
+    if (ValidateStatus == "success")
+    {
+        clsList.Add("is-success");
+    }
+    if (Form.HideRequiredAsterisk)
+    {
+        clsList.Add("is-no-asterisk");
+    }
+    clsList.Add(Form.RequireAsteriskPosition == "right" ? "asterisk-right" : "asterisk-left");
+    if (Size != null)
+    {
+        clsList.Add($"el-form-item--{Size.Value.ToString().ToLower()}");
+    }
+    var finalLabelPosition = string.IsNullOrWhiteSpace(LabelPosition) ? Convert.ToString(Form.LabelPosition) : LabelPosition;
+    if (!string.IsNullOrWhiteSpace(finalLabelPosition))
+    {
+        clsList.Add($"el-form-item--label-{finalLabelPosition}");
+    }
     var labelStyles = new List<string>();
     var bodyStyles = new List<string>();
+    var resolvedLabelWidth = Form.ResolveLabelWidth(LabelWidth);
     if (!Form.Inline)
     {
-        labelStyles.Add($"width:{LabelWidth}px");
-
-        if (Form.LabelAlign != LabelAlign.Top && !string.IsNullOrWhiteSpace(Label))
+        if (!string.IsNullOrWhiteSpace(resolvedLabelWidth))
         {
-            bodyStyles.Add($"margin-left:{LabelWidth}px");
+            labelStyles.Add($"width:{resolvedLabelWidth}");
         }
+
+        if (Form.LabelAlign != LabelAlign.Top && !string.IsNullOrWhiteSpace(Label) && !string.IsNullOrWhiteSpace(resolvedLabelWidth))
+        {
+            bodyStyles.Add($"margin-left:{resolvedLabelWidth}");
+        }
+    }
+    var labelText = string.IsNullOrWhiteSpace(Label) ? Label : $"{Label}{Form.LabelSuffix}";
+    var shouldShowValidationMessage = ShowMessage && Form.ShowMessage;
+    var errorMessages = new List<string>();
+    if (!string.IsNullOrWhiteSpace(Error))
+    {
+        errorMessages.Add(Error);
+    }
+    else if (ValidationResult != null && !ValidationResult.IsValid)
+    {
+        errorMessages.AddRange(ValidationResult.ErrorMessages);
     }
 }
 @if (ApplyStyle)
 {
-    <div class="@string.Join(" ", clsList)" style="@formItemCssBuilder">
+    <div class="@string.Join(" ", clsList)" role="group" style="@formItemCssBuilder">
         @if (!string.IsNullOrWhiteSpace(Image))
         {
-            <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
+            <label for="@For" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
         }
         else if (!string.IsNullOrWhiteSpace(Label))
         {
-            <label for="name" class="el-form-item__label" style="@string.Join(";", labelStyles)">
-                @Label
+            <label for="@For" class="el-form-item__label" style="@string.Join(";", labelStyles)">
+                @labelText
             </label>
         }
         <div class="el-form-item__content" style="@string.Join(";", bodyStyles)">
             <CascadingValue Value="this">
                 @ChildContent
             </CascadingValue>
-            @if (ValidationResult != null && !ValidationResult.IsValid)
+            @if (shouldShowValidationMessage && errorMessages.Any())
             {
-                @foreach (var errorMessage in ValidationResult.ErrorMessages)
+                @foreach (var errorMessage in errorMessages)
                 {
                     var marginTop = IsShowing ? "3px" : "0px";
                     var opacity = IsShowing ? "0" : "1";
-                    <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                    <div class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                         @errorMessage
                     </div>
                 }
@@ -62,13 +99,13 @@ else
     <CascadingValue Value="this">
         @ChildContent
     </CascadingValue>
-    @if (ValidationResult != null && !ValidationResult.IsValid)
+    @if (shouldShowValidationMessage && errorMessages.Any())
     {
-        @foreach (var errorMessage in ValidationResult.ErrorMessages)
+        @foreach (var errorMessage in errorMessages)
         {
             var marginTop = IsShowing ? "3px" : "0px";
             var opacity = IsShowing ? "0" : "1";
-            <div class="el-form-item__error" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+            <div class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                 @errorMessage
             </div>
         }

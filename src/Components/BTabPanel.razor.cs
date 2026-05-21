@@ -23,12 +23,26 @@ namespace Element
 
         protected async Task OnInternalTabCloseAsync(MouseEventArgs e)
         {
+            if (Disabled)
+            {
+                return;
+            }
             RequireRender = true;
             await TabContainer.CloseTabAsync(this);
         }
 
         [Parameter]
         public bool IsActive { get; set; }
+
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
         public ElementReference Element { get; set; }
 
         [CascadingParameter]
@@ -36,6 +50,10 @@ namespace Element
 
         protected async Task Activate(MouseEventArgs e)
         {
+            if (Disabled)
+            {
+                return;
+            }
             RequireRender = true;
             IsActive = await TabContainer.SetActivateTabAsync(this);
         }
@@ -63,6 +81,13 @@ namespace Element
 
         [Parameter]
         public bool IsClosable { get; set; }
+
+        [Parameter]
+        public bool Closable
+        {
+            get => IsClosable;
+            set => IsClosable = value;
+        }
 
         protected override async Task OnParametersSetAsync()
         {

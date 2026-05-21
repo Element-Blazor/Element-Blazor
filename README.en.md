@@ -91,6 +91,10 @@ dotnet add package Element --prerelease
 - Demo source: `demo`
 - Community source: `community`
 
+## Theme Variables
+
+Element-Blazor ships an Element Plus `2.14.0` compatible CSS variable layer at `/_content/Element/css/theme.css`. Load it after `index.css`, then override `--el-*` variables in your app stylesheet. See [docs/p1-theme-variables.md](docs/p1-theme-variables.md) for Button/Input/Table migration examples.
+
 ## Versioning and Plan
 
 - Version history: see [CHANGELOG.md](CHANGELOG.md)
