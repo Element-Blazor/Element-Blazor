@@ -20,5 +20,7 @@ namespace Element
         public string DefaultActiveIndex { get; set; }
 
         public MenuMode Mode { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }

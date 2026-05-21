@@ -7,7 +7,7 @@
         .AddIf(IsHover, "hover");
     var isHidden = !IsVisible ? "display:none;" : string.Empty;
 }
-<li class="@clsBuilder.ToString()" style="@isHidden" @onclick="SelectItemAsync" role="option" aria-selected="@IsSelected" aria-disabled="@Disabled">
+<li class="@clsBuilder.ToString()" style="@isHidden" @onclick="SelectItemAsync" role="option" aria-selected="@IsSelected" aria-disabled="@Disabled" tabindex="@(Disabled ? -1 : 0)">
     <span>
         @if (!string.IsNullOrWhiteSpace(Text))
         {

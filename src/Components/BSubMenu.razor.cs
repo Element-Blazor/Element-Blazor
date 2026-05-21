@@ -58,7 +58,7 @@ namespace Element
 
         public void Activate()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -93,7 +93,7 @@ namespace Element
 
         protected async Task OnOverAsync()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -198,7 +198,7 @@ namespace Element
 
         protected async Task OnOutAsync()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -240,7 +240,7 @@ namespace Element
 
         protected void OnClick()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -255,6 +255,20 @@ namespace Element
             if (e.Key != "Enter" && e.Key != " ")
             {
                 return Task.CompletedTask;
+            }
+            OnClick();
+            return Task.CompletedTask;
+        }
+
+        internal Task ToggleByKeyboardAsync()
+        {
+            if (Disabled || Options.Disabled)
+            {
+                return Task.CompletedTask;
+            }
+            if (TopMenu.Mode == MenuMode.Horizontal)
+            {
+                return OnOverAsync();
             }
             OnClick();
             return Task.CompletedTask;

@@ -1,7 +1,7 @@
 ﻿@inherits BMenuContainer
-<li role="menuitem" tabindex="0" aria-haspopup="true"
+<li role="menuitem" tabindex="@(Disabled || Options.Disabled ? -1 : 0)" aria-haspopup="true"
     class="el-submenu @(isActive?"is-active":"") @(IsOpened?"is-opened":"") @(Disabled ? "is-disabled" : "")"
-    aria-disabled="@Disabled"
+    aria-disabled="@(Disabled || Options.Disabled)"
     aria-expanded="@(IsOpened?"true":"")"
     @onkeydown="OnKeyDownAsync">
     <div @onmouseover="OnOverAsync"

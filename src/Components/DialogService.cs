@@ -152,6 +152,7 @@ namespace Element
                 Title = title,
                 Parameters = parameters,
                 IsModal = true,
+                Top = "15vh",
                 OnShow = onShow,
                 TaskCompletionSource = taskCompletionSource
             };

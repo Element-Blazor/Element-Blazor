@@ -27,7 +27,9 @@ namespace Element
         internal bool EnableClearButton { get; set; }
         private int hoveredIndex = -1;
         private string filterText;
+        private static long dropDownIdSeed;
         internal bool OptionsRendered { get; private set; }
+        internal string DropDownId { get; } = $"el-select-dropdown-{Interlocked.Increment(ref dropDownIdSeed)}";
 
         [Parameter]
         public string Label { get; set; }
@@ -96,6 +98,21 @@ namespace Element
 
         [Parameter]
         public string PopperClass { get; set; }
+
+        [Parameter]
+        public string PopperStyle { get; set; }
+
+        [Parameter]
+        public EventCallback<bool> OnVisibleChange { get; set; }
+
+        [Parameter]
+        public EventCallback OnEndReached { get; set; }
+
+        [Parameter]
+        public EventCallback<FocusEventArgs> OnFocus { get; set; }
+
+        [Parameter]
+        public EventCallback<FocusEventArgs> OnBlur { get; set; }
 
         [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
@@ -332,7 +349,7 @@ namespace Element
 
         private async Task ToggleDropDownAsync()
         {
-            if (Disabled || Loading)
+            if (Disabled)
             {
                 return;
             }
@@ -359,15 +376,19 @@ namespace Element
                 Target = elementSelect,
                 OptionContent = ChildContent,
                 PopperClass = PopperClass,
+                PopperStyle = PopperStyle,
                 MaxHeight = PopperMaxHeight,
                 FitInputWidth = FitInputWidth,
+                DropDownId = DropDownId,
                 Refresh = () =>
                 {
                     StateHasChanged();
                 },
+                OnClosed = () => NotifyVisibleChangeAsync(false),
                 IsShow = true
             };
             PopupService.SelectDropDownOptions.Add(dropDownOption);
+            await NotifyVisibleChangeAsync(true);
         }
 
         private void ClearSelection()
@@ -454,6 +475,10 @@ namespace Element
             {
                 return;
             }
+            if (Loading)
+            {
+                return;
+            }
             var option = Options[hoveredIndex];
             if (option.Disabled)
             {
@@ -495,6 +520,37 @@ namespace Element
 
         private IReadOnlyList<SelectResultModel<TValue>> FilteredOptions => Options.Where(IsOptionVisible).ToList();
 
+        private Task NotifyVisibleChangeAsync(bool visible)
+        {
+            if (!visible && dropDownOption != null)
+            {
+                filterText = null;
+                dropDownOption = null;
+            }
+            if (!OnVisibleChange.HasDelegate)
+            {
+                StateHasChanged();
+                return Task.CompletedTask;
+            }
+            return OnVisibleChange.InvokeAsync(visible);
+        }
+
+        protected async Task OnInputFocusAsync(FocusEventArgs e)
+        {
+            if (OnFocus.HasDelegate)
+            {
+                await OnFocus.InvokeAsync(e);
+            }
+        }
+
+        protected async Task OnInputBlurAsync(FocusEventArgs e)
+        {
+            if (OnBlur.HasDelegate)
+            {
+                await OnBlur.InvokeAsync(e);
+            }
+        }
+
         internal void RegisterOption(SelectResultModel<TValue> option)
         {
             OptionsRendered = true;
@@ -516,6 +572,15 @@ namespace Element
         bool ISelectDropDownContext.ShouldShowEmpty => ShouldShowEmpty;
 
         bool ISelectDropDownContext.ShouldShowNoMatch => ShouldShowNoMatch;
+
+        Task ISelectDropDownContext.OnEndReachedAsync()
+        {
+            if (!OnEndReached.HasDelegate || Loading)
+            {
+                return Task.CompletedTask;
+            }
+            return OnEndReached.InvokeAsync();
+        }
 
         private bool ShouldShowEmpty => !Loading && (OptionsRendered || ChildContent == null) && !FilteredOptions.Any();
 

@@ -1,11 +1,11 @@
 ﻿@inherits BComponentBase
-<li role="menuitem" tabindex="0"
+<li role="menuitem" tabindex="@(Disabled || Options.Disabled ? -1 : 0)"
     @onclick="OnClickAsync"
     @onmouseover="OnOver"
     @onmouseout="OnOut"
     @onkeydown="OnKeyDownAsync"
     class="el-menu-item @(IsActive?"is-active":"") @(Disabled ? "is-disabled" : "")"
-    aria-disabled="@Disabled"
+    aria-disabled="@(Disabled || Options.Disabled)"
     style="background-color:@BackgroundColor;color:@TextColor; border-bottom-color:@BorderColor;">
     <i class="@(Icon ?? "el-icon-menu")"></i>
     @ChildContent

@@ -47,6 +47,10 @@ namespace Element
         private string currentRoute;
         public void Activate()
         {
+            if (Options.Disabled)
+            {
+                return;
+            }
             IsActive = true;
             TextColor = Options.ActiveTextColor;
             BorderColor = Options.ActiveTextColor;
@@ -104,7 +108,7 @@ namespace Element
 
         public void OnOver()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -122,7 +126,7 @@ namespace Element
 
         public void OnOut()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }
@@ -157,7 +161,7 @@ namespace Element
 
         public async Task OnClickAsync()
         {
-            if (Disabled)
+            if (Disabled || Options.Disabled)
             {
                 return;
             }

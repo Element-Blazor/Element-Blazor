@@ -20,6 +20,8 @@ namespace Element
         public TaskCompletionSource<int> TaskCompletionSource { get; set; }
         public Func<SubMenuOption, Task> Close { get; set; }
 
+        internal string Placement { get; set; } = "bottom-start";
+
         public CancellationTokenSource ClosingTaskCancellationTokenSource { get; set; }
         public Task ClosingTask { get; internal set; }
     }

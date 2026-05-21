@@ -10,15 +10,19 @@
         .AddIf(!string.IsNullOrWhiteSpace(Top), $"margin-top:{Top}")
         .Add(Style);
     var wrapperStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
-        .AddIf(ZIndex.HasValue, $"z-index:{ZIndex.Value}");
+        .Add($"z-index:{ResolvedZIndex}")
+        .AddIf(!ModelValue, "display:none");
+    var modalStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+        .Add($"z-index:{ResolvedModalZIndex}")
+        .AddIf(!ModelValue, "display:none");
 }
-@if (ModelValue)
+@if (ShouldRenderDialog)
 {
     @if (Modal)
     {
-        <div class="v-modal el-overlay" style="@wrapperStyleBuilder.ToString()" @onclick="CloseOnModalClickAsync"></div>
+        <div class="v-modal el-overlay" style="@modalStyleBuilder.ToString()" @onclick="CloseOnModalClickAsync"></div>
     }
-    <div class="el-overlay-dialog el-dialog__wrapper" style="@wrapperStyleBuilder.ToString()" tabindex="-1" role="presentation" @onclick="CloseOnModalClickAsync" @onkeydown="OnKeyDownAsync">
+    <div class="el-overlay-dialog el-dialog__wrapper" style="@wrapperStyleBuilder.ToString()" tabindex="-1" role="presentation" @onclick="CloseOnModalClickAsync" @onkeydown="OnKeyDownAsync" @ref="wrapperElement">
         <div class="@dialogClsBuilder.ToString()" style="@dialogStyleBuilder.ToString()" role="dialog" aria-modal="@Modal" aria-label="@Title" @onclick:stopPropagation>
             <div class="el-dialog__header">
                 @if (Header != null)

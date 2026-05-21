@@ -426,6 +426,7 @@ namespace Element
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            ShadowCount = DialogOptions.Count(x => x.IsModal);
             await RenderLoadingAsync();
             await RenderDateTimePickerAsync();
             await RenderDropDownAsync(SelectDropDownOptions, true);
@@ -444,8 +445,21 @@ namespace Element
             var targetEl = option.Target.Dom(JSRuntime);
             var rect = await targetEl.GetBoundingClientRectAsync();
             var top = await targetEl.GetTopRelativeBodyAsync();
-            option.Left = rect.Left;
+            var left = await targetEl.GetLeftRelativeBodyAsync();
+            var documentWidth = await Document.GetClientWidthAsync();
+            var documentHeight = await Document.GetClientHeightAsync();
+            option.Left = left;
             option.Top = top + rect.Height;
+            option.Placement = "bottom-start";
+            if (option.Left + rect.Width > documentWidth)
+            {
+                option.Left = Math.Max(10, documentWidth - rect.Width - 10);
+            }
+            if (rect.Bottom + 200 > documentHeight && rect.Top > 200)
+            {
+                option.Top = Math.Max(10, top - 200);
+                option.Placement = "top-start";
+            }
             option.IsShow = true;
             option.ShowStatus = AnimationStatus.Begin;
             StateHasChanged();
@@ -464,11 +478,16 @@ namespace Element
             var targetEl = option.Target.Dom(JSRuntime);
             var rect = await targetEl.GetBoundingClientRectAsync();
             var top = await targetEl.GetTopRelativeBodyAsync();
-            option.Left = rect.Left;
+            var left = await targetEl.GetLeftRelativeBodyAsync();
+            option.Left = left;
             option.Top = top + rect.Height;
             if (autoWidth || option.FitInputWidth)
             {
                 option.Width = rect.Width;
+            }
+            else if (option.Width <= 0)
+            {
+                option.MinWidth = rect.Width;
             }
             var dropDownEl = option.Element.Dom(JSRuntime);
             var width = await dropDownEl.GetClientWidthAsync();
@@ -509,12 +528,20 @@ namespace Element
 
         internal async Task CloseDropDownAsync(DropDownOption option)
         {
+            if (!option.IsShow)
+            {
+                return;
+            }
             option.IsShow = false;
             if (GlobalBlazuiSettings.DisableAnimation)
             {
                 PopupService.SelectDropDownOptions.Remove(option);
                 PopupService.DropDownMenuOptions.Remove(option);
                 option.Refresh?.Invoke();
+                if (option.OnClosed != null)
+                {
+                    await option.OnClosed();
+                }
                 return;
             }
             option.HideStatus = AnimationStatus.Begin;
@@ -526,6 +553,10 @@ namespace Element
             PopupService.SelectDropDownOptions.Remove(option);
             PopupService.DropDownMenuOptions.Remove(option);
             option.Refresh?.Invoke();
+            if (option.OnClosed != null)
+            {
+                await option.OnClosed();
+            }
         }
 
         internal async Task CloseSubMenuAsync(SubMenuOption option)

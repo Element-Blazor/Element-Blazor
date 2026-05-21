@@ -7,6 +7,10 @@
     {
         tableClsList.Add("el-table--fit");
     }
+    if (Flexible)
+    {
+        tableClsList.Add("el-table--flexible");
+    }
     tableClsList.Add("el-table--enable-row-hover");
     tableClsList.Add("el-table--enable-row-transition");
     if (Stripe)
@@ -33,10 +37,14 @@
         tableClsList.Add("el-table--scrollable-y");
         styles.Add((Height > 0 ? "height:" : "max-height:") + fixedHeight + "px");
     }
+    if (IsEmpty)
+    {
+        tableClsList.Add("is-empty");
+    }
 
     styles.AddRange(Style?.Split(';') ?? new string[0]);
 
-    <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)">
+    <div style="@string.Join(";", styles)" @ref="Container" class="@string.Join(" ", tableClsList)" role="table" aria-busy="@Loading">
         @if (Loading)
         {
             <div class="el-loading-mask" style="background-color:@(LoadingBackground ?? "var(--el-mask-color)")">
@@ -65,7 +73,7 @@
             var validColumnCount = Headers.Count();
             @if (ShowHeader)
             {
-                <div class="el-table__header-wrapper" @ref="headerElement">
+                <div class="el-table__header-wrapper" @ref="headerElement" @onscroll="SyncBodyScrollFromHeaderAsync">
                     <table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="@TableWidthStyle">
                     <colgroup>
                         @if (HasSelectionColumn)
@@ -85,10 +93,10 @@
                         <col name="gutter" width="0" />
                     </colgroup>
                     <thead class="has-gutter">
-                        <tr class="">
+                        <tr class="" role="row">
                             @if (HasSelectionColumn)
                             {
-                                <th colspan="1" rowspan="1" class="el-table_1_column_0     is-leaf">
+                                <th colspan="1" rowspan="1" class="el-table_1_column_0 el-table__cell is-leaf" role="columnheader">
                                     <div class="cell">
                                         <BCheckBox TValue="Boolean" @ref="chkAll" Name="selectAll" Status="selectAllStatus" StatusChanged="ChangeAllStatus"></BCheckBox>
                                     </div>
@@ -101,7 +109,7 @@
                                 {
                                     continue;
                                 }
-                                <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i     is-leaf">
+                                <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i el-table__cell is-leaf" role="columnheader">
                                     <div class="cell">
                                         @header.Text
                                     </div>
@@ -120,7 +128,7 @@
                 var bodyHeight = Math.Max(0, fixedHeight - (ShowHeader ? headerHeight : 0));
                 bodyStyleList.Add((Height > 0 ? "height:" : "max-height:") + bodyHeight + "px");
             }
-            <div class="el-table__body-wrapper is-scrolling-none" style="@string.Join(";", bodyStyleList)">
+            <div class="el-table__body-wrapper @ScrollClass" style="@string.Join(";", bodyStyleList)" @ref="bodyWrapperElement" @onscroll="SyncHeaderScrollAsync">
                 <table cellspacing="0" cellpadding="0" border="0" class="el-table__body" style="@TableWidthStyle">
                     <colgroup>
                         @if (HasSelectionColumn)
@@ -162,10 +170,10 @@
                                 clsList.Add("el-table__row--level-0");
                             }
                             var rowId = treeRow?.Id ?? 0;
-                            <tr @key="row" class="@string.Join(" ", clsList)" @onclick="e=>SetCurrentRowAsync(row)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync">
+                            <tr @key="row" class="@string.Join(" ", clsList)" @onclick="e=>SetCurrentRowAsync(row)" @ondblclick="e=>BeginEditAsync(row)" @onkeyup="SaveTableAsync" role="row">
                                 @if (HasSelectionColumn)
                                 {
-                                    <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                    <td rowspan="1" colspan="1" class="el-table_1_column_0 el-table__cell">
                                         <div class="cell">
                                             <BCheckBox TValue="Boolean" OnRenderCompleted="chk => OnRowCheckBoxRenderCompleted(row, (BCheckBox<bool>)chk)" Name="@($"chk{i}")" Status="SelectedRows.Contains(row) ? Status.Checked : Status.UnChecked" StatusChanged="(status => ChangeRowStatus(status, row))"></BCheckBox>
                                         </div>
@@ -196,7 +204,7 @@
                                             throw new BlazuiException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
                                         }
                                         var hasChild = treeRow.HasChildren || rows.Cast<TreeItemBase>().Any(x => x.ParentId == rowId);
-                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j el-table__cell">
                                             <div class="cell">
                                                 @if (hasChild)
                                                 {
@@ -229,7 +237,7 @@
                                     }
                                     else
                                     {
-                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j  ">
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j el-table__cell">
                                             <div class="cell">
                                                 @if (row == editingRow && CanEdit(header))
                                                 {
@@ -271,7 +279,7 @@
                                                     <tr @onkeyup="e=> { saveAction = SaveAction.Create; _ = SaveTableAsync(e); }" @ref="editingRowEl">
                                                         @if (HasSelectionColumn)
                                                         {
-                                                            <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                                            <td rowspan="1" colspan="1" class="el-table_1_column_0 el-table__cell">
                                                                 <div class="cell">
 
                                                                 </div>
@@ -286,7 +294,7 @@
                                                             }
                                                             if (CanEdit(header))
                                                             {
-                                                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                                                <td rowspan="1" colspan="1" class="el-table_1_column_0 el-table__cell">
                                                                     <div class="cell">
                                                                         <BDynamicComponent Component="header.EditorRender" Config="header.EditorRenderConfig"></BDynamicComponent>
                                                                     </div>
@@ -294,14 +302,14 @@
                                                             }
                                                             else
                                                             {
-                                                                <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                                                <td rowspan="1" colspan="1" class="el-table_1_column_0 el-table__cell">
                                                                     <div class="cell">
                                                                     </div>
                                                                 </td>
                                                             }
                                                         }
 
-                                                        <td rowspan="1" colspan="1" class="el-table_1_column_0  ">
+                                                        <td rowspan="1" colspan="1" class="el-table_1_column_0 el-table__cell">
                                                             <div class="cell">
                                                                 <BButton Type="ButtonType.Primary" Size="ButtonSize.Small" OnClick="SaveTableAsync" @ref="saveAddButton">保存</BButton>
                                                             </div>
@@ -310,12 +318,19 @@
                                                 }
                                             </tbody>
                                         </table>
-                                        @if (rows.Count <= 0 && !IsEditable)
+                                        @if (IsEmpty)
                                         {
-                                            <div class="el-table__empty-block" style="height:60px;">
-                                                <span class="el-table__empty-text">
-                                                    @(string.IsNullOrWhiteSpace(EmptyText) ? "暂无数据" : EmptyText)
-                                                </span>
+                                            <div class="el-table__empty-block" style="@EmptyBlockStyle" role="row">
+                                                <div class="el-table__empty-text">
+                                                    @if (Empty != null)
+                                                    {
+                                                        @Empty
+                                                    }
+                                                    else
+                                                    {
+                                                        @(string.IsNullOrWhiteSpace(EmptyText) ? "暂无数据" : EmptyText)
+                                                    }
+                                                </div>
                                             </div>
                                         }
                                     </div>

@@ -30,7 +30,7 @@
 <div class="@classBuilder.ToString()" style="@Style" @onkeydown="OnKeyDownAsync">
     @if (TabPosition == TabPosition.Bottom)
     {
-        <div class="el-tabs__content" style="@bodyStyle" @ref="Content">
+        <div class="el-tabs__content" style="@bodyStyle" @ref="Content" role="tabpanel" aria-labelledby="tab-@(ActiveTab?.Name)" id="pane-@(ActiveTab?.Name)">
             <BDynamicComponent Component="activeContent"></BDynamicComponent>
         </div>
     }
@@ -40,8 +40,8 @@
             <span tabindex="0" class="el-tabs__new-tab" @onclick="OnAddingTab"><i class="el-icon-plus"></i></span>
         }
         <div class="el-tabs__nav-wrap @headerPosition">
-            <div class="el-tabs__nav-scroll">
-                <div role="tablist" class="el-tabs__nav @headerPosition" style="transform: translateX(0px);">
+            <div class="el-tabs__nav-scroll" @ref="navScrollElement">
+                <div role="tablist" class="el-tabs__nav @headerPosition" style="transform: translateX(0px);" aria-orientation="@(TabPosition == TabPosition.Left || TabPosition == TabPosition.Right ? "vertical" : "horizontal")">
                     @if (Type == TabType.Normal)
                     {
                     <div class="el-tabs__active-bar @headerPosition" style="width: @(BarWidth)px; transform: translateX(@(BarOffsetLeft)px);"></div>
@@ -67,7 +67,7 @@
     </div>
     @if (TabPosition != TabPosition.Bottom)
     {
-        <div class="el-tabs__content" style="@bodyStyle" @ref="Content">
+        <div class="el-tabs__content" style="@bodyStyle" @ref="Content" role="tabpanel" aria-labelledby="tab-@(ActiveTab?.Name)" id="pane-@(ActiveTab?.Name)">
             <BDynamicComponent Component="activeContent"></BDynamicComponent>
         </div>
     }

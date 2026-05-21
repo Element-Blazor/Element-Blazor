@@ -14,12 +14,17 @@ namespace Element
         [Parameter]
         public MenuMode Mode { get; set; } = MenuMode.Vertical;
         protected string modeClass;
+        protected string menuClass;
+        protected string menuStyle;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
         [Parameter]
         public bool CanCollapse { get; set; } = true;
+
+        [Parameter]
+        public bool Disabled { get; set; }
 
         [Parameter]
         public string BackgroundColor { get; set; }
@@ -41,6 +46,14 @@ namespace Element
 
         [Parameter]
         public string DefaultActive { get; set; }
+
+        [Parameter]
+        public string DefaultActiveIndex
+        {
+            get => DefaultActive;
+            set => DefaultActive = value;
+        }
+
         protected IMenuItem activeItem;
         [Parameter]
         public IMenuItem ActiveItem { get => activeItem; set => activeItem = value; }
@@ -48,6 +61,8 @@ namespace Element
         public EventCallback<IMenuItem> ActiveItemChanged { get; set; }
         public virtual void ActivateItem(IMenuItem item)
         {
+            if (Disabled)
+                return;
             if (item == null)
                 return;
             if (item.Disabled)
@@ -92,10 +107,39 @@ namespace Element
                 TextColor = TextColor,
                 DefaultActiveIndex = DefaultActive,
                 HoverColor = HoverColor,
-                Mode = Mode
+                Mode = Mode,
+                Disabled = Disabled
             };
 
             base.OnInitialized();
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            modeClass = $"el-menu--{Mode.ToString().ToLower()}";
+            menuClass = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add(modeClass, "el-menu", Cls)
+                .AddIf(Disabled, "is-disabled")
+                .ToString();
+            menuStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+                .Add("overflow:auto")
+                .AddIf(!string.IsNullOrWhiteSpace(BackgroundColor), $"--el-menu-bg-color:{BackgroundColor}")
+                .AddIf(!string.IsNullOrWhiteSpace(TextColor), $"--el-menu-text-color:{TextColor}")
+                .AddIf(!string.IsNullOrWhiteSpace(ActiveTextColor), $"--el-menu-active-color:{ActiveTextColor}")
+                .AddIf(!string.IsNullOrWhiteSpace(HoverColor), $"--el-menu-hover-bg-color:{HoverColor}")
+                .Add(Style)
+                .ToString();
+            if (Options != null)
+            {
+                Options.BackgroundColor = BackgroundColor;
+                Options.ActiveTextColor = ActiveTextColor;
+                Options.TextColor = TextColor;
+                Options.DefaultActiveIndex = DefaultActive;
+                Options.HoverColor = HoverColor;
+                Options.Mode = Mode;
+                Options.Disabled = Disabled;
+            }
         }
         protected override bool ShouldRender()
         {
@@ -104,6 +148,10 @@ namespace Element
 
         protected async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
+            if (Disabled)
+            {
+                return;
+            }
             if (e.Key != "ArrowDown" && e.Key != "ArrowRight" && e.Key != "ArrowUp" && e.Key != "ArrowLeft" && e.Key != "Home" && e.Key != "End" && e.Key != "Enter" && e.Key != " ")
             {
                 return;
@@ -122,9 +170,31 @@ namespace Element
             {
                 currentIndex = enabledItems.Count - 1;
             }
+            else if (e.Key == "Enter" || e.Key == " ")
+            {
+                if (activeItem is BMenuItem menuItem)
+                {
+                    await menuItem.OnClickAsync();
+                }
+                else if (activeItem is BSubMenu subMenu)
+                {
+                    await subMenu.ToggleByKeyboardAsync();
+                }
+                return;
+            }
             else
             {
-                var isPrev = e.Key == "ArrowUp" || e.Key == "ArrowLeft";
+                var isPrev = Mode == MenuMode.Horizontal
+                    ? e.Key == "ArrowLeft"
+                    : e.Key == "ArrowUp";
+                if (Mode == MenuMode.Horizontal && (e.Key == "ArrowUp" || e.Key == "ArrowDown"))
+                {
+                    return;
+                }
+                if (Mode == MenuMode.Vertical && (e.Key == "ArrowLeft" || e.Key == "ArrowRight"))
+                {
+                    return;
+                }
                 currentIndex = (currentIndex + (isPrev ? -1 : 1) + enabledItems.Count) % enabledItems.Count;
             }
             ActivateItem(enabledItems[currentIndex]);

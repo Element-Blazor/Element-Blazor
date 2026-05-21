@@ -49,6 +49,7 @@ namespace Element
         /// 渲染后的内容区域
         /// </summary>
         public ElementReference Content { get; set; }
+        protected ElementReference navScrollElement;
 
         /// <summary>
         /// Tab 类型
@@ -63,7 +64,21 @@ namespace Element
         public string ModelValue { get; set; }
 
         [Parameter]
+        public string Value
+        {
+            get => ModelValue;
+            set => ModelValue = value;
+        }
+
+        [Parameter]
         public EventCallback<string> ModelValueChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<string> ValueChanged
+        {
+            get => ModelValueChanged;
+            set => ModelValueChanged = value;
+        }
 
         [Parameter]
         public TabPosition TabPosition { get; set; }
@@ -370,10 +385,11 @@ namespace Element
                     item.IsActive = item.Name == tab.Name;
                 }
             }
-            ActiveTab = tab;
             var eventArgs = new BChangeEventArgs<BTabPanel>();
             eventArgs.OldValue = ActiveTab;
             eventArgs.NewValue = tab;
+            ActiveTab = tab;
+            ModelValue = tab.Name;
             RequireRender = true;
             if (OnActiveTabChanged.HasDelegate)
             {
@@ -412,6 +428,15 @@ namespace Element
             }
             else
             {
+                var isVertical = TabPosition == TabPosition.Left || TabPosition == TabPosition.Right;
+                if (!isVertical && (e.Key == "ArrowUp" || e.Key == "ArrowDown"))
+                {
+                    return;
+                }
+                if (isVertical && (e.Key == "ArrowLeft" || e.Key == "ArrowRight"))
+                {
+                    return;
+                }
                 var step = e.Key == "ArrowLeft" || e.Key == "ArrowUp" ? -1 : 1;
                 currentIndex = (currentIndex + step + enabledTabs.Count) % enabledTabs.Count;
             }

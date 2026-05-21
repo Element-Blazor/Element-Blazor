@@ -72,7 +72,7 @@
             var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("opacity:0", "top:10px")
                 .Add(width);
-            <div @key="option" class="el-overlay-dialog el-dialog__wrapper" style="z-index: @index;" @onclick="async e => await CloseDialogOnModalClickAsync(option)" @onkeydown="async e => await OnDialogKeyDownAsync(option, e)" tabindex="-1">
+            <div @key="option" class="el-overlay-dialog el-dialog__wrapper" style="z-index: @index;" @onclick="async e => await CloseDialogOnModalClickAsync(option)" @onkeydown="async e => await OnDialogKeyDownAsync(option, e)" tabindex="-1" role="presentation">
                 <BTransition role="dialog" @onclick:stopPropagation OnAllEnd="()=> DialogAnimationEndAsync(option)" OnPause="e=>OnPauseAsync(option)" @ref="option.Element" AutoAdjustPosition="true" aria-modal="true" aria-label="@option.Title" Cls="@clsBuilder.ToString()" InitialStyle="@styleBuilder.ToString()">
                     <Path>
                         <BTransitionPath top="@option.Top" opacity="1" Delay="200" Duration="300"></BTransitionPath>
@@ -109,13 +109,12 @@
             </div>
             @if (option.IsModal)
             {
-                ShadowCount++;
                 var shadowStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
                     .Add("opacity:0", "position:fixed")
                     .Add($"z-index:{shadowIndex}");
                 var firstStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
-                    .Add($"opacity:{(ShadowCount == 0 ? 0 : 0.5)}");
-                <BTransition InitialStyle="@shadowStyle.ToString()" @ref="option.ShadowElement" Cls="v-modal">
+                    .Add("opacity:0.5");
+                <BTransition InitialStyle="@shadowStyle.ToString()" @ref="option.ShadowElement" Cls="v-modal el-overlay">
                     <Path>
                         <BTransitionPath Style="@firstStyle.ToString()" Delay="300" Duration="200"></BTransitionPath>
                         <BTransitionPath opacity="0" Duration="300" Pause="true"></BTransitionPath>
@@ -126,7 +125,6 @@
         }
         else
         {
-            ShadowCount++;
             var layerSyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
    .AddIf(option.Point != System.Drawing.Point.Empty, $"left:{option.Point.X}px;", $"top:{option.Point.Y}px");
             var messageBoxStyleBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
@@ -178,7 +176,7 @@
             </div>
             @if (option.IsModal)
             {
-                <div class="v-modal" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:@(ShadowCount == 0 ? "0" : "0.5");position:fixed;"></div>
+                <div class="v-modal el-overlay" tabindex="0" style="z-index: @shadowIndex;transition:opacity 0.3s;opacity:0.5;position:fixed;"></div>
             }
         }
     }
@@ -411,16 +409,27 @@
         var dropdownClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
             .Add("el-select-dropdown", "el-popper")
             .Add(option.PopperClass);
+        var popperStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .AddIf(option.Width > 0, $"width:{option.Width}px")
+            .AddIf(option.MinWidth > 0, $"min-width:{option.MinWidth}px")
+            .Add($"left:{option.Left}px")
+            .Add($"top:{option.Top}px")
+            .Add("transition:transform 0.2s linear 0s")
+            .Add($"transform:{transform}")
+            .Add("position:absolute")
+            .Add($"transform-origin:{option.TransformOrigin}")
+            .Add($"z-index:{index}")
+            .Add(option.PopperStyle);
         var wrapperStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
             .Add($"max-height:{(option.MaxHeight > 0 ? option.MaxHeight : 274)}px");
         var context = option.Select as ISelectDropDownContext;
         var listClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
             .Add("el-scrollbar__view", "el-select-dropdown__list")
             .AddIf(option.IsTree, "blazor-dropdown-tree");
-        <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <div class="@dropdownClsBuilder.ToString()" @ref="option.Element" style="width:@(option.Width)px;left:@(option.Left)px;top:@(option.Top)px; transition:transform 0.2s linear 0s; transform:@transform; position:absolute; transform-origin: @option.TransformOrigin; z-index:@(index);" x-placement="@option.Placement">
+        <div class="v-modal el-select-dropdown__outside" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
+        <div class="@dropdownClsBuilder.ToString()" id="@option.DropDownId" @ref="option.Element" style="@popperStyleBuilder.ToString()" x-placement="@option.Placement">
             <div class="el-scrollbar" style="">
-                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="@wrapperStyleBuilder.ToString()">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="@wrapperStyleBuilder.ToString()" @ref="option.ScrollElement" @onscroll="async e => { if (context != null && await option.ScrollElement.Dom(JSRuntime).IsScrollAtEndAsync()) await context.OnEndReachedAsync(); }">
                     @if (context != null && context.Loading)
                     {
                         <p class="el-select-dropdown__empty">
@@ -491,7 +500,7 @@
         dropDownStyles.Add("transform-origin: center top 0px");
         dropDownStyles.Add($"z-index:{index}");
         <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="bottom-start">
+        <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="@option.Placement">
             <CascadingValue Value="option">
                 @option.OptionContent
             </CascadingValue>
@@ -523,7 +532,7 @@
             transform = "transform:scaleY(0);";
             opacity = "0";
         }
-        <div class="el-menu--horizontal el-popper" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="right-start">
+        <div class="el-menu--horizontal el-popper" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="@option.Placement">
             <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
                 <CascadingValue Value="option.SubMenu">
                     <CascadingValue Value="option.Options">

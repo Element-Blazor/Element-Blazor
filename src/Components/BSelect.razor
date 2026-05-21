@@ -17,6 +17,8 @@
      aria-haspopup="listbox"
      aria-expanded="@IsDropDownOpen"
      aria-disabled="@Disabled"
+     aria-controls="@DropDownId"
+     aria-busy="@Loading"
      tabindex="@(Disabled ? -1 : 0)">
     <BInput TValue="string"
             Clearable="Clearable"
@@ -29,6 +31,8 @@
             ValueChanged="UpdateValue"
             Value="@DisplayLabel"
             AdditionalClearIcon="el-select__caret"
-            ValidateEvent="false">
+            ValidateEvent="false"
+            OnFocus="OnInputFocusAsync"
+            OnBlur="OnInputBlurAsync">
     </BInput>
 </div>

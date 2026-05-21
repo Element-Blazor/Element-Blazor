@@ -1,5 +1,7 @@
 namespace Element
 {
+    using System.Threading.Tasks;
+
     internal interface ISelectDropDownContext
     {
         bool Loading { get; }
@@ -11,5 +13,7 @@ namespace Element
         bool ShouldShowEmpty { get; }
 
         bool ShouldShowNoMatch { get; }
+
+        Task OnEndReachedAsync();
     }
 }

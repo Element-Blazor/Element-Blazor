@@ -258,6 +258,33 @@ window.getTopRelativeBody = function (el) {
         offset = elemRect.top - bodyRect.top;
     return this.parseFloat(offset);
 };
+window.getLeftRelativeBody = function (el) {
+    if (!el) {
+        return 0;
+    }
+    var bodyRect = document.body.getBoundingClientRect(),
+        elemRect = el.getBoundingClientRect(),
+        offset = elemRect.left - bodyRect.left;
+    return this.parseFloat(offset);
+};
+window.isScrollAtEnd = function (el) {
+    if (!el) {
+        return false;
+    }
+    return el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+};
+window.getScrollLeft = function (el) {
+    if (!el) {
+        return 0;
+    }
+    return el.scrollLeft || 0;
+};
+window.setScrollLeft = function (el, value) {
+    if (!el) {
+        return;
+    }
+    el.scrollLeft = value || 0;
+};
 window.Remove = function (el) {
     if (!el) {
         return;

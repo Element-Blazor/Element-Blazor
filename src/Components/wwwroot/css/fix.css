@@ -1,5 +1,5 @@
 ﻿.el-tabs--card > .el-tabs__header .el-tabs__item {
-    float: left;
+    float: none;
 }
 
 .el-card {
@@ -139,19 +139,21 @@
 .el-table {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .el-table__body-wrapper {
-    flex: 1;
-    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .el-table__body, .el-table__footer, .el-table__header {
-    flex: 1;
+    min-width: 100%;
 }
 
 .el-table__header-wrapper {
-    display: flex;
+    flex: 0 0 auto;
+    min-width: 0;
 }
 
 div.blazor-ribbon {
@@ -197,11 +199,11 @@ div.blazor-ribbon {
     div.blazor-ribbon > div.blazor-tabs .blazor-block {
         min-width: 100px;
         font-size: 14px;
-        float: left;
+        float: none;
     }
 
     div.blazor-ribbon > div.blazor-tabs .blazor-ribbon-item {
-        float: left;
+        float: none;
         padding-left: 10px;
         padding-right: 10px;
         padding-top: 15px;

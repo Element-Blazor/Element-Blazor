@@ -30,6 +30,7 @@ namespace Element
         private ElementReference editingRowEl;
         internal BCheckBox<bool> chkAll;
         internal ElementReference headerElement;
+        internal ElementReference bodyWrapperElement;
         private object editingRow;
 
         /// <summary>
@@ -244,6 +245,9 @@ namespace Element
             get => EmptyMessage;
             set => EmptyMessage = value;
         }
+
+        [Parameter]
+        public RenderFragment Empty { get; set; }
         /// <summary>
         /// 总数据条数
         /// </summary>
@@ -368,6 +372,12 @@ namespace Element
         public bool Fit { get; set; } = true;
 
         [Parameter]
+        public bool Flexible { get; set; }
+
+        [Parameter]
+        public bool ScrollbarAlwaysOn { get; set; }
+
+        [Parameter]
         public bool ShowHeader { get; set; } = true;
 
         [Parameter]
@@ -409,6 +419,44 @@ namespace Element
         public LoadingService LoadingService { get; set; }
 
         protected string TableWidthStyle => Fit ? "width:100%" : "min-width:100%";
+
+        protected bool IsEmpty => rows.Count <= 0 && !IsEditable;
+
+        protected string EmptyBlockStyle
+        {
+            get
+            {
+                var height = Height > 0 || MaxHeight > 0
+                    ? Math.Max(60, (Height > 0 ? Height : MaxHeight) - (ShowHeader ? headerHeight : 0))
+                    : 60;
+                return $"height:{height}px";
+            }
+        }
+
+        protected string ScrollClass => HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("is-scrolling-none")
+            .AddIf(ScrollbarAlwaysOn, "is-scrollbar-always-on")
+            .ToString();
+
+        protected async Task SyncHeaderScrollAsync()
+        {
+            if (string.IsNullOrWhiteSpace(headerElement.Id) || string.IsNullOrWhiteSpace(bodyWrapperElement.Id))
+            {
+                return;
+            }
+            var scrollLeft = await bodyWrapperElement.Dom(JSRuntime).GetScrollLeftAsync();
+            await headerElement.Dom(JSRuntime).SetScrollLeftAsync(scrollLeft);
+        }
+
+        protected async Task SyncBodyScrollFromHeaderAsync()
+        {
+            if (string.IsNullOrWhiteSpace(headerElement.Id) || string.IsNullOrWhiteSpace(bodyWrapperElement.Id))
+            {
+                return;
+            }
+            var scrollLeft = await headerElement.Dom(JSRuntime).GetScrollLeftAsync();
+            await bodyWrapperElement.Dom(JSRuntime).SetScrollLeftAsync(scrollLeft);
+        }
 
         protected async Task SetCurrentRowAsync(object row)
         {

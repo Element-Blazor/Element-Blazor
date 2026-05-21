@@ -1,6 +1,6 @@
 ﻿@inherits BMenuContainer
 <CascadingValue Value=this>
     <CascadingValue Value="Options">
-        <ul role="menubar" class="@modeClass el-menu" style="overflow:auto;@Style" @onmouseout:stopPropagation @onkeydown="OnKeyDownAsync" @ref="Container">@ChildContent</ul>
+        <ul role="menubar" class="@menuClass" style="@menuStyle" @onmouseout:stopPropagation @onkeydown="OnKeyDownAsync" @ref="Container" tabindex="0" aria-orientation="@(Mode == MenuMode.Horizontal ? "horizontal" : "vertical")">@ChildContent</ul>
     </CascadingValue>
 </CascadingValue>

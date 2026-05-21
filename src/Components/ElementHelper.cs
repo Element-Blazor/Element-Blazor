@@ -101,6 +101,26 @@ namespace Element
             return await jSRuntime.InvokeAsync<float>("getTopRelativeBody", elementReference);
         }
 
+        public async Task<float> GetLeftRelativeBodyAsync()
+        {
+            return await jSRuntime.InvokeAsync<float>("getLeftRelativeBody", elementReference);
+        }
+
+        public async Task<bool> IsScrollAtEndAsync()
+        {
+            return await jSRuntime.InvokeAsync<bool>("isScrollAtEnd", elementReference);
+        }
+
+        public async Task<int> GetScrollLeftAsync()
+        {
+            return await jSRuntime.InvokeAsync<int>("getScrollLeft", elementReference);
+        }
+
+        public async Task SetScrollLeftAsync(int value)
+        {
+            await jSRuntime.InvokeVoidAsync("setScrollLeft", elementReference, value);
+        }
+
         public async Task SetDisabledAsync(bool isDisabled)
         {
             await jSRuntime.InvokeVoidAsync("setDisabled", elementReference, isDisabled);
