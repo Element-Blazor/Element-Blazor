@@ -1,4 +1,4 @@
-ï»¿using Element;
+using Element;
 
 using Microsoft.AspNetCore.Components;
 using System;
@@ -8,58 +8,58 @@ using System.Text;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdownFileUpload : BFieldComponentBase<string[]>
+    public partial class ElMarkdownFileUpload : ElementFieldComponentBase<string[]>
     {
         /// <summary>
-        /// ä¸Šä¼ åœ°å€
+        /// ÉÏ´«µØÖ·
         /// </summary>
         [Parameter]
         public string UploadUrl { get; set; }
 
         /// <summary>
-        /// ç¦ç”¨ä¸Šä¼ 
+        /// ½ûÓÃÉÏ´«
         /// </summary>
         [Parameter]
         public bool DisableUpload { get; set; }
 
         /// <summary>
-        /// æ–‡æœ¬æç¤º
+        /// ÎÄ±¾ÌáÊ¾
         /// </summary>
         [Parameter]
         public string Tip { get; set; }
 
         /// <summary>
-        /// ä¸Šä¼ ç±»å‹
+        /// ÉÏ´«ÀàĞÍ
         /// </summary>
         [Parameter]
         public UploadType UploadType { get; set; }
 
         /// <summary>
-        /// æ–‡ä»¶åœ°å€åˆ—è¡¨
+        /// ÎÄ¼şµØÖ·ÁĞ±í
         /// </summary>
         [Parameter]
         public string[] Urls { get; set; }
 
         /// <summary>
-        /// å•æ–‡ä»¶æœ€å¤§é™åˆ¶ï¼ŒKBä¸ºå•ä½
+        /// µ¥ÎÄ¼ş×î´óÏŞÖÆ£¬KBÎªµ¥Î»
         /// </summary>
         [Parameter]
         public long MaxSize { get; set; }
 
         /// <summary>
-        /// å¦‚æœä¸Šä¼ çš„æ˜¯å›¾ç‰‡ï¼ŒæŒ‡å®šå›¾ç‰‡æœ€å¤§å®½åº¦
+        /// Èç¹ûÉÏ´«µÄÊÇÍ¼Æ¬£¬Ö¸¶¨Í¼Æ¬×î´ó¿í¶È
         /// </summary>
         [Parameter]
         public float Width { get; set; }
 
         /// <summary>
-        /// å¦‚æœä¸Šä¼ çš„æ˜¯å›¾ç‰‡ï¼ŒæŒ‡å®šå›¾ç‰‡æœ€å¤§é«˜åº¦
+        /// Èç¹ûÉÏ´«µÄÊÇÍ¼Æ¬£¬Ö¸¶¨Í¼Æ¬×î´ó¸ß¶È
         /// </summary>
         [Parameter]
         public float Height { get; set; }
 
         /// <summary>
-        /// å…è®¸ä¸Šä¼ çš„æ–‡ä»¶åç¼€
+        /// ÔÊĞíÉÏ´«µÄÎÄ¼şºó×º
         /// </summary>
         [Parameter]
         public string[] AllowExtensions { get; set; }

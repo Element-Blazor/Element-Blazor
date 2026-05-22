@@ -1,4 +1,4 @@
-﻿using Element;
+using Element;
 using Markdig;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -7,11 +7,11 @@ using System.Text;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdown : BComponentBase
+    public partial class ElMarkdown : ElementComponentBase
     {
         private MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         /// <summary>
-        /// Markdown 文本
+        /// Markdown �ı�
         /// </summary>
         [Parameter]
         public string Text { get; set; }

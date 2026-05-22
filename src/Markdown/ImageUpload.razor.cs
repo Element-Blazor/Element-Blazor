@@ -1,4 +1,4 @@
-ï»¿using Element;
+using Element;
 
 using Element.Markdown.IconHandlers;
 using Microsoft.AspNetCore.Components;
@@ -10,19 +10,19 @@ namespace Element.Markdown
 {
     public partial class ImageUpload
     {
-        internal protected BForm form;
+        internal protected ElForm form;
 
         [Parameter]
         public ImageModel Image { get; set; }
 
         /// <summary>
-        /// æ–‡æœ¬æç¤º
+        /// ÎÄ±¾ÌáÊ¾
         /// </summary>
         [Parameter]
         public string Tip { get; set; }
 
         /// <summary>
-        /// ç¦ç”¨ä¸Šä¼ 
+        /// ½ûÓÃÉÏ´«
         /// </summary>
         [Parameter]
         public bool DisableUpload { get; set; }
@@ -30,25 +30,25 @@ namespace Element.Markdown
         public string UploadUrl { get; set; }
 
         /// <summary>
-        /// å•æ–‡ä»¶æœ€å¤§é™åˆ¶ï¼ŒKBä¸ºå•ä½
+        /// µ¥ÎÄ¼ş×î´óÏŞÖÆ£¬KBÎªµ¥Î»
         /// </summary>
         [Parameter]
         public long MaxSize { get; set; }
 
         /// <summary>
-        /// å›¾ç‰‡æœ€å¤§å®½åº¦
+        /// Í¼Æ¬×î´ó¿í¶È
         /// </summary>
         [Parameter]
         public float Width { get; set; }
 
         /// <summary>
-        /// å›¾ç‰‡æœ€å¤§é«˜åº¦
+        /// Í¼Æ¬×î´ó¸ß¶È
         /// </summary>
         [Parameter]
         public float Height { get; set; }
 
         /// <summary>
-        /// å…è®¸ä¸Šä¼ çš„æ–‡ä»¶åç¼€
+        /// ÔÊĞíÉÏ´«µÄÎÄ¼şºó×º
         /// </summary>
         [Parameter]
         public string[] AllowExtensions { get; set; }

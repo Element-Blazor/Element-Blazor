@@ -1,4 +1,4 @@
-﻿using Element;
+using Element;
 
 using Element.Markdown.IconHandlers;
 using Microsoft.AspNetCore.Components;
@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Element.Markdown
 {
-    public class LinkBase : BDialogBase
+    public class LinkBase : ElementDialogBase
     {
-        internal protected BForm form;
+        internal protected ElForm form;
 
         [Parameter]
         public LinkModel Link { get; set; }

@@ -1,17 +1,17 @@
-锘緻inherits BDialogBase
+@inherits ElementDialogBase
 @using Element.Markdown.IconHandlers
 
-<BForm @ref="form" Value="this.Image">
-    <BFormItem TValue="string" Name="@nameof(ImageModel.Alt)" Label="ALT">
-        <BInput TValue="string"></BInput>
-    </BFormItem>
-    <BFormItem TValue="string" Name="@nameof(ImageModel.Title)" Label="鏍囬">
-        <BInput TValue="string"></BInput>
-    </BFormItem>
-    <BFormItem TValue="string[]" IsRequired="true" Name="@nameof(ImageModel.Urls)" Label="鍦板潃">
-        <BMarkdownFileUpload DisableUpload="DisableUpload" UploadUrl="@UploadUrl" Tip="@Tip" UploadType="UploadType.Image" AllowExtensions="AllowExtensions" Height="Height" Width="Width" MaxSize="MaxSize"></BMarkdownFileUpload>
-    </BFormItem>
-    <BFormActionItem Style="text-align:right">
-        <BButton Type="@ButtonType.Primary" @onclick="Submit">纭畾</BButton>
-    </BFormActionItem>
-</BForm>
+<ElForm @ref="form" Value="this.Image">
+    <ElFormItem TValue="string" Name="@nameof(ImageModel.Alt)" Label="ALT">
+        <ElInput TValue="string"></ElInput>
+    </ElFormItem>
+    <ElFormItem TValue="string" Name="@nameof(ImageModel.Title)" Label="标题">
+        <ElInput TValue="string"></ElInput>
+    </ElFormItem>
+    <ElFormItem TValue="string[]" IsRequired="true" Name="@nameof(ImageModel.Urls)" Label="地址">
+        <ElMarkdownFileUpload DisableUpload="DisableUpload" UploadUrl="@UploadUrl" Tip="@Tip" UploadType="UploadType.Image" AllowExtensions="AllowExtensions" Height="Height" Width="Width" MaxSize="MaxSize"></ElMarkdownFileUpload>
+    </ElFormItem>
+    <ElFormActionItem Style="text-align:right">
+        <ElButton Type="@ButtonType.Primary" @onclick="Submit">确定</ElButton>
+    </ElFormActionItem>
+</ElForm>

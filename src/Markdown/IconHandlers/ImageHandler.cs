@@ -1,4 +1,4 @@
-Ôªøusing Element;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -19,7 +19,7 @@ namespace Element.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditor editor)
+        public async Task HandleAsync(ElMarkdownEditor editor)
         {
             var imageName = await jSRuntime.InvokeAsync<string>("getSelection", editor.textarea);
             var imageModel = new ImageModel
@@ -36,7 +36,7 @@ namespace Element.Markdown.IconHandlers
             parameters.Add(nameof(ImageUpload.AllowExtensions), editor.AllowImageExtensions);
             parameters.Add(nameof(ImageUpload.DisableUpload), editor.DisableImageUpload);
             parameters.Add(nameof(ImageUpload.Tip), editor.ImageUploadTip);
-            var result = await dialogService.ShowDialogAsync<ImageUpload, ImageModel>("ÊèíÂÖ•ÂõæÁâá", parameters);
+            var result = await dialogService.ShowDialogAsync<ImageUpload, ImageModel>("≤Â»ÎÕº∆¨", parameters);
             imageModel = result.Result;
             if(imageModel!=null)
             {

@@ -1,16 +1,16 @@
-锘緻inherits LinkBase
+@inherits LinkBase
 @using Element.Markdown.IconHandlers
-    <BForm @ref="form" Value="Link">
-        <BFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Name)" Label="鍚嶇О">
-            <BInput TValue="string"></BInput>
-        </BFormItem>
-        <BFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Url)" Label="鍦板潃">
-            <BInput TValue="string"></BInput>
-        </BFormItem>
-        <BFormItem TValue="string" Name="@nameof(LinkModel.Title)" Label="鏍囬">
-            <BInput TValue="string"></BInput>
-        </BFormItem>
-        <BFormActionItem Style="text-align:right">
-            <BButton Type="@ButtonType.Primary" @onclick="Submit">纭畾</BButton>
-        </BFormActionItem>
-    </BForm>
+    <ElForm @ref="form" Value="Link">
+        <ElFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Name)" Label="名称">
+            <ElInput TValue="string"></ElInput>
+        </ElFormItem>
+        <ElFormItem TValue="string" IsRequired="true" Name="@nameof(LinkModel.Url)" Label="地址">
+            <ElInput TValue="string"></ElInput>
+        </ElFormItem>
+        <ElFormItem TValue="string" Name="@nameof(LinkModel.Title)" Label="标题">
+            <ElInput TValue="string"></ElInput>
+        </ElFormItem>
+        <ElFormActionItem Style="text-align:right">
+            <ElButton Type="@ButtonType.Primary" @onclick="Submit">确定</ElButton>
+        </ElFormActionItem>
+    </ElForm>

@@ -1,4 +1,4 @@
-﻿using Element;
+using Element;
 
 using Element.Markdown.IconHandlers;
 using Microsoft.AspNetCore.Components;
@@ -10,7 +10,7 @@ namespace Element.Markdown
 {
     public partial class CreateTable
     {
-        internal BForm form;
+        internal ElForm form;
 
         internal void Submit()
         {

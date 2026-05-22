@@ -1,4 +1,4 @@
-ï»¿
+
 using Element;
 
 using Markdig;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Element.Markdown
 {
-    public partial class BMarkdownEditor : BFieldComponentBase<string>
+    public partial class ElMarkdownEditor : ElementFieldComponentBase<string>
     {
         internal static IDictionary<Icon, IconDescriptionAttribute> allIcons = new Dictionary<Icon, IconDescriptionAttribute>();
 
@@ -21,19 +21,19 @@ namespace Element.Markdown
         private bool editorRendered = false;
         private MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
         /// <summary>
-        /// å€¼
+        /// Öµ
         /// </summary>
         [Parameter]
         public string Value { get; set; }
 
         /// <summary>
-        /// å›¾ç‰‡ä¸Šä¼ çª—å£çš„æç¤º
+        /// Í¼Æ¬ÉÏ´«´°¿ÚµÄÌáÊ¾
         /// </summary>
         [Parameter]
         public string ImageUploadTip { get; set; }
 
         /// <summary>
-        /// æ–‡ä»¶ä¸Šä¼ çª—å£çš„æç¤º
+        /// ÎÄ¼şÉÏ´«´°¿ÚµÄÌáÊ¾
         /// </summary>
         [Parameter]
         public string FileUploadTip { get; set; }
@@ -42,19 +42,19 @@ namespace Element.Markdown
         private IServiceProvider serviceProvider { get; set; }
 
         /// <summary>
-        /// å½“ç¼–è¾‘å™¨æ»šåŠ¨æ—¶ï¼Œé¢„è§ˆè·Ÿç€æ»šåŠ¨
+        /// µ±±à¼­Æ÷¹ö¶¯Ê±£¬Ô¤ÀÀ¸ú×Å¹ö¶¯
         /// </summary>
         [Parameter]
         public bool EnableSyncScroll { get; set; } = true;
 
         /// <summary>
-        /// ç¦ç”¨æ–‡ä»¶ä¸Šä¼ 
+        /// ½ûÓÃÎÄ¼şÉÏ´«
         /// </summary>
         [Parameter]
         public bool DisableFileUpload { get; set; }
 
         /// <summary>
-        /// ç¦ç”¨å›¾ç‰‡ä¸Šä¼ 
+        /// ½ûÓÃÍ¼Æ¬ÉÏ´«
         /// </summary>
         [Parameter]
         public bool DisableImageUpload { get; set; }
@@ -62,54 +62,54 @@ namespace Element.Markdown
         [Parameter]
         public EventCallback<string> ValueChanged { get; set; }
         /// <summary>
-        /// å·¥å…·æ å›¾æ ‡
+        /// ¹¤¾ßÀ¸Í¼±ê
         /// </summary>
         [Parameter]
         public Icon[] Icons { get; set; }
 
         /// <summary>
-        /// é«˜åº¦
+        /// ¸ß¶È
         /// </summary>
         [Parameter]
         public float Height { get; set; } = 500;
 
         /// <summary>
-        /// æ–‡ä»¶ä¸Šä¼ åœ°å€
+        /// ÎÄ¼şÉÏ´«µØÖ·
         /// </summary>
         [Parameter]
         public string UploadUrl { get; set; }
 
         /// <summary>
-        /// å•æ–‡ä»¶å›¾ç‰‡æœ€å¤§é™åˆ¶ï¼ŒKBä¸ºå•ä½
+        /// µ¥ÎÄ¼şÍ¼Æ¬×î´óÏŞÖÆ£¬KBÎªµ¥Î»
         /// </summary>
         [Parameter]
         public long ImageMaxSize { get; set; }
 
         /// <summary>
-        /// å•æ–‡ä»¶æœ€å¤§é™åˆ¶ï¼ŒKBä¸ºå•ä½
+        /// µ¥ÎÄ¼ş×î´óÏŞÖÆ£¬KBÎªµ¥Î»
         /// </summary>
         [Parameter]
         public long FileMaxSize { get; set; }
         /// <summary>
-        /// å›¾ç‰‡æœ€å¤§å®½åº¦
+        /// Í¼Æ¬×î´ó¿í¶È
         /// </summary>
         [Parameter]
         public float ImageWidth { get; set; }
 
         /// <summary>
-        /// å›¾ç‰‡æœ€å¤§é«˜åº¦
+        /// Í¼Æ¬×î´ó¸ß¶È
         /// </summary>
         [Parameter]
         public float ImageHeight { get; set; }
 
         /// <summary>
-        /// å…è®¸ä¸Šä¼ çš„å›¾ç‰‡æ–‡ä»¶åç¼€
+        /// ÔÊĞíÉÏ´«µÄÍ¼Æ¬ÎÄ¼şºó×º
         /// </summary>
         [Parameter]
         public string[] AllowImageExtensions { get; set; } = new string[] { ".jpg", ".png", ".jpeg", ".gif", ".bmp" };
 
         /// <summary>
-        /// å…è®¸ä¸Šä¼ çš„æ™®é€šæ–‡ä»¶åç¼€
+        /// ÔÊĞíÉÏ´«µÄÆÕÍ¨ÎÄ¼şºó×º
         /// </summary>
         [Parameter]
         public string[] AllowFileExtensions { get; set; } = new string[0];
@@ -125,7 +125,7 @@ namespace Element.Markdown
         }
         internal ElementReference preview;
 
-        static BMarkdownEditor()
+        static ElMarkdownEditor()
         {
             var iconType = typeof(Icon);
             var iconNames = Enum.GetNames(typeof(Icon));
@@ -188,7 +188,7 @@ namespace Element.Markdown
             var handler = (IIconHandler)serviceProvider.GetService(iconDescription.Handler);
             if (handler == null)
             {
-                Alert("è¯¥å›¾æ ‡æ²¡æœ‰å¯¹åº”çš„å¤„ç†ç¨‹åº");
+                Alert("¸ÃÍ¼±êÃ»ÓĞ¶ÔÓ¦µÄ´¦Àí³ÌĞò");
                 return;
             }
             handler.HandleAsync(this);

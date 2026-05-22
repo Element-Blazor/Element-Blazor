@@ -1,4 +1,4 @@
-Ôªøusing Element;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -19,7 +19,7 @@ namespace Element.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditor editor)
+        public async Task HandleAsync(ElMarkdownEditor editor)
         {
             var linkName = await jSRuntime.InvokeAsync<string>("getSelection", editor.Textarea);
             var linkModel = new LinkModel
@@ -29,7 +29,7 @@ namespace Element.Markdown.IconHandlers
             };
             var parameters = new Dictionary<string, object>();
             parameters.Add(nameof(Link.Link), linkModel);
-            var result = await dialogService.ShowDialogAsync<Link, LinkModel>("ÊèíÂÖ•ÈìæÊé•", parameters);
+            var result = await dialogService.ShowDialogAsync<Link, LinkModel>("≤Â»Î¡¥Ω”", parameters);
             linkModel = result.Result;
             if(linkModel!=null)
             {

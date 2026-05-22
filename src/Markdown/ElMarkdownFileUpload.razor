@@ -1,2 +1,15 @@
-@inherits BMarkdownFileUpload
+@inherits ElementFieldComponentBase<string[]>
 
+<ElTabs>
+    @if (!DisableUpload)
+    {
+        <ElTabPane Title="本地上传（粘贴上传）">
+            <ElUpload UploadType="UploadType" Url="@UploadUrl" MaxSize="@MaxSize" AllowExtensions="AllowExtensions" Height="Height" Width="Width" OnFileListUpload="UpdateFiles" OnDeleteFile="OnDeleteFile">
+                <Tip>@Tip</Tip>
+            </ElUpload>
+        </ElTabPane>
+    }
+    <ElTabPane Title="网络资源">
+        <ElInput TValue="string" ValueChanged="UpdateUrl"></ElInput>
+    </ElTabPane>
+</ElTabs>

@@ -1,4 +1,4 @@
-Ôªøusing Element;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -19,7 +19,7 @@ namespace Element.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditor editor)
+        public async Task HandleAsync(ElMarkdownEditor editor)
         {
             var parameters = new Dictionary<string, object>();
             parameters.Add(nameof(FileUpload.UploadUrl), editor.UploadUrl);
@@ -27,7 +27,7 @@ namespace Element.Markdown.IconHandlers
             parameters.Add(nameof(FileUpload.AllowExtensions), editor.AllowFileExtensions);
             parameters.Add(nameof(FileUpload.DisableUpload), editor.DisableFileUpload);
             parameters.Add(nameof(FileUpload.Tip), editor.FileUploadTip);
-            var result = await dialogService.ShowDialogAsync<FileUpload, FileModel>("ÊèíÂÖ•Êñá‰ª∂", parameters);
+            var result = await dialogService.ShowDialogAsync<FileUpload, FileModel>("≤Â»ÎŒƒº˛", parameters);
             var fileModel = result.Result;
             if(fileModel!=null)
             {

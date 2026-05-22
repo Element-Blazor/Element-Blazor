@@ -1,4 +1,4 @@
-Ôªøusing Element;
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
@@ -19,12 +19,12 @@ namespace Element.Markdown.IconHandlers
             this.dialogService = dialogService;
         }
 
-        public async Task HandleAsync(BMarkdownEditor editor)
+        public async Task HandleAsync(ElMarkdownEditor editor)
         {
-            var model = await dialogService.ShowDialogAsync<CreateTable, CreateTableModel>("ÊèíÂÖ•Ë°®Ê†º", 400);
+            var model = await dialogService.ShowDialogAsync<CreateTable, CreateTableModel>("≤Â»Î±Ì∏Ò", 400);
             if(model.Result!=null&&model.Result.Columns>0)
             {
-                var headers = Enumerable.Range(1, model.Result.Columns).Select(x => "   Âàó" + x + "   ").ToArray();
+                var headers = Enumerable.Range(1, model.Result.Columns).Select(x => "   ¡–" + x + "   ").ToArray();
                 var lines = Enumerable.Range(1, model.Result.Columns).Select(x => " :-------").ToArray();
                 var columns = Enumerable.Range(1, model.Result.Columns).Select(x => "         ").ToArray();
                 var rows = new List<string>();

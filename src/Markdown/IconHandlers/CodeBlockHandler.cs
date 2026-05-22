@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace Element.Markdown.IconHandlers
             this.jSRuntime = jSRuntime;
         }
 
-        public async Task HandleAsync(BMarkdownEditor editor)
+        public async Task HandleAsync(ElMarkdownEditor editor)
         {
             var selection = await jSRuntime.InvokeAsync<string>("getSelection", editor.textarea);
             var result = $"```{Environment.NewLine}{(string.IsNullOrWhiteSpace(selection) ? "code" : selection)}{Environment.NewLine}```";
