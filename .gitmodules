@@ -10,3 +10,6 @@
 	path = community
 	url = https://github.com/Element-Blazor/BlazorCommunity
 	branch = master
+[submodule "blazor-element-plus-admin"]
+	path = blazor-element-plus-admin
+	url = https://github.com/Element-Blazor/blazor-element-plus-admin.git
