@@ -49,7 +49,7 @@
     <Compile Include="ElementVSExtensionPackage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BLAZUI PNG高清.png">
+    <Content Include="Element.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -61,7 +61,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ProjectTemplates\BlazuiAdminServerRenderProject.zip">
+    <Content Include="ProjectTemplates\ElementAdminServerRenderProject.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -86,7 +86,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BLAZUI 32.png">
+    <Content Include="Element32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
