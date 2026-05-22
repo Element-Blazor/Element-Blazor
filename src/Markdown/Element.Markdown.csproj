@@ -1,57 +1,80 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
-		<ApplicationIcon />
-		<OutputType>Library</OutputType>
-		<IsPackable>true</IsPackable>
-		<Version>2.14.0-alpha.1</Version>
-		<Authors>wzxinchen;Element-Blazor</Authors>
-		<Company>Element-Blazor</Company>
-		<Description>基于 Element-Blazor 和 Markdig 的 Markdown 编辑器，跟随 Element Plus 2.14 版本线。</Description>
-		<PackageProjectUrl>https://github.com/Element-Blazor/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
-		<RepositoryType></RepositoryType>
-		<RazorLangVersion>3.0</RazorLangVersion>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Product>Element.Markdown</Product>
-		<PackageIcon>LOGO.png</PackageIcon>
-		<PackageTags>blazor,Element,Element Plus,Element-Plus,markdown</PackageTags>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <PackageId>Element.Markdown</PackageId>
+    <Title>Element-Blazor Markdown</Title>
+    <Version>2.14.0-alpha.1</Version>
+    <Authors>wzxinchen;Element-Blazor</Authors>
+    <Company>Element-Blazor</Company>
+    <Description>Markdown editor components for Element-Blazor, aligned with the Element Plus 2.14 version line.</Description>
+    <PackageProjectUrl>https://github.com/Element-Blazor/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>Element.Markdown</Product>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>PACKAGE_README.Markdown.md</PackageReadmeFile>
+    <PackageIcon>LOGO.png</PackageIcon>
+    <PackageTags>blazor;components;element;element-plus;markdown;editor;net10</PackageTags>
+    <PackageReleaseNotes>Element.Markdown 2.14 alpha follows the Element-Blazor 2.14 version line and .NET 10 baseline.</PackageReleaseNotes>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <NoWarn>$(NoWarn);1591;1701;1702</NoWarn>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>obj\Debug\netcoreapp3.1\Element.Markdown.xml</DocumentationFile>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\net10.0\Element.Markdown.xml</DocumentationFile>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>obj\Debug\netcoreapp3.1\Element.Markdown.xml</DocumentationFile>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Release\net10.0\Element.Markdown.xml</DocumentationFile>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<None Include="..\..\LOGO.png">
-		  <Pack>True</Pack>
-		  <PackagePath></PackagePath>
-		</None>
-		<None Include="wwwroot\css\editor.css" />
-		<None Include="wwwroot\css\editormd.min.css" />
-		<None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
-		<None Include="wwwroot\images\loading.gif" />
-		<None Include="wwwroot\js\addons.min.js" />
-		<None Include="wwwroot\js\continuelist.js" />
-		<None Include="wwwroot\js\dom.js" />
-		<None Include="wwwroot\js\modes.min.js" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LOGO.png">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\LICENSE">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\PACKAGE_README.Markdown.md">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="wwwroot\css\editor.css" />
+    <None Include="wwwroot\css\editormd.min.css" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\images\loading.gif" />
+    <None Include="wwwroot\js\addons.min.js" />
+    <None Include="wwwroot\js\continuelist.js" />
+    <None Include="wwwroot\js\dom.js" />
+    <None Include="wwwroot\js\modes.min.js" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Properties\" />
-	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <PackageReference Include="Markdig" Version="0.30.4" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.30.4" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300" PrivateAssets="All" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Components\Element.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Components\Element.csproj" />
+  </ItemGroup>
 
 </Project>

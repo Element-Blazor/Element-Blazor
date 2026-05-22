@@ -44,7 +44,7 @@ namespace Element
         public virtual bool IsActive { get; set; }
         public virtual string BackgroundColor { get; set; }
 
-        private string currentRoute;
+        private string currentRoute = string.Empty;
         public void Activate()
         {
             if (Options.Disabled)

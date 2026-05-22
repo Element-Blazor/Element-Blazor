@@ -162,7 +162,12 @@ namespace Element
 
         public override bool Equals(object obj)
         {
-            return  ToString() == obj.ToString();
+            return obj != null && ToString() == obj.ToString();
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(stringValue, intValue, numberValue);
         }
     }
 }

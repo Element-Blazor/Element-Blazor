@@ -14,12 +14,12 @@ namespace Element.Test.FormTests
         private IElementHandle submitButton;
         private IElementHandle resetButton;
         private IElementHandle[] formItems;
-        private string expectedDate;
+        private string expectedDate = string.Empty;
 
         public async Task TestAsync(DemoCard demoCard)
         {
             await AssertFillAsync(demoCard);
-            return;//下面的暂时不搞
+            /*
             await submitButton.ClickAsync();
             await Task.Delay(500);
             var resultEl = await demoCard.Page.QuerySelectorAsync("div.el-message-box__wrapper > div > div.el-message-box__content > div.el-message-box__message > p");
@@ -30,6 +30,7 @@ namespace Element.Test.FormTests
             await resetButton.ClickAsync();
             await Task.Delay(50);
             await AssertFormAsync(demoCard, false, new List<int>());
+            */
         }
 
         private async Task AssertCloseMessageBoxAsync(DemoCard demoCard)
@@ -53,7 +54,7 @@ namespace Element.Test.FormTests
             Assert.StartsWith($"名称：测试,区域：Shanghai,区域2：,日期：{DateTime.Today.ToString("yyyy/M/d")}", result);
             Assert.EndsWith($"，即时配送：True，性质：Offline,Online，特殊资源：场地，枚举资源：Option2，活动形式：详情", result);
             await AssertCloseMessageBoxAsync(demoCard);
-            return;//下面的暂时不搞
+            /*
             var formItem1 = formItems.FirstOrDefault();
             var formItem1Input = await formItem1.QuerySelectorAsync("div.el-input > input");
             var label1 = await formItem1.QuerySelectorAsync("label");
@@ -142,6 +143,7 @@ namespace Element.Test.FormTests
             Assert.Equal("测试活动", text8.Trim());
             filledIndexes.Add(7);
             await AssertFormAsync(demoCard, true, filledIndexes);
+            */
         }
 
         private async Task AssertFormAsync(DemoCard demoCard, bool showRequired, List<int> filledIndexes)
