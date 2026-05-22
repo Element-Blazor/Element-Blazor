@@ -1,6 +1,6 @@
 web:
-  image: registry-vpc.cn-shanghai.aliyuncs.com/wzyuchen/blazui:latest
+  image: element-blazor:latest
   ports:
     - "9000:80"
   restart: always
-  hostname: blazui
+  hostname: element-blazor

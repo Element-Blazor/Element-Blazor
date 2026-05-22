@@ -1,4 +1,4 @@
-# P1 Theme Variables
+﻿# P1 Theme Variables
 
 This layer aligns Element-Blazor with the Element Plus `2.14.0` theme-token model without changing the existing `el-*` DOM class contract.
 
@@ -14,8 +14,8 @@ Load `theme.css` after the legacy `index.css` file:
 For the legacy package name, use:
 
 ```html
-<link rel="stylesheet" href="/_content/Blazui.Component/css/index.css" />
-<link rel="stylesheet" href="/_content/Blazui.Component/css/theme.css" />
+<link rel="stylesheet" href="/_content/Element/css/index.css" />
+<link rel="stylesheet" href="/_content/Element/css/theme.css" />
 ```
 
 Applications can override tokens after `theme.css`:
@@ -178,3 +178,4 @@ After:
 ```
 
 These examples keep selectors such as `el-button`, `el-input__inner` and `el-table__row` unchanged, so tests and downstream CSS that depend on the existing DOM structure continue to target the same classes.
+

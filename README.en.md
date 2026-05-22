@@ -1,4 +1,4 @@
-# Element-Blazor
+﻿# Element-Blazor
 
 [![NuGet](https://img.shields.io/nuget/dt/Element.svg)](https://www.nuget.org/packages/Element/)
 
@@ -31,7 +31,7 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 - Public Razor components use Element Plus-style PascalCase `El*` names, such as `<ElButton>`, `<ElInput>`, and `<ElTable>`.
 - Hyphenated `<el-button>` is treated as a plain HTML/custom element by Razor and is not suitable as a Blazor component type. `el_` is also not idiomatic for .NET, so it is not used.
 - Legacy public component names such as `Button`, `Input`, and `Table` are removed directly. There is no compatibility layer and no transition alias.
-- `B*` names may remain only as temporary internal implementation names. The roadmap target is to internalize or rename them into `El*` implementations.
+- Legacy prefixed component implementation entry points have been removed. The mainline keeps no compatibility layer, transition alias, or inheritance wrapper; active implementation names are `El*`/`Element*`.
 
 ## Quick Start
 
@@ -105,14 +105,14 @@ Element-Blazor ships an Element Plus `2.14.0` compatible CSS variable layer at `
 
 ## Current Track
 
-- 🟢 Done P0: project facade, build baseline, submodules, version baseline, and warning inventory
-- 🔵 P1: add the Element Plus 2.14 CSS variable layer
-- 🔵 P2: remove legacy public component names and switch to Element Plus `El*` control names
-- 🔵 P3: align visual design and APIs starting with `ElButton`, `ElInput`, and `ElForm`
-- 🔵 P4: documentation site and component overview
-- 🔵 P5: Element Plus component matrix gap filling
-- 🔵 P6: DiscuzX-like community facade and real product showcase
-- 🔵 P7: testing, release, and long-term maintenance
+- Done P0: project facade, build baseline, submodules, version baseline, and warning inventory
+- Done P1: add the Element Plus 2.14 CSS variable layer
+- Done P2: remove legacy public component names and switch to Element Plus `El*` control names
+- In progress P3: align visual design and APIs starting with `ElButton`, `ElInput`, and `ElForm`
+- Pending P4: documentation site and component overview
+- Pending P5: Element Plus component matrix gap filling
+- In progress P6: DiscuzX-like community facade and real product showcase
+- Pending P7: testing, release, and long-term maintenance
 
 ## Contributing
 
@@ -126,10 +126,11 @@ Before submitting a PR, please:
 1. Keep the change scope minimal and avoid unrelated refactoring
 2. Add examples and necessary tests for new features
 3. Update relevant documentation and change notes
-4. Update roadmap progress; completed items must use the `🟢 Done` marker
+4. Update roadmap progress with plain-text status markers such as `Done`, `In progress`, and `Pending`
 
 ## Acknowledgements
 
 - Element Plus design concepts, component specs, and interaction patterns
 - Element UI historical ecosystem as reference material
 - All contributors and community users
+

@@ -1,6 +1,6 @@
 # Community 重构蓝图
 
-> 最终决策：`community` 子模块不做旧项目兼容升级，而是作为业务素材库，按 Element Plus 2.14、Element-Blazor `El*` 控件命名和现代 .NET 主线彻底重构。旧 UI、旧组件名、旧包名、旧启动方式、旧 `B*` 写法不保留。
+> 最终决策：`community` 子模块不做旧项目兼容升级，而是作为业务素材库，按 Element Plus 2.14、Element-Blazor `El*` 控件命名和现代 .NET 主线彻底重构。旧 UI、旧组件名、旧包名、旧启动方式和旧写法不保留。
 
 ## 审计结论
 
@@ -9,12 +9,12 @@
 | 项目年代 | 主体为 `netcoreapp3.1`、`netstandard2.1`、Blazor WASM 3.2 | 新建现代 .NET 目标框架项目，不在旧项目上修修补补。 |
 | 前台 | `BlazorCommunity.App` Server-side Blazor，含首页、搜索、帖子详情、发帖、账号页、移动页 | 作为页面与业务流程参考，重建新前台。 |
 | WASM | `BlazorCommunity.Api` 托管 `BlazorCommunity.WasmApp` | 是否保留 WASM 形态重新评估；第一阶段只建一个可运行主展示面。 |
-| 后台 | `BlazorCommunity.Admin` 依赖 `Element.Admin` 与旧 `BAdmin` | 不保留旧 Admin 框架，重建 Element Plus 风格管理后台。 |
+| 后台 | `BlazorCommunity.Admin` 仍带历史 Admin 框架痕迹 | 不保留旧 Admin 框架，重建 Element Plus 风格管理后台。 |
 | API | `BlazorCommunity.Api` 有 client/admin 控制器，覆盖用户、主题、回复、关注、横幅、版本、上传 | 保留接口语义作为参考，重建 API 边界和 DTO。 |
 | 数据库 | MySQL，含 `BZTopic`、`BZReply`、`BZUser`、`BZFollow`、`BZVersion`、`BzBanner` 等模型 | 保留领域模型方向，重新设计实体、迁移、种子数据。 |
 | 登录 | Server 前台使用 ASP.NET Identity cookie；WASM/API 使用 token/localStorage；后台另有 IdentityUser | 统一认证方案，先实现本地账号 cookie/JWT 二选一，再扩展。 |
 | 配置 | 硬编码 MySQL 地址、旧域名、旧包名 | 全部迁移到本地安全配置、样例配置和启动脚本。 |
-| 组件 | 大量 `BButton`、`BForm`、`BTable`、`BMarkdownEditor` | 全部迁移为 `El*`，旧组件名不出现。 |
+| 组件 | 大量历史组件写法 | 全部迁移为 `El*`，旧组件名不出现。 |
 
 ## 新目标
 
@@ -133,7 +133,7 @@
 | --- | --- |
 | 引入 Element Plus 2.14 主题变量 | 社区使用统一 `--el-*` token。 |
 | 建立社区布局组件 | Header、ForumNav、TopicList、TopicCard、ReplyList、UserCard。 |
-| 替换所有旧样式口径 | 不出现 `BButton`、`BForm`、`BTable` 等旧写法。 |
+| 替换所有旧样式口径 | 不出现旧组件写法。 |
 | 视觉对齐 | 后台产品密度、边框、圆角、hover、active 与 Element Plus 接近。 |
 
 ### C4 DiscuzX 信息架构 🔵
@@ -202,7 +202,7 @@
 ### C3 主题融合
 
 ```text
-请把新的 ElementCommunity 主站接入 Element Plus 2.14 主题变量和 Element-Blazor `El*` 控件。要求页面里不出现旧 `B*`/无前缀旧组件名；Header、ForumNav、TopicList、TopicCard、ReplyList、UserCard 统一使用 `El*` 和 `el-*` DOM class。
+请把新的 ElementCommunity 主站接入 Element Plus 2.14 主题变量和 Element-Blazor `El*` 控件。要求页面里不出现旧组件名或无前缀旧组件名；Header、ForumNav、TopicList、TopicCard、ReplyList、UserCard 统一使用 `El*` 和 `el-*` DOM class。
 ```
 
 ### C5 管理后台
