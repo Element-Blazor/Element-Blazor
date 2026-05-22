@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Element
         {
             IsShow = true;
         }
-        public BSubMenu SubMenu { get; set; }
+        public ElSubMenu SubMenu { get; set; }
         public MenuOptions Options { get; set; }
         public RenderFragment Content { get; set; }
         public TaskCompletionSource<int> TaskCompletionSource { get; set; }

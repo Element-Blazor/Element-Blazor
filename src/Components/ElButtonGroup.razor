@@ -1,1 +1,6 @@
-@inherits BButtonGroup
+@inherits ElementComponentBase
+<CascadingValue Value="this" IsFixed="true">
+    <div class="@GroupClass" style="@Style" @attributes="Attributes">
+        @ChildContent
+    </div>
+</CascadingValue>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,7 +18,7 @@ namespace Element
 
         public static void Throw(int errCode, string message)
         {
-            throw new BlazuiException(errCode, message);
+            throw new ElementException(errCode, message);
         }
     }
 }

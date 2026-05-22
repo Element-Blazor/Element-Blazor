@@ -1,4 +1,4 @@
-﻿using Castle.DynamicProxy;
+using Castle.DynamicProxy;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -40,9 +40,9 @@ namespace Element.Core
                 invocation.Proceed();
                 return;
             }
-            if (typeof(BComponentBase).IsAssignableFrom(invocation.Method.DeclaringType))
+            if (typeof(ElementComponentBase).IsAssignableFrom(invocation.Method.DeclaringType))
             {
-                if (invocation.InvocationTarget is BComponentBase componentBase)
+                if (invocation.InvocationTarget is ElementComponentBase componentBase)
                 {
                     if (componentBase.allowRefresh)
                     {

@@ -1,4 +1,4 @@
-ï»¿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    internal class ButtonBase : BComponentBase
+    internal class ButtonBase : ElementComponentBase
     {
         internal HtmlPropertyBuilder cssClassBuilder;
         protected virtual async Task OnButtonClickedAsync(MouseEventArgs e)
@@ -37,25 +37,25 @@ namespace Element
         protected string showingImage;
 
         /// <summary>
-        /// æŒ‰é’®å›¾ç‰‡
+        /// °´Å¥Í¼Æ¬
         /// </summary>
         [Parameter]
         public string Image { get; set; }
 
         /// <summary>
-        /// é¼ æ ‡æ”¾ä¸Šå»æ—¶çš„æŒ‰é’®å›¾ç‰‡
+        /// Êó±ê·ÅÉÏÈ¥Ê±µÄ°´Å¥Í¼Æ¬
         /// </summary>
         [Parameter]
         public string HoverImage { get; set; }
 
         /// <summary>
-        /// é¼ æ ‡ç‚¹å‡»æ—¶çš„æŒ‰é’®å›¾ç‰‡
+        /// Êó±êµã»÷Ê±µÄ°´Å¥Í¼Æ¬
         /// </summary>
         [Parameter]
         public string ClickImage { get; set; }
 
         /// <summary>
-        /// æ˜¯å¦å°†è‡ªå®šä¹‰çš„ CSS ç±»åŠ å…¥åˆ°å·²æœ‰ CSS ç±»ï¼Œå¦‚æœä¸º falseï¼Œåˆ™æ›¿æ¢æ‰é»˜è®¤ CSS ç±»ï¼Œé»˜è®¤ä¸º true
+        /// ÊÇ·ñ½«×Ô¶¨ÒåµÄ CSS Àà¼ÓÈëµ½ÒÑÓĞ CSS Àà£¬Èç¹ûÎª false£¬ÔòÌæ»»µôÄ¬ÈÏ CSS Àà£¬Ä¬ÈÏÎª true
         /// </summary>
         [Parameter]
         public bool AppendCustomCls { get; set; } = true;

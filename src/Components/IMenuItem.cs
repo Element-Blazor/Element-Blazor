@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ namespace Element
     {
         string Icon { get; set; }
         string Index { get; set; }
-        BMenuContainer Menu { get; set; }
+        ElMenuContainer Menu { get; set; }
 
         object Model { get; set; }
         MenuOptions Options { get; set; }

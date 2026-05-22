@@ -1,4 +1,4 @@
-﻿using Element.ControlConfigs;
+using Element.ControlConfigs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
@@ -13,15 +13,15 @@ namespace Element.ControlRenders
         public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig config)
         {
             var uploadConfig = (UploadAttribute)config.ControlAttribute;
-            renderTreeBuilder.OpenComponent<BUpload>(0);
-            renderTreeBuilder.AddAttribute(1, nameof(BUpload.Url), uploadConfig.Url);
-            renderTreeBuilder.AddAttribute(2, nameof(BUpload.Width), uploadConfig.Width);
-            renderTreeBuilder.AddAttribute(3, nameof(BUpload.MaxSize), uploadConfig.MaxSize);
-            renderTreeBuilder.AddAttribute(4, nameof(BUpload.Tip), (RenderFragment)(builder => builder.AddMarkupContent(9, uploadConfig.Tip)));
-            renderTreeBuilder.AddAttribute(5, nameof(BUpload.AllowExtensions), uploadConfig.AllowExtensions);
-            renderTreeBuilder.AddAttribute(6, nameof(BUpload.Height), uploadConfig.Height);
-            renderTreeBuilder.AddAttribute(7, nameof(BUpload.EnablePasteUpload), uploadConfig.EnablePasteUpload);
-            renderTreeBuilder.AddAttribute(8, nameof(BUpload.UploadType), uploadConfig.Type);
+            renderTreeBuilder.OpenComponent<ElUpload>(0);
+            renderTreeBuilder.AddAttribute(1, nameof(ElUpload.Url), uploadConfig.Url);
+            renderTreeBuilder.AddAttribute(2, nameof(ElUpload.Width), uploadConfig.Width);
+            renderTreeBuilder.AddAttribute(3, nameof(ElUpload.MaxSize), uploadConfig.MaxSize);
+            renderTreeBuilder.AddAttribute(4, nameof(ElUpload.Tip), (RenderFragment)(builder => builder.AddMarkupContent(9, uploadConfig.Tip)));
+            renderTreeBuilder.AddAttribute(5, nameof(ElUpload.AllowExtensions), uploadConfig.AllowExtensions);
+            renderTreeBuilder.AddAttribute(6, nameof(ElUpload.Height), uploadConfig.Height);
+            renderTreeBuilder.AddAttribute(7, nameof(ElUpload.EnablePasteUpload), uploadConfig.EnablePasteUpload);
+            renderTreeBuilder.AddAttribute(8, nameof(ElUpload.UploadType), uploadConfig.Type);
             renderTreeBuilder.CloseComponent();
         }
     }

@@ -35,15 +35,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="BStepBase.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Remove="BStep.razor" />
-		<Content Remove="BSteps.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <None Include="..\..\LOGO.png">
 	    <Pack>True</Pack>
 	    <PackagePath></PackagePath>

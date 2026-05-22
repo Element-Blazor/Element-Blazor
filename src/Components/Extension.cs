@@ -1,4 +1,4 @@
-锘縰sing Element.ControlRender;
+using Element.ControlRender;
 using Element.ControlRenders;
 using Element.Core;
 using Element.DisplayRenders;
@@ -18,11 +18,11 @@ namespace Element
     public static class Extension
     {
         /// <summary>
-        /// 娣诲姞 Blazui 鐩稿叧鏈嶅姟
+        /// 添加 Element 相关服务
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBlazuiServices(this IServiceCollection services)
+        public static IServiceCollection AddElementServices(this IServiceCollection services)
         {
             services.AddSingleton<FormFieldControlMap>();
             services.AddSingleton<TableEditorMap>();

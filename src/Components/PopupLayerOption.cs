@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +9,7 @@ namespace Element
     internal class PopupLayerOption
     {
         public int ShadowZIndex { get; internal set; }
-        public BPopup Instance { get; internal set; }
+        public ElPopup Instance { get; internal set; }
         public bool IsNew { get; internal set; }
         public int ZIndex { get; internal set; }
 

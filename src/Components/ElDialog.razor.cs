@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class ElDialog : BComponentBase
+    public partial class ElDialog : ElementComponentBase
     {
         private static int nextZIndex = 2000;
         private ElementReference wrapperElement;

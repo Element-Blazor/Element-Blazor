@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,53 +8,53 @@ using Microsoft.AspNetCore.Components;
 namespace Element
 {
     /// <summary>
-    /// Tab é€‰é¡¹
+    /// Tab Ñ¡Ïî
     /// </summary>
     public class TabOption
     {
         /// <summary>
-        /// Tab åç§°
+        /// Tab Ãû³Æ
         /// </summary>
         public string Name { get; set; } = Guid.NewGuid().ToString();
 
         /// <summary>
-        /// æ˜¯å¦å¯å…³é—­
+        /// ÊÇ·ñ¿É¹Ø±Õ
         /// </summary>
         public bool IsClosable { get; set; }
 
         /// <summary>
-        /// æ˜¯å¦ç¦ç”¨
+        /// ÊÇ·ñ½ûÓÃ
         /// </summary>
         public bool IsDisabled { get; set; }
 
         /// <summary>
-        /// Tab æ ‡é¢˜
+        /// Tab ±êÌâ
         /// </summary>
         public string Title { get; set; }
 
         /// <summary>
-        /// Tag å†…å®¹ï¼Œå¯ä»¥æ˜¯ä¸€ä¸²å­—ç¬¦ä¸²ã€<seealso cref="RenderFragment"/>  ä»¥åŠä¸€ä¸ªç»„ä»¶çš„ <seealso cref="Type"/>
+        /// Tag ÄÚÈİ£¬¿ÉÒÔÊÇÒ»´®×Ö·û´®¡¢<seealso cref="RenderFragment"/>  ÒÔ¼°Ò»¸ö×é¼şµÄ <seealso cref="Type"/>
         /// </summary>
         public object Content { get; set; }
 
         /// <summary>
-        /// Tab Body åŒºé™„åŠ æ ·å¼
+        /// Tab Body Çø¸½¼ÓÑùÊ½
         /// </summary>
         public string BodyStyle { get; set; }
 
         /// <summary>
-        /// æ˜¯å¦æ´»åŠ¨
+        /// ÊÇ·ñ»î¶¯
         /// </summary>
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Tab é¡µæ¸²æŸ“å®Œæˆæ—¶è§¦å‘
+        /// Tab Ò³äÖÈ¾Íê³ÉÊ±´¥·¢
         /// </summary>
         public Func<object, Task> OnRenderCompletedAsync { get; set; } = p => Task.CompletedTask;
 
         /// <summary>
-        /// Tab é¡µåˆ‡æ¢æ—¶è§¦å‘
+        /// Tab Ò³ÇĞ»»Ê±´¥·¢
         /// </summary>
-        public EventCallback<BChangeEventArgs<BTabPanel>> OnTabPanelChanging { get; set; }
+        public EventCallback<ElementChangeEventArgs<ElTabPane>> OnTabPanelChanging { get; set; }
     }
 }

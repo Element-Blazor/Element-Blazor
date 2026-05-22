@@ -1,4 +1,4 @@
-ï»¿
+
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -14,32 +14,32 @@ namespace Element
         public object Content { get; set; }
 
         /// <summary>
-        /// çª—å£è¦æ˜¾ç¤ºçš„ç»„ä»¶æ‰€éœ€è¦çš„å‚æ•°
+        /// ´°¿ÚÒªÏÔÊ¾µÄ×é¼şËùĞèÒªµÄ²ÎÊı
         /// </summary>
         public IDictionary<string, object> Parameters { get; set; }
 
         /// <summary>
-        /// æ˜¯å¦çª—å£
+        /// ÊÇ·ñ´°¿Ú
         /// </summary>
         public bool IsDialog { get; set; }
         /// <summary>
-        /// å¼¹çª—å…¨å±
+        /// µ¯´°È«ÆÁ
         /// </summary>
         public bool FullScreen { get; set; } = false;
         public DialogResult Result { get; internal set; }
 
         /// <summary>
-        /// å®½åº¦
+        /// ¿í¶È
         /// </summary>
         public float Width { get; set; }
 
         /// <summary>
-        /// çª—å£æŒ‰é’®ï¼Œå°šæœªæµ‹è¯•
+        /// ´°¿Ú°´Å¥£¬ÉĞÎ´²âÊÔ
         /// </summary>
         public IList<RenderFragment> Buttons { get; set; } = new List<RenderFragment>();
 
         /// <summary>
-        /// æ˜¯å¦æ¨¡æ€çª—å£
+        /// ÊÇ·ñÄ£Ì¬´°¿Ú
         /// </summary>
         public bool IsModal { get; set; } = true;
 
@@ -60,21 +60,21 @@ namespace Element
         public int? CustomZIndex { get; set; }
 
         /// <summary>
-        /// çª—å£æ˜¾ç¤ºä½ç½®
+        /// ´°¿ÚÏÔÊ¾Î»ÖÃ
         /// </summary>
         public PointF Point { get; internal set; }
         internal int ZIndex { get; set; }
         internal int ShadowZIndex { get; set; }
         internal TaskCompletionSource<DialogResult> TaskCompletionSource { get; set; }
-        internal BPopup Instance { get; set; }
-        internal BTransition Element { get; set; }
-        internal BTransition ShadowElement { get; set; }
+        internal ElPopup Instance { get; set; }
+        internal ElTransition Element { get; set; }
+        internal ElTransition ShadowElement { get; set; }
         internal bool IsNew { get; set; }
 
         internal Func<Task> OnShow { get; set; }
 
         /// <summary>
-        /// å…³é—­çª—å£
+        /// ¹Ø±Õ´°¿Ú
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="result"></param>
@@ -88,7 +88,7 @@ namespace Element
         }
 
         /// <summary>
-        /// å…³é—­çª—å£
+        /// ¹Ø±Õ´°¿Ú
         /// </summary>
         /// <returns></returns>
         public async Task CloseDialogAsync()

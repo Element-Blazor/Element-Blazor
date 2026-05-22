@@ -1,4 +1,4 @@
-锘縰sing System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,24 +7,24 @@ namespace Element
     public class TableSaveEventArgs
     {
         /// <summary>
-        /// 淇濆瓨鍔ㄤ綔绫诲瀷
+        /// 保存动作类型
         /// </summary>
         public SaveAction Action { get; set; }
 
         /// <summary>
-        /// 瑕佷繚瀛樼殑鏁版嵁
+        /// 要保存的数据
         /// </summary>
         public object Data { get; set; }
 
         /// <summary>
-        /// 鏄惁鍙栨秷淇濆瓨鍔ㄤ綔
+        /// 是否取消保存动作
         /// </summary>
         public bool Cancel { get; set; }
 
         /// <summary>
-        /// 琛ㄦ牸瀵硅薄
+        /// 表格对象
         /// </summary>
-        public BTable Table { get; set; }
+        public ElTable Table { get; set; }
         public string Key { get; set; }
         public Type DataType { get; set; }
     }

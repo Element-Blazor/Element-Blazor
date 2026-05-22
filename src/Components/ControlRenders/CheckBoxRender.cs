@@ -1,4 +1,4 @@
-﻿using Element.ControlConfigs;
+using Element.ControlConfigs;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
@@ -14,12 +14,12 @@ namespace Element.ControlRenders
         {
             var inputConfig = (CheckBoxAttribute)config.ControlAttribute;
             renderTreeBuilder.OpenComponent(0, config.InputControlType);
-            renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
+            renderTreeBuilder.AddAttribute(1, nameof(ElFormItemObject.EnableAlwaysRender), true);
             if (inputConfig != null)
             {
                 renderTreeBuilder.AddAttribute(2, nameof(inputConfig.Image), inputConfig.Image);
                 renderTreeBuilder.AddAttribute(3, nameof(inputConfig.Style), inputConfig.Style);
-                renderTreeBuilder.AddAttribute(4, nameof(BFormItemObject.ChildContent), inputConfig.Text);
+                renderTreeBuilder.AddAttribute(4, nameof(ElFormItemObject.ChildContent), inputConfig.Text);
             }
             renderTreeBuilder.CloseComponent();
         }

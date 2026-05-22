@@ -1,1 +1,15 @@
-@inherits BCard
+@inherits ElementComponentBase
+<div class="@wrapperClassBuilder" style="@Style" @ref="Container">
+    @{
+        if (Header != null)
+        {
+            <div class="el-card__header">
+                @Header
+            </div>
+        }
+    }
+
+    <div class="@bodyClassBuilder">
+        @Body
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿using Element.ControlRender;
+using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
@@ -13,7 +13,7 @@ namespace Element.ControlRenders
         public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig formItemConfig)
         {
             renderTreeBuilder.OpenComponent(0, formItemConfig.InputControlType);
-            renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
+            renderTreeBuilder.AddAttribute(1, nameof(ElFormItemObject.EnableAlwaysRender), true);
             renderTreeBuilder.CloseComponent();
         }
     }

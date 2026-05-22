@@ -1,1 +1,15 @@
-@inherits BRibbon
+@inherits ElementComponentBase
+
+<div class="blazor-ribbon">
+    <div class="blazor-tabs" style="@styleBuilder.ToString()">
+        <ElTabs OnActiveTabChanging="PreventMenuSwitchAsync" Type="@TabType.BorderCard">
+            <ElTabPane Title="@(MenuText ?? "¿ªÊ¼")" @ref="menuTabPanel" Style="@menuStyleBuilder.ToString()">
+
+            </ElTabPane>
+            @Tabs
+        </ElTabs>
+    </div>
+    <div class="blazor-body">
+        @Body
+    </div>
+</div>

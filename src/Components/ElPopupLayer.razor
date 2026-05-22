@@ -1,1 +1,7 @@
-@inherits BPopupLayer
+@inherits ElementComponentBase
+<span @ref="container" style="@Style">
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+</span>

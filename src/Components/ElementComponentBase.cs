@@ -1,15 +1,20 @@
-ï»¿using Element;
+
+
+using Element.Lang;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Element
-{
-    public class ElementComponentBase : ComponentBase, IDisposable
+{    public class ElementComponentBase : ComponentBase, IDisposable
     {
-        [CascadingParameter(Name ="Page")]
+        internal bool allowRefresh;
+        [CascadingParameter(Name = "Page")]
         public ElementComponentBase Page { get; set; }
         protected bool RequireRender { get; set; } = true;
 
@@ -17,7 +22,7 @@ namespace Element
         public IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
-        /// è‹¥è¯¥é¡¹ä¸º trueï¼Œåˆ™è¯¥ç»„ä»¶ä¼šå§‹ç»ˆå…è®¸åˆ·æ–°ï¼Œä¸å— <seealso cref="ElementComponentBase.MarkAsRequireRender"/> æ–¹æ³•æ§åˆ¶
+        /// Èô¸ÃÏîÎª true£¬Ôò¸Ã×é¼ş»áÊ¼ÖÕÔÊĞíË¢ĞÂ£¬²»ÊÜ <seealso cref="ElementComponentBase.MarkAsRequireRender"/> ·½·¨¿ØÖÆ
         /// </summary>
         [Parameter]
         public bool EnableAlwaysRender { get; set; }
@@ -42,21 +47,21 @@ namespace Element
         public Func<object, Task> OnRenderCompleted { get; set; }
 
         /// <summary>
-        /// è‡ªå®šä¹‰ CSS ç±»
+        /// ×Ô¶¨Òå CSS Àà
         /// </summary>
         [Parameter]
         public virtual string Cls { get; set; }
 
         [CascadingParameter]
-        public BBadge Badge { get; set; }
+        public ElBadge Badge { get; set; }
         /// <summary>
-        /// è®¾ç½®è‡ªå®šä¹‰æ ·å¼
+        /// ÉèÖÃ×Ô¶¨ÒåÑùÊ½
         /// </summary>
         [Parameter]
         public string Style { get; set; } = string.Empty;
 
         /// <summary>
-        /// å¼¹å‡º Alert æ¶ˆæ¯
+        /// µ¯³ö Alert ÏûÏ¢
         /// </summary>
         /// <param name="text"></param>
         public void Alert(string text)
@@ -73,7 +78,7 @@ namespace Element
         }
 
         /// <summary>
-        /// å¼¹å‡º Confirm æ¶ˆæ¯
+        /// µ¯³ö Confirm ÏûÏ¢
         /// </summary>
         /// <param name="text"></param>
         public async Task<MessageBoxResult> ConfirmAsync(string text)
@@ -82,7 +87,7 @@ namespace Element
         }
 
         /// <summary>
-        /// é»˜è®¤æƒ…å†µä¸‹æ‰€æœ‰å¤æ‚ç»„ä»¶éƒ½åªè¿›è¡Œä¸€æ¬¡æ¸²æŸ“ï¼Œè¯¥æ–¹æ³•å°†ç»„ä»¶ç½®ä¸ºéœ€è¦å†æ¬¡æ¸²æŸ“
+        /// Ä¬ÈÏÇé¿öÏÂËùÓĞ¸´ÔÓ×é¼ş¶¼Ö»½øĞĞÒ»´ÎäÖÈ¾£¬¸Ã·½·¨½«×é¼şÖÃÎªĞèÒªÔÙ´ÎäÖÈ¾
         /// </summary>
         public virtual void MarkAsRequireRender()
         {
@@ -90,7 +95,7 @@ namespace Element
         }
 
         [CascadingParameter]
-        public BDialogBase DialogContainer { get; set; }
+        public ElementDialogBase DialogContainer { get; set; }
 
         protected virtual Task OnDialogShowAsync()
         {
@@ -130,13 +135,16 @@ namespace Element
 
         public virtual void Refresh()
         {
-            MarkAsRequireRender();
-            StateHasChanged();
+            _ = InvokeAsync(() =>
+              {
+                  MarkAsRequireRender();
+                  StateHasChanged();
+              });
         }
 
         protected override bool ShouldRender()
         {
-            return RequireRender || EnableAlwaysRender;
+            return true;
         }
 
         public virtual void Dispose()

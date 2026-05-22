@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -55,7 +55,7 @@ namespace Element
             return await jSRuntime.InvokeAsync<int>("getClientHeight");
         }
 
-        internal ValueTask RegisterPasteUploadAsync(BUpload upload, string url)
+        internal ValueTask RegisterPasteUploadAsync(ElUpload upload, string url)
         {
             return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url);
         }

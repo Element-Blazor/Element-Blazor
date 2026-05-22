@@ -1,1 +1,7 @@
-@inherits BTransition
+@inherits ElementComponentBase
+<div class="@clsBuilder?.ToString()" @attributes="Attributes" style="@styleBuilder" @ref="animationElement">
+        @Content
+    </div>
+<CascadingValue Value="this">
+    @Path
+</CascadingValue>

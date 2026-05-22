@@ -1,4 +1,4 @@
-Ôªø
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -18,7 +18,7 @@ namespace Element
         public async Task<MessageBoxResult> AlertAsync(string text)
         {
             var option = CreateOption(text);
-            var okRenderFragment = CreateButtonRenderer(option, "Á°ÆÂÆö", MessageBoxResult.Ok, ButtonType.Primary);
+            var okRenderFragment = CreateButtonRenderer(option, "»∑∂®", MessageBoxResult.Ok, ButtonType.Primary);
             option.Buttons.Add(okRenderFragment);
             DialogService.Dialogs.Add(option);
             var dialogResult = await option.TaskCompletionSource.Task;
@@ -31,7 +31,7 @@ namespace Element
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
             return new DialogOption()
             {
-                Title = "ÊèêÁ§∫",
+                Title = "Ã· æ",
                 Content = text,
                 IsDialog = false,
                 TaskCompletionSource = taskCompletionSource
@@ -42,8 +42,8 @@ namespace Element
         {
             return builder =>
             {
-                builder.OpenComponent<BButton>(0);
-                builder.AddAttribute(1, nameof(BButton.OnClick), EventCallback.Factory.Create(option.Instance, async (MouseEventArgs e) =>
+                builder.OpenComponent<ElButton>(0);
+                builder.AddAttribute(1, nameof(ElButton.OnClick), EventCallback.Factory.Create(option.Instance, async (MouseEventArgs e) =>
                 {
                     await option.Instance.CloseDialogAsync(option, new DialogResult()
                     {
@@ -60,8 +60,8 @@ namespace Element
         public async Task<MessageBoxResult> ConfirmAsync(string text)
         {
             var option = CreateOption(text);
-            var cancelRenderFragment = CreateButtonRenderer(option, "ÂèñÊ∂à", MessageBoxResult.Cancel, ButtonType.Default);
-            var okRenderFragment = CreateButtonRenderer(option, "Á°ÆÂÆö", MessageBoxResult.Ok, ButtonType.Primary);
+            var cancelRenderFragment = CreateButtonRenderer(option, "»°œ˚", MessageBoxResult.Cancel, ButtonType.Default);
+            var okRenderFragment = CreateButtonRenderer(option, "»∑∂®", MessageBoxResult.Ok, ButtonType.Primary);
             option.Buttons.Add(cancelRenderFragment);
             option.Buttons.Add(okRenderFragment);
             DialogService.Dialogs.Add(option);

@@ -1,1 +1,12 @@
-@inherits BMenuItem
+@inherits ElementComponentBase
+<li role="menuitem" tabindex="@(Disabled || Options.Disabled ? -1 : 0)"
+    @onclick="OnClickAsync"
+    @onmouseover="OnOver"
+    @onmouseout="OnOut"
+    @onkeydown="OnKeyDownAsync"
+    class="el-menu-item @(IsActive?"is-active":"") @(Disabled ? "is-disabled" : "")"
+    aria-disabled="@(Disabled || Options.Disabled)"
+    style="background-color:@BackgroundColor;color:@TextColor; border-bottom-color:@BorderColor;">
+    <i class="@(Icon ?? "el-icon-menu")"></i>
+    @ChildContent
+</li>

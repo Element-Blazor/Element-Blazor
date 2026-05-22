@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ namespace Element
     public static class LoadingExtension
     {
         /// <summary>
-        /// æ˜¾ç¤º Loading çŠ¶æ€
+        /// ÏÔÊ¾ Loading ×´Ì¬
         /// </summary>
         /// <param name="container"></param>
         /// <returns></returns>
@@ -22,10 +22,10 @@ namespace Element
         }
 
         /// <summary>
-        /// æ˜¾ç¤º Loading çŠ¶æ€
+        /// ÏÔÊ¾ Loading ×´Ì¬
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="action">åœ¨ Loading çŠ¶æ€æœŸé—´è¦åšçš„äº‹</param>
+        /// <param name="action">ÔÚ Loading ×´Ì¬ÆÚ¼äÒª×öµÄÊÂ</param>
         /// <returns></returns>
         public static async Task WithLoadingAsync(this IContainerComponent container, Func<Task> action)
         {
@@ -46,10 +46,10 @@ namespace Element
         }
 
         /// <summary>
-        /// æ˜¾ç¤º Loading çŠ¶æ€
+        /// ÏÔÊ¾ Loading ×´Ì¬
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="action">åœ¨ Loading çŠ¶æ€æœŸé—´è¦åšçš„äº‹</param>
+        /// <param name="action">ÔÚ Loading ×´Ì¬ÆÚ¼äÒª×öµÄÊÂ</param>
         /// <param name="text"></param>
         /// <returns></returns>
         public static async Task WithLoadingAsync(this IContainerComponent container, Func<Task> action, string text)
@@ -103,11 +103,11 @@ namespace Element
         {
             if (container == null)
             {
-                throw new BlazuiException("è¦ç½®ä¸º Loading çŠ¶æ€çš„ç»„ä»¶å°šæœªæ¸²æŸ“å®Œæˆ");
+                throw new ElementException("ÒªÖÃÎª Loading ×´Ì¬µÄ×é¼şÉĞÎ´äÖÈ¾Íê³É");
             }
             if (string.IsNullOrWhiteSpace(container.Container.Id))
             {
-                throw new BlazuiException("è¦ç½®ä¸º Loading çŠ¶æ€çš„ç»„ä»¶å°šæœªæ¸²æŸ“å®Œæˆï¼ŒIContainerComponent.Container çš„ Id ä¸º null");
+                throw new ElementException("ÒªÖÃÎª Loading ×´Ì¬µÄ×é¼şÉĞÎ´äÖÈ¾Íê³É£¬IContainerComponent.Container µÄ Id Îª null");
             }
         }
     }

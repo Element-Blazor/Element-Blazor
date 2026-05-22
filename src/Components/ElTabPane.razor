@@ -1,1 +1,25 @@
-@inherits BTabPanel
+@inherits ElementComponentBase
+@{
+    var isActiveTab = TabContainer.ActiveTab?.Name == this.Name;
+    if (TabContainer.DataSource != null)
+    {
+        isActiveTab = TabContainer.DataSource.Any(x => x.Name == this.Name && x.IsActive);
+    }
+
+    var name = Name;
+    var position = TabContainer.GetPosition();
+    var headerPosition = position.headerPosition;
+    var tabPosition = position.tabPosition;
+    var classBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+        .Add("el-tabs__item", headerPosition)
+        .AddIf(IsClosable, "is-closable")
+        .AddIf(isActiveTab, "is-active")
+        .AddIf(Disabled, "is-disabled");
+}
+<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(isActiveTab && !Disabled ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="@classBuilder.ToString()" aria-selected="@(isActiveTab ? "true" : "false")" aria-disabled="@Disabled">
+    @Title
+    @if (IsClosable && !Disabled)
+    {
+        <span class="el-icon-close" @onclick="OnInternalTabCloseAsync" @onclick:stopPropagation></span>
+    }
+</div>

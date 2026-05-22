@@ -1,4 +1,4 @@
-﻿using Castle.DynamicProxy;
+using Castle.DynamicProxy;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace Element.Core
             {
                 return;
             }
-            var componentBase = proxy as BComponentBase;
+            var componentBase = proxy as ElementComponentBase;
             if (delayTask != null)
             {
                 if (delayTask.Status == TaskStatus.Running || delayTask.Status == TaskStatus.WaitingForActivation

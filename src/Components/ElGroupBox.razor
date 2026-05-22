@@ -1,1 +1,14 @@
-@inherits BGroupBox
+@inherits ElementComponentBase
+@if (!string.IsNullOrWhiteSpace(Title))
+{
+    <fieldset class="blazor-fieldset">
+        <legend>@Title</legend>
+        @ChildContent
+    </fieldset>
+}
+else
+{
+    <div class="blazor-groupbox">
+        @ChildContent
+    </div>
+}

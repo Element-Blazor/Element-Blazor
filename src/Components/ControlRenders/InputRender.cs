@@ -1,4 +1,4 @@
-﻿using Element.ControlConfigs;
+using Element.ControlConfigs;
 using Element.ControlRender;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.CompilerServices;
@@ -30,7 +30,7 @@ namespace Element.ControlRenders
                 builder.AddAttribute(8, nameof(inputConfig.Image), inputConfig.Image);
                 builder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
             }
-            builder.AddAttribute(10, nameof(BFormItemObject.EnableAlwaysRender), true);
+            builder.AddAttribute(10, nameof(ElFormItemObject.EnableAlwaysRender), true);
             CreateBind(config, builder, 11);
             builder.CloseComponent();
         }

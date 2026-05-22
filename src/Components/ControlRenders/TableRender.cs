@@ -1,4 +1,4 @@
-ï»¿using Element.ControlConfigs;
+using Element.ControlConfigs;
 using Element.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -80,7 +80,7 @@ namespace Element.ControlRenders
         }
         private readonly MessageService message;
         private readonly MessageBox messageBox;
-        BTable currentTable = null;
+        ElTable currentTable = null;
 
         public TableRender(MessageService message, MessageBox messageBox)
         {
@@ -93,36 +93,36 @@ namespace Element.ControlRenders
             List<KeyValueModel> tableDataSource = new List<KeyValueModel>();
             var attributeConfig = (TableAttribute)config.ControlAttribute;
             renderTreeBuilder.OpenComponent(0, config.InputControlType);
-            renderTreeBuilder.AddAttribute(1, nameof(BFormItemObject.EnableAlwaysRender), true);
-            renderTreeBuilder.AddAttribute(2, nameof(BTable.AutoGenerateColumns), true);
-            renderTreeBuilder.AddAttribute(3, nameof(BTable.DataType), typeof(KeyValueModel));
+            renderTreeBuilder.AddAttribute(1, nameof(ElFormItemObject.EnableAlwaysRender), true);
+            renderTreeBuilder.AddAttribute(2, nameof(ElTable.AutoGenerateColumns), true);
+            renderTreeBuilder.AddAttribute(3, nameof(ElTable.DataType), typeof(KeyValueModel));
             if (attributeConfig != null)
             {
-                renderTreeBuilder.AddAttribute(4, nameof(BTable.Height), attributeConfig.Height);
-                renderTreeBuilder.AddAttribute(5, nameof(BTable.IsEditable), attributeConfig.IsEditable);
+                renderTreeBuilder.AddAttribute(4, nameof(ElTable.Height), attributeConfig.Height);
+                renderTreeBuilder.AddAttribute(5, nameof(ElTable.IsEditable), attributeConfig.IsEditable);
                 if (attributeConfig.IsEditable)
                 {
-                    renderTreeBuilder.AddAttribute(6, nameof(BTable.DataType), typeof(KeyValueModel));
+                    renderTreeBuilder.AddAttribute(6, nameof(ElTable.DataType), typeof(KeyValueModel));
                     if (config.Page == null)
                     {
-                        ExceptionHelper.Throw(ExceptionHelper.CascadingValueNotFound, "è¡¨æ ¼å¯ç”¨å¯ç¼–è¾‘åŠŸèƒ½åå¿…é¡»åœ¨å¤–é¢å¥—ä¸€å±‚ CascadingValueï¼Œå€¼ä¸º thisï¼Œåç§°ä¸º Page");
+                        ExceptionHelper.Throw(ExceptionHelper.CascadingValueNotFound, "±í¸ñÆôÓÃ¿É±à¼­¹¦ÄÜºó±ØĞëÔÚÍâÃæÌ×Ò»²ã CascadingValue£¬ÖµÎª this£¬Ãû³ÆÎª Page");
                     }
-                    renderTreeBuilder.AddAttribute(7, nameof(BTable.OnSave), EventCallback.Factory.Create<TableSaveEventArgs>(config.Page, DefaultSaverAsync));
+                    renderTreeBuilder.AddAttribute(7, nameof(ElTable.OnSave), EventCallback.Factory.Create<TableSaveEventArgs>(config.Page, DefaultSaverAsync));
                 }
             }
-            renderTreeBuilder.AddAttribute(8, nameof(BTable.DataSourceChanged), EventCallback.Factory.Create<object>(this, dataSource =>
+            renderTreeBuilder.AddAttribute(8, nameof(ElTable.DataSourceChanged), EventCallback.Factory.Create<object>(this, dataSource =>
              {
                  tableDataSource = (List<KeyValueModel>)dataSource;
                  config.EditingValue = dataSource;
              }));
-            renderTreeBuilder.AddAttribute(9, nameof(BTable.DataSource), tableDataSource);
-            renderTreeBuilder.AddComponentReferenceCapture(10, table => currentTable = (BTable)table);
+            renderTreeBuilder.AddAttribute(9, nameof(ElTable.DataSource), tableDataSource);
+            renderTreeBuilder.AddComponentReferenceCapture(10, table => currentTable = (ElTable)table);
             renderTreeBuilder.CloseComponent();
         }
 
         private async Task ExecuteDeleteAsync(object context, object tableDataSource)
         {
-            var result = await messageBox.ConfirmAsync("ç¡®è®¤åˆ é™¤å—ï¼Ÿ");
+            var result = await messageBox.ConfirmAsync("È·ÈÏÉ¾³ıÂğ£¿");
             if (result != MessageBoxResult.Ok)
             {
                 return;

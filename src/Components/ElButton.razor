@@ -1,1 +1,9 @@
-@inherits BButton
+@inherits ElementComponentBase
+@if (string.IsNullOrWhiteSpace(Image))
+{
+    @ButtonElement
+}
+else
+{
+    <img src="@showingImage" class="@Cls" @onclick="OnButtonClickedAsync" style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(Style).Add("cursor:pointer").ToString()" @onmouseover="MouseOver" @onmouseout="MouseOut" />
+}

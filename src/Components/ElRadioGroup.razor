@@ -1,2 +1,7 @@
+@inherits ElementFieldComponentBase<TValue>
 @typeparam TValue
-@inherits BRadioGroup<TValue>
+<div role="radiogroup" class="el-radio-group">
+    <CascadingValue Value="@this">
+        @ChildContent
+    </CascadingValue>
+</div>

@@ -1,4 +1,4 @@
-ï»¿
+
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -10,32 +10,32 @@ namespace Element
     public class PopupOption
     {
         /// <summary>
-        /// å…³è”åˆ°çš„ BPopup ç»„ä»¶å®ä¾‹
+        /// ¹ØÁªµ½µÄ ElPopup ×é¼şÊµÀı
         /// </summary>
-        public BPopup Instance { get; internal set; }
+        public ElPopup Instance { get; internal set; }
 
         /// <summary>
-        /// å¼¹å‡ºå±‚å…ƒç´ æœ¬èº«
+        /// µ¯³ö²ãÔªËØ±¾Éí
         /// </summary>
         internal ElementReference Element { get; set; }
 
         /// <summary>
-        /// é®ç½©å±‚å…ƒç´ 
+        /// ÕÚÕÖ²ãÔªËØ
         /// </summary>
         internal ElementReference ShadowElement { get; set; }
 
         /// <summary>
-        /// è¦å°†å¼¹å‡ºå±‚æ˜¾ç¤ºåˆ°å“ªä¸ªå…ƒç´ ä¸‹æ–¹
+        /// Òª½«µ¯³ö²ãÏÔÊ¾µ½ÄÄ¸öÔªËØÏÂ·½
         /// </summary>
         internal ElementReference Target { get; set; }
 
         /// <summary>
-        /// éšè—åŠ¨ç”»çŠ¶æ€
+        /// Òş²Ø¶¯»­×´Ì¬
         /// </summary>
         internal AnimationStatus HideStatus { get; set; }
 
         /// <summary>
-        /// æ˜¾ç¤ºåŠ¨ç”»çŠ¶æ€
+        /// ÏÔÊ¾¶¯»­×´Ì¬
         /// </summary>
         internal AnimationStatus ShowStatus { get; set; }
 

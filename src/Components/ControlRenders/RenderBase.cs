@@ -1,4 +1,4 @@
-ï»¿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
@@ -19,32 +19,32 @@ namespace Element.ControlRenders
             {
                 if (config.RawValue == null && finalType != valueType)
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), (object)null);
+                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), (object)null);
                 }
                 else if (config.RawValue == null)
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Activator.CreateInstance(finalType));
+                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Activator.CreateInstance(finalType));
                 }
                 else
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Enum.Parse(finalType, editingValue));
+                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Enum.Parse(finalType, editingValue));
                 }
             }
             else
             {
-                builder.AddAttribute(startIndex + 1, nameof(BInput<string>.Value), Convert.ChangeType(editingValue, valueType));
+                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Convert.ChangeType(editingValue, valueType));
             }
         }
 
-        protected Type CreateTwoWayBinding(RenderConfig config, RenderTreeBuilder builder, int startIndex, string propertyName = nameof(BInput<string>.ValueChanged), Type valueType = null)
+        protected Type CreateTwoWayBinding(RenderConfig config, RenderTreeBuilder builder, int startIndex, string propertyName = nameof(ElInput<string>.ValueChanged), Type valueType = null)
         {
             valueType = valueType ?? config.InputControlType.GetGenericArguments()[0];
             if (config.Page == null)
             {
-                Console.WriteLine("æ²¡æœ‰åŒå‘ç»‘å®š");
+                Console.WriteLine("Ã»ÓÐË«Ïò°ó¶¨");
                 return valueType;
             }
-            Console.WriteLine("å¼€å§‹åŒå‘ç»‘å®š");
+            Console.WriteLine("¿ªÊ¼Ë«Ïò°ó¶¨");
             var createMethod = typeof(EventCallbackFactory).GetMethods().FirstOrDefault(x =>
             {
                 if (!x.IsGenericMethod || !x.IsPublic)
