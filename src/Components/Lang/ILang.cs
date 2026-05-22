@@ -10,7 +10,7 @@ namespace Element.Lang
         /// <summary>
         /// 初始化加载的json文件
         /// </summary>
-        void InitBLangBaseAsync();
+        void InitElementLangBaseAsync();
 
         /// <summary>
         /// 读取对应文件的语言
