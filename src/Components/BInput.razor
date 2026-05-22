@@ -3,14 +3,17 @@
 @{
     var text = Formatter(Value);
     var nativeValue = text ?? string.Empty;
-    var isClearable = Value != null && Clearable && !Disabled && !Readonly && (IsFocus || IsMouseOver);
-    var hasSuffix = isClearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPassword || ShowWordLimit || HasValidationStatusIcon;
+    var isClearable = Value != null && Clearable && !IsInputDisabled && !Readonly && (IsFocus || IsMouseOver);
+    var hasSuffix = HasSuffix;
     var inputStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
         .Add(InputStyle)
+        .AddIf(ShowPasswordToggle, "padding-right:60px")
+        .AddIf(IsWordLimitVisible && WordLimitPosition != "outside", "padding-right:60px")
         .AddIf(!string.IsNullOrWhiteSpace(Image), "background: transparent", "border: transparent")
         .ToString();
     var textareaStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
         .Add(InputStyle)
+        .AddIf(IsWordLimitVisible && WordLimitPosition != "outside", "padding-right:52px")
         .AddIf(!string.IsNullOrWhiteSpace(Image), "background: transparent", "border: transparent")
         .AddIf(!string.IsNullOrWhiteSpace(Resize), $"resize:{Resize}")
         .ToString();
@@ -24,14 +27,14 @@
     }
     @if (Type == InputType.Textarea)
     {
-        <textarea id="@Id" style="@textareaStyle" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" name="@Name" disabled="@Disabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" rows="@Rows" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" />
+        <textarea id="@Id" style="@textareaStyle" @ref="InputElement" @attributes="Attributes" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oncompositionstart="OnCompositionStartAsync" @oncompositionupdate="OnCompositionUpdateAsync" @oncompositionend="OnCompositionEndAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" name="@Name" disabled="@IsInputDisabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" rows="@Rows" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" aria-invalid="@IsAriaInvalid" aria-describedby="@AriaDescribedBy" />
         @if (isClearable)
         {
             <i class="el-textarea__icon el-textarea__clear el-icon-circle-close @(AdditionalClearIcon ?? string.Empty)" @onclick="ClearOnClick"></i>
         }
-        @if (ShowWordLimit && Maxlength != null)
+        @if (IsWordLimitVisible)
         {
-            <span class="el-input__count">@TextLength / @Maxlength</span>
+            <span class="el-input__count @(WordLimitPosition == "outside" ? "is-outside" : string.Empty)">@TextLength / @Maxlength</span>
         }
     }
     else
@@ -44,7 +47,7 @@
                 </span>
             </span>
         }
-        <input id="@Id" type="@NativeInputType" style="@inputStyle" @ref="InputElement" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" @onkeydown="OnKeyDown" name="@Name" disabled="@Disabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" />
+        <input id="@Id" type="@NativeInputType" style="@inputStyle" @ref="InputElement" @attributes="Attributes" @onclick="OnInputClick" placeholder="@Placeholder" value="@nativeValue" class="@InputElementClass" @onfocus="OnFocusEventAsync" @onblur="OnBlurEventAsync" @oncompositionstart="OnCompositionStartAsync" @oncompositionupdate="OnCompositionUpdateAsync" @oncompositionend="OnCompositionEndAsync" @oninput="OnChangeEventArgs" @onchange="OnNativeChangeAsync" @onkeydown="OnKeyDown" name="@Name" disabled="@IsInputDisabled" readonly="@Readonly" maxlength="@Maxlength" minlength="@Minlength" autocomplete="@Autocomplete" autofocus="@Autofocus" tabindex="@Tabindex" aria-label="@AriaLabel" inputmode="@Inputmode" form="@Form" aria-invalid="@IsAriaInvalid" aria-describedby="@AriaDescribedBy" />
         @if (hasSuffix)
         {
             <span class="el-input__suffix">
@@ -57,13 +60,13 @@
                     {
                         <i class="el-input__icon @SuffixIcon" @onclick="OnSuffixIconClick"></i>
                     }
-                    @if (ShowPassword)
+                    @if (ShowPasswordToggle)
                     {
                         <i class="el-input__icon el-input__password el-icon-view" @onclick="TogglePasswordVisibility"></i>
                     }
-                    @if (ShowWordLimit && Maxlength != null)
+                    @if (IsWordLimitVisible)
                     {
-                        <span class="el-input__count">
+                        <span class="el-input__count @(WordLimitPosition == "outside" ? "is-outside" : string.Empty)">
                             <span class="el-input__count-inner">@TextLength / @Maxlength</span>
                         </span>
                     }

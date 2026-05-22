@@ -15,23 +15,46 @@
      @ref="elementSelect"
      role="combobox"
      aria-haspopup="listbox"
+     aria-multiselectable="@Multiple"
      aria-expanded="@IsDropDownOpen"
-     aria-disabled="@Disabled"
+     aria-disabled="@IsSelectDisabled"
      aria-controls="@DropDownId"
      aria-busy="@Loading"
-     tabindex="@(Disabled ? -1 : 0)">
+     tabindex="@(IsSelectDisabled ? -1 : 0)">
+    @if (Multiple && SelectedOptions.Any())
+    {
+        <div class="el-select__tags">
+            @foreach (var selected in VisibleSelectedOptions)
+            {
+                <span class="el-tag el-tag--info el-tag--small el-tag--light" @key="selected.Key">
+                    <span class="el-select__tags-text">@selected.Text</span>
+                    @if (!IsSelectDisabled)
+                    {
+                        <i class="el-tag__close el-icon-close" @onclick="e => RemoveTagAsync(selected)" @onclick:stopPropagation></i>
+                    }
+                </span>
+            }
+            @if (CollapsedTagCount > 0)
+            {
+                <span class="el-tag el-tag--info el-tag--small el-tag--light">
+                    <span class="el-select__tags-text">+ @CollapsedTagCount</span>
+                </span>
+            }
+        </div>
+    }
     <BInput TValue="string"
             Clearable="Clearable"
-            Disabled="Disabled"
+            Disabled="IsSelectDisabled"
             Readonly="@(!Filterable)"
-            Size="@Size"
+            Size="@EffectiveSize"
             @bind-EnableClearButton="EnableClearButton"
             SuffixIcon="@string.Join(" ",suffixIconClsList)"
-            Placeholder="@Placeholder"
+            Placeholder="@EffectivePlaceholder"
             ValueChanged="UpdateValue"
             Value="@DisplayLabel"
             AdditionalClearIcon="el-select__caret"
             ValidateEvent="false"
+            OnClear="OnInputClearAsync"
             OnFocus="OnInputFocusAsync"
             OnBlur="OnInputBlurAsync">
     </BInput>

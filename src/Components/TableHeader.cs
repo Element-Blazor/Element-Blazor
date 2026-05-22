@@ -29,6 +29,13 @@ namespace Element
         public Func<object, object> EvalRaw { get; set; }
         public bool Ignore { get; internal set; }
         public bool IsOperation { get; internal set; }
+        public bool Sortable { get; set; }
+        public TableSortOrder SortOrder { get; set; }
+        public TableColumnFixed Fixed { get; set; }
+        public IList<TableFilterOption> Filters { get; set; }
+        public HashSet<object> FilterValues { get; set; } = new HashSet<object>();
+        public Func<object, object, bool> FilterMethod { get; set; }
+        public bool HasActiveFilter => FilterValues != null && FilterValues.Count > 0;
     }
 
     public struct IntString

@@ -35,6 +35,12 @@ namespace Element
             FormItem.ShowErrorMessage();
         }
 
+        protected bool IsAriaInvalid => FormItem?.ValidationResult != null && !FormItem.ValidationResult.IsValid;
+
+        protected string AriaDescribedBy => IsAriaInvalid && !string.IsNullOrWhiteSpace(FormItem?.Name)
+            ? $"{FormItem.Name}-error"
+            : null;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();

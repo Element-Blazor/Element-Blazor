@@ -127,7 +127,7 @@ namespace Element
             if (string.IsNullOrWhiteSpace(Cls) || AppendCustomCls)
             {
                 cssClassBuilder.Add($"el-button", $"el-button--{Type.ToString().ToLower()}", Cls)
-                .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
+                .AddIf(GetSizeCssValue(Size) != null, $"el-button--{GetSizeCssValue(Size)}")
                 .AddIf(IsPlain, "is-plain")
                 .AddIf(IsRound, "is-round")
                 .AddIf(IsDisabled, "is-disabled")
@@ -139,7 +139,7 @@ namespace Element
             if (string.IsNullOrWhiteSpace(Cls))
             {
                 cssClassBuilder.Add($"el-button", $"el-button--{Type.ToString().ToLower()}")
-                    .AddIf(Size != ButtonSize.Default, $"el-button--{Size.ToString().ToLower()}")
+                    .AddIf(GetSizeCssValue(Size) != null, $"el-button--{GetSizeCssValue(Size)}")
                     .AddIf(IsPlain, "is-plain")
                     .AddIf(IsRound, "is-round")
                     .AddIf(IsDisabled, "is-disabled")
@@ -147,5 +147,12 @@ namespace Element
                     .AddIf(IsCircle, "is-circle");
             }
         }
+
+        private static string GetSizeCssValue(ButtonSize size) => size switch
+        {
+            ButtonSize.Large => "large",
+            ButtonSize.Small => "small",
+            _ => null
+        };
     }
 }

@@ -1,28 +1,7 @@
-﻿@inherits BComponentBase
-@{
-    var icon = Icon;
-    if (Loading)
-    {
-        icon = LoadingIcon;
-    }
-
-}
+@inherits BComponentBase
 @if (string.IsNullOrWhiteSpace(Image))
 {
-    <button type="@NativeType" @onclick="OnButtonClickedAsync" style="@buttonStyleBuilder" class="@cssClassBuilder" disabled="@(Disabled || Loading)" autofocus="@Autofocus">
-        @if (Loading)
-        {
-            <i class="@LoadingIcon"></i>
-        }
-        else if (!string.IsNullOrWhiteSpace(icon))
-        {
-            <i class="@icon"></i>
-        }
-        @if (!string.IsNullOrWhiteSpace(ButtonTextContent) || ChildContent != null)
-        {
-            <span>@(ButtonTextContent ?? string.Empty)@ChildContent</span>
-        }
-    </button>
+    @ButtonElement
 }
 else
 {

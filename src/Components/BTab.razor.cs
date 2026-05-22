@@ -232,7 +232,6 @@ namespace Element
                 return;
             }
 
-            Console.WriteLine(tab.Title);
             tabPanels.Add(tab);
         }
 

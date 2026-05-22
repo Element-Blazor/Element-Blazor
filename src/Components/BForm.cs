@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,13 @@ namespace Element
     public partial class BForm : BComponentBase, IContainerComponent
     {
         private List<FormItemConfig> formItemConfigs;
+        private readonly List<FormInputRegistration> inputRegistrations = new List<FormInputRegistration>();
         [Inject]
         FormFieldControlMap formFieldControlMap { get; set; }
 
         private bool requireRefresh = true;
         private Task showMessageTask;
+        private IDictionary<string, IList<IValidationRule>> lastRulesReference;
         public ElementReference Container { get; set; }
 
         internal List<BFormItemObject> Items { get; set; } = new List<BFormItemObject>();
@@ -44,6 +47,12 @@ namespace Element
 
         [Parameter]
         public bool ScrollToError { get; set; }
+
+        [Parameter]
+        public IDictionary<string, IList<IValidationRule>> Rules { get; set; }
+
+        [Parameter]
+        public EventCallback<FormValidateEventArgs> OnValidate { get; set; }
 
         [Parameter]
         public object LabelPosition
@@ -154,14 +163,22 @@ namespace Element
             clsList.Add("el-form");
             if (Size != null)
             {
-                clsList.Add($"el-form--{Size.Value.ToString().ToLower()}");
+                var sizeCssValue = GetSizeCssValue(Size.Value);
+                if (sizeCssValue != null)
+                {
+                    clsList.Add($"el-form--{sizeCssValue}");
+                }
             }
 
             builder.OpenElement(0, "form");
-            builder.AddAttribute(1, "class", string.Join(" ", clsList));
-            builder.AddAttribute(2, "style", Style);
-            builder.AddElementReferenceCapture(3, value => Container = value);
-            TypeInference.CreateCascadingValue_0(builder, 4, 5, this, 6, (__builder2) =>
+            if (Attributes != null)
+            {
+                builder.AddMultipleAttributes(1, Attributes);
+            }
+            builder.AddAttribute(2, "class", string.Join(" ", clsList));
+            builder.AddAttribute(3, "style", Style);
+            builder.AddElementReferenceCapture(4, value => Container = value);
+            TypeInference.CreateCascadingValue_0(builder, 5, 6, this, 7, (__builder2) =>
              {
                  if (EntityType != null)
                  {
@@ -201,7 +218,7 @@ namespace Element
                          }
                      };
                  }
-                 __builder2.AddContent(7, ChildContent);
+                 __builder2.AddContent(8, ChildContent);
              }
             );
             builder.CloseElement();
@@ -261,6 +278,11 @@ namespace Element
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
+            if (ValidateOnRuleChange && !ReferenceEquals(Rules, lastRulesReference))
+            {
+                ClearValidate();
+            }
+            lastRulesReference = Rules;
             SetValues();
         }
 
@@ -306,6 +328,64 @@ namespace Element
             StateHasChanged();
         }
 
+        public void ResetFields(params string[] props)
+        {
+            foreach (var item in FilterItems(props))
+            {
+                item.MarkAsRequireRender();
+                item.Reset();
+            }
+            RequireRender = true;
+            StateHasChanged();
+        }
+
+        public void ClearValidate(params string[] props)
+        {
+            foreach (var item in FilterItems(props))
+            {
+                item.ClearValidate();
+            }
+            RequireRender = true;
+            StateHasChanged();
+        }
+
+        public BFormItemObject GetField(string prop)
+        {
+            return Items.FirstOrDefault(x => x.Name == prop);
+        }
+
+        public bool ValidateField(params string[] props)
+        {
+            var items = FilterItems(props).ToList();
+            RequireRender = true;
+            foreach (var item in items)
+            {
+                item.MarkAsRequireRender();
+                item.Validate();
+                item.IsShowing = true;
+            }
+            var isValid = items.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
+            if (!isValid)
+            {
+                ShowErrorMessage();
+            }
+            if (ScrollToError)
+            {
+                _ = ScrollToFirstErrorAsync();
+            }
+            return isValid;
+        }
+
+        public async Task ScrollToFieldAsync(string prop)
+        {
+            var id = ResolveInputId(GetField(prop));
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return;
+            }
+            await JSRuntime.InvokeVoidAsync("scrollElementIntoViewById", id);
+        }
+
         public bool IsValid()
         {
             RequireRender = true;
@@ -320,7 +400,27 @@ namespace Element
             {
                 ShowErrorMessage();
             }
+            if (ScrollToError)
+            {
+                _ = ScrollToFirstErrorAsync();
+            }
             return isValid;
+        }
+
+        internal void RegisterInput(string prop, string id, object input)
+        {
+            if (string.IsNullOrWhiteSpace(prop) || string.IsNullOrWhiteSpace(id) || input == null)
+            {
+                return;
+            }
+
+            inputRegistrations.RemoveAll(x => ReferenceEquals(x.Input, input));
+            inputRegistrations.Add(new FormInputRegistration(prop, id, input));
+        }
+
+        internal void UnregisterInput(object input)
+        {
+            inputRegistrations.RemoveAll(x => ReferenceEquals(x.Input, input));
         }
 
         internal string ResolveLabelWidth(object itemLabelWidth)
@@ -336,6 +436,77 @@ namespace Element
             }
             return $"{width}px";
         }
+
+        internal string ResolveInputId(BFormItemObject item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+            if (!string.IsNullOrWhiteSpace(item.For))
+            {
+                return item.For;
+            }
+
+            if (string.IsNullOrWhiteSpace(item.Name))
+            {
+                return null;
+            }
+
+            return inputRegistrations.LastOrDefault(x => x.Prop == item.Name).Id;
+        }
+
+        private Task ScrollToFirstErrorAsync()
+        {
+            var firstErrorItem = Items.FirstOrDefault(x => x.ValidationResult != null && !x.ValidationResult.IsValid);
+            if (firstErrorItem == null)
+            {
+                return Task.CompletedTask;
+            }
+            return ScrollToFieldAsync(firstErrorItem.Name);
+        }
+
+        private IEnumerable<BFormItemObject> FilterItems(params string[] props)
+        {
+            if (props == null || props.Length == 0 || props.All(string.IsNullOrWhiteSpace))
+            {
+                return Items;
+            }
+
+            return Items.Where(x => props.Contains(x.Name));
+        }
+
+        private static string GetSizeCssValue(InputSize size) => size switch
+        {
+            InputSize.Large => "large",
+            InputSize.Small => "small",
+            _ => null
+        };
+
+        private readonly struct FormInputRegistration
+        {
+            public FormInputRegistration(string prop, string id, object input)
+            {
+                Prop = prop;
+                Id = id;
+                Input = input;
+            }
+
+            public string Prop { get; }
+
+            public string Id { get; }
+
+            public object Input { get; }
+        }
+    }
+
+    public class FormValidateEventArgs
+    {
+        public string Prop { get; set; }
+
+        public bool IsValid { get; set; }
+
+        public string Message { get; set; }
     }
 
 

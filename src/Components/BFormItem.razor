@@ -28,7 +28,11 @@
     clsList.Add(Form.RequireAsteriskPosition == "right" ? "asterisk-right" : "asterisk-left");
     if (Size != null)
     {
-        clsList.Add($"el-form-item--{Size.Value.ToString().ToLower()}");
+        var sizeCssValue = Size.Value == InputSize.Large ? "large" : Size.Value == InputSize.Small ? "small" : null;
+        if (sizeCssValue != null)
+        {
+            clsList.Add($"el-form-item--{sizeCssValue}");
+        }
     }
     var finalLabelPosition = string.IsNullOrWhiteSpace(LabelPosition) ? Convert.ToString(Form.LabelPosition) : LabelPosition;
     if (!string.IsNullOrWhiteSpace(finalLabelPosition))
@@ -51,6 +55,8 @@
         }
     }
     var labelText = string.IsNullOrWhiteSpace(Label) ? Label : $"{Label}{Form.LabelSuffix}";
+    var labelFor = Form.ResolveInputId(this);
+    var isGroup = string.IsNullOrWhiteSpace(labelFor) && !string.IsNullOrWhiteSpace(Label);
     var shouldShowValidationMessage = ShowMessage && Form.ShowMessage;
     var errorMessages = new List<string>();
     if (!string.IsNullOrWhiteSpace(Error))
@@ -64,14 +70,14 @@
 }
 @if (ApplyStyle)
 {
-    <div class="@string.Join(" ", clsList)" role="group" style="@formItemCssBuilder">
+    <div class="@string.Join(" ", clsList)" role="@(isGroup ? "group" : null)" aria-labelledby="@(isGroup ? $"{Name}-label" : null)" style="@formItemCssBuilder">
         @if (!string.IsNullOrWhiteSpace(Image))
         {
-            <label for="@For" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
+            <label id="@($"{Name}-label")" for="@labelFor" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
         }
         else if (!string.IsNullOrWhiteSpace(Label))
         {
-            <label for="@For" class="el-form-item__label" style="@string.Join(";", labelStyles)">
+            <label id="@($"{Name}-label")" for="@labelFor" class="el-form-item__label" style="@string.Join(";", labelStyles)">
                 @labelText
             </label>
         }
@@ -85,7 +91,7 @@
                 {
                     var marginTop = IsShowing ? "3px" : "0px";
                     var opacity = IsShowing ? "0" : "1";
-                    <div class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                    <div id="@($"{Name}-error")" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                         @errorMessage
                     </div>
                 }
@@ -105,7 +111,7 @@ else
         {
             var marginTop = IsShowing ? "3px" : "0px";
             var opacity = IsShowing ? "0" : "1";
-            <div class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+            <div id="@($"{Name}-error")" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                 @errorMessage
             </div>
         }

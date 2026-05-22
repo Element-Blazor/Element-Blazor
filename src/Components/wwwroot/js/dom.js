@@ -25,6 +25,28 @@ window.execFocus = function (el) {
     }
     el.focus();
 }
+window.execBlur = function (el) {
+    if (!el) {
+        return;
+    }
+    el.blur();
+}
+window.execSelect = function (el) {
+    if (!el || !el.select) {
+        return;
+    }
+    el.select();
+}
+window.scrollElementIntoViewById = function (id) {
+    if (!id) {
+        return;
+    }
+    var el = document.getElementById(id);
+    if (!el) {
+        return;
+    }
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
 window.upload = function (el) {
     if (!el) {
         return;

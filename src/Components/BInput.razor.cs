@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Web;
@@ -11,7 +12,12 @@ namespace Element
     public partial class BInput<TValue> : BFieldComponentBase<TValue>, IDisposable
     {
         internal HtmlPropertyBuilder wrapperClsBuilder;
+        private static long inputIdSeed;
+        private readonly string generatedInputId = $"el-input-{Interlocked.Increment(ref inputIdSeed)}";
         private bool passwordVisible;
+        private bool isComposing;
+        private InputSize effectiveSize = InputSize.Normal;
+        private bool effectiveDisabled;
         /// <summary>
         /// 输入框类型
         /// </summary>
@@ -147,6 +153,15 @@ namespace Element
         [Parameter]
         public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
 
+        [Parameter]
+        public EventCallback OnCompositionStart { get; set; }
+
+        [Parameter]
+        public EventCallback OnCompositionUpdate { get; set; }
+
+        [Parameter]
+        public EventCallback<TValue> OnCompositionEnd { get; set; }
+
         /// <summary>
         /// 如何格式化
         /// </summary>
@@ -218,7 +233,11 @@ namespace Element
             {
                 await EnableClearButtonChanged.InvokeAsync(EnableClearButton);
             }
-            Value = default;
+            Value = TypeHelper.ChangeType<TValue>(string.Empty);
+            if (FormItem != null)
+            {
+                FormItem.Value = Value;
+            }
             if (ValueChanged.HasDelegate)
             {
                 await ValueChanged.InvokeAsync(Value);
@@ -239,7 +258,7 @@ namespace Element
             {
                 await OnClear.InvokeAsync(e);
             }
-            SetFieldValue(Value, true);
+            SetFieldValue(Value, ValidateEvent);
         }
 
         protected virtual async Task OnFocusAsync()
@@ -275,6 +294,11 @@ namespace Element
 
         protected virtual async Task OnChangeEventArgs(ChangeEventArgs input)
         {
+            if (isComposing)
+            {
+                return;
+            }
+
             try
             {
                 var value = input.Value;
@@ -304,11 +328,17 @@ namespace Element
             {
                 await OnInput.InvokeAsync(Value);
             }
-            SetFieldValue(Value, true);
+            SetFieldValue(Value, false);
         }
 
         protected async Task OnNativeChangeAsync(ChangeEventArgs input)
         {
+            if (ValidateEvent)
+            {
+                SetFieldValue(Value, false);
+                FormItem?.Validate();
+                FormItem?.ShowErrorMessage();
+            }
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(Value);
@@ -320,12 +350,65 @@ namespace Element
             passwordVisible = !passwordVisible;
         }
 
+        protected async Task OnCompositionStartAsync()
+        {
+            isComposing = true;
+            if (OnCompositionStart.HasDelegate)
+            {
+                await OnCompositionStart.InvokeAsync();
+            }
+        }
+
+        protected async Task OnCompositionUpdateAsync()
+        {
+            if (OnCompositionUpdate.HasDelegate)
+            {
+                await OnCompositionUpdate.InvokeAsync();
+            }
+        }
+
+        protected async Task OnCompositionEndAsync(ChangeEventArgs input)
+        {
+            isComposing = false;
+            await OnChangeEventArgs(input);
+            if (OnCompositionEnd.HasDelegate)
+            {
+                await OnCompositionEnd.InvokeAsync(Value);
+            }
+        }
+
+        public ValueTask FocusAsync()
+        {
+            return InputElement.Dom(JSRuntime).FocusAsync();
+        }
+
+        public ValueTask BlurAsync()
+        {
+            return InputElement.Dom(JSRuntime).BlurAsync();
+        }
+
+        public ValueTask SelectAsync()
+        {
+            return InputElement.Dom(JSRuntime).SelectAsync();
+        }
+
+        public async Task ClearAsync()
+        {
+            await ClearOnClick(null);
+        }
+
+        public override void Dispose()
+        {
+            FormItem?.Form?.UnregisterInput(this);
+            base.Dispose();
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await base.OnAfterRenderAsync(firstRender);
-            if (Disabled)
+            if (effectiveDisabled)
             {
-                await InputElement.Dom(JSRuntime).SetDisabledAsync(Disabled);
+                await InputElement.Dom(JSRuntime).SetDisabledAsync(effectiveDisabled);
             }
         }
 
@@ -357,24 +440,22 @@ namespace Element
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            if (ShowPassword && Type == InputType.Password)
-            {
-                Type = passwordVisible ? InputType.Text : InputType.Password;
-            }
+            effectiveDisabled = Disabled || (FormItem?.Form?.Disabled ?? false);
+            effectiveSize = Size == InputSize.Normal
+                ? FormItem?.Size ?? FormItem?.Form?.Size ?? InputSize.Normal
+                : Size;
+            Id = string.IsNullOrWhiteSpace(Id) && FormItem != null ? generatedInputId : Id;
             if (FormItem?.Form != null)
             {
-                Disabled = Disabled || FormItem.Form.Disabled;
-                if (Size == InputSize.Normal && FormItem.Size != null)
-                {
-                    Size = FormItem.Size.Value;
-                }
+                FormItem.Form.RegisterInput(FormItem.Name, Id, this);
             }
+            var inputSizeCssValue = GetSizeCssValue(effectiveSize);
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add(Type == InputType.Textarea ? "el-textarea" : "el-input", Cls)
-                .AddIf(Size != InputSize.Normal, Type == InputType.Textarea ? $"el-textarea--{Size.ToString().ToLower()}" : $"el-input--{Size.ToString().ToLower()}")
-                .AddIf(Clearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPassword || ShowWordLimit || HasValidationStatusIcon, "el-input--suffix")
+                .AddIf(inputSizeCssValue != null, Type == InputType.Textarea ? $"el-textarea--{inputSizeCssValue}" : $"el-input--{inputSizeCssValue}")
+                .AddIf(HasSuffix, "el-input--suffix")
                 .AddIf(!string.IsNullOrWhiteSpace(PrefixIcon), "el-input--prefix")
-                .AddIf(Disabled, "is-disabled")
+                .AddIf(effectiveDisabled, "is-disabled")
                 .AddIf(IsFocus, "is-focus")
                 .AddIf(IsExceed, "is-exceed")
                 .AddIf(Prepend != null || Append != null, "el-input-group")
@@ -398,7 +479,23 @@ namespace Element
             SetFieldValue(Value, false);
         }
 
-        protected string NativeInputType => (ShowPassword && passwordVisible) ? "text" : Type.ToString().ToLower();
+        protected string NativeInputType => (ShowPassword && Type == InputType.Password && passwordVisible) ? "text" : Type.ToString().ToLower();
+
+        protected bool IsInputDisabled => effectiveDisabled;
+
+        protected bool IsWordLimitVisible => ShowWordLimit
+            && Maxlength != null
+            && (Type == InputType.Text || Type == InputType.Textarea)
+            && !effectiveDisabled
+            && !Readonly
+            && !ShowPassword;
+
+        protected bool ShowPasswordToggle => ShowPassword
+            && Type == InputType.Password
+            && !effectiveDisabled
+            && !string.IsNullOrEmpty(Formatter(Value));
+
+        protected bool HasSuffix => Clearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPasswordToggle || IsWordLimitVisible || HasValidationStatusIcon;
 
         protected string InputElementClass => Type == InputType.Textarea
             ? HtmlPropertyBuilder.CreateCssClassBuilder()
@@ -410,7 +507,7 @@ namespace Element
 
         protected int TextLength => Formatter(Value)?.Length ?? 0;
 
-        protected bool IsExceed => ShowWordLimit && Maxlength != null && int.TryParse(Convert.ToString(Maxlength), out var max) && TextLength > max;
+        protected bool IsExceed => IsWordLimitVisible && int.TryParse(Convert.ToString(Maxlength), out var max) && TextLength > max;
 
         protected bool HasValidationStatusIcon => FormItem != null && FormItem.Form.StatusIcon && FormItem.ValidationResult != null;
 
@@ -428,5 +525,12 @@ namespace Element
         {
             return true;
         }
+
+        private static string GetSizeCssValue(InputSize size) => size switch
+        {
+            InputSize.Large => "large",
+            InputSize.Small => "small",
+            _ => null
+        };
     }
 }

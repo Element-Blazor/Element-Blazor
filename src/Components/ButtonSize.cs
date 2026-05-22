@@ -7,11 +7,16 @@ namespace Element
 {
     public enum ButtonSize
     {
-        Default,
-        Medium,
+        Default = 0,
 
-        Small,
+        Large = 1,
 
-        Mini
+        Small = 2,
+
+        [Obsolete("Element Plus 2.x uses Large/Default/Small. Medium is kept as a compatibility alias and renders as Large.")]
+        Medium = Large,
+
+        [Obsolete("Element Plus 2.x uses Large/Default/Small. Mini is kept as a compatibility alias and renders as Small.")]
+        Mini = Small
     }
 }

@@ -93,23 +93,47 @@ namespace Element
         [CascadingParameter]
         public BForm Form { get; set; }
 
+        [Parameter]
         public IList<IValidationRule> Rules { get; set; } = new List<IValidationRule>();
         public ValidationResult ValidationResult { get; protected set; }
 
         protected override void OnInitialized()
         {
             Form.Items.Add(this);
+            ResolveRules();
+        }
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            ResolveRules();
+        }
+
+        private void ResolveRules()
+        {
+            var rules = new List<IValidationRule>();
             var validation = Form.Validations.FirstOrDefault(x => x.Name == Name);
             if (validation != null)
             {
-                Rules = validation.Rules;
+                rules.AddRange(validation.Rules);
             }
-            if (Required && !Rules.OfType<RequiredRule>().Any())
+            if (Form.Rules != null && !string.IsNullOrWhiteSpace(Name) && Form.Rules.TryGetValue(Name, out var formRules))
             {
-                var requiredRule = new RequiredRule();
-                requiredRule.ErrorMessage = RequiredMessage ?? $"请确认{Label}";
-                Rules.Add(requiredRule);
+                rules.AddRange(formRules);
             }
+            if (Rules != null)
+            {
+                rules.AddRange(Rules.Where(x => x != null && !rules.Contains(x)));
+            }
+            if (Required && !rules.OfType<RequiredRule>().Any())
+            {
+                var requiredRule = new RequiredRule
+                {
+                    ErrorMessage = RequiredMessage ?? $"请确认{Label}"
+                };
+                rules.Add(requiredRule);
+            }
+            Rules = rules;
         }
 
         internal void ShowErrorMessage()
@@ -135,6 +159,14 @@ namespace Element
         public virtual void Reset()
         {
 
+        }
+
+        public virtual void ClearValidate()
+        {
+            ValidationResult = null;
+            ValidateStatus = string.Empty;
+            IsShowing = true;
+            MarkAsRequireRender();
         }
     }
 }

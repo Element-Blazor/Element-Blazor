@@ -81,6 +81,16 @@ namespace Element
             return jSRuntime.InvokeVoidAsync("execFocus", elementReference);
         }
 
+        public ValueTask BlurAsync()
+        {
+            return jSRuntime.InvokeVoidAsync("execBlur", elementReference);
+        }
+
+        public ValueTask SelectAsync()
+        {
+            return jSRuntime.InvokeVoidAsync("execSelect", elementReference);
+        }
+
         public async Task ChildMoveToBodyAsync()
         {
             await jSRuntime.InvokeAsync<object>("childMoveToBody", elementReference);

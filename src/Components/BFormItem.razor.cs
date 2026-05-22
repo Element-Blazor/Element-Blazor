@@ -57,6 +57,15 @@ namespace Element
                 ValidationResult = new ValidationResult();
                 ValidationResult.ErrorMessages.Add(Error);
                 ValidationResult.IsValid = false;
+                if (Form.OnValidate.HasDelegate)
+                {
+                    _ = Form.OnValidate.InvokeAsync(new FormValidateEventArgs
+                    {
+                        Prop = Name,
+                        IsValid = false,
+                        Message = Error
+                    });
+                }
                 StateHasChanged();
                 return;
             }
@@ -71,6 +80,15 @@ namespace Element
             }
             ValidationResult.IsValid = !ValidationResult.ErrorMessages.Any();
             ValidateStatus = ValidationResult.IsValid ? "success" : "error";
+            if (Form.OnValidate.HasDelegate)
+            {
+                _ = Form.OnValidate.InvokeAsync(new FormValidateEventArgs
+                {
+                    Prop = Name,
+                    IsValid = ValidationResult.IsValid,
+                    Message = ValidationResult.ErrorMessages.FirstOrDefault() ?? string.Empty
+                });
+            }
             StateHasChanged();
         }
 

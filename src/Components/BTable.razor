@@ -25,9 +25,10 @@
     {
         tableClsList.Add("is-loading");
     }
-    if (Size != InputSize.Normal)
+    var tableSizeCssValue = Size == InputSize.Large ? "large" : Size == InputSize.Small ? "small" : null;
+    if (tableSizeCssValue != null)
     {
-        tableClsList.Add($"el-table--{Size.ToString().ToLower()}");
+        tableClsList.Add($"el-table--{tableSizeCssValue}");
     }
 
     styles.Add("width:100%");
@@ -109,9 +110,39 @@
                                 {
                                     continue;
                                 }
-                                <th colspan="1" rowspan="1" @key="header.Text" class="el-table_1_column_@i el-table__cell is-leaf" role="columnheader">
+                                <th colspan="1" rowspan="1" @key="header.Text" class="@GetHeaderCellClass(header, i)" role="columnheader" aria-sort="@(header.SortOrder == TableSortOrder.Ascending ? "ascending" : header.SortOrder == TableSortOrder.Descending ? "descending" : "none")">
                                     <div class="cell">
-                                        @header.Text
+                                        @if (header.Sortable)
+                                        {
+                                            <span class="caret-wrapper" @onclick="e => ToggleSortAsync(header)" role="button" tabindex="0">
+                                                @header.Text
+                                                <span class="sort-caret ascending"></span>
+                                                <span class="sort-caret descending"></span>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @header.Text
+                                        }
+                                        @if (header.Filters != null && header.Filters.Any())
+                                        {
+                                            <span class="el-table__column-filter-trigger" tabindex="0">
+                                                <i class="el-icon-arrow-down"></i>
+                                                <span class="el-table-filter">
+                                                    <ul class="el-table-filter__list">
+                                                        @foreach (var filter in header.Filters)
+                                                        {
+                                                            <li class="el-table-filter__list-item @(header.FilterValues.Contains(filter.Value) ? "is-active" : string.Empty)" @onclick="e => ToggleFilterAsync(header, filter)">
+                                                                @filter.Text
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                    <div class="el-table-filter__bottom">
+                                                        <button class="@(header.HasActiveFilter ? string.Empty : "is-disabled")" disabled="@(!header.HasActiveFilter)" @onclick="e => ClearFilterAsync(header)">清空</button>
+                                                    </div>
+                                                </span>
+                                            </span>
+                                        }
                                     </div>
                                 </th>
                             }
@@ -204,7 +235,7 @@
                                             throw new BlazuiException("BTableTreeColumn 要求实体继承 " + nameof(TreeItemBase) + " 基类");
                                         }
                                         var hasChild = treeRow.HasChildren || rows.Cast<TreeItemBase>().Any(x => x.ParentId == rowId);
-                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j el-table__cell">
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="@GetBodyCellClass(header, j)">
                                             <div class="cell">
                                                 @if (hasChild)
                                                 {
@@ -237,7 +268,7 @@
                                     }
                                     else
                                     {
-                                        <td rowspan="1" @key="header.Text" colspan="1" class="el-table_1_column_@j el-table__cell">
+                                        <td rowspan="1" @key="header.Text" colspan="1" class="@GetBodyCellClass(header, j)">
                                             <div class="cell">
                                                 @if (row == editingRow && CanEdit(header))
                                                 {

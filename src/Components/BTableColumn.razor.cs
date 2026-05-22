@@ -36,6 +36,28 @@ namespace Element
         [Parameter]
         public string Text { get; set; }
 
+        [Parameter]
+        public string Label
+        {
+            get => Text;
+            set => Text = value;
+        }
+
+        [Parameter]
+        public bool Sortable { get; set; }
+
+        [Parameter]
+        public TableSortOrder SortOrder { get; set; }
+
+        [Parameter]
+        public TableColumnFixed Fixed { get; set; }
+
+        [Parameter]
+        public IList<TableFilterOption> Filters { get; set; }
+
+        [Parameter]
+        public Func<object, object, bool> FilterMethod { get; set; }
+
         /// <summary>
         /// 是否可编辑
         /// </summary>

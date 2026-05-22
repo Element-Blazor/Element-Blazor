@@ -108,7 +108,6 @@ namespace Element
             }
             if (!TabContainer.Exists(Name))
             {
-                Console.WriteLine("Add Tab:" + Name);
                 TabContainer.AddTab(this);
             }
         }
@@ -121,7 +120,6 @@ namespace Element
                 {
                     return;
                 }
-                Console.WriteLine("id:" + Element.Id);
                 var dom = Element.Dom(JSRuntime);
                 var width = await dom.GetClientWidthAsync();
                 var paddingLeft = await dom.Style.GetPaddingLeftAsync();

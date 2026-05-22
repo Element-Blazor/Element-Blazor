@@ -16,7 +16,7 @@ namespace Element
             {
                 return false;
             }
-            if (value is IEnumerable enumerable)
+            if (value is IEnumerable enumerable && value is not string)
             {
                 if (!enumerable.Cast<object>().Any())
                 {

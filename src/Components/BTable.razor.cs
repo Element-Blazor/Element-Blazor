@@ -49,6 +49,8 @@ namespace Element
         internal int headerHeight = 49;
         internal List<object> rows = new List<object>();
         internal List<object> hiddenRows = new List<object>();
+        private List<object> sourceRows = new List<object>();
+        private TableHeader activeSortHeader;
 
         internal void AddColumn(BTableColumn column)
         {
@@ -82,7 +84,12 @@ namespace Element
                 Template = column.ChildContent,
                 Format = column.Format,
                 IsTree = column.IsTree,
-                IsEditable = column.IsEditable
+                IsEditable = column.IsEditable,
+                Sortable = column.Sortable,
+                SortOrder = column.SortOrder,
+                Fixed = column.Fixed,
+                Filters = column.Filters,
+                FilterMethod = column.FilterMethod
             };
             if (columnConfig.Property != null)
             {
@@ -534,7 +541,8 @@ namespace Element
         {
             if (DataSource != null)
             {
-                rows = (DataSource as IEnumerable).Cast<object>().ToList();
+                sourceRows = (DataSource as IEnumerable).Cast<object>().ToList();
+                rows = sourceRows.ToList();
                 foreach (var item in rows)
                 {
                     var propertyChanged = item as INotifyPropertyChanged;
@@ -583,6 +591,7 @@ namespace Element
                 DataSource = Activator.CreateInstance(typeof(List<>).MakeGenericType(DataType));
             }
             InitilizeHeaders();
+            ApplyTableQuery();
         }
 
         private void InitilizeHeaders()
@@ -1267,6 +1276,127 @@ namespace Element
                 _ = SelectedRowsChanged.InvokeAsync(SelectedRows);
             }
             ResetSelectAllStatus();
+        }
+
+        protected async Task ToggleSortAsync(TableHeader header)
+        {
+            if (header == null || !header.Sortable || header.Property == null)
+            {
+                return;
+            }
+            if (activeSortHeader != null && activeSortHeader != header)
+            {
+                activeSortHeader.SortOrder = TableSortOrder.None;
+            }
+            activeSortHeader = header;
+            header.SortOrder = header.SortOrder switch
+            {
+                TableSortOrder.None => TableSortOrder.Ascending,
+                TableSortOrder.Ascending => TableSortOrder.Descending,
+                _ => TableSortOrder.None
+            };
+            if (header.SortOrder == TableSortOrder.None)
+            {
+                activeSortHeader = null;
+            }
+            ApplyTableQuery();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        protected async Task ToggleFilterAsync(TableHeader header, TableFilterOption filter)
+        {
+            if (header == null || filter == null)
+            {
+                return;
+            }
+            if (header.FilterValues.Contains(filter.Value))
+            {
+                header.FilterValues.Remove(filter.Value);
+            }
+            else
+            {
+                header.FilterValues.Add(filter.Value);
+            }
+            ApplyTableQuery();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        protected async Task ClearFilterAsync(TableHeader header)
+        {
+            if (header == null)
+            {
+                return;
+            }
+            header.FilterValues.Clear();
+            ApplyTableQuery();
+            await InvokeAsync(StateHasChanged);
+        }
+
+        private void ApplyTableQuery()
+        {
+            if (sourceRows == null || sourceRows.Count == 0)
+            {
+                return;
+            }
+            IEnumerable<object> query = sourceRows;
+            foreach (var header in Headers.Where(x => x.HasActiveFilter))
+            {
+                query = query.Where(row => MatchesFilter(row, header));
+            }
+            var sortHeader = activeSortHeader ?? Headers.FirstOrDefault(x => x.SortOrder != TableSortOrder.None);
+            if (sortHeader != null && sortHeader.Property != null && sortHeader.SortOrder != TableSortOrder.None)
+            {
+                query = sortHeader.SortOrder == TableSortOrder.Ascending
+                    ? query.OrderBy(row => sortHeader.EvalRaw?.Invoke(row))
+                    : query.OrderByDescending(row => sortHeader.EvalRaw?.Invoke(row));
+            }
+            rows = query.ToList();
+            ResetSelectAllStatus();
+        }
+
+        private bool MatchesFilter(object row, TableHeader header)
+        {
+            if (!header.HasActiveFilter)
+            {
+                return true;
+            }
+            var cellValue = header.EvalRaw?.Invoke(row);
+            foreach (var filterValue in header.FilterValues)
+            {
+                if (header.FilterMethod != null && header.FilterMethod(filterValue, row))
+                {
+                    return true;
+                }
+                if (Equals(cellValue, filterValue) || string.Equals(Convert.ToString(cellValue), Convert.ToString(filterValue), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected string GetHeaderCellClass(TableHeader header, int columnIndex)
+        {
+            return GetCellClass(header, columnIndex, "is-leaf")
+                + (header.Sortable ? " is-sortable" : string.Empty)
+                + (header.SortOrder == TableSortOrder.Ascending ? " ascending" : string.Empty)
+                + (header.SortOrder == TableSortOrder.Descending ? " descending" : string.Empty)
+                + (header.HasActiveFilter ? " filtered" : string.Empty);
+        }
+
+        protected string GetBodyCellClass(TableHeader header, int columnIndex)
+        {
+            return GetCellClass(header, columnIndex);
+        }
+
+        private string GetCellClass(TableHeader header, int columnIndex, params string[] extraClasses)
+        {
+            var builder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                .Add($"el-table_1_column_{columnIndex}", "el-table__cell")
+                .Add(extraClasses)
+                .AddIf(header?.Fixed == TableColumnFixed.Left, "is-fixed-left")
+                .AddIf(header?.Fixed == TableColumnFixed.Right, "is-fixed-right");
+            return builder.ToString();
         }
     }
 }
