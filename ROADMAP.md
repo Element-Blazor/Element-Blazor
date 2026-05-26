@@ -101,16 +101,16 @@
 | Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
 | Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |
 | Input Tag | `ElInputTag` | 🟡 部分对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交和表单校验联动；继续补齐拖拽排序、组合键细节和测试。 |
-| Input OTP | 缺少 `ElInputOtp` | 🔴 缺失 | 实现分格输入、粘贴和焦点流转。 |
+| Input OTP | `ElInputOtp` | 🟡 部分对齐 | 已实现分格输入、粘贴填充、焦点流转、掩码、禁用/只读和表单校验联动；继续补齐更细键盘行为和测试。 |
 | Mention | 缺少 `ElMention` | 🔴 缺失 | 实现触发字符、候选项和文本区域集成。 |
 | Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟡 部分对齐 | 补齐禁用、尺寸、边框和键盘行为。 |
-| Rate | 缺少 `ElRate` | 🔴 缺失 | 实现评分、半星、颜色、文本和只读。 |
+| Rate | `ElRate` | 🟡 部分对齐 | 已实现评分、半星、颜色、文本/分值、清除、禁用和表单校验联动；继续补齐自定义图标插槽和测试。 |
 | Select | `ElSelect`、`ElOption` | 🟡 部分对齐 | 补齐多选、远程搜索、过滤、分组和虚拟化边界。 |
 | Virtualized Select | 缺少 `ElSelectV2` | 🔴 缺失 | 设计大数据虚拟列表。 |
-| Slider | 缺少 `ElSlider` | 🔴 缺失 | 实现拖拽、范围、步长、marks 和 tooltip。 |
+| Slider | `ElSlider`、`SliderMark` | 🟡 部分对齐 | 已实现拖拽、范围、步长、停点、marks、输入框联动和表单校验联动；继续补齐 range 双滑块、tooltip 和测试。 |
 | Switch | `ElSwitch` | 🟡 部分对齐 | 补齐 active/inactive text/value、loading、before-change。 |
 | Time Picker | 缺少 `ElTimePicker` | 🔴 缺失 | 实现时间面板、范围和格式。 |
-| Time Select | 缺少 `ElTimeSelect` | 🔴 缺失 | 实现固定步长时间选择。 |
+| Time Select | `ElTimeSelect` | 🟡 部分对齐 | 已实现固定步长时间选择、禁用时间范围、清空、尺寸和表单校验联动；继续补齐键盘导航和测试。 |
 | Transfer | `ElTransfer` | 🟡 部分对齐 | 补齐过滤、插槽、方向文案和全选逻辑。 |
 | TreeSelect | `ElTreeSingleSelect`，缺少官方命名入口 | 🟡 部分对齐 | 新增 `ElTreeSelect` 并对齐 Select + Tree API。 |
 | Upload | `ElUpload` | 🟡 部分对齐 | 补齐列表类型、拖拽、限制、钩子和请求定制。 |

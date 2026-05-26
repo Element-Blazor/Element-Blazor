@@ -1,0 +1,44 @@
+@inherits ElementFieldComponentBase<double>
+
+<div class="@wrapperClsBuilder.ToString()" style="@Style">
+    <div class="el-slider__runway" @onclick="OnRunwayClickAsync">
+        <div class="el-slider__bar" style="@BarStyle"></div>
+        <input class="el-slider__input"
+               type="range"
+               min="@Min"
+               max="@Max"
+               step="@Step"
+               value="@Value"
+               disabled="@IsSliderDisabled"
+               @oninput="OnInputAsync"
+               @onchange="OnChangeAsync" />
+        <div class="el-slider__button-wrapper" style="@ButtonStyle">
+            <div class="el-slider__button"></div>
+        </div>
+        @if (ShowStops)
+        {
+            @foreach (var stop in Stops)
+            {
+                <div class="el-slider__stop" style="left:@stop%;"></div>
+            }
+        }
+        @if (Marks != null)
+        {
+            @foreach (var mark in Marks)
+            {
+                <div class="el-slider__marks-text" style="left:@GetPercent(mark.Value)%;">@(mark.Label ?? mark.Value.ToString())</div>
+            }
+        }
+    </div>
+    @if (ShowInput)
+    {
+        <ElInputNumber Value="@DecimalValue"
+                       ValueChanged="OnInputNumberChangedAsync"
+                       Min="@((decimal)Min)"
+                       Max="@((decimal)Max)"
+                       Step="@((decimal)Step)"
+                       Disabled="@IsSliderDisabled"
+                       Size="@InputSize.Small"
+                       ValidateEvent="false" />
+    }
+</div>

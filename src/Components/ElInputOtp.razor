@@ -1,0 +1,22 @@
+@inherits ElementFieldComponentBase<string>
+
+<div class="@wrapperClsBuilder.ToString()"
+     style="@Style"
+     role="group"
+     aria-disabled="@IsInputOtpDisabled">
+    @for (var i = 0; i < Length; i++)
+    {
+        var index = i;
+        <input class="el-input-otp__inner"
+               @key="index"
+               @ref="inputElements[index]"
+               value="@GetCellValue(index)"
+               maxlength="1"
+               inputmode="@Inputmode"
+               autocomplete="one-time-code"
+               disabled="@IsInputOtpDisabled"
+               readonly="@Readonly"
+               @oninput="e => OnCellInputAsync(index, e)"
+               @onkeydown="e => OnCellKeyDownAsync(index, e)" />
+    }
+</div>

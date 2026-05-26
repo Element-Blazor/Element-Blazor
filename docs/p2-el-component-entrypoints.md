@@ -4,7 +4,7 @@ Element-Blazor exposes Element Plus-style `El*` Razor component entrypoints. Pub
 
 ## Core Entrypoints
 
-`ElButton`, `ElButtonGroup`, `ElContainer`, `ElHeader`, `ElAside`, `ElMain`, `ElFooter`, `ElIcon`, `ElRow`, `ElCol`, `ElLink`, `ElText`, `ElScrollbar`, `ElSpace`, `ElSplitter`, `ElSplitterPanel`, `ElInput`, `ElInputNumber`, `ElInputTag`, `ElAutocomplete`, `ElCascader`, `ElForm`, `ElFormItem`, `ElFormActionItem`, `ElSelect`, `ElOption`, `ElTable`, `ElTableColumn`, `ElTableColumns`, `ElTableTemplateColumn`, `ElTableDateTimeColumn`, `ElTableCheckBoxColumn`, and `ElTableTreeColumn` are the public core entrypoints.
+`ElButton`, `ElButtonGroup`, `ElContainer`, `ElHeader`, `ElAside`, `ElMain`, `ElFooter`, `ElIcon`, `ElRow`, `ElCol`, `ElLink`, `ElText`, `ElScrollbar`, `ElSpace`, `ElSplitter`, `ElSplitterPanel`, `ElInput`, `ElInputNumber`, `ElInputTag`, `ElInputOtp`, `ElAutocomplete`, `ElCascader`, `ElRate`, `ElSlider`, `ElTimeSelect`, `ElForm`, `ElFormItem`, `ElFormActionItem`, `ElSelect`, `ElOption`, `ElTable`, `ElTableColumn`, `ElTableColumns`, `ElTableTemplateColumn`, `ElTableDateTimeColumn`, `ElTableCheckBoxColumn`, and `ElTableTreeColumn` are the public core entrypoints.
 
 Additional Element Plus-style entrypoints exist for the rest of the current component surface, including `ElCard`, `ElCheckbox`, `ElRadio`, `ElSwitch`, `ElMenu`, `ElPagination`, `ElTabs`, `ElTabPane`, `ElTag`, `ElTree`, and `ElUpload`.
 
