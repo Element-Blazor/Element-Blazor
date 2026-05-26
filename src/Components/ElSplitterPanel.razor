@@ -1,0 +1,19 @@
+@inherits ElementComponentBase
+
+<div class="@PanelClass" style="@PanelStyle" @attributes="Attributes">
+    @ChildContent
+</div>
+@if (Resizable)
+{
+    <div class="@BarClass"
+         role="separator"
+         aria-orientation="@AriaOrientation"
+         data-collapsible="@Collapsible.ToString().ToLowerInvariant()"
+         @onmousedown="OnResizeStart"
+         @onmousemove="OnResizeMove"
+         @onmouseup="OnResizeEnd"
+         @onmouseleave="OnResizeEnd"
+         @ondblclick="OnDoubleClickAsync">
+        <span class="el-splitter__bar-dragger"></span>
+    </div>
+}

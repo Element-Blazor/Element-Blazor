@@ -1,0 +1,10 @@
+@inherits ElementComponentBase
+
+<div class="@dividerCssBuilder.ToString()" style="@dividerStyleBuilder.ToString()" role="separator" aria-orientation="@AriaOrientation">
+    @if (IsHorizontal && ChildContent != null)
+    {
+        <div class="@contentCssBuilder.ToString()">
+            @ChildContent
+        </div>
+    }
+</div>

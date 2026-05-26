@@ -1,0 +1,28 @@
+@inherits ElementComponentBase
+
+@if (Native)
+{
+    <div class="@ScrollbarClass" style="@ScrollbarStyle" @attributes="Attributes">
+        <div class="@WrapClass" style="@WrapStyle" @ref="WrapElement">
+            <div class="@ViewClass" style="@ViewStyle">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="@ScrollbarClass" style="@ScrollbarStyle" @attributes="Attributes">
+        <div class="@WrapClass" style="@WrapStyle" @onscroll="OnScrollAsync" @ref="WrapElement">
+            <div class="@ViewClass" style="@ViewStyle">
+                @ChildContent
+            </div>
+        </div>
+        <div class="el-scrollbar__bar is-horizontal" style="@BarVisibilityStyle">
+            <div class="el-scrollbar__thumb" style="@HorizontalThumbStyle"></div>
+        </div>
+        <div class="el-scrollbar__bar is-vertical" style="@BarVisibilityStyle">
+            <div class="el-scrollbar__thumb" style="@VerticalThumbStyle"></div>
+        </div>
+    </div>
+}

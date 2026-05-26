@@ -1,0 +1,7 @@
+@inherits ElementComponentBase
+
+<CascadingValue Value="this" IsFixed="false">
+    <div class="@SplitterClass" style="@SplitterStyle" @ref="RootElement" @attributes="Attributes">
+        @ChildContent
+    </div>
+</CascadingValue>

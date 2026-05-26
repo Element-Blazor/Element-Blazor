@@ -386,3 +386,97 @@ window.RegisterAnimationBegin = function (transitionRef, el) {
     window[getDomGuid(el)] = transitionRef;
     el.addEventListener('transitionend', onblazortransitionend);
 }
+window.elementScrollbarScrollTo = function (el, top, left) {
+    if (!el) {
+        return;
+    }
+    el.scrollTo({ top: top || 0, left: left || 0 });
+};
+window.elementScrollbarSetScrollTop = function (el, top) {
+    if (!el) {
+        return;
+    }
+    el.scrollTop = top || 0;
+};
+window.elementScrollbarSetScrollLeft = function (el, left) {
+    if (!el) {
+        return;
+    }
+    el.scrollLeft = left || 0;
+};
+window.elementScrollbarGetState = function (el) {
+    if (!el) {
+        return {
+            scrollTop: 0,
+            scrollLeft: 0,
+            scrollHeight: 0,
+            scrollWidth: 0,
+            clientHeight: 0,
+            clientWidth: 0
+        };
+    }
+    return {
+        scrollTop: el.scrollTop || 0,
+        scrollLeft: el.scrollLeft || 0,
+        scrollHeight: el.scrollHeight || 0,
+        scrollWidth: el.scrollWidth || 0,
+        clientHeight: el.clientHeight || 0,
+        clientWidth: el.clientWidth || 0
+    };
+};
+window.elementSplitterInit = function (root) {
+    if (!root || root.dataset.elementSplitterReady === "true") {
+        return;
+    }
+
+    root.dataset.elementSplitterReady = "true";
+    var isVertical = root.classList.contains("el-splitter--vertical");
+    var bars = root.querySelectorAll(":scope > .el-splitter__bar");
+
+    bars.forEach(function (bar) {
+        bar.addEventListener("dblclick", function () {
+            if (bar.dataset.collapsible !== "true") {
+                return;
+            }
+
+            var panel = bar.previousElementSibling;
+            if (!panel || !panel.classList.contains("el-splitter-panel")) {
+                return;
+            }
+
+            panel.style.flexBasis = "0px";
+            panel.style[isVertical ? "height" : "width"] = "0px";
+        });
+
+        bar.addEventListener("mousedown", function (event) {
+            var panel = bar.previousElementSibling;
+            if (!panel || !panel.classList.contains("el-splitter-panel")) {
+                return;
+            }
+
+            event.preventDefault();
+            var start = isVertical ? event.clientY : event.clientX;
+            var rect = panel.getBoundingClientRect();
+            var startSize = isVertical ? rect.height : rect.width;
+
+            var onMove = function (moveEvent) {
+                var point = isVertical ? moveEvent.clientY : moveEvent.clientX;
+                var nextSize = Math.max(0, startSize + point - start);
+                panel.style.flexBasis = nextSize + "px";
+                panel.style[isVertical ? "height" : "width"] = nextSize + "px";
+            };
+
+            var onUp = function () {
+                document.removeEventListener("mousemove", onMove);
+                document.removeEventListener("mouseup", onUp);
+                document.body.style.userSelect = "";
+                bar.classList.remove("is-active");
+            };
+
+            document.body.style.userSelect = "none";
+            bar.classList.add("is-active");
+            document.addEventListener("mousemove", onMove);
+            document.addEventListener("mouseup", onUp);
+        });
+    });
+};

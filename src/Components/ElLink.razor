@@ -1,0 +1,25 @@
+@inherits ElementComponentBase
+
+<a class="@LinkClass"
+   style="@LinkStyle"
+   href="@(Disabled ? null : Href)"
+   target="@Target"
+   rel="@Rel"
+   aria-disabled="@(Disabled ? "true" : "false")"
+   tabindex="@(Disabled ? -1 : Tabindex)"
+   @onclick="OnLinkClickAsync"
+   @onclick:preventDefault="Disabled"
+   @attributes="Attributes">
+    @if (IconContent != null)
+    {
+        @IconContent
+    }
+    else if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <i class="@Icon" aria-hidden="true"></i>
+    }
+    @if (ChildContent != null)
+    {
+        <span class="el-link__inner">@ChildContent</span>
+    }
+</a>

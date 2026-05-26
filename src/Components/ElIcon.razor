@@ -1,4 +1,5 @@
-﻿<span @onclick="OnElClickAsync">
-    <i class="el-icon-@icon" ></i>
+﻿@inherits ElementComponentBase
+
+<i class="@IconClass" style="@IconStyle" @onclick="OnElClickAsync" @attributes="Attributes">
     @ChildContent
-</span>
+</i>

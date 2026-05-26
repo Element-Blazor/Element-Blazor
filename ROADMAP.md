@@ -4,7 +4,9 @@
 
 ## 本轮核对结论
 
-核对时间：2026-05-22。
+核对时间：2026-05-26。
+
+核对来源：Element Plus 官方组件总览 `https://element-plus.org/en-US/component/overview.html`。
 
 | 项目 | 状态 | 说明 |
 | --- | --- | --- |
@@ -44,9 +46,138 @@
 | P2 组件命名切换 | 已完成 | 旧组件入口已清理，主线只使用 `El*` / `Element*`。 |
 | P3 核心组件对齐 | 进行中 | `ElButton`、`ElInput`、`ElForm`、`ElDialog`、`ElTabs`、`ElMenu` 已推进；`ElSelect`、`ElTable` 继续补齐高级能力。 |
 | P4 文档站与组件总览 | 待开始 | 建设组件总览、示例卡片和 API 表格。 |
-| P5 组件矩阵补齐 | 待开始 | 按 Element Plus 矩阵继续补齐缺口组件。 |
+| P5 组件矩阵补齐 | 进行中 | 按 Element Plus 矩阵继续补齐缺口组件，完成一个就在下方矩阵标记一个。 |
 | P6 社区展示站 | 进行中 | 旧社区项目作为业务素材来源，主线使用 `El*` 控件和 Element Plus 主题。 |
 | P7 稳定化与发布 | 待开始 | 安全依赖、测试矩阵、NuGet 门面和发布节奏。 |
+
+## Element Plus 2.14 组件矩阵
+
+状态标记：
+
+| 标记 | 含义 |
+| --- | --- |
+| 🟢 已对齐 | 已有公开入口，核心 DOM、API 和基础行为完成首轮对齐。 |
+| 🟡 部分对齐 | 已有公开入口或服务能力，但 API、DOM、交互、示例或测试仍需补齐。 |
+| 🔵 规划/主题项 | 官方是设计、主题或文档项，优先用 token、CSS、文档和示例承接。 |
+| 🔴 缺失 | 还没有可用的公开 `El*` 组件入口。 |
+| ⚪ 不适用 | 官方能力不适合做成独立 Blazor 组件，需在备注中说明替代方案。 |
+
+### Basic 基础组件
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Button | `ElButton` | 🟢 已对齐 | API、示例和基础交互已补齐。 |
+| Border | `theme.css` token | 🟢 已对齐 | 已补充边框 token 文档和示例。 |
+| Color | `theme.css` token | 🟢 已对齐 | 已补充色彩 token 文档和示例。 |
+| Layout Container | `ElContainer`、`ElHeader`、`ElAside`、`ElMain`、`ElFooter`，旧 `ElLayout` 保留 | 🟢 已对齐 | 新容器五件套已提供公开入口和示例。 |
+| Icon | `ElIcon` | 🟢 已对齐 | 已支持名称、尺寸、颜色和旋转状态。 |
+| Layout | `ElRow`、`ElCol` | 🟢 已对齐 | 已实现 24 栅格、gutter、offset、push/pull、响应式属性和示例。 |
+| Link | `ElLink` | 🟢 已对齐 | 已实现链接类型、禁用、下划线和图标能力。 |
+| Text | `ElText` | 🟢 已对齐 | 已实现类型、尺寸、截断、line-clamp 和 tag。 |
+| Scrollbar | `ElScrollbar` | 🟢 已对齐 | 已提供公开滚动容器、常显滚动条和滚动方法。 |
+| Space | `ElSpace` | 🟢 已对齐 | 已实现间距、方向、换行、填充和 spacer。 |
+| Splitter | `ElSplitter`、`ElSplitterPanel` | 🟢 已对齐 | 已实现水平/垂直分隔面板、尺寸约束和拖拽。 |
+| Typography | `theme.css` 基础文字 token | 🟢 已对齐 | 已补充排版规范、文档和示例。 |
+
+### Configuration 配置组件
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Config Provider | 缺少 `ElConfigProvider` | 🔴 缺失 | 设计全局尺寸、命名空间、z-index、locale 等级联配置。 |
+
+### Form 表单组件
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Autocomplete | 缺少 `ElAutocomplete` | 🔴 缺失 | 基于输入框和弹层实现建议列表。 |
+| Cascader | 缺少 `ElCascader` | 🔴 缺失 | 实现级联数据模型、面板和选择状态。 |
+| Checkbox | `ElCheckbox`、`ElCheckboxGroup`、`ElCheckboxButton` | 🟡 部分对齐 | 补齐 indeterminate、limit、尺寸和测试。 |
+| Color Picker Panel | 缺少 `ElColorPickerPanel` | 🔴 缺失 | 先抽象颜色模型和面板。 |
+| Color Picker | 缺少 `ElColorPicker` | 🔴 缺失 | 基于面板补输入、透明度、预设色。 |
+| Date Picker Panel | 内部日期面板，缺少公开入口 | 🔴 缺失 | 抽出公开 `ElDatePickerPanel`。 |
+| Date Picker | `ElDatePicker` | 🟡 部分对齐 | 补范围、快捷项、禁用日期、格式和值格式。 |
+| DateTime Picker | 缺少 `ElDateTimePicker` | 🔴 缺失 | 在 Date Picker 基础上补时间选择。 |
+| Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟡 部分对齐 | 补齐校验事件、label、scroll、disabled、size 细节。 |
+| Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
+| Input Number | 缺少 `ElInputNumber` | 🔴 缺失 | 实现步进、精度、范围和按钮位置。 |
+| Input Tag | 缺少 `ElInputTag` | 🔴 缺失 | 实现标签输入、删除、限制和触发键。 |
+| Input OTP | 缺少 `ElInputOtp` | 🔴 缺失 | 实现分格输入、粘贴和焦点流转。 |
+| Mention | 缺少 `ElMention` | 🔴 缺失 | 实现触发字符、候选项和文本区域集成。 |
+| Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟡 部分对齐 | 补齐禁用、尺寸、边框和键盘行为。 |
+| Rate | 缺少 `ElRate` | 🔴 缺失 | 实现评分、半星、颜色、文本和只读。 |
+| Select | `ElSelect`、`ElOption` | 🟡 部分对齐 | 补齐多选、远程搜索、过滤、分组和虚拟化边界。 |
+| Virtualized Select | 缺少 `ElSelectV2` | 🔴 缺失 | 设计大数据虚拟列表。 |
+| Slider | 缺少 `ElSlider` | 🔴 缺失 | 实现拖拽、范围、步长、marks 和 tooltip。 |
+| Switch | `ElSwitch` | 🟡 部分对齐 | 补齐 active/inactive text/value、loading、before-change。 |
+| Time Picker | 缺少 `ElTimePicker` | 🔴 缺失 | 实现时间面板、范围和格式。 |
+| Time Select | 缺少 `ElTimeSelect` | 🔴 缺失 | 实现固定步长时间选择。 |
+| Transfer | `ElTransfer` | 🟡 部分对齐 | 补齐过滤、插槽、方向文案和全选逻辑。 |
+| TreeSelect | `ElTreeSingleSelect`，缺少官方命名入口 | 🟡 部分对齐 | 新增 `ElTreeSelect` 并对齐 Select + Tree API。 |
+| Upload | `ElUpload` | 🟡 部分对齐 | 补齐列表类型、拖拽、限制、钩子和请求定制。 |
+
+### Data 数据展示
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Avatar | 缺少 `ElAvatar` | 🔴 缺失 | 实现图片、图标、文字、尺寸和形状。 |
+| Badge | `ElBadge` | 🟡 部分对齐 | 补 max、dot、hidden、offset、slot。 |
+| Calendar | 缺少 `ElCalendar` | 🔴 缺失 | 实现日期单元格模板和月份切换。 |
+| Card | `ElCard` | 🟡 部分对齐 | 补 body-style、shadow、header/footer 插槽。 |
+| Carousel | 缺少 `ElCarousel` | 🔴 缺失 | 实现轮播、指示器、箭头和 autoplay。 |
+| Collapse | 缺少 `ElCollapse` | 🔴 缺失 | 实现折叠面板和手风琴模式。 |
+| Descriptions | 缺少 `ElDescriptions` | 🔴 缺失 | 实现描述列表、边框、列数和响应式。 |
+| Empty | 仅有内部 `EmptyRender` | 🔴 缺失 | 提供公开 `ElEmpty`。 |
+| Image | 缺少 `ElImage` | 🔴 缺失 | 实现 fit、lazy、preview 和错误占位。 |
+| Infinite Scroll | 缺少公开能力 | 🔴 缺失 | 设计 Blazor 事件指令或组件包装。 |
+| Pagination | `ElPagination` | 🟡 部分对齐 | 补齐布局、尺寸、背景、跳转和页大小。 |
+| Progress | 缺少 `ElProgress` | 🔴 缺失 | 实现 line、circle、dashboard 和状态。 |
+| Result | 缺少 `ElResult` | 🔴 缺失 | 实现图标、标题、描述和 extra。 |
+| Skeleton | 缺少 `ElSkeleton` | 🔴 缺失 | 实现骨架屏、模板和 loading。 |
+| Table | `ElTable` 与列组件 | 🟡 部分对齐 | 补齐排序、过滤、固定列、展开、树形、汇总和虚拟化边界。 |
+| Virtualized Table | 缺少 `ElTableV2` | 🔴 缺失 | 设计虚拟表格架构。 |
+| Tag | `ElTag` | 🟡 部分对齐 | 补 effect、round、hit、disable-transitions 和事件命名。 |
+| Timeline | 缺少 `ElTimeline` | 🔴 缺失 | 实现时间线和节点插槽。 |
+| Tour | 缺少 `ElTour` | 🔴 缺失 | 实现引导步骤、遮罩和定位。 |
+| Tree | `ElTree`、`ElTreeItem` | 🟡 部分对齐 | 补懒加载、过滤、勾选、拖拽和节点模板。 |
+| Virtualized Tree | 缺少 `ElTreeV2` | 🔴 缺失 | 设计虚拟树。 |
+| Statistic | 缺少 `ElStatistic` | 🔴 缺失 | 实现数字格式、前后缀和倒计时扩展。 |
+| Segmented | 缺少 `ElSegmented` | 🔴 缺失 | 实现分段控制器。 |
+
+### Navigation 导航
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Affix | 缺少 `ElAffix` | 🔴 缺失 | 实现固定定位、offset 和 target。 |
+| Anchor | 缺少 `ElAnchor` | 🔴 缺失 | 实现锚点列表、滚动监听和 hash。 |
+| Backtop | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElBacktop` 和滚动目标。 |
+| Breadcrumb | `ElBreadcrumb`、`ElBreadcrumbItem` | 🟡 部分对齐 | 补 separator icon、replace 和路由行为。 |
+| Dropdown | `ElDropdown`、`ElDropdownItem` | 🟡 部分对齐 | 补触发方式、分裂按钮、禁用、命令事件。 |
+| Menu | `ElMenu`、`ElSubMenu`、`ElMenuItem` | 🟡 部分对齐 | 补 collapse、router、popper、键盘和主题。 |
+| Page Header | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElPageHeader`。 |
+| Steps | 缺少 `ElSteps` | 🔴 缺失 | 实现步骤条、方向、状态和图标。 |
+| Tabs | `ElTabs`、`ElTabPane` | 🟡 部分对齐 | 补 closable、editable、stretch、before-leave 和键盘。 |
+
+### Feedback 反馈组件
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Alert | 缺少 `ElAlert` | 🔴 缺失 | 实现静态提示、关闭、图标和描述。 |
+| Dialog | `ElDialog`、`DialogService` | 🟡 部分对齐 | 补 append-to-body、destroy、拖拽、焦点和无障碍。 |
+| Drawer | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElDrawer`。 |
+| Loading | `ElLoading`、`LoadingService` | 🟡 部分对齐 | 补指令式/服务式 API、锁屏和自定义图标。 |
+| Message | `MessageService` | 🟡 部分对齐 | 补 grouping、plain、duration、append-to 和 close 事件。 |
+| Message Box | `MessageBox` 服务 | 🟡 部分对齐 | 补 prompt、distinguish-cancel-close、before-close。 |
+| Notification | 缺少 `ElNotification` | 🔴 缺失 | 实现通知服务和位置。 |
+| Popconfirm | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElPopconfirm`。 |
+| Popover | 缺少 `ElPopover` | 🔴 缺失 | 实现弹出层、触发和定位。 |
+| Tooltip | 缺少 `ElTooltip` | 🔴 缺失 | 实现提示、触发、定位和可访问性。 |
+
+### Others 其他
+
+| Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
+| --- | --- | --- | --- |
+| Divider | `ElDivider` | 🟢 已对齐 | 已实现 direction、content-position、border-style。 |
+| Watermark | 缺少 `ElWatermark` | 🔴 缺失 | 实现水印文本、图片、层级和容器。 |
 
 ## P2 验收口径
 
@@ -55,4 +186,3 @@
 - `demo`、`template`、`community` 的活跃 Razor 标签不使用旧组件标签。
 - 不新增兼容包装、继承别名或旧包入口。
 - 扫描旧组件 API 名称时，活跃代码应无命中；业务实体命名不属于组件清理范围。
-
