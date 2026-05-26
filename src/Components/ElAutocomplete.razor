@@ -1,0 +1,33 @@
+@inherits ElementFieldComponentBase<string>
+
+<div class="@wrapperClsBuilder.ToString()"
+     style="@Style"
+     @ref="autocompleteElement"
+     role="combobox"
+     aria-haspopup="listbox"
+     aria-expanded="@IsDropDownOpen"
+     aria-disabled="@IsAutocompleteDisabled"
+     aria-controls="@DropDownId">
+    <ElInput TValue="string"
+             @ref="input"
+             Value="@Value"
+             ValueChanged="OnInputValueChangedAsync"
+             Placeholder="@Placeholder"
+             Disabled="@IsAutocompleteDisabled"
+             Readonly="@Readonly"
+             Clearable="@Clearable"
+             Size="@EffectiveSize"
+             PrefixIcon="@PrefixIcon"
+             SuffixIcon="@SuffixIcon"
+             Autocomplete="@NativeAutocomplete"
+             ValidateEvent="@ValidateEvent"
+             OnFocus="OnInputFocusAsync"
+             OnBlur="OnInputBlurAsync"
+             OnClear="OnInputClearAsync"
+             OnKeyDown="OnKeyDownAsync"
+             AriaLabel="@AriaLabel"
+             Tabindex="@Tabindex"
+             InputStyle="@InputStyle"
+             AdditionalClearIcon="@AdditionalClearIcon">
+    </ElInput>
+</div>

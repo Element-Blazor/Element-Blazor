@@ -11,6 +11,7 @@ namespace Element
     public class DropDownOption : PopupOption
     {
         public Action Refresh { get; set; }
+        internal Action RequestRender { get; set; }
         public Func<Task> OnClosed { get; set; }
         public object Select { get; set; }
         public RenderFragment OptionContent { get; set; }

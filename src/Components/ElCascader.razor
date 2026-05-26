@@ -1,0 +1,26 @@
+@inherits ElementFieldComponentBase<IList<string>>
+
+<div class="@wrapperClsBuilder.ToString()"
+     style="@Style"
+     @ref="cascaderElement"
+     role="combobox"
+     aria-haspopup="listbox"
+     aria-expanded="@IsDropDownOpen"
+     aria-disabled="@IsCascaderDisabled"
+     aria-controls="@DropDownId"
+     @onclick="OnCascaderClickAsync">
+    <ElInput TValue="string"
+             Value="@DisplayValue"
+             Placeholder="@Placeholder"
+             Disabled="@IsCascaderDisabled"
+             Readonly="true"
+             Clearable="@Clearable"
+             Size="@EffectiveSize"
+             PrefixIcon="@PrefixIcon"
+             SuffixIcon="@SuffixIconClass"
+             ValidateEvent="false"
+             OnClear="OnInputClearAsync"
+             OnFocus="OnInputFocusAsync"
+             OnBlur="OnInputBlurAsync">
+    </ElInput>
+</div>

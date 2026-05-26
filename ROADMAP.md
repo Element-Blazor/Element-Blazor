@@ -89,8 +89,8 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Autocomplete | 缺少 `ElAutocomplete` | 🔴 缺失 | 基于输入框和弹层实现建议列表。 |
-| Cascader | 缺少 `ElCascader` | 🔴 缺失 | 实现级联数据模型、面板和选择状态。 |
+| Autocomplete | `ElAutocomplete` | 🟡 部分对齐 | 已实现输入建议、异步查询、键盘选择、清空、禁用、尺寸和表单校验联动；继续补齐远程节流细节、插槽示例和测试。 |
+| Cascader | `ElCascader`、`CascaderOption` | 🟡 部分对齐 | 已实现级联数据模型、面板、选择路径、清空、禁用、尺寸和表单校验联动；继续补齐多选、懒加载、过滤和插槽示例。 |
 | Checkbox | `ElCheckbox`、`ElCheckboxGroup`、`ElCheckboxButton` | 🟡 部分对齐 | 补齐 indeterminate、limit、尺寸和测试。 |
 | Color Picker Panel | 缺少 `ElColorPickerPanel` | 🔴 缺失 | 先抽象颜色模型和面板。 |
 | Color Picker | 缺少 `ElColorPicker` | 🔴 缺失 | 基于面板补输入、透明度、预设色。 |
@@ -99,8 +99,8 @@
 | DateTime Picker | 缺少 `ElDateTimePicker` | 🔴 缺失 | 在 Date Picker 基础上补时间选择。 |
 | Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟡 部分对齐 | 已推进 size、disabled、scroll 细节；继续补齐 label、校验状态和表单项交互。 |
 | Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
-| Input Number | 缺少 `ElInputNumber` | 🔴 缺失 | 实现步进、精度、范围和按钮位置。 |
-| Input Tag | 缺少 `ElInputTag` | 🔴 缺失 | 实现标签输入、删除、限制和触发键。 |
+| Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |
+| Input Tag | `ElInputTag` | 🟡 部分对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交和表单校验联动；继续补齐拖拽排序、组合键细节和测试。 |
 | Input OTP | 缺少 `ElInputOtp` | 🔴 缺失 | 实现分格输入、粘贴和焦点流转。 |
 | Mention | 缺少 `ElMention` | 🔴 缺失 | 实现触发字符、候选项和文本区域集成。 |
 | Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟡 部分对齐 | 补齐禁用、尺寸、边框和键盘行为。 |

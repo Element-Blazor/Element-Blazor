@@ -146,6 +146,7 @@ namespace Element
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.RequestRender = () => InvokeAsync(StateHasChanged);
                 option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 SelectDropDownOptions.Add(option);
@@ -198,6 +199,7 @@ namespace Element
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.RequestRender = () => InvokeAsync(StateHasChanged);
                 option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 DropDownMenuOptions.Add(option);
@@ -248,6 +250,7 @@ namespace Element
                 var option = e.NewItems.OfType<DropDownOption>().FirstOrDefault();
                 option.IsNew = true;
                 option.Instance = this;
+                option.RequestRender = () => InvokeAsync(StateHasChanged);
                 option.ShadowZIndex = ZIndex++;
                 option.ZIndex = ZIndex++;
                 SelectDropDownOptions.Add(option);
