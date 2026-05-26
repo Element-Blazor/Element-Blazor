@@ -161,7 +161,7 @@ namespace Element
             base.OnParametersSet();
             effectiveDisabled = Disabled || (FormItem?.Form?.Disabled ?? false);
             effectiveSize = Size == InputSize.Normal
-                ? FormItem?.Size ?? FormItem?.Form?.Size ?? InputSize.Normal
+                ? FormItem?.Size ?? FormItem?.Form?.EffectiveSize ?? ResolveInputSize(InputSize.Normal)
                 : Size;
             var sizeCssValue = GetSizeCssValue(effectiveSize);
             warpperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()

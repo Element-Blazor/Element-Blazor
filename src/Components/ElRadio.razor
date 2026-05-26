@@ -32,11 +32,10 @@
         ariaDisabled = true;
     }
     var isBordered = IsBordered ? "is-bordered" : string.Empty;
-    var size = RadioGroup == null ? Size.ToString().ToLower() : RadioGroup.Size.ToString().ToLower();
-    if (!string.IsNullOrWhiteSpace(size))
-    {
-        size = "el-radio-button--" + size;
-    }
+    var effectiveSize = RadioGroup == null ? ResolveRadioSize(Size) : RadioGroup.EffectiveSize;
+    var size = effectiveSize == RadioSize.Default
+        ? "el-radio-button--default"
+        : "el-radio--" + effectiveSize.ToString().ToLowerInvariant();
 }
 <label role="radio" tabindex="0" class="el-radio @isChecked @isDisabled @isBordered @size" @onclick="ChangeRadio" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
     <span class="el-radio__input @isChecked @isDisabled">

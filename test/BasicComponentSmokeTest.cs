@@ -14,6 +14,7 @@ namespace Element.Test
         [InlineData("button", ".el-button")]
         [InlineData("border", ".border-demo__item")]
         [InlineData("color", ".color-demo__main")]
+        [InlineData("configuration", ".el-space .el-button")]
         [InlineData("container", ".el-container .el-header")]
         [InlineData("icon", ".el-icon.el-icon-edit")]
         [InlineData("layout", ".el-row .el-col")]

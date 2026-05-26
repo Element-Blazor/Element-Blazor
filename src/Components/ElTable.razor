@@ -25,7 +25,7 @@
     {
         tableClsList.Add("is-loading");
     }
-    var tableSizeCssValue = Size == InputSize.Large ? "large" : Size == InputSize.Small ? "small" : null;
+    var tableSizeCssValue = EffectiveSize == InputSize.Large ? "large" : EffectiveSize == InputSize.Small ? "small" : null;
     if (tableSizeCssValue != null)
     {
         tableClsList.Add($"el-table--{tableSizeCssValue}");

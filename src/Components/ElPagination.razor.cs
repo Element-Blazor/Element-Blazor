@@ -54,6 +54,18 @@ namespace Element
         [Parameter]
         public bool Background { get; set; } = true;
 
+        [Parameter]
+        public ElementSize Size { get; set; } = ElementSize.Default;
+
+        protected ElementSize EffectiveSize => Size == ElementSize.Default ? ConfigSize : Size;
+
+        protected ButtonSize NavigationButtonSize => EffectiveSize switch
+        {
+            ElementSize.Large => ButtonSize.Large,
+            ElementSize.Small => ButtonSize.Small,
+            _ => ButtonSize.Default
+        };
+
         /// <summary>
         /// 最大显示的页码数
         /// </summary>
@@ -76,6 +88,7 @@ namespace Element
 
         protected override void OnParametersSet()
         {
+            base.OnParametersSet();
             pageCount = Convert.ToInt32(Math.Ceiling((float)Total / PageSize));
             if (CurrentPage > pageCount)
             {

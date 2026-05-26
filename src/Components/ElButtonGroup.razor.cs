@@ -14,6 +14,8 @@ namespace Element
         [Parameter]
         public ButtonSize Size { get; set; }
 
+        internal ButtonSize EffectiveSize => ResolveButtonSize(Size);
+
         [Parameter]
         public ButtonType Type { get; set; } = ButtonType.Default;
 

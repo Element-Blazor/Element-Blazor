@@ -13,6 +13,9 @@ namespace Element
 
         [Parameter]
         public RadioSize Size { get; set; }
+
+        internal RadioSize EffectiveSize => ResolveRadioSize(Size);
+
         [Parameter]
         public EventCallback<ElementChangeEventArgs<TValue>> SelectedValueChanging { get; set; }
         [Parameter]

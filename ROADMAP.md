@@ -83,7 +83,7 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Config Provider | 缺少 `ElConfigProvider` | 🔴 缺失 | 设计全局尺寸、命名空间、z-index、locale 等级联配置。 |
+| Config Provider | `ElConfigProvider`、`ElementConfig` | 🟡 部分对齐 | 已提供尺寸、命名空间、z-index、locale 级联配置；命名空间尚未全量重写 DOM class。 |
 
 ### Form 表单组件
 

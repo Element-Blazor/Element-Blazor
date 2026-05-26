@@ -390,6 +390,8 @@ namespace Element
         [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
 
+        protected InputSize EffectiveSize => ResolveInputSize(Size);
+
         [Parameter]
         public bool Loading { get; set; }
 

@@ -30,6 +30,8 @@ namespace Element
         [Parameter]
         public InputSize? Size { get; set; }
 
+        internal InputSize EffectiveSize => Size ?? ResolveInputSize(InputSize.Normal);
+
         [Parameter]
         public bool InlineMessage { get; set; }
 
@@ -161,9 +163,10 @@ namespace Element
                     break;
             }
             clsList.Add("el-form");
-            if (Size != null)
+            var effectiveSize = EffectiveSize;
+            if (effectiveSize != InputSize.Normal)
             {
-                var sizeCssValue = GetSizeCssValue(Size.Value);
+                var sizeCssValue = GetSizeCssValue(effectiveSize);
                 if (sizeCssValue != null)
                 {
                     clsList.Add($"el-form--{sizeCssValue}");

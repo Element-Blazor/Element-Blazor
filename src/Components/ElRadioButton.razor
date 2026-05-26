@@ -30,7 +30,10 @@
         isDisabled = "is-disabled";
         ariaDisabled = true;
     }
-    var size = RadioGroup == null ? string.Empty : RadioGroup.Size.ToString().ToLower();
+    var effectiveSize = RadioGroup == null ? ResolveRadioSize(Size) : RadioGroup.EffectiveSize;
+    var size = effectiveSize == RadioSize.Default
+        ? (RadioGroup == null ? string.Empty : "default")
+        : effectiveSize.ToString().ToLowerInvariant();
     if (!string.IsNullOrWhiteSpace(size))
     {
         size = "el-radio-button--" + size;

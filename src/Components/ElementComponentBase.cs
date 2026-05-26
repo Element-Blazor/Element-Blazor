@@ -11,11 +11,15 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Element
-{    public class ElementComponentBase : ComponentBase, IDisposable
+{
+    public class ElementComponentBase : ComponentBase, IDisposable
     {
         internal bool allowRefresh;
         [CascadingParameter(Name = "Page")]
         public ElementComponentBase Page { get; set; }
+
+        [CascadingParameter]
+        public ElementConfig ElementConfiguration { get; set; }
         protected bool RequireRender { get; set; } = true;
 
         [Parameter(CaptureUnmatchedValues = true)]
@@ -96,6 +100,61 @@ namespace Element
 
         [CascadingParameter]
         public ElementDialogBase DialogContainer { get; set; }
+
+        protected ElementSize ConfigSize => ElementConfiguration?.Size ?? ElementSize.Default;
+
+        protected string ConfigNamespace => string.IsNullOrWhiteSpace(ElementConfiguration?.Namespace)
+            ? ElementConfig.DefaultNamespace
+            : ElementConfiguration.Namespace;
+
+        protected int ConfigZIndex => ElementConfiguration?.ZIndex ?? ElementConfig.DefaultZIndex;
+
+        protected string ConfigLocale => ElementConfiguration?.Locale;
+
+        protected ButtonSize ResolveButtonSize(ButtonSize size)
+        {
+            if (size != ButtonSize.Default)
+            {
+                return size;
+            }
+
+            return ConfigSize switch
+            {
+                ElementSize.Large => ButtonSize.Large,
+                ElementSize.Small => ButtonSize.Small,
+                _ => ButtonSize.Default
+            };
+        }
+
+        protected InputSize ResolveInputSize(InputSize size)
+        {
+            if (size != InputSize.Normal)
+            {
+                return size;
+            }
+
+            return ConfigSize switch
+            {
+                ElementSize.Large => InputSize.Large,
+                ElementSize.Small => InputSize.Small,
+                _ => InputSize.Normal
+            };
+        }
+
+        protected RadioSize ResolveRadioSize(RadioSize size)
+        {
+            if (size != RadioSize.Default)
+            {
+                return size;
+            }
+
+            return ConfigSize switch
+            {
+                ElementSize.Large => RadioSize.Medium,
+                ElementSize.Small => RadioSize.Small,
+                _ => RadioSize.Default
+            };
+        }
 
         protected virtual Task OnDialogShowAsync()
         {

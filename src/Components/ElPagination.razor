@@ -1,3 +1,4 @@
+@inherits ElementComponentBase
 @{
     var pageClsList = new List<string>();
     pageClsList.Add("el-pagination");
@@ -5,10 +6,14 @@
     {
         pageClsList.Add("is-background");
     }
+    if (EffectiveSize == ElementSize.Small)
+    {
+        pageClsList.Add("el-pagination--small");
+    }
     var renderedPrefix = false;
 }
 <div class="@string.Join(" ",pageClsList)">
-    <ElButton Icon="el-icon-arrow-left" IsDisabled="previousDisabled" OnClick="(e=>Jump(CurrentPage-1))"></ElButton>
+    <ElButton Icon="el-icon-arrow-left" Size="@NavigationButtonSize" IsDisabled="previousDisabled" OnClick="(e=>Jump(CurrentPage-1))"></ElButton>
     <ul class="el-pager">
         @for (int i = CurrentPage; i <= pageCount; i++)
         {
@@ -127,5 +132,5 @@
             }
         }
     </ul>
-    <ElButton Icon="el-icon-arrow-right" IsDisabled="nextDisabled" OnClick="(e=>Jump(CurrentPage+1))"></ElButton>
+    <ElButton Icon="el-icon-arrow-right" Size="@NavigationButtonSize" IsDisabled="nextDisabled" OnClick="(e=>Jump(CurrentPage+1))"></ElButton>
 </div>

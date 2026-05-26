@@ -96,7 +96,7 @@ namespace Element
             {
                 wasOpen = true;
                 hasOpenedRender = false;
-                ResolvedZIndex = ZIndex ?? Interlocked.Add(ref nextZIndex, 2);
+                ResolvedZIndex = ZIndex ?? Interlocked.Add(ref nextZIndex, 2) + ConfigZIndex - ElementConfig.DefaultZIndex;
                 if (OnOpen.HasDelegate)
                 {
                     await OnOpen.InvokeAsync();

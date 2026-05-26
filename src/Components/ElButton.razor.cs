@@ -205,8 +205,8 @@ namespace Element
             : Type;
 
         private ButtonSize EffectiveSize => Size == ButtonSize.Default && ButtonGroup != null
-            ? ButtonGroup.Size
-            : Size;
+            ? ButtonGroup.EffectiveSize
+            : ResolveButtonSize(Size);
 
         private bool IsTextButton => Text || EffectiveType == ButtonType.Text;
 
