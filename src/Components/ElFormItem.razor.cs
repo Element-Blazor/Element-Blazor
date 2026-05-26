@@ -9,12 +9,23 @@ namespace Element
     public partial class ElFormItem<TValue> : ElFormItemObject
     {
         /// <summary>
-        ///  «∑Ò“˛≤ÿ∏√±Ìµ•œÓ
+        /// ÊòØÂê¶ÈöêËóèËØ•Ë°®ÂçïÈ°π
         /// </summary>
         [Parameter]
         public bool IsHidden { get; set; }
         public TValue OriginValue { get; set; }
-        public TValue Value { get; set; }
+        private TValue value;
+        public TValue Value
+        {
+            get => value;
+            set
+            {
+                this.value = value;
+                Form?.NotifyFieldValueChanged(this, value);
+            }
+        }
+
+        internal override object CurrentValue => Value;
 
         internal HtmlPropertyBuilder formItemCssBuilder;
 
@@ -32,7 +43,7 @@ namespace Element
             {
                 if (GetType() != typeof(ElFormActionItem))
                 {
-                    ExceptionHelper.Throw(ExceptionHelper.FormItemMustHaveName, "ElFormItem ◊Èº˛±ÿ–Î÷∏∂® Prop ªÚ Name  Ù–‘");
+                    ExceptionHelper.Throw(ExceptionHelper.FormItemMustHaveName, "ElFormItem ÁªÑ‰ª∂ÂøÖÈ°ªÊåáÂÆö Prop Êàñ Name Â±ûÊÄß");
                 }
                 return;
             }
@@ -40,12 +51,31 @@ namespace Element
             {
                 return;
             }
-            OriginValueHasSet = true;
             if (Form.Values.TryGetValue(Name, out var value))
             {
-                OriginValue = (TValue)value;
-                Value = (TValue)value;
+                SetInitialValue(value, resetCurrentValue: true);
             }
+        }
+
+        internal override void SetInitialValue(object value, bool resetCurrentValue)
+        {
+            if (value == null)
+            {
+                OriginValue = default;
+            }
+            else if (value is TValue typedValue)
+            {
+                OriginValue = typedValue;
+            }
+            else
+            {
+                OriginValue = (TValue)TypeHelper.ChangeType(value, typeof(TValue));
+            }
+            if (resetCurrentValue || !OriginValueHasSet)
+            {
+                this.value = OriginValue;
+            }
+            OriginValueHasSet = true;
             OriginValueHasRendered = false;
         }
 

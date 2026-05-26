@@ -9,17 +9,19 @@ namespace Element
 {
     public abstract class ElFormItemObject : ElementComponentBase
     {
+        private IList<IValidationRule> parameterRules = new List<IValidationRule>();
+        private IList<IValidationRule> resolvedRules = new List<IValidationRule>();
         /// <summary>
-        /// ÊÇ·ñÓ¦ÓÃÑùÊ½£¬Èç¹û²»Ó¦ÓÃ£¬Ôò¸Ã×é¼ş±¾Éí²»Éú³ÉÈÎºÎ HTML
+        /// æ˜¯å¦åº”ç”¨æ ·å¼ï¼Œå¦‚æœä¸åº”ç”¨ï¼Œåˆ™è¯¥ç»„ä»¶æœ¬èº«ä¸ç”Ÿæˆä»»ä½• HTML
         /// </summary>
         [Parameter]
         public bool ApplyStyle { get; set; } = true;
         /// <summary>
-        /// ³õÊ¼ÖµÊÇ·ñÒÑäÖÈ¾
+        /// åˆå§‹å€¼æ˜¯å¦å·²æ¸²æŸ“
         /// </summary>
         public bool OriginValueHasRendered { get; set; } = false;
         /// <summary>
-        /// ³õÊ¼ÖµÊÇ·ñÒÑÉèÖÃ
+        /// åˆå§‹å€¼æ˜¯å¦å·²è®¾ç½®
         /// </summary>
         internal bool OriginValueHasSet { get; set; } = false;
         [Parameter]
@@ -29,13 +31,13 @@ namespace Element
         public string For { get; set; }
 
         /// <summary>
-        /// ÉèÖÃ×Ö¶Î Label ÎªÍ¼Æ¬µØÖ·
+        /// è®¾ç½®å­—æ®µ Label ä¸ºå›¾ç‰‡åœ°å€
         /// </summary>
         [Parameter]
         public string Image { get; set; }
 
         /// <summary>
-        /// ±êÇ©¿í¶È
+        /// æ ‡ç­¾å®½åº¦
         /// </summary>
         [Parameter]
         public object LabelWidth { get; set; }
@@ -86,7 +88,7 @@ namespace Element
         public RenderFragment ChildContent { get; set; }
 
         /// <summary>
-        /// Õ¼Î»·û
+        /// å ä½ç¬¦
         /// </summary>
         [Parameter]
         public string Placeholder { get; set; }
@@ -94,12 +96,20 @@ namespace Element
         public ElForm Form { get; set; }
 
         [Parameter]
-        public IList<IValidationRule> Rules { get; set; } = new List<IValidationRule>();
+        public IList<IValidationRule> Rules
+        {
+            get => resolvedRules;
+            set
+            {
+                parameterRules = value ?? new List<IValidationRule>();
+                resolvedRules = parameterRules;
+            }
+        }
         public ValidationResult ValidationResult { get; protected set; }
 
         protected override void OnInitialized()
         {
-            Form.Items.Add(this);
+            Form?.RegisterField(this);
             ResolveRules();
         }
 
@@ -109,10 +119,20 @@ namespace Element
             ResolveRules();
         }
 
+        internal void RefreshRules()
+        {
+            ResolveRules();
+        }
+
         private void ResolveRules()
         {
+            if (Form == null)
+            {
+                return;
+            }
+
             var rules = new List<IValidationRule>();
-            var validation = Form.Validations.FirstOrDefault(x => x.Name == Name);
+            var validation = Form.Validations?.FirstOrDefault(x => x.Name == Name);
             if (validation != null)
             {
                 rules.AddRange(validation.Rules);
@@ -121,20 +141,24 @@ namespace Element
             {
                 rules.AddRange(formRules);
             }
-            if (Rules != null)
+            if (parameterRules != null)
             {
-                rules.AddRange(Rules.Where(x => x != null && !rules.Contains(x)));
+                rules.AddRange(parameterRules.Where(x => x != null && !rules.Contains(x)));
             }
             if (Required && !rules.OfType<RequiredRule>().Any())
             {
                 var requiredRule = new RequiredRule
                 {
-                    ErrorMessage = RequiredMessage ?? $"ÇëÈ·ÈÏ{Label}"
+                    ErrorMessage = RequiredMessage ?? $"è¯·ç¡®è®¤{Label}"
                 };
                 rules.Add(requiredRule);
             }
-            Rules = rules;
+            resolvedRules = rules;
         }
+
+        internal abstract object CurrentValue { get; }
+
+        internal abstract void SetInitialValue(object value, bool resetCurrentValue);
 
         internal void ShowErrorMessage()
         {
@@ -167,6 +191,12 @@ namespace Element
             ValidateStatus = string.Empty;
             IsShowing = true;
             MarkAsRequireRender();
+        }
+
+        public override void Dispose()
+        {
+            Form?.UnregisterField(this);
+            base.Dispose();
         }
     }
 }

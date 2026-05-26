@@ -17,9 +17,14 @@ namespace Element
         private bool requireRefresh = true;
         private Task showMessageTask;
         private IDictionary<string, IList<IValidationRule>> lastRulesReference;
+        private List<FormFieldValidation> lastValidationsReference;
+        private object lastValueReference;
+        private bool hasResolvedRules;
         public ElementReference Container { get; set; }
 
         internal List<ElFormItemObject> Items { get; set; } = new List<ElFormItemObject>();
+
+        public IReadOnlyList<ElFormItemObject> Fields => Items;
 
         [Parameter]
         public bool Inline { get; set; }
@@ -88,13 +93,13 @@ namespace Element
         public string RequireAsteriskPosition { get; set; } = "left";
 
         /// <summary>
-        /// ÊÇ·ñÊÇ´´½¨
+        /// æ˜¯å¦æ˜¯åˆ›å»º
         /// </summary>
         [Parameter]
         public bool IsCreate { get; set; } = true;
 
         /// <summary>
-        /// ±íµ¥Ãû³Æ
+        /// è¡¨å•åç§°
         /// </summary>
         [Parameter]
         public string Name { get; set; }
@@ -103,7 +108,7 @@ namespace Element
         public LabelAlign LabelAlign { get; set; }
 
         /// <summary>
-        /// ÉèÖÃÑéÖ¤¹æÔò
+        /// è®¾ç½®éªŒè¯è§„åˆ™
         /// </summary>
         [Parameter]
         public List<FormFieldValidation> Validations { get; set; } = new List<FormFieldValidation>();
@@ -112,13 +117,13 @@ namespace Element
         public RenderFragment ChildContent { get; set; }
 
         /// <summary>
-        /// ±íµ¥°´Å¥
+        /// è¡¨å•æŒ‰é’®
         /// </summary>
         [Parameter]
         public RenderFragment Buttons { get; set; }
 
         /// <summary>
-        /// ´¥·¢ä¯ÀÀÆ÷Ìá½»
+        /// è§¦å‘æµè§ˆå™¨æäº¤
         /// </summary>
         public async Task SubmitAsync(string url)
         {
@@ -126,7 +131,7 @@ namespace Element
         }
 
         /// <summary>
-        /// ¸ÃÊôĞÔ½öÓÃÓÚÉèÖÃ±íµ¥³õÊ¼Öµ£¬»ñÈ¡±íµ¥ÊäÈëÖµÇëÊ¹ÓÃ <seealso cref="GetValue{T}"/> ·½·¨
+        /// è¯¥å±æ€§ä»…ç”¨äºè®¾ç½®è¡¨å•åˆå§‹å€¼ï¼Œè·å–è¡¨å•è¾“å…¥å€¼è¯·ä½¿ç”¨ <seealso cref="GetValue{T}"/> æ–¹æ³•
         /// </summary>
         [Parameter]
         public object Value { get; set; }
@@ -228,7 +233,7 @@ namespace Element
         }
 
         /// <summary>
-        /// ÉèÖÃºó×Ô¶¯Éú³É±íµ¥
+        /// è®¾ç½®åè‡ªåŠ¨ç”Ÿæˆè¡¨å•
         /// </summary>
         [Parameter]
         public Type EntityType { get; set; }
@@ -236,7 +241,7 @@ namespace Element
         public IDictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
 
         /// <summary>
-        /// »ñÈ¡±íµ¥ÊäÈëÖµ
+        /// è·å–è¡¨å•è¾“å…¥å€¼
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -244,7 +249,7 @@ namespace Element
         {
             if (!IsValid())
             {
-                throw new ElementException("±íµ¥ÑéÖ¤²»Í¨¹ı£¬´ËÊ±ÎŞ·¨»ñÈ¡±íµ¥ÊäÈëµÄÖµ");
+                throw new ElementException("è¡¨å•éªŒè¯ä¸é€šè¿‡ï¼Œæ­¤æ—¶æ— æ³•è·å–è¡¨å•è¾“å…¥çš„å€¼");
             }
             var value = Activator.CreateInstance<T>();
             var properties = typeof(T).GetProperties();
@@ -259,11 +264,11 @@ namespace Element
                 object destValue = formItem.GetType().GetProperty("Value").GetValue(formItem);
                 try
                 {
-                    property.SetValue(value, destValue);
+                    property.SetValue(value, ConvertValue(destValue, property.PropertyType));
                 }
-                catch (ArgumentException ex)
+                catch (Exception ex) when (ex is ArgumentException || ex is InvalidCastException || ex is FormatException)
                 {
-                    throw new ElementException($"×Ö¶Î {formItem.Name} ÊäÈëµÄÀàĞÍÎª {destValue.GetType()}£¬µ«ÊµÌå {typeof(T)} ¶ÔÓ¦µÄÊôĞÔµÄÀàĞÍÎª {property.PropertyType}", ex);
+                    throw new ElementException($"å­—æ®µ {formItem.Name} è¾“å…¥çš„ç±»å‹ä¸º {destValue?.GetType().ToString() ?? "null"}ï¼Œä½†å®ä½“ {typeof(T)} å¯¹åº”çš„å±æ€§çš„ç±»å‹ä¸º {property.PropertyType}", ex);
                 }
             }
             return value;
@@ -273,6 +278,10 @@ namespace Element
         {
             if (Value == null)
             {
+                Values = Items
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Name))
+                    .GroupBy(x => x.Name)
+                    .ToDictionary(x => x.Key, x => x.Last().CurrentValue);
                 return;
             }
             Values = Value.GetType().GetProperties().Reverse().ToDictionary(x => x.Name, x => x.GetValue(Value));
@@ -281,12 +290,33 @@ namespace Element
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            if (ValidateOnRuleChange && !ReferenceEquals(Rules, lastRulesReference))
-            {
-                ClearValidate();
-            }
-            lastRulesReference = Rules;
+            var rulesChanged = !ReferenceEquals(Rules, lastRulesReference) || !ReferenceEquals(Validations, lastValidationsReference);
+            var modelChanged = !ReferenceEquals(Value, lastValueReference);
             SetValues();
+            if (modelChanged)
+            {
+                RefreshFieldInitialValues(resetCurrentValue: true);
+                lastValueReference = Value;
+            }
+            if (rulesChanged && hasResolvedRules)
+            {
+                foreach (var item in Items)
+                {
+                    item.RefreshRules();
+                }
+                if (ValidateOnRuleChange)
+                {
+                    ValidateField();
+                }
+                else
+                {
+                    ClearValidate();
+                }
+            }
+
+            lastRulesReference = Rules;
+            lastValidationsReference = Validations;
+            hasResolvedRules = true;
         }
 
         internal void ShowErrorMessage()
@@ -357,6 +387,11 @@ namespace Element
             return Items.FirstOrDefault(x => x.Name == prop);
         }
 
+        public ElFormItemObject GetField(params string[] prop)
+        {
+            return FilterItems(prop).FirstOrDefault();
+        }
+
         public bool ValidateField(params string[] props)
         {
             var items = FilterItems(props).ToList();
@@ -391,6 +426,11 @@ namespace Element
 
         public bool IsValid()
         {
+            return Validate();
+        }
+
+        public bool Validate()
+        {
             RequireRender = true;
             foreach (var item in Items)
             {
@@ -398,7 +438,7 @@ namespace Element
                 item.Validate();
                 item.IsShowing = true;
             }
-            var isValid = Items.All(x => x.ValidationResult.IsValid);
+            var isValid = Items.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
             if (!isValid)
             {
                 ShowErrorMessage();
@@ -408,6 +448,11 @@ namespace Element
                 _ = ScrollToFirstErrorAsync();
             }
             return isValid;
+        }
+
+        public Task<bool> ValidateAsync()
+        {
+            return Task.FromResult(Validate());
         }
 
         internal void RegisterInput(string prop, string id, object input)
@@ -424,6 +469,60 @@ namespace Element
         internal void UnregisterInput(object input)
         {
             inputRegistrations.RemoveAll(x => ReferenceEquals(x.Input, input));
+        }
+
+        internal void RegisterField(ElFormItemObject item)
+        {
+            if (item == null || Items.Contains(item))
+            {
+                return;
+            }
+
+            Items.Add(item);
+            ApplyInitialValue(item, resetCurrentValue: false);
+        }
+
+        internal void UnregisterField(ElFormItemObject item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            Items.Remove(item);
+            if (!string.IsNullOrWhiteSpace(item.Name))
+            {
+                inputRegistrations.RemoveAll(x => x.Prop == item.Name);
+            }
+        }
+
+        internal void NotifyFieldValueChanged(ElFormItemObject item, object value)
+        {
+            if (item == null || string.IsNullOrWhiteSpace(item.Name))
+            {
+                return;
+            }
+
+            Values[item.Name] = value;
+            if (Value == null)
+            {
+                return;
+            }
+
+            var property = Value.GetType().GetProperty(item.Name);
+            if (property == null || !property.CanWrite)
+            {
+                return;
+            }
+
+            try
+            {
+                property.SetValue(Value, ConvertValue(value, property.PropertyType));
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidCastException || ex is FormatException)
+            {
+                throw new ElementException($"å­—æ®µ {item.Name} è¾“å…¥çš„ç±»å‹ä¸º {value?.GetType().ToString() ?? "null"}ï¼Œä½†å®ä½“ {Value.GetType()} å¯¹åº”çš„å±æ€§çš„ç±»å‹ä¸º {property.PropertyType}", ex);
+            }
         }
 
         internal string ResolveLabelWidth(object itemLabelWidth)
@@ -476,7 +575,53 @@ namespace Element
                 return Items;
             }
 
-            return Items.Where(x => props.Contains(x.Name));
+            return Items.Where(x => props.Contains(x.Name) || props.Contains(x.Prop));
+        }
+
+        private void RefreshFieldInitialValues(bool resetCurrentValue)
+        {
+            foreach (var item in Items)
+            {
+                ApplyInitialValue(item, resetCurrentValue);
+            }
+        }
+
+        private void ApplyInitialValue(ElFormItemObject item, bool resetCurrentValue)
+        {
+            if (item == null || !Values.Any() || string.IsNullOrWhiteSpace(item.Name))
+            {
+                return;
+            }
+
+            if (Values.TryGetValue(item.Name, out var value))
+            {
+                item.SetInitialValue(value, resetCurrentValue);
+            }
+        }
+
+        private static object ConvertValue(object value, Type destinationType)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            var finalType = Nullable.GetUnderlyingType(destinationType) ?? destinationType;
+            if (finalType.IsInstanceOfType(value))
+            {
+                return value;
+            }
+
+            if (finalType.IsEnum)
+            {
+                if (value is string stringValue)
+                {
+                    return Enum.Parse(finalType, stringValue);
+                }
+                return Enum.ToObject(finalType, value);
+            }
+
+            return TypeHelper.ChangeType(value, destinationType);
         }
 
         private static string GetSizeCssValue(InputSize size) => size switch
