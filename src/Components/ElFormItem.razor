@@ -42,7 +42,8 @@
             clsList.Add($"el-form-item--{formSizeCssValue}");
         }
     }
-    var finalLabelPosition = string.IsNullOrWhiteSpace(LabelPosition) ? Convert.ToString(Form.LabelPosition) : LabelPosition;
+    var formLabelPosition = Convert.ToString(Form.LabelPosition);
+    var finalLabelPosition = string.IsNullOrWhiteSpace(LabelPosition) ? formLabelPosition : LabelPosition.Trim().ToLowerInvariant();
     if (!string.IsNullOrWhiteSpace(finalLabelPosition))
     {
         clsList.Add($"el-form-item--label-{finalLabelPosition}");
@@ -57,7 +58,7 @@
             labelStyles.Add($"width:{resolvedLabelWidth}");
         }
 
-        if (Form.LabelAlign != LabelAlign.Top && !string.IsNullOrWhiteSpace(Label) && !string.IsNullOrWhiteSpace(resolvedLabelWidth))
+        if (finalLabelPosition != "top" && !string.IsNullOrWhiteSpace(Label) && !string.IsNullOrWhiteSpace(resolvedLabelWidth))
         {
             bodyStyles.Add($"margin-left:{resolvedLabelWidth}");
         }
@@ -99,7 +100,7 @@
                 {
                     var marginTop = IsShowing ? "3px" : "0px";
                     var opacity = IsShowing ? "0" : "1";
-                    <div id="@($"{Name}-error")" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+                    <div id="@ErrorId" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                         @errorMessage
                     </div>
                 }
@@ -119,7 +120,7 @@ else
         {
             var marginTop = IsShowing ? "3px" : "0px";
             var opacity = IsShowing ? "0" : "1";
-            <div id="@($"{Name}-error")" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
+            <div id="@ErrorId" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
                 @errorMessage
             </div>
         }

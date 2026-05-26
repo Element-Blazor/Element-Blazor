@@ -21,7 +21,7 @@ namespace Element
             }
             if (TypeHelper.Equal(FormItem.Value, value))
             {
-                FormItem.Form?.NotifyFieldValueChanged(FormItem, value);
+                FormItem.NotifyValueChanged(value, validate);
                 FormItem.MarkAsRequireRender();
                 return;
             }

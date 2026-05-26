@@ -22,6 +22,7 @@ namespace Element.ControlRenders
             renderTreeBuilder.AddAttribute(6, nameof(ElUpload.Height), uploadConfig.Height);
             renderTreeBuilder.AddAttribute(7, nameof(ElUpload.EnablePasteUpload), uploadConfig.EnablePasteUpload);
             renderTreeBuilder.AddAttribute(8, nameof(ElUpload.UploadType), uploadConfig.Type);
+            renderTreeBuilder.AddAttribute(9, nameof(ElFormItemObject.EnableAlwaysRender), true);
             renderTreeBuilder.CloseComponent();
         }
     }

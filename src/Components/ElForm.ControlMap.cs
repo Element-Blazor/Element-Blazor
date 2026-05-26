@@ -15,7 +15,6 @@ namespace Element
     public class FormFieldControlMap
     {
         private Dictionary<Func<PropertyInfo, bool>, Type> fieldsControlMap = new Dictionary<Func<PropertyInfo, bool>, Type>();
-        private Dictionary<string, List<ElFormItemObject>> formControls = new Dictionary<string, List<ElFormItemObject>>();
         public FormFieldControlMap(IServiceProvider provider)
         {
             fieldsControlMap.Add(property => property.PropertyType == typeof(string), typeof(ElInput<string>));
@@ -50,7 +49,7 @@ namespace Element
                 {
                     return true;
                 }
-                if (!property.PropertyType.IsGenericParameter)
+                if (!property.PropertyType.IsGenericType)
                 {
                     return false;
                 }
@@ -88,7 +87,7 @@ namespace Element
                 }
                 if (controlType == null)
                 {
-                    throw new ElementException($"ÀàĞÍ {property.PropertyType.FullName} Ã»ÓĞÅäÖÃ¶ÔÓ¦µÄ×é¼ş£¬±íµ¥ÎŞ·¨Éú³É");
+                    throw new ElementException($"ç±»å‹ {property.PropertyType.FullName} æ²¡æœ‰é…ç½®å¯¹åº”çš„ç»„ä»¶ï¼Œè¡¨å•æ— æ³•ç”Ÿæˆ");
                 }
                 var formControl = property.GetCustomAttribute<FormControlAttribute>() ?? new FormControlAttribute()
                 {
@@ -99,7 +98,8 @@ namespace Element
                     formControl.LabelWidth = 100;
                 }
                 var editorGeneratorAttr = property.GetCustomAttribute<EditorGeneratorAttribute>();
-                var formItemType = typeof(ElFormItem<>).MakeGenericType(property.PropertyType);
+                var formItemValueType = GetFormItemValueType(property, controlType);
+                var formItemType = typeof(ElFormItem<>).MakeGenericType(formItemValueType);
                 if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(ElSelect<>))
                 {
                     controlType = controlType.MakeGenericType(property.PropertyType);
@@ -109,15 +109,16 @@ namespace Element
                 {
                     SortNo = formControl.SortNo,
                     FormItem = formItemType,
+                    ValueType = formItemValueType,
                     IsRequired = editorGeneratorAttr?.IsRequired ?? true,
-                    RequiredMessage = editorGeneratorAttr.RequiredMessage ?? "ÇëÌîĞ´´Ë×Ö¶Î",
+                    RequiredMessage = editorGeneratorAttr?.RequiredMessage ?? "è¯·å¡«å†™è¯¥å­—æ®µ",
                     InputControlType = controlType,
                     Ignore = editorGeneratorAttr?.Ignore ?? false,
                     InputControlRender = GetInputControlRender(controlType),
                     Label = editorGeneratorAttr?.Label ?? property.Name,
-                    Image = editorGeneratorAttr.Image,
+                    Image = editorGeneratorAttr?.Image,
                     LabelWidth = formControl.LabelWidth,
-                    Placeholder = editorGeneratorAttr.Placeholder,
+                    Placeholder = editorGeneratorAttr?.Placeholder,
                     Name = property.Name,
                     Property = property,
                     ControlAttribute = GetInputControlConfig(property, controlType)
@@ -130,25 +131,23 @@ namespace Element
 
         private object GetInputControlConfig(PropertyInfo propertyInfo, Type controlType)
         {
+            var genericControlDefinition = controlType.IsGenericType ? controlType.GetGenericTypeDefinition() : null;
             if (propertyInfo.PropertyType == typeof(IFileModel[]))
             {
                 var uploadAttr = propertyInfo.GetCustomAttribute<UploadAttribute>();
                 if (uploadAttr == null)
                 {
-                    throw new ElementException("IFileModel[] ÀàĞÍµÄÊôĞÔ±ØĞë±ê¼Ç UploadAttribute ÌØĞÔ");
+                    throw new ElementException("IFileModel[] ç±»å‹çš„å±æ€§å¿…é¡»æ ‡è®° UploadAttribute ç‰¹æ€§");
                 }
                 return uploadAttr;
             }
-            if (!propertyInfo.PropertyType.IsGenericType)
+            if (genericControlDefinition == typeof(ElInput<>))
             {
-                if (controlType.GetGenericTypeDefinition() == typeof(ElInput<>))
-                {
-                    return propertyInfo.GetCustomAttribute<InputAttribute>();
-                }
-                if (controlType.GetGenericTypeDefinition() == typeof(ElCheckbox<>))
-                {
-                    return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new ElementException($"¸´Ñ¡¿ò×é¼şËù¶ÔÓ¦µÄÊôĞÔ±ØĞë±ê¼Ç {nameof(CheckBoxAttribute)} ÌØĞÔ");
-                }
+                return propertyInfo.GetCustomAttribute<InputAttribute>();
+            }
+            if (genericControlDefinition == typeof(ElCheckbox<>))
+            {
+                return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new ElementException($"å¤é€‰æ¡†å¯¹åº”å±æ€§å¿…é¡»è®¾ç½® {nameof(CheckBoxAttribute)}ã€‚");
             }
             if (propertyInfo.PropertyType == typeof(IDictionary<string, string>)
                 || propertyInfo.PropertyType == typeof(Dictionary<string, string>))
@@ -156,6 +155,15 @@ namespace Element
                 return propertyInfo.GetCustomAttribute<TableAttribute>();
             }
             return null;
+        }
+
+        private static Type GetFormItemValueType(PropertyInfo property, Type controlType)
+        {
+            if (controlType == typeof(ElDatePicker))
+            {
+                return typeof(DateTime?);
+            }
+            return property.PropertyType;
         }
 
         private IControlRender GetInputControlRender(Type controlType)
@@ -174,11 +182,7 @@ namespace Element
             }
             if (!controlType.IsGenericType)
             {
-                if (controlType == typeof(ElCheckbox<>))
-                {
-                    return this.provider.GetRequiredService<ICheckBoxRender>();
-                }
-                throw new ElementException($"×é¼ş {controlType.FullName} ÉĞÎ´ÊµÏÖ¶ÔÓ¦µÄäÖÈ¾Æ÷");
+                throw new ElementException($"ç»„ä»¶ {controlType.FullName} å°šæœªå®ç°å¯¹åº”çš„æ¸²æŸ“å™¨");
             }
             var genericDefine = controlType.GetGenericTypeDefinition();
             if (genericDefine == typeof(ElInput<>))
@@ -195,11 +199,11 @@ namespace Element
             {
                 return this.provider.GetRequiredService<ISwitchRender>();
             }
-            if (genericDefine.GetGenericTypeDefinition() == typeof(ElSelect<>))
+            if (genericDefine == typeof(ElSelect<>))
             {
                 return this.provider.GetRequiredService<ISelectRender>();
             }
-            throw new ElementException($"×é¼ş {controlType.FullName} ÉĞÎ´ÊµÏÖ¶ÔÓ¦µÄäÖÈ¾Æ÷");
+            throw new ElementException($"ç»„ä»¶ {controlType.FullName} å°šæœªå®ç°å¯¹åº”çš„æ¸²æŸ“å™¨");
         }
     }
 }

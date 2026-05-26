@@ -15,5 +15,6 @@ namespace Element
         public string Name { get; internal set; }
         public bool Ignore { get; internal set; }
         public int SortNo { get; internal set; }
+        public Type ValueType { get; internal set; }
     }
 }

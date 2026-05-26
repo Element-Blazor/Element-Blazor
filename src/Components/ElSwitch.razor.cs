@@ -36,6 +36,20 @@ namespace Element
         public string InactiveColor { get; set; } = "#C0CCDA";
         [Parameter]
         public TValue Value { get; set; }
+
+        [Parameter]
+        public EventCallback<TValue> ValueChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<TValue> ModelValueChanged { get; set; }
+
+        [Parameter]
+        public TValue ModelValue
+        {
+            get => Value;
+            set => Value = value;
+        }
+
         [Parameter]
         public TValue Model
         {
@@ -70,6 +84,14 @@ namespace Element
                 Value = InactiveValue;
             }
             SetFieldValue(Value, true);
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(Value);
+            }
             if (OnChanged.HasDelegate)
             {
                 await OnChanged.InvokeAsync(e);

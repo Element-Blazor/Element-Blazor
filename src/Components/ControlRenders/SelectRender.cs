@@ -28,7 +28,7 @@ namespace Element.ControlRenders
             var finalValueType = nullValueType ?? valueType;
             if (renderConfig.InputControlType.IsGenericTypeDefinition && !finalValueType.IsEnum)
             {
-                throw new ElementException("ÏÂÀ­¿òÉú³ÉÖ»Ö§³ÖList»òÃ¶¾ÙÀàÐÍ");
+                throw new ElementException("ä¸‹æ‹‰æ¡†ç”Ÿæˆåªæ”¯æŒListæˆ–æžšä¸¾ç±»åž‹");
             }
             else if (renderConfig.InputControlType.IsGenericTypeDefinition)
             {
@@ -59,14 +59,14 @@ namespace Element.ControlRenders
                     renderTreeBuilder.AddComponentReferenceCapture(9, e => renderConfig.InputControl = e);
                     return;
                 }
-                if (!valueType.IsEnum)
+                if (!finalValueType.IsEnum)
                 {
-                    throw new ElementException("ÏÂÀ­¿òÉú³ÉÖ»Ö§³ÖList»òÃ¶¾ÙÀàÐÍ");
+                    throw new ElementException("ä¸‹æ‹‰æ¡†ç”Ÿæˆåªæ”¯æŒListæˆ–æžšä¸¾ç±»åž‹");
                 }
 
                 renderTreeBuilder.AddAttribute(6, nameof(ElFormItemObject.ChildContent), (RenderFragment)(contentBuilder =>
                 {
-                    var names = Enum.GetNames(valueType);
+                    var names = Enum.GetNames(finalValueType);
                     for (int i = 0; i < names.Length; i++)
                     {
                         var name = names[i];
@@ -84,7 +84,7 @@ namespace Element.ControlRenders
                             text = displayAttr?.Name ?? displayAttr?.Description;
                         }
                         contentBuilder.AddAttribute(8, nameof(ElOption<int>.Text), text ?? name);
-                        contentBuilder.AddAttribute(9, nameof(ElOption<int>.Value), Enum.Parse(valueType, name));
+                        contentBuilder.AddAttribute(9, nameof(ElOption<int>.Value), Enum.Parse(finalValueType, name));
                         contentBuilder.CloseComponent();
                     }
                 }));

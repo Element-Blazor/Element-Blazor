@@ -1,4 +1,4 @@
-﻿using KellermanSoftware.CompareNetObjects;
+using KellermanSoftware.CompareNetObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +52,26 @@ namespace Element
 
         public static object ChangeType(object value, Type type)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
+            var finalType = Nullable.GetUnderlyingType(type) ?? type;
+            if (finalType.IsInstanceOfType(value))
+            {
+                return value;
+            }
+
+            if (finalType.IsEnum)
+            {
+                if (value is string stringValue)
+                {
+                    return Enum.Parse(finalType, stringValue);
+                }
+                return Enum.ToObject(finalType, value);
+            }
+
             object destValue = null;
             if (type.IsGenericType)
             {

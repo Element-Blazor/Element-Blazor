@@ -39,5 +39,6 @@ namespace Element
         public object RawValue { get; set; }
         public object RawLabel { get; set; }
         public bool RawInfoHasSet { get; set; }
+        public Type ValueType { get; set; }
     }
 }

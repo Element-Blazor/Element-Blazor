@@ -21,7 +21,7 @@ namespace Element
             set
             {
                 this.value = value;
-                Form?.NotifyFieldValueChanged(this, value);
+                NotifyValueChanged(value, validate: false);
             }
         }
 
@@ -102,6 +102,10 @@ namespace Element
             ValidationResult = new ValidationResult();
             foreach (var item in Rules)
             {
+                if (item == null)
+                {
+                    continue;
+                }
                 if (item.Validate(Value))
                 {
                     continue;

@@ -48,3 +48,7 @@ Public examples in `demo`, `template`, and `community` use `El*` tags. Element P
 | `LabelPosition` | Form label alignment. |
 | `Prop` | Form item model property. |
 | `Model` | Form model object. |
+| `Rules` | Form-level validation rules keyed by `Prop`/`Name`. |
+| `Validate` / `ValidateField` | Validate all fields or selected fields. |
+| `ResetFields` / `ClearValidate` | Reset field values or clear validation state. |
+| `ScrollToFieldAsync` | Scroll a form field into view. |

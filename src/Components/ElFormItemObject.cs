@@ -11,6 +11,7 @@ namespace Element
     {
         private IList<IValidationRule> parameterRules = new List<IValidationRule>();
         private IList<IValidationRule> resolvedRules = new List<IValidationRule>();
+        private string prop;
         /// <summary>
         /// 是否应用样式，如果不应用，则该组件本身不生成任何 HTML
         /// </summary>
@@ -26,6 +27,8 @@ namespace Element
         internal bool OriginValueHasSet { get; set; } = false;
 
         internal string FieldId => string.IsNullOrWhiteSpace(Name) ? null : $"{Name}-form-item";
+
+        internal string ErrorId => string.IsNullOrWhiteSpace(Name) ? null : $"{Name}-error";
 
         [Parameter]
         public string Label { get; set; }
@@ -46,13 +49,17 @@ namespace Element
         public object LabelWidth { get; set; }
 
         [Parameter]
-        public string Name { get; set; }
+        public string Name
+        {
+            get => prop;
+            set => prop = value;
+        }
 
         [Parameter]
         public string Prop
         {
-            get => Name;
-            set => Name = value;
+            get => prop;
+            set => prop = value;
         }
 
         [Parameter]
@@ -122,6 +129,14 @@ namespace Element
             ResolveRules();
         }
 
+        internal bool HasRules => Rules != null && Rules.Any();
+
+        internal bool HasValidationError => ValidationResult != null && !ValidationResult.IsValid;
+
+        internal string FirstErrorMessage => Error
+            ?? ValidationResult?.ErrorMessages?.FirstOrDefault()
+            ?? string.Empty;
+
         internal void RefreshRules()
         {
             ResolveRules();
@@ -152,7 +167,7 @@ namespace Element
             {
                 var requiredRule = new RequiredRule
                 {
-                    ErrorMessage = RequiredMessage ?? $"请确认{Label}"
+                    ErrorMessage = RequiredMessage ?? (string.IsNullOrWhiteSpace(Label) ? "该字段为必填项" : $"请确认{Label}")
                 };
                 rules.Add(requiredRule);
             }
@@ -194,6 +209,11 @@ namespace Element
             ValidateStatus = string.Empty;
             IsShowing = true;
             MarkAsRequireRender();
+        }
+
+        internal void NotifyValueChanged(object value, bool validate)
+        {
+            Form?.NotifyFieldValueChanged(this, value, validate);
         }
 
         public override void Dispose()

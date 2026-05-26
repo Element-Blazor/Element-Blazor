@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace Element
         private List<FormFieldValidation> lastValidationsReference;
         private object lastValueReference;
         private bool hasResolvedRules;
+        private string labelPosition;
         public ElementReference Container { get; set; }
 
         internal List<ElFormItemObject> Items { get; set; } = new List<ElFormItemObject>();
@@ -65,24 +68,36 @@ namespace Element
         public EventCallback<FormValidateEventArgs> OnValidate { get; set; }
 
         [Parameter]
+        public EventCallback OnSubmit { get; set; }
+
+        [Parameter]
         public object LabelPosition
         {
-            get => LabelAlign.ToString().ToLower();
+            get => string.IsNullOrWhiteSpace(labelPosition) ? NormalizeLabelPosition(LabelAlign) : labelPosition;
             set
             {
                 if (value == null)
                 {
                     return;
                 }
+                var stringValue = Convert.ToString(value);
+                if (string.IsNullOrWhiteSpace(stringValue))
+                {
+                    return;
+                }
                 if (value is LabelAlign directAlign)
                 {
                     LabelAlign = directAlign;
+                    labelPosition = NormalizeLabelPosition(directAlign);
                     return;
                 }
-                if (Enum.TryParse<LabelAlign>(Convert.ToString(value), true, out var labelAlign))
+                if (Enum.TryParse<LabelAlign>(stringValue, true, out var labelAlign))
                 {
                     LabelAlign = labelAlign;
+                    labelPosition = NormalizeLabelPosition(labelAlign);
+                    return;
                 }
+                labelPosition = stringValue.Trim().ToLowerInvariant();
             }
         }
 
@@ -146,6 +161,10 @@ namespace Element
             set => Value = value;
         }
 
+        private Task OnSubmitAsync()
+        {
+            return OnSubmit.HasDelegate ? OnSubmit.InvokeAsync() : Task.CompletedTask;
+        }
 
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)
         {
@@ -189,7 +208,9 @@ namespace Element
             builder.AddAttribute(2, "class", string.Join(" ", clsList));
             builder.AddAttribute(3, "style", Style);
             builder.AddElementReferenceCapture(4, value => Container = value);
-            TypeInference.CreateCascadingValue_0(builder, 5, 6, this, 7, (__builder2) =>
+            builder.AddAttribute(5, "onsubmit", EventCallback.Factory.Create(this, OnSubmitAsync));
+            builder.AddEventPreventDefaultAttribute(6, "onsubmit", true);
+            TypeInference.CreateCascadingValue_0(builder, 7, 8, this, 9, (__builder2) =>
              {
                  if (EntityType != null)
                  {
@@ -218,6 +239,7 @@ namespace Element
                                  formItemConfig.InputControlRender.Render(inputControlBuilder, formItemConfig);
                              }
                              ));
+                             formItemsBuilder.AddAttribute(9, nameof(ElFormItemObject.EnableAlwaysRender), true);
                              formItemsBuilder.CloseComponent();
                          }
                          if (Buttons != null)
@@ -355,6 +377,11 @@ namespace Element
 
         public void Reset()
         {
+            ResetFields();
+        }
+
+        public void ResetFields()
+        {
             foreach (var item in Items)
             {
                 item.MarkAsRequireRender();
@@ -375,6 +402,16 @@ namespace Element
             StateHasChanged();
         }
 
+        public void ResetField(string prop)
+        {
+            ResetFields(prop);
+        }
+
+        public void ResetFields(IEnumerable<string> props)
+        {
+            ResetFields(props?.ToArray() ?? Array.Empty<string>());
+        }
+
         public void ClearValidate(params string[] props)
         {
             foreach (var item in FilterItems(props))
@@ -383,6 +420,11 @@ namespace Element
             }
             RequireRender = true;
             StateHasChanged();
+        }
+
+        public void ClearValidate(IEnumerable<string> props)
+        {
+            ClearValidate(props?.ToArray() ?? Array.Empty<string>());
         }
 
         public ElFormItemObject GetField(string prop)
@@ -395,29 +437,27 @@ namespace Element
             return FilterItems(prop).FirstOrDefault();
         }
 
+        public IReadOnlyList<ElFormItemObject> GetFields(params string[] props)
+        {
+            return FilterItems(props).ToList();
+        }
+
         public bool ValidateField(params string[] props)
         {
-            var items = FilterItems(props).ToList();
-            RequireRender = true;
-            foreach (var item in items)
-            {
-                item.MarkAsRequireRender();
-                item.Validate();
-                item.IsShowing = true;
-            }
-            var isValid = items.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
-            if (!isValid)
-            {
-                ShowErrorMessage();
-            }
-            if (ScrollToError)
-            {
-                _ = ScrollToFirstErrorAsync();
-            }
-            return isValid;
+            return ValidateItems(FilterItems(props), scrollToError: ScrollToError);
+        }
+
+        public bool ValidateField(IEnumerable<string> props)
+        {
+            return ValidateField(props?.ToArray() ?? Array.Empty<string>());
         }
 
         public Task<bool> ValidateFieldAsync(params string[] props)
+        {
+            return Task.FromResult(ValidateField(props));
+        }
+
+        public Task<bool> ValidateFieldAsync(IEnumerable<string> props)
         {
             return Task.FromResult(ValidateField(props));
         }
@@ -442,23 +482,7 @@ namespace Element
 
         public bool Validate()
         {
-            RequireRender = true;
-            foreach (var item in Items)
-            {
-                item.MarkAsRequireRender();
-                item.Validate();
-                item.IsShowing = true;
-            }
-            var isValid = Items.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
-            if (!isValid)
-            {
-                ShowErrorMessage();
-            }
-            if (ScrollToError)
-            {
-                _ = ScrollToFirstErrorAsync();
-            }
-            return isValid;
+            return ValidateItems(Items, scrollToError: ScrollToError);
         }
 
         public Task<bool> ValidateAsync()
@@ -466,7 +490,7 @@ namespace Element
             return Task.FromResult(Validate());
         }
 
-        internal void RegisterInput(string prop, string id, object input)
+        internal void RegisterInput(string prop, string id, object input, ElFormItemObject field = null)
         {
             if (string.IsNullOrWhiteSpace(prop) || string.IsNullOrWhiteSpace(id) || input == null)
             {
@@ -474,7 +498,7 @@ namespace Element
             }
 
             inputRegistrations.RemoveAll(x => ReferenceEquals(x.Input, input));
-            inputRegistrations.Add(new FormInputRegistration(prop, id, input));
+            inputRegistrations.Add(new FormInputRegistration(prop, id, input, field));
         }
 
         internal void UnregisterInput(object input)
@@ -503,11 +527,11 @@ namespace Element
             Items.Remove(item);
             if (!string.IsNullOrWhiteSpace(item.Name))
             {
-                inputRegistrations.RemoveAll(x => x.Prop == item.Name);
+                inputRegistrations.RemoveAll(x => x.Prop == item.Name && (ReferenceEquals(x.Field, item) || x.Field == null));
             }
         }
 
-        internal void NotifyFieldValueChanged(ElFormItemObject item, object value)
+        internal void NotifyFieldValueChanged(ElFormItemObject item, object value, bool validate = false)
         {
             if (item == null || string.IsNullOrWhiteSpace(item.Name))
             {
@@ -515,6 +539,12 @@ namespace Element
             }
 
             Values[item.Name] = value;
+            if (validate)
+            {
+                item.MarkAsRequireRender();
+                item.Validate();
+                item.ShowErrorMessage();
+            }
             if (Value == null)
             {
                 return;
@@ -545,9 +575,9 @@ namespace Element
             }
             if (width is string stringWidth)
             {
-                return stringWidth;
+                return ElementCssUtility.NormalizeCssSize(stringWidth);
             }
-            return $"{width}px";
+            return $"{Convert.ToString(width, System.Globalization.CultureInfo.InvariantCulture)}px";
         }
 
         internal string ResolveInputId(ElFormItemObject item)
@@ -566,7 +596,35 @@ namespace Element
                 return null;
             }
 
-            return inputRegistrations.LastOrDefault(x => x.Prop == item.Name).Id;
+            return inputRegistrations.LastOrDefault(x => x.Prop == item.Name && ReferenceEquals(x.Field, item)).Id
+                ?? inputRegistrations.LastOrDefault(x => x.Prop == item.Name).Id;
+        }
+
+        private bool ValidateItems(IEnumerable<ElFormItemObject> items, bool scrollToError)
+        {
+            var itemList = items.Where(x => x != null).ToList();
+            RequireRender = true;
+            foreach (var item in itemList)
+            {
+                item.MarkAsRequireRender();
+                item.Validate();
+                item.IsShowing = true;
+            }
+            var isValid = itemList.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
+            if (!isValid)
+            {
+                ShowErrorMessage();
+            }
+            if (!isValid && scrollToError)
+            {
+                var firstErrorItem = itemList.FirstOrDefault(x => x.ValidationResult != null && !x.ValidationResult.IsValid);
+                if (firstErrorItem != null)
+                {
+                    _ = ScrollToFieldAsync(firstErrorItem.Name);
+                }
+            }
+            StateHasChanged();
+            return isValid;
         }
 
         private Task ScrollToFirstErrorAsync()
@@ -586,7 +644,8 @@ namespace Element
                 return Items;
             }
 
-            return Items.Where(x => props.Contains(x.Name) || props.Contains(x.Prop));
+            var propSet = new HashSet<string>(props.Where(x => !string.IsNullOrWhiteSpace(x)), StringComparer.OrdinalIgnoreCase);
+            return Items.Where(x => propSet.Contains(x.Name) || propSet.Contains(x.Prop));
         }
 
         private void RefreshFieldInitialValues(bool resetCurrentValue)
@@ -635,6 +694,13 @@ namespace Element
             return TypeHelper.ChangeType(value, destinationType);
         }
 
+        private static string NormalizeLabelPosition(LabelAlign labelAlign) => labelAlign switch
+        {
+            LabelAlign.Left => "left",
+            LabelAlign.Top => "top",
+            _ => "right"
+        };
+
         private static string GetSizeCssValue(InputSize size) => size switch
         {
             InputSize.Large => "large",
@@ -644,11 +710,12 @@ namespace Element
 
         private readonly struct FormInputRegistration
         {
-            public FormInputRegistration(string prop, string id, object input)
+            public FormInputRegistration(string prop, string id, object input, ElFormItemObject field)
             {
                 Prop = prop;
                 Id = id;
                 Input = input;
+                Field = field;
             }
 
             public string Prop { get; }
@@ -656,6 +723,8 @@ namespace Element
             public string Id { get; }
 
             public object Input { get; }
+
+            public ElFormItemObject Field { get; }
         }
     }
 

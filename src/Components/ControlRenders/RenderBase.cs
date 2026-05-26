@@ -14,10 +14,19 @@ namespace Element.ControlRenders
         {
             Type valueType = CreateTwoWayBinding(config, builder, startIndex);
             var finalType = Nullable.GetUnderlyingType(valueType) ?? valueType;
-            var editingValue = config.EditingValue?.ToString();
+            var value = config.EditingValue ?? config.RawValue;
+            if (value == null)
+            {
+                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Nullable.GetUnderlyingType(valueType) != null ? null : GetDefaultValue(valueType));
+                return;
+            }
             if (finalType.IsEnum)
             {
-                if (config.RawValue == null && finalType != valueType)
+                if (finalType.IsInstanceOfType(value))
+                {
+                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), value);
+                }
+                else if (config.RawValue == null && finalType != valueType)
                 {
                     builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), (object)null);
                 }
@@ -27,24 +36,24 @@ namespace Element.ControlRenders
                 }
                 else
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Enum.Parse(finalType, editingValue));
+                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Enum.Parse(finalType, Convert.ToString(value)));
                 }
             }
             else
             {
-                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Convert.ChangeType(editingValue, valueType));
+                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), TypeHelper.ChangeType(value, valueType));
             }
         }
 
         protected Type CreateTwoWayBinding(RenderConfig config, RenderTreeBuilder builder, int startIndex, string propertyName = nameof(ElInput<string>.ValueChanged), Type valueType = null)
         {
-            valueType = valueType ?? config.InputControlType.GetGenericArguments()[0];
+            valueType = valueType ?? config.ValueType ?? config.InputControlType.GetGenericArguments()[0];
             if (config.Page == null)
             {
-                Console.WriteLine("Ã»ÓÐË«Ïò°ó¶¨");
+                Console.WriteLine("æ²¡æœ‰åŒå‘ç»‘å®š");
                 return valueType;
             }
-            Console.WriteLine("¿ªÊ¼Ë«Ïò°ó¶¨");
+            Console.WriteLine("å¼€å§‹åŒå‘ç»‘å®š");
             var createMethod = typeof(EventCallbackFactory).GetMethods().FirstOrDefault(x =>
             {
                 if (!x.IsGenericMethod || !x.IsPublic)
@@ -69,6 +78,11 @@ namespace Element.ControlRenders
             var setterMethod = createMethod.Invoke(EventCallback.Factory, new object[] { config.Page, settter });
             builder.AddAttribute(startIndex, propertyName, Convert.ChangeType(setterMethod, typeof(EventCallback<>).MakeGenericType(valueType)));
             return valueType;
+        }
+
+        private static object GetDefaultValue(Type type)
+        {
+            return type.IsValueType ? Activator.CreateInstance(type) : null;
         }
     }
 }

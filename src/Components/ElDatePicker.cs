@@ -10,7 +10,7 @@ namespace Element
     public class ElDatePicker : ElInput<DateTime?>
     {
         /// <summary>
-        /// ÏÔÊ¾µÄÈÕÆÚ¸ñÊ½
+        /// æ˜¾ç¤ºçš„æ—¥æœŸæ ¼å¼
         /// </summary>
         [Parameter]
         public string Format { get; set; } = "yyyy-MM-dd";
@@ -19,33 +19,33 @@ namespace Element
         /// Placeholder
         /// </summary>
         [Parameter]
-        public override string Placeholder { get; set; } = "ÇëÑ¡ÔñÈÕÆÚ";
+        public override string Placeholder { get; set; } = "è¯·é€‰æ‹©æ—¥æœŸ";
 
         /// <summary>
-        /// Í¼±ê
+        /// å›¾æ ‡
         /// </summary>
         public override string PrefixIcon { get; set; } = "el-icon-date";
 
         /// <summary>
-        /// ÊäÈë¿òÑùÊ½Àà£¬Ò»°ãÇë²»ÒªÉèÖÃ¸ÃÊôĞÔ
+        /// è¾“å…¥æ¡†æ ·å¼ç±»ï¼Œä¸€èˆ¬è¯·ä¸è¦è®¾ç½®è¯¥å±æ€§
         /// </summary>
         [Parameter]
         public override string Cls { get; set; } = "el-date-editor el-input--prefix el-input--suffix el-date-editor--date";
 
         /// <summary>
-        /// »ñÈ¡Ñ¡ÔñµÄÈÕÆÚ
+        /// è·å–é€‰æ‹©çš„æ—¥æœŸ
         /// </summary>
         [Parameter]
         public DateTime? Date { get; set; }
 
         /// <summary>
-        /// ÈÕÆÚ±»Ñ¡ÔñÊ±´¥·¢
+        /// æ—¥æœŸè¢«é€‰æ‹©æ—¶è§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<DateTime?> DateChanged { get; set; }
 
         /// <summary>
-        /// Ê±¼ä¸ñÊ½»¯Î¯ÍĞ
+        /// æ—¶é—´æ ¼å¼åŒ–å§”æ‰˜
         /// </summary>
         public override Func<DateTime?, string> Formatter { get; set; }
 
@@ -86,6 +86,14 @@ namespace Element
             if (DateChanged.HasDelegate)
             {
                 _ = DateChanged.InvokeAsync(Date);
+            }
+            if (ValueChanged.HasDelegate)
+            {
+                _ = ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                _ = ModelValueChanged.InvokeAsync(Value);
             }
             SetFieldValue(Date, true);
         }

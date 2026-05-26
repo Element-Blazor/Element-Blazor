@@ -56,7 +56,7 @@ namespace Element
                 {
                     return true;
                 }
-                if (!property.PropertyType.IsGenericParameter)
+                if (!property.PropertyType.IsGenericType)
                 {
                     return false;
                 }
@@ -94,7 +94,7 @@ namespace Element
             var renderType = editorRenderMap.FirstOrDefault(x => x.Key(propertyInfo, control)).Value;
             if (renderType == null)
             {
-                throw new ElementException($"ÊôĞÔ {propertyInfo.Name} ÀàĞÍÎª {propertyInfo.PropertyType} ¶ÔÓ¦µÄäÖÈ¾Æ÷²»´æÔÚ");
+                throw new ElementException($"å±æ€§ {propertyInfo.Name} ç±»å‹ä¸º {propertyInfo.PropertyType} å¯¹åº”çš„æ¸²æŸ“å™¨ä¸å­˜åœ¨");
             }
             Type dataSourceLoader = null;
             if (control.IsGenericType)
