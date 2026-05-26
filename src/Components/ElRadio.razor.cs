@@ -60,6 +60,8 @@ namespace Element
         public bool IsBordered { get; set; }
         [Parameter]
         public bool IsDisabled { get; set; }
+
+        internal bool EffectiveDisabled => IsDisabled || (RadioGroup?.EffectiveDisabled ?? false) || (FormItem?.Form?.Disabled ?? false);
         [Parameter]
         public bool Disabled
         {
@@ -122,7 +124,7 @@ namespace Element
 
         protected void ChangeRadio(MouseEventArgs e)
         {
-            if (IsDisabled)
+            if (EffectiveDisabled)
             {
                 return;
             }

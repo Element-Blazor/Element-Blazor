@@ -1,5 +1,16 @@
 @inherits ElementComponentBase
 
-<CascadingValue Value="ResolvedConfig" IsFixed="false">
-    @ChildContent
-</CascadingValue>
+@if (ShouldRewriteNamespace)
+{
+    <span @ref="NamespaceRoot" style="display:contents">
+        <CascadingValue Value="ResolvedConfig" IsFixed="false">
+            @ChildContent
+        </CascadingValue>
+    </span>
+}
+else
+{
+    <CascadingValue Value="ResolvedConfig" IsFixed="false">
+        @ChildContent
+    </CascadingValue>
+}

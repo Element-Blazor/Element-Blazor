@@ -37,7 +37,7 @@ window.execSelect = function (el) {
     }
     el.select();
 }
-window.scrollElementIntoViewById = function (id) {
+window.scrollElementIntoViewById = function (id, options) {
     if (!id) {
         return;
     }
@@ -45,8 +45,84 @@ window.scrollElementIntoViewById = function (id) {
     if (!el) {
         return;
     }
+    if (options) {
+        try {
+            el.scrollIntoView(JSON.parse(options));
+            return;
+        } catch (e) {
+        }
+    }
     el.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
+window.elementConfigApplyNamespace = function (root, namespace, defaultNamespace) {
+    if (!root || !namespace || !defaultNamespace || namespace === defaultNamespace) {
+        return;
+    }
+
+    var previousNamespace = root.dataset.elementNamespace || defaultNamespace;
+    root.dataset.elementNamespace = namespace;
+
+    var rewriteElement = function (el) {
+        if (!el || !el.classList || root.__elementApplyingNamespace) {
+            return;
+        }
+
+        root.__elementApplyingNamespace = true;
+        try {
+            Array.from(el.classList).forEach(function (className) {
+                var prefix = null;
+                if (className.indexOf(defaultNamespace + "-") === 0) {
+                    prefix = defaultNamespace + "-";
+                } else if (previousNamespace && className.indexOf(previousNamespace + "-") === 0) {
+                    prefix = previousNamespace + "-";
+                }
+
+                if (!prefix) {
+                    return;
+                }
+
+                el.classList.remove(className);
+                el.classList.add(namespace + "-" + className.substring(prefix.length));
+            });
+        } finally {
+            root.__elementApplyingNamespace = false;
+        }
+    };
+
+    var rewriteTree = function (el) {
+        rewriteElement(el);
+        if (!el || !el.querySelectorAll) {
+            return;
+        }
+        el.querySelectorAll("[class]").forEach(rewriteElement);
+    };
+
+    rewriteTree(root);
+    if (root.__elementNamespaceObserver) {
+        root.__elementNamespaceObserver.disconnect();
+    }
+
+    root.__elementNamespaceObserver = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === "attributes") {
+                rewriteElement(mutation.target);
+                return;
+            }
+
+            mutation.addedNodes.forEach(function (node) {
+                if (node.nodeType === 1) {
+                    rewriteTree(node);
+                }
+            });
+        });
+    });
+    root.__elementNamespaceObserver.observe(root, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        attributeFilter: ["class"]
+    });
+};
 window.upload = function (el) {
     if (!el) {
         return;

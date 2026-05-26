@@ -24,6 +24,9 @@ namespace Element
         /// 初始值是否已设置
         /// </summary>
         internal bool OriginValueHasSet { get; set; } = false;
+
+        internal string FieldId => string.IsNullOrWhiteSpace(Name) ? null : $"{Name}-form-item";
+
         [Parameter]
         public string Label { get; set; }
 

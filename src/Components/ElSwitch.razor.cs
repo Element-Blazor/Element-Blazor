@@ -48,6 +48,8 @@ namespace Element
 
         public event Func<MouseEventArgs, Task> OnChangedAsync;
 
+        protected bool EffectiveDisabled => IsDisabled || (FormItem?.Form?.Disabled ?? false);
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -55,7 +57,7 @@ namespace Element
         }
         protected async Task OnInternalSwitchChangedAsync(MouseEventArgs e)
         {
-            if (IsDisabled)
+            if (EffectiveDisabled)
             {
                 return;
             }

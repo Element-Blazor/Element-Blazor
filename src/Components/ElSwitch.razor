@@ -29,14 +29,14 @@
 
     var isDisabled = string.Empty;
     var styleText = $"border-color: rgb(19, 206, 102); background-color: {backgroundColor};";
-    if (IsDisabled)
+    if (EffectiveDisabled)
     {
         isDisabled = "is-disabled";
         styleText = string.Empty;
     }
 }
 <div role="switch" class="el-switch @isChecked @isDisabled" aria-checked="@ariaChecked">
-    <input type="checkbox" name="" disabled="@IsDisabled" true-value="@ActiveValue" class="el-switch__input">
+    <input type="checkbox" name="" disabled="@EffectiveDisabled" true-value="@ActiveValue" class="el-switch__input">
     @if (showText)
     {
         <span class="el-switch__label el-switch__label--left @leftIsActive">

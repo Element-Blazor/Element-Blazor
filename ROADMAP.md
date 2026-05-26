@@ -83,7 +83,7 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Config Provider | `ElConfigProvider`、`ElementConfig` | 🟡 部分对齐 | 已提供尺寸、命名空间、z-index、locale 级联配置；命名空间尚未全量重写 DOM class。 |
+| Config Provider | `ElConfigProvider`、`ElementConfig` | 🟢 已对齐 | 已提供尺寸、命名空间、z-index、locale 级联配置，并在自定义命名空间时重写子树 DOM class。 |
 
 ### Form 表单组件
 
@@ -97,7 +97,7 @@
 | Date Picker Panel | 内部日期面板，缺少公开入口 | 🔴 缺失 | 抽出公开 `ElDatePickerPanel`。 |
 | Date Picker | `ElDatePicker` | 🟡 部分对齐 | 补范围、快捷项、禁用日期、格式和值格式。 |
 | DateTime Picker | 缺少 `ElDateTimePicker` | 🔴 缺失 | 在 Date Picker 基础上补时间选择。 |
-| Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟡 部分对齐 | 补齐校验事件、label、scroll、disabled、size 细节。 |
+| Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟡 部分对齐 | 已推进 size、disabled、scroll 细节；继续补齐 label、校验状态和表单项交互。 |
 | Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
 | Input Number | 缺少 `ElInputNumber` | 🔴 缺失 | 实现步进、精度、范围和按钮位置。 |
 | Input Tag | 缺少 `ElInputTag` | 🔴 缺失 | 实现标签输入、删除、限制和触发键。 |

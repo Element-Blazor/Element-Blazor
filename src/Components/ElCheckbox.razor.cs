@@ -166,7 +166,7 @@ namespace Element
         {
             get
             {
-                return isDisabled == "is-disabled";
+                return isDisabled == "is-disabled" || (CheckBoxGroup?.EffectiveDisabled ?? false) || (FormItem?.Form?.Disabled ?? false);
             }
             set
             {

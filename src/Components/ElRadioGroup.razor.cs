@@ -14,7 +14,35 @@ namespace Element
         [Parameter]
         public RadioSize Size { get; set; }
 
-        internal RadioSize EffectiveSize => ResolveRadioSize(Size);
+        internal RadioSize EffectiveSize
+        {
+            get
+            {
+                if (Size != RadioSize.Default)
+                {
+                    return ResolveRadioSize(Size);
+                }
+
+                return FormItem?.Form?.EffectiveSize switch
+                {
+                    InputSize.Large => RadioSize.Medium,
+                    InputSize.Small => RadioSize.Small,
+                    _ => ResolveRadioSize(Size)
+                };
+            }
+        }
+
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
+
+        internal bool EffectiveDisabled => Disabled || (FormItem?.Form?.Disabled ?? false);
 
         [Parameter]
         public EventCallback<ElementChangeEventArgs<TValue>> SelectedValueChanging { get; set; }

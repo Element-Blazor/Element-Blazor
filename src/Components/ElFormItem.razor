@@ -34,6 +34,14 @@
             clsList.Add($"el-form-item--{sizeCssValue}");
         }
     }
+    else
+    {
+        var formSizeCssValue = Form.EffectiveSize == InputSize.Large ? "large" : Form.EffectiveSize == InputSize.Small ? "small" : null;
+        if (formSizeCssValue != null)
+        {
+            clsList.Add($"el-form-item--{formSizeCssValue}");
+        }
+    }
     var finalLabelPosition = string.IsNullOrWhiteSpace(LabelPosition) ? Convert.ToString(Form.LabelPosition) : LabelPosition;
     if (!string.IsNullOrWhiteSpace(finalLabelPosition))
     {
@@ -70,7 +78,7 @@
 }
 @if (ApplyStyle)
 {
-    <div class="@string.Join(" ", clsList)" role="@(isGroup ? "group" : null)" aria-labelledby="@(isGroup ? $"{Name}-label" : null)" style="@formItemCssBuilder">
+    <div id="@FieldId" class="@string.Join(" ", clsList)" role="@(isGroup ? "group" : null)" aria-labelledby="@(isGroup ? $"{Name}-label" : null)" style="@formItemCssBuilder">
         @if (!string.IsNullOrWhiteSpace(Image))
         {
             <label id="@($"{Name}-label")" for="@labelFor" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>

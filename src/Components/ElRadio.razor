@@ -26,13 +26,22 @@
     var checkedValue = TypeHelper.Equal(Value, currentSelectedValue);
     var isDisabled = string.Empty;
     var ariaDisabled = false;
-    if (IsDisabled)
+    if (EffectiveDisabled)
     {
         isDisabled = "is-disabled";
         ariaDisabled = true;
     }
     var isBordered = IsBordered ? "is-bordered" : string.Empty;
-    var effectiveSize = RadioGroup == null ? ResolveRadioSize(Size) : RadioGroup.EffectiveSize;
+    var effectiveSize = RadioGroup == null
+        ? Size != RadioSize.Default
+            ? ResolveRadioSize(Size)
+            : FormItem?.Form?.EffectiveSize switch
+            {
+                InputSize.Large => RadioSize.Medium,
+                InputSize.Small => RadioSize.Small,
+                _ => ResolveRadioSize(Size)
+            }
+        : RadioGroup.EffectiveSize;
     var size = effectiveSize == RadioSize.Default
         ? "el-radio-button--default"
         : "el-radio--" + effectiveSize.ToString().ToLowerInvariant();
@@ -40,7 +49,7 @@
 <label role="radio" tabindex="0" class="el-radio @isChecked @isDisabled @isBordered @size" @onclick="ChangeRadio" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
     <span class="el-radio__input @isChecked @isDisabled">
         <span class="el-radio__inner"></span>
-        <input type="radio" aria-hidden="true" tabindex="-1" checked="@checkedValue" class="el-radio__original" value="@currentSelectedValue">
+        <input type="radio" aria-hidden="true" tabindex="-1" disabled="@EffectiveDisabled" checked="@checkedValue" class="el-radio__original" value="@currentSelectedValue">
     </span>
     <span class="el-radio__label">@ChildContent</span>
 </label>

@@ -56,6 +56,9 @@ namespace Element
         public bool ScrollToError { get; set; }
 
         [Parameter]
+        public string ScrollIntoViewOptions { get; set; }
+
+        [Parameter]
         public IDictionary<string, IList<IValidationRule>> Rules { get; set; }
 
         [Parameter]
@@ -414,14 +417,22 @@ namespace Element
             return isValid;
         }
 
+        public Task<bool> ValidateFieldAsync(params string[] props)
+        {
+            return Task.FromResult(ValidateField(props));
+        }
+
         public async Task ScrollToFieldAsync(string prop)
         {
-            var id = ResolveInputId(GetField(prop));
+            var field = GetField(prop);
+            var id = field?.ApplyStyle == true && !string.IsNullOrWhiteSpace(field.FieldId)
+                ? field.FieldId
+                : ResolveInputId(field);
             if (string.IsNullOrWhiteSpace(id))
             {
                 return;
             }
-            await JSRuntime.InvokeVoidAsync("scrollElementIntoViewById", id);
+            await JSRuntime.InvokeVoidAsync("scrollElementIntoViewById", id, ScrollIntoViewOptions);
         }
 
         public bool IsValid()

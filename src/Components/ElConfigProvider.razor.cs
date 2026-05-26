@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
+using System.Threading.Tasks;
 
 namespace Element
 {
     public partial class ElConfigProvider : ElementComponentBase
     {
+        private string appliedNamespace;
+
+        protected ElementReference NamespaceRoot { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -24,6 +30,8 @@ namespace Element
         public string Locale { get; set; }
 
         protected ElementConfig ResolvedConfig { get; private set; } = new ElementConfig();
+
+        protected bool ShouldRewriteNamespace => ResolvedConfig.Namespace != ElementConfig.DefaultNamespace;
 
         protected override void OnParametersSet()
         {
@@ -50,6 +58,22 @@ namespace Element
                 config.Locale = Locale.Trim();
             }
             ResolvedConfig = config;
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            await base.OnAfterRenderAsync(firstRender);
+            if (!ShouldRewriteNamespace || appliedNamespace == ResolvedConfig.Namespace)
+            {
+                return;
+            }
+
+            appliedNamespace = ResolvedConfig.Namespace;
+            await JSRuntime.InvokeVoidAsync(
+                "elementConfigApplyNamespace",
+                NamespaceRoot,
+                ResolvedConfig.Namespace,
+                ElementConfig.DefaultNamespace);
         }
 
         private static ElementConfig Merge(ElementConfig inheritedConfig, ElementConfig config)

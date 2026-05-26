@@ -13,6 +13,18 @@ namespace Element
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
+        [Parameter]
+        public bool Disabled { get; set; }
+
+        [Parameter]
+        public bool IsDisabled
+        {
+            get => Disabled;
+            set => Disabled = value;
+        }
+
+        internal bool EffectiveDisabled => Disabled || (FormItem?.Form?.Disabled ?? false);
+
         internal ObservableCollection<TValue> SelectedItems { get; set; } = new ObservableCollection<TValue>();
 
         protected override void OnInitialized()
