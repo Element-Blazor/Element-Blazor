@@ -71,6 +71,12 @@ namespace Element
         public EventCallback OnSubmit { get; set; }
 
         [Parameter]
+        public EventCallback OnValidSubmit { get; set; }
+
+        [Parameter]
+        public EventCallback OnInvalidSubmit { get; set; }
+
+        [Parameter]
         public object LabelPosition
         {
             get => string.IsNullOrWhiteSpace(labelPosition) ? NormalizeLabelPosition(LabelAlign) : labelPosition;
@@ -161,9 +167,25 @@ namespace Element
             set => Value = value;
         }
 
-        private Task OnSubmitAsync()
+        private async Task OnSubmitAsync()
         {
-            return OnSubmit.HasDelegate ? OnSubmit.InvokeAsync() : Task.CompletedTask;
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync();
+            }
+
+            if (!OnValidSubmit.HasDelegate && !OnInvalidSubmit.HasDelegate)
+            {
+                return;
+            }
+
+            if (Validate())
+            {
+                await OnValidSubmit.InvokeAsync();
+                return;
+            }
+
+            await OnInvalidSubmit.InvokeAsync();
         }
 
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)

@@ -89,7 +89,7 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Autocomplete | `ElAutocomplete` | 🟡 部分对齐 | 已实现输入建议、异步查询、键盘选择、清空、禁用、尺寸和表单校验联动；继续补齐远程节流细节、插槽示例和测试。 |
+| Autocomplete | `ElAutocomplete` | 🟢 已对齐 | 已实现输入建议、异步查询、远程节流与旧请求作废、键盘选择、清空、禁用、尺寸、表单校验联动、项模板插槽示例和组件测试。 |
 | Cascader | `ElCascader`、`CascaderOption` | 🟡 部分对齐 | 已实现级联数据模型、面板、选择路径、清空、禁用、尺寸和表单校验联动；继续补齐多选、懒加载、过滤和插槽示例。 |
 | Checkbox | `ElCheckbox`、`ElCheckboxGroup`、`ElCheckboxButton` | 🟡 部分对齐 | 补齐 indeterminate、limit、尺寸和测试。 |
 | Color Picker Panel | 缺少 `ElColorPickerPanel` | 🔴 缺失 | 先抽象颜色模型和面板。 |
@@ -97,7 +97,7 @@
 | Date Picker Panel | 内部日期面板，缺少公开入口 | 🔴 缺失 | 抽出公开 `ElDatePickerPanel`。 |
 | Date Picker | `ElDatePicker` | 🟡 部分对齐 | 补范围、快捷项、禁用日期、格式和值格式。 |
 | DateTime Picker | 缺少 `ElDateTimePicker` | 🔴 缺失 | 在 Date Picker 基础上补时间选择。 |
-| Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟡 部分对齐 | 已推进 size、disabled、scroll 细节；继续补齐 label、校验状态和表单项交互。 |
+| Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟢 已对齐 | 已补齐 label、size、disabled、rules、字段校验、提交、重置、清理校验、字段滚动和自动生成表单绑定闭环。 |
 | Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
 | Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |
 | Input Tag | `ElInputTag` | 🟡 部分对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交和表单校验联动；继续补齐拖拽排序、组合键细节和测试。 |

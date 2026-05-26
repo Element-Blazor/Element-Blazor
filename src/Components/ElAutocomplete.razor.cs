@@ -19,6 +19,7 @@ namespace Element
         private ElementReference autocompleteElement;
         private ElInput<string> input;
         private HtmlPropertyBuilder wrapperClsBuilder;
+        private long queryVersion;
         private int highlightedIndex = -1;
         private bool loading;
         private InputSize effectiveSize = InputSize.Normal;
@@ -54,6 +55,13 @@ namespace Element
 
         [Parameter]
         public RenderFragment<AutocompleteOption> ItemTemplate { get; set; }
+
+        [Parameter]
+        public RenderFragment<AutocompleteOption> SuggestionItemTemplate
+        {
+            get => ItemTemplate;
+            set => ItemTemplate = value;
+        }
 
         [Parameter]
         public string Placeholder { get; set; } = "请输入内容";
@@ -253,6 +261,7 @@ namespace Element
             Value = string.Empty;
             currentSuggestions.Clear();
             highlightedIndex = -1;
+            CancelPendingQuery();
             SetFieldValue(Value, ValidateEvent);
             await CloseDropDownAsync();
         }
@@ -301,10 +310,10 @@ namespace Element
                 return;
             }
 
-            queryCancellationTokenSource?.Cancel();
-            queryCancellationTokenSource?.Dispose();
+            CancelPendingQuery();
             queryCancellationTokenSource = new CancellationTokenSource();
             var token = queryCancellationTokenSource.Token;
+            var currentQueryVersion = Interlocked.Increment(ref queryVersion);
 
             if (debounce && Debounce > 0)
             {
@@ -342,11 +351,16 @@ namespace Element
             }
             catch
             {
+                if (!IsCurrentQuery(currentQueryVersion, token))
+                {
+                    return;
+                }
+
                 SetLoading(false);
                 throw;
             }
 
-            if (token.IsCancellationRequested)
+            if (!IsCurrentQuery(currentQueryVersion, token))
             {
                 return;
             }
@@ -509,6 +523,8 @@ namespace Element
         {
             Value = string.Empty;
             currentSuggestions.Clear();
+            highlightedIndex = -1;
+            CancelPendingQuery();
             SetFieldValue(Value, ValidateEvent);
             if (ValueChanged.HasDelegate)
             {
@@ -523,13 +539,26 @@ namespace Element
 
         public override void Dispose()
         {
-            queryCancellationTokenSource?.Cancel();
-            queryCancellationTokenSource?.Dispose();
+            CancelPendingQuery();
             if (dropDownOption != null)
             {
                 PopupService.SelectDropDownOptions.Remove(dropDownOption);
             }
             base.Dispose();
+        }
+
+        private void CancelPendingQuery()
+        {
+            Interlocked.Increment(ref queryVersion);
+            queryCancellationTokenSource?.Cancel();
+            queryCancellationTokenSource?.Dispose();
+            queryCancellationTokenSource = null;
+            loading = false;
+        }
+
+        private bool IsCurrentQuery(long version, CancellationToken token)
+        {
+            return !token.IsCancellationRequested && Interlocked.Read(ref queryVersion) == version;
         }
 
         private void SetLoading(bool value)
@@ -584,6 +613,10 @@ namespace Element
         }
 
         private bool IsDropDownOpen => dropDownOption != null && dropDownOption.IsShow;
+
+        internal IReadOnlyList<AutocompleteOption> CurrentSuggestions => currentSuggestions;
+
+        internal bool IsInternalLoading => loading;
 
         private bool IsAutocompleteDisabled => effectiveDisabled;
 

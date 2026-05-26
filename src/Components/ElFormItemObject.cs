@@ -131,9 +131,9 @@ namespace Element
 
         internal bool HasRules => Rules != null && Rules.Any();
 
-        internal bool HasValidationError => ValidationResult != null && !ValidationResult.IsValid;
+        public bool HasValidationError => ValidationResult != null && !ValidationResult.IsValid;
 
-        internal string FirstErrorMessage => Error
+        public string FirstErrorMessage => Error
             ?? ValidationResult?.ErrorMessages?.FirstOrDefault()
             ?? string.Empty;
 

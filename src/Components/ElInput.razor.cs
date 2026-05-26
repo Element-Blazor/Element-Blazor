@@ -19,18 +19,18 @@ namespace Element
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
         /// <summary>
-        /// ÊäÈë¿òÀàĞÍ
+        /// è¾“å…¥æ¡†ç±»å‹
         /// </summary>
         [Parameter]
         public InputType Type { get; set; } = InputType.Text;
 
         /// <summary>
-        /// µ±ÊäÈëÖµ´íÎóÊ±ÊÇ·ñÅ×³öÒì³£
+        /// å½“è¾“å…¥å€¼é”™è¯¯æ—¶æ˜¯å¦æŠ›å‡ºå¼‚å¸¸
         /// </summary>
         protected virtual bool ThrowOnInvalidValue { get; } = false;
 
         /// <summary>
-        /// ÔÚÇ°·½¼ÓÈëÔªËØ
+        /// åœ¨å‰æ–¹åŠ å…¥å…ƒç´ 
         /// </summary>
         [Parameter]
         public RenderFragment Prepend { get; set; }
@@ -39,7 +39,7 @@ namespace Element
         public RenderFragment Append { get; set; }
 
         /// <summary>
-        /// ÊÇ·ñÆôÓÃÇå¿Õ°´Å¥
+        /// æ˜¯å¦å¯ç”¨æ¸…ç©ºæŒ‰é’®
         /// </summary>
         [Parameter]
         public bool IsClearButtonClick { get; set; }
@@ -48,13 +48,13 @@ namespace Element
         public EventCallback<bool> EnableClearButtonChanged { get; set; }
 
         /// <summary>
-        /// °´Å¥±³¾°Í¼Æ¬
+        /// æŒ‰é’®èƒŒæ™¯å›¾ç‰‡
         /// </summary>
         [Parameter]
         public string Image { get; set; }
 
         /// <summary>
-        /// ÊäÈë¿ò³ß´ç
+        /// è¾“å…¥æ¡†å°ºå¯¸
         /// </summary>
         [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
@@ -163,7 +163,7 @@ namespace Element
         public EventCallback<TValue> OnCompositionEnd { get; set; }
 
         /// <summary>
-        /// ÈçºÎ¸ñÊ½»¯
+        /// å¦‚ä½•æ ¼å¼åŒ–
         /// </summary>
         [Parameter]
         public virtual Func<TValue, string> Formatter { get; set; } = v => Convert.ToString(v);
@@ -172,7 +172,7 @@ namespace Element
         public virtual Func<string, string> Parser { get; set; }
 
         /// <summary>
-        /// ÊäÈë¿òµÄÖµ
+        /// è¾“å…¥æ¡†çš„å€¼
         /// </summary>
         [Parameter]
         public TValue Value { get; set; }
@@ -185,7 +185,7 @@ namespace Element
         }
 
         /// <summary>
-        /// Öµ¸Ä±äÊ±´¥·¢
+        /// å€¼æ”¹å˜æ—¶è§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<TValue> ValueChanged { get; set; }
@@ -197,7 +197,7 @@ namespace Element
         /// Placeholder
         /// </summary>
         [Parameter]
-        public virtual string Placeholder { get; set; } = "ÇëÊäÈëÄÚÈİ";
+        public virtual string Placeholder { get; set; } = "è¯·è¾“å…¥å†…å®¹";
 
         internal bool IsFocus { get; set; }
 
@@ -222,7 +222,7 @@ namespace Element
         internal ElementReference Content { get; set; }
 
         /// <summary>
-        /// HTML ÔªËØÒıÓÃ
+        /// HTML å…ƒç´ å¼•ç”¨
         /// </summary>
         public ElementReference InputElement { get; set; }
 
@@ -447,7 +447,7 @@ namespace Element
             Id = string.IsNullOrWhiteSpace(Id) && FormItem != null ? generatedInputId : Id;
             if (FormItem?.Form != null)
             {
-                FormItem.Form.RegisterInput(FormItem.Name, Id, this);
+                FormItem.Form.RegisterInput(FormItem.Name, Id, this, FormItem);
             }
             var inputSizeCssValue = GetSizeCssValue(effectiveSize);
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
