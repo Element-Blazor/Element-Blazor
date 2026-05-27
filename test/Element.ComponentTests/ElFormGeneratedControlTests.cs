@@ -65,6 +65,77 @@ namespace Element.ComponentTests
             Assert.Equal("@alice", model.Assignee);
         }
 
+        [Fact]
+        public void GeneratedInputAppliesAttributeConfiguration()
+        {
+            var model = new InputFormModel
+            {
+                Description = "Element"
+            };
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(InputFormModel))
+                .Add(x => x.Value, model));
+
+            var wrapper = cut.Find(".el-textarea");
+            var textarea = cut.Find("textarea");
+
+            Assert.Contains("el-textarea--large", wrapper.ClassList);
+            Assert.Equal("Describe", textarea.GetAttribute("placeholder"));
+            Assert.Equal("7", textarea.GetAttribute("maxlength"));
+            Assert.Equal("3", textarea.GetAttribute("minlength"));
+            Assert.Equal("4", textarea.GetAttribute("rows"));
+            Assert.Equal("input-form", textarea.GetAttribute("form"));
+            Assert.Equal("description input", textarea.GetAttribute("aria-label"));
+            Assert.Equal("text", textarea.GetAttribute("inputmode"));
+            Assert.Equal("2", textarea.GetAttribute("tabindex"));
+            Assert.Equal("off", textarea.GetAttribute("autocomplete"));
+            Assert.False(textarea.HasAttribute("readonly"));
+            Assert.Contains("min-height:48px", textarea.GetAttribute("style"));
+            Assert.Contains("resize:none", textarea.GetAttribute("style"));
+            Assert.Equal("7 / 7", cut.Find(".el-input__count").TextContent.Trim());
+        }
+
+        [Fact]
+        public void GeneratedInputUsesEditorPlaceholderWhenAttributePlaceholderIsEmpty()
+        {
+            var model = new PlaceholderFormModel();
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(PlaceholderFormModel))
+                .Add(x => x.Value, model));
+
+            Assert.Equal("Editor placeholder", cut.Find("input").GetAttribute("placeholder"));
+        }
+
+        [Fact]
+        public void GeneratedInputSupportsIconsAndAliases()
+        {
+            var model = new IconInputFormModel
+            {
+                Query = "Element"
+            };
+            JSInterop.SetupVoid("setDisabled", _ => true);
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(IconInputFormModel))
+                .Add(x => x.Value, model));
+
+            var wrapper = cut.Find(".el-input");
+            var input = cut.Find("input");
+
+            Assert.Contains("el-input--prefix", wrapper.ClassList);
+            Assert.Contains("el-input--suffix", wrapper.ClassList);
+            Assert.Contains("el-icon-search", cut.Find(".el-input__prefix .el-input__icon").ClassList);
+            Assert.Contains("el-icon-date", cut.Find(".el-input__suffix .el-input__icon").ClassList);
+            Assert.Equal("Search", input.GetAttribute("placeholder"));
+            Assert.True(input.HasAttribute("disabled"));
+            Assert.Equal("email", input.GetAttribute("type"));
+            Assert.True(input.HasAttribute("readonly"));
+            Assert.Equal("search", input.GetAttribute("inputmode"));
+            Assert.Equal("section", input.GetAttribute("style"));
+        }
+
         private class GeneratedFormModel
         {
             public string Name { get; set; }
@@ -104,6 +175,49 @@ namespace Element.ComponentTests
         {
             [Mention(DataSourceLoader = typeof(MentionLoader))]
             public string Assignee { get; set; }
+        }
+
+        private class InputFormModel
+        {
+            [Input(
+                Type = InputType.Textarea,
+                Size = InputSize.Large,
+                Placeholder = "Describe",
+                Clearable = true,
+                Maxlength = 7,
+                Minlength = 3,
+                Resize = "none",
+                ShowWordLimit = true,
+                WordLimitPosition = "outside",
+                InputStyle = "min-height:48px",
+                Rows = 4,
+                Form = "input-form",
+                AriaLabel = "description input",
+                Inputmode = "text",
+                Tabindex = 2)]
+            public string Description { get; set; }
+        }
+
+        private class PlaceholderFormModel
+        {
+            [EditorGenerator(Placeholder = "Editor placeholder")]
+            [Input(Clearable = true)]
+            public string Name { get; set; }
+        }
+
+        private class IconInputFormModel
+        {
+            [Input(
+                Type = InputType.Email,
+                IsDisabled = true,
+                IsClearable = true,
+                Readonly = true,
+                PrefixIcon = "el-icon-search",
+                SuffixIcon = "el-icon-date",
+                Placeholder = "Search",
+                Inputmode = "search",
+                InputStyle = "section")]
+            public string Query { get; set; }
         }
 
         private class MentionLoader : IDataSourceLoader
