@@ -74,6 +74,20 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void TriggerKeyWithCommandModifierDoesNotAddTag()
+        {
+            var cut = Render<InputTagHost>();
+
+            var input = cut.Find("input");
+            input.Input("alpha");
+            input.KeyDown(new KeyboardEventArgs { Key = "Enter", CtrlKey = true });
+            input.KeyDown(new KeyboardEventArgs { Key = ",", MetaKey = true });
+            input.KeyDown(new KeyboardEventArgs { Key = ",", AltKey = true });
+
+            Assert.Empty(cut.Instance.Value);
+        }
+
+        [Fact]
         public void HomeEndAndEscapeManageTagSelection()
         {
             IList<string> value = new List<string> { "one", "two", "three" };
@@ -117,6 +131,73 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void ShiftArrowExtendsSelectionAndDeleteRemovesRange()
+        {
+            IList<string> value = new List<string> { "one", "two", "three", "four" };
+            var removed = new List<string>();
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.OnRemove, tag => removed.Add(tag)));
+
+            var input = cut.Find("input");
+            input.KeyDown(new KeyboardEventArgs { Key = "End" });
+            input.KeyDown(new KeyboardEventArgs { Key = "ArrowLeft", ShiftKey = true });
+
+            var tags = cut.FindAll(".el-tag");
+            Assert.DoesNotContain("is-focus", tags[1].ClassList);
+            Assert.Contains("is-focus", tags[2].ClassList);
+            Assert.Contains("is-focus", tags[3].ClassList);
+            Assert.Equal("true", tags[2].GetAttribute("aria-selected"));
+            Assert.Equal("true", tags[3].GetAttribute("aria-selected"));
+
+            input.KeyDown(new KeyboardEventArgs { Key = "Delete" });
+
+            Assert.Equal(new[] { "one", "two" }, value);
+            Assert.Equal(new[] { "three", "four" }, removed);
+        }
+
+        [Fact]
+        public void CtrlASelectsAllTagsAndBackspaceRemovesSelection()
+        {
+            IList<string> value = new List<string> { "one", "two", "three" };
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next));
+
+            var input = cut.Find("input");
+            input.KeyDown(new KeyboardEventArgs { Key = "a", CtrlKey = true });
+
+            foreach (var tag in cut.FindAll(".el-tag"))
+            {
+                Assert.Contains("is-focus", tag.ClassList);
+                Assert.Equal("true", tag.GetAttribute("aria-selected"));
+            }
+
+            input.KeyDown(new KeyboardEventArgs { Key = "Backspace" });
+
+            Assert.Empty(value);
+        }
+
+        [Fact]
+        public void ShiftHomeExtendsSelectionToFirstTag()
+        {
+            IList<string> value = new List<string> { "one", "two", "three", "four" };
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next));
+
+            var input = cut.Find("input");
+            input.KeyDown(new KeyboardEventArgs { Key = "End" });
+            input.KeyDown(new KeyboardEventArgs { Key = "Home", ShiftKey = true });
+
+            foreach (var tag in cut.FindAll(".el-tag"))
+            {
+                Assert.Contains("is-focus", tag.ClassList);
+            }
+        }
+
+        [Fact]
         public void DraggingReordersTagsAndRaisesOnDrag()
         {
             IList<string> value = new List<string> { "one", "two", "three" };
@@ -133,6 +214,58 @@ namespace Element.ComponentTests
 
             Assert.Equal(new[] { "two", "three", "one" }, value);
             Assert.Equal((0, 2, "one"), dragged);
+        }
+
+        [Fact]
+        public void DraggingShowsSourceAndDropTargetState()
+        {
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, new List<string> { "one", "two", "three" })
+                .Add(x => x.Draggable, true));
+
+            cut.FindAll(".el-tag")[0].DragStart(new DragEventArgs());
+            cut.FindAll(".el-tag")[2].DragOver(new DragEventArgs());
+
+            var tags = cut.FindAll(".el-tag");
+            Assert.Contains("is-dragging", tags[0].ClassList);
+            Assert.Contains("is-drop-target", tags[2].ClassList);
+        }
+
+        [Fact]
+        public void DragEndCommitsReorderWhenDroppedOverTag()
+        {
+            IList<string> value = new List<string> { "one", "two", "three" };
+            (int OldIndex, int NewIndex, string Tag)? dragged = null;
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.Draggable, true)
+                .Add(x => x.OnDrag, next => dragged = next));
+
+            cut.FindAll(".el-tag")[2].DragStart(new DragEventArgs());
+            cut.FindAll(".el-tag")[0].DragOver(new DragEventArgs());
+            cut.FindAll(".el-tag")[2].DragEnd(new DragEventArgs());
+
+            Assert.Equal(new[] { "three", "one", "two" }, value);
+            Assert.Equal((2, 0, "three"), dragged);
+        }
+
+        [Fact]
+        public void DraggingSameIndexDoesNotRaiseChanges()
+        {
+            IList<string> value = new List<string> { "one", "two", "three" };
+            var dragCount = 0;
+            var cut = Render<ElInputTag>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.Draggable, true)
+                .Add(x => x.OnDrag, _ => dragCount++));
+
+            cut.FindAll(".el-tag")[1].DragStart(new DragEventArgs());
+            cut.FindAll(".el-tag")[1].Drop(new DragEventArgs());
+
+            Assert.Equal(new[] { "one", "two", "three" }, value);
+            Assert.Equal(0, dragCount);
         }
 
         [Fact]

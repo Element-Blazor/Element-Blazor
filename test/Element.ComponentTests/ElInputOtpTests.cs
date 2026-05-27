@@ -91,6 +91,21 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void PartialMultiCharacterInputDoesNotRaiseChangeUntilComplete()
+        {
+            var host = Render<OtpHost>();
+
+            host.FindAll("input")[0].Input("12");
+            Assert.Equal("12", host.Instance.Value);
+            Assert.Empty(host.Instance.Changes);
+
+            host.FindAll("input")[2].Input("34");
+
+            Assert.Equal("1234", host.Instance.Value);
+            Assert.Equal(new[] { "1234" }, host.Instance.Changes);
+        }
+
+        [Fact]
         public void HomeAndEndKeysKeepAllCellsAddressable()
         {
             var host = Render<OtpHost>();
@@ -110,6 +125,110 @@ namespace Element.ComponentTests
             inputs[3].Input("8");
 
             Assert.Equal("928", host.Instance.Value);
+        }
+
+        [Fact]
+        public void CtrlArrowKeysJumpToEdges()
+        {
+            var host = Render<OtpHost>();
+            var inputs = host.FindAll("input");
+
+            inputs[2].KeyDown(new KeyboardEventArgs { Key = "ArrowLeft", CtrlKey = true });
+            inputs = host.FindAll("input");
+            inputs[0].Input("9");
+
+            Assert.Equal("9", host.Instance.Value);
+
+            inputs = host.FindAll("input");
+            inputs[0].KeyDown(new KeyboardEventArgs { Key = "ArrowRight", MetaKey = true });
+            inputs = host.FindAll("input");
+            inputs[3].Input("8");
+
+            Assert.Equal("98", host.Instance.Value);
+        }
+
+        [Fact]
+        public void CtrlBackspaceClearsThroughCurrentCell()
+        {
+            string value = "1234";
+            var cut = Render<ElInputOtp>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.Length, 4));
+
+            cut.FindAll("input")[2].KeyDown(new KeyboardEventArgs
+            {
+                Key = "Backspace",
+                CtrlKey = true
+            });
+
+            Assert.Equal("4", value);
+            var inputs = cut.FindAll("input");
+            Assert.Equal("4", inputs[0].GetAttribute("value"));
+            Assert.Equal(string.Empty, inputs[1].GetAttribute("value"));
+        }
+
+        [Fact]
+        public void MetaDeleteClearsFromCurrentCell()
+        {
+            string value = "1234";
+            var cut = Render<ElInputOtp>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.Length, 4));
+
+            cut.FindAll("input")[1].KeyDown(new KeyboardEventArgs
+            {
+                Key = "Delete",
+                MetaKey = true
+            });
+
+            Assert.Equal("1", value);
+            var inputs = cut.FindAll("input");
+            Assert.Equal("1", inputs[0].GetAttribute("value"));
+            Assert.Equal(string.Empty, inputs[1].GetAttribute("value"));
+        }
+
+        [Fact]
+        public void DisabledAndReadonlyKeyboardDoesNotChangeValue()
+        {
+            string disabledValue = "1234";
+            var disabled = Render<ElInputOtp>(parameters => parameters
+                .Add(x => x.Value, disabledValue)
+                .Add(x => x.ValueChanged, next => disabledValue = next)
+                .Add(x => x.Length, 4)
+                .Add(x => x.Disabled, true));
+
+            disabled.FindAll("input")[1].KeyDown(new KeyboardEventArgs { Key = "Delete" });
+            Assert.Equal("1234", disabledValue);
+
+            string readonlyValue = "1234";
+            var readOnly = Render<ElInputOtp>(parameters => parameters
+                .Add(x => x.Value, readonlyValue)
+                .Add(x => x.ValueChanged, next => readonlyValue = next)
+                .Add(x => x.Length, 4)
+                .Add(x => x.Readonly, true));
+
+            readOnly.FindAll("input")[1].Input("9");
+            readOnly.FindAll("input")[1].KeyDown(new KeyboardEventArgs { Key = "Backspace" });
+
+            Assert.Equal("1234", readonlyValue);
+        }
+
+        [Fact]
+        public void CellsExposeAriaAndMaskDisplay()
+        {
+            var cut = Render<ElInputOtp>(parameters => parameters
+                .Add(x => x.Value, "12")
+                .Add(x => x.Length, 4)
+                .Add(x => x.Mask, true));
+
+            var inputs = cut.FindAll("input");
+
+            Assert.Equal("*", inputs[0].GetAttribute("value"));
+            Assert.Equal("OTP character 1 of 4", inputs[0].GetAttribute("aria-label"));
+            Assert.Equal("OTP character 4 of 4", inputs[3].GetAttribute("aria-label"));
+            Assert.Equal("false", inputs[0].GetAttribute("aria-invalid"));
         }
 
         private class OtpHost : ComponentBase

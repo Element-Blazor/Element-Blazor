@@ -25,5 +25,19 @@ namespace Element.ControlConfigs
         public InputSize Size { get; set; } = InputSize.Normal;
 
         public string Placeholder { get; set; }
+
+        public string Autocomplete { get; set; } = "off";
+
+        public string Inputmode { get; set; } = "decimal";
+
+        public int Tabindex { get; set; } = 0;
+
+        public string AriaLabel { get; set; }
+
+        public string AriaLabelledby { get; set; }
+
+        public string AriaDescribedby { get; set; }
+
+        public bool ValidateEvent { get; set; } = true;
     }
 }

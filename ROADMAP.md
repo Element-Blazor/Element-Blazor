@@ -99,9 +99,9 @@
 | DateTime Picker | `ElDateTimePicker`、`DateTimePickerType`、`DateTimePickerShortcut` | 🟢 已对齐 | 已基于公开日期面板补齐单值、范围、时间输入、默认时间、快捷项、禁用日期、显示格式、值格式、清空、弹层事件和组件测试。 |
 | Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟢 已对齐 | 已补齐 label、size、disabled、rules、DataAnnotations、异步校验、字段校验、提交、重置、清理校验、字段滚动、嵌套 Prop、EditContext、插槽和自动生成表单绑定闭环。 |
 | Input | `ElInput` | 🟢 已对齐 | 已实现 prefix/suffix 插槽、show-word-limit、formatter/parser、禁用/只读、清空、尺寸和表单校验联动，并补充组件测试。 |
-| Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |
-| Input Tag | `ElInputTag` | 🟡 部分对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交和表单校验联动；继续补齐拖拽排序、组合键细节和测试。 |
-| Input OTP | `ElInputOtp` | 🟡 部分对齐 | 已实现分格输入、粘贴填充、焦点流转、掩码、禁用/只读和表单校验联动；继续补齐更细键盘行为和测试。 |
+| Input Number | `ElInputNumber` | 🟢 已对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读、严格键盘体验、ARIA 细节、表单校验联动和组件测试。 |
+| Input Tag | `ElInputTag` | 🟢 已对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交、拖拽排序、组合键细节、表单校验联动和组件测试。 |
+| Input OTP | `ElInputOtp` | 🟢 已对齐 | 已实现分格输入、粘贴填充、焦点流转、掩码、禁用/只读、更细键盘行为、表单校验联动和组件测试。 |
 | Mention | 缺少 `ElMention` | 🔴 缺失 | 实现触发字符、候选项和文本区域集成。 |
 | Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟡 部分对齐 | 补齐禁用、尺寸、边框和键盘行为。 |
 | Rate | `ElRate` | 🟡 部分对齐 | 已实现评分、半星、颜色、文本/分值、清除、禁用和表单校验联动；继续补齐自定义图标插槽和测试。 |

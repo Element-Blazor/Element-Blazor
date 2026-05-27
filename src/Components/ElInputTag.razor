@@ -10,6 +10,7 @@
         <span class="@GetTagClass(index)"
               @key="@($"{index}-{tag}")"
               draggable="@IsTagDraggable"
+              aria-selected="@GetAriaBoolean(IsTagSelected(index))"
               @ondragstart="e => OnTagDragStartAsync(index, e)"
               @ondragover:preventDefault
               @ondragover="e => OnTagDragOverAsync(index, e)"
@@ -21,7 +22,7 @@
             <span class="el-select__tags-text">@tag</span>
             @if (!IsInputTagDisabled && !Readonly)
             {
-                <i class="el-tag__close el-icon-close" @onclick="e => RemoveTagAsync(tag)" @onclick:stopPropagation></i>
+                <i class="el-tag__close el-icon-close" @onclick="e => RemoveTagAtAsync(index)" @onclick:stopPropagation></i>
             }
         </span>
     }

@@ -99,7 +99,14 @@ namespace Element.ControlRenders
                 builder.AddAttribute(seq++, nameof(ElInputNumber.IsDisabled), attribute.IsDisabled);
                 builder.AddAttribute(seq++, nameof(ElInputNumber.Readonly), attribute.Readonly);
                 builder.AddAttribute(seq++, nameof(ElInputNumber.Size), attribute.Size);
+                builder.AddAttribute(seq++, nameof(ElInputNumber.Autocomplete), attribute.Autocomplete);
+                builder.AddAttribute(seq++, nameof(ElInputNumber.Inputmode), attribute.Inputmode);
+                builder.AddAttribute(seq++, nameof(ElInputNumber.Tabindex), attribute.Tabindex);
+                builder.AddAttribute(seq++, nameof(ElInputNumber.ValidateEvent), attribute.ValidateEvent);
                 builder.AddAttribute(seq++, nameof(ElInputNumber.Placeholder), attribute.Placeholder ?? config.Placeholder);
+                AddAttributeIfNotEmpty(builder, ref seq, nameof(ElInputNumber.AriaLabel), attribute.AriaLabel);
+                AddAttributeIfNotEmpty(builder, ref seq, nameof(ElInputNumber.AriaLabelledby), attribute.AriaLabelledby);
+                AddAttributeIfNotEmpty(builder, ref seq, nameof(ElInputNumber.AriaDescribedby), attribute.AriaDescribedby);
             }
             else if (!string.IsNullOrWhiteSpace(config.Placeholder))
             {
@@ -134,6 +141,16 @@ namespace Element.ControlRenders
             }
             CreateBind(config, builder, seq, nameof(ElInputTag.ValueChanged), nameof(ElInputTag.Value), typeof(IList<string>));
             seq += 2;
+        }
+
+        private static void AddAttributeIfNotEmpty(RenderTreeBuilder builder, ref int seq, string name, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            builder.AddAttribute(seq++, name, value);
         }
 
         private void RenderInputOtp(RenderTreeBuilder builder, RenderConfig config, ref int seq)

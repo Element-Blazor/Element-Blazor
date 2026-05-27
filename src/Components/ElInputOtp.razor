@@ -17,6 +17,9 @@
                autocomplete="one-time-code"
                disabled="@IsInputOtpDisabled"
                readonly="@Readonly"
+               aria-label="@GetCellAriaLabel(index)"
+               aria-invalid="@AriaInvalid"
+               aria-describedby="@AriaDescribedBy"
                @oninput="e => OnCellInputAsync(index, e)"
                @onkeydown="e => OnCellKeyDownAsync(index, e)" />
     }

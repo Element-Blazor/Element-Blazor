@@ -108,7 +108,7 @@ namespace Element
                     SortNo = formControl.SortNo,
                     FormItem = formItemType,
                     ValueType = formItemValueType,
-                    IsRequired = editorGeneratorAttr?.IsRequired ?? requiredAttribute != null,
+                    IsRequired = editorGeneratorAttr?.IsRequired ?? true,
                     RequiredMessage = editorGeneratorAttr?.RequiredMessage ?? requiredAttribute?.ErrorMessage ?? $"请确认{label}",
                     InputControlType = controlType,
                     Ignore = editorGeneratorAttr?.Ignore ?? false,

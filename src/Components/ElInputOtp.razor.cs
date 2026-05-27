@@ -141,7 +141,21 @@ namespace Element
 
             if (e.Key == "Backspace")
             {
+                if (e.CtrlKey || e.MetaKey)
+                {
+                    await ClearThroughIndexAsync(index);
+                    return;
+                }
+
                 await HandleBackspaceAsync(index);
+            }
+            else if ((e.Key == "ArrowLeft" || e.Key == "ArrowUp") && (e.CtrlKey || e.MetaKey))
+            {
+                await FocusCellAsync(0);
+            }
+            else if ((e.Key == "ArrowRight" || e.Key == "ArrowDown") && (e.CtrlKey || e.MetaKey))
+            {
+                await FocusCellAsync(LastCellIndex);
             }
             else if (e.Key == "ArrowLeft" && index > 0)
             {
@@ -153,6 +167,12 @@ namespace Element
             }
             else if (e.Key == "Delete")
             {
+                if (e.CtrlKey || e.MetaKey)
+                {
+                    await ClearFromIndexAsync(index);
+                    return;
+                }
+
                 await HandleDeleteAsync(index);
             }
             else if (e.Key == "Home")
@@ -161,7 +181,7 @@ namespace Element
             }
             else if (e.Key == "End")
             {
-                await FocusCellAsync(Math.Max(Length - 1, 0));
+                await FocusCellAsync(LastCellIndex);
             }
         }
 
@@ -184,7 +204,8 @@ namespace Element
             }
 
             var nextValue = new string(chars).TrimEnd('\0');
-            await CommitAsync(nextValue, validate: ValidateEvent, notifyChange: true);
+            var shouldNotifyChange = IsValueComplete(nextValue);
+            await CommitAsync(nextValue, validate: shouldNotifyChange ? ValidateEvent : false, notifyChange: shouldNotifyChange);
             await FocusCellAsync(GetNextFocusIndex(writeIndex));
         }
 
@@ -252,6 +273,32 @@ namespace Element
             await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
         }
 
+        private async Task ClearThroughIndexAsync(int index)
+        {
+            var chars = EnsureCells();
+            var end = Math.Clamp(index, 0, Length - 1);
+            for (var i = 0; i <= end; i++)
+            {
+                chars[i] = '\0';
+            }
+
+            await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+            await FocusCellAsync(0);
+        }
+
+        private async Task ClearFromIndexAsync(int index)
+        {
+            var chars = EnsureCells();
+            var start = Math.Clamp(index, 0, Length - 1);
+            for (var i = start; i < Length; i++)
+            {
+                chars[i] = '\0';
+            }
+
+            await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+            await FocusCellAsync(start);
+        }
+
         private async Task FocusCellAsync(int index)
         {
             if (index < 0 || index >= inputElements.Length)
@@ -275,6 +322,11 @@ namespace Element
 
             var value = cell.ToString();
             return Mask && !string.IsNullOrEmpty(value) ? "*" : value;
+        }
+
+        private string GetCellAriaLabel(int index)
+        {
+            return $"OTP character {index + 1} of {Length}";
         }
 
         private char[] EnsureCells()
@@ -308,5 +360,9 @@ namespace Element
         private bool IsValueComplete(string value) => !string.IsNullOrEmpty(value) && value.Length >= Length;
 
         private bool IsInputOtpDisabled => effectiveDisabled;
+
+        private int LastCellIndex => Math.Max(Length - 1, 0);
+
+        private string AriaInvalid => IsAriaInvalid ? "true" : "false";
     }
 }

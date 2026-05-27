@@ -15,6 +15,7 @@ namespace Element
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
         private int? selectedTagIndex;
+        private int? selectionAnchorIndex;
         private int? draggingIndex;
         private int? dropIndex;
         private string inputText;
@@ -124,6 +125,7 @@ namespace Element
             Value = NormalizeValue(value);
             SyncTagsFromValue();
             inputText = string.Empty;
+            ClearSelection();
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -141,13 +143,13 @@ namespace Element
         private Task OnInputAsync(ChangeEventArgs e)
         {
             inputText = Convert.ToString(e.Value);
-            selectedTagIndex = null;
+            ClearSelection();
             return Task.CompletedTask;
         }
 
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
-            if (TriggerKeys != null && TriggerKeys.Contains(e.Key))
+            if (TriggerKeys != null && TriggerKeys.Contains(e.Key) && !HasCommandModifier(e))
             {
                 await AddInputTagAsync();
             }
@@ -159,11 +161,11 @@ namespace Element
             {
                 if (e.CtrlKey || e.MetaKey)
                 {
-                    await RemoveTagsBackwardsAsync();
+                    await RemoveTagsBackwardsAsync(e.ShiftKey);
                 }
                 else if (selectedTagIndex.HasValue)
                 {
-                    await RemoveTagAtAsync(selectedTagIndex.Value);
+                    await RemoveSelectedTagsAsync(backwards: true);
                 }
                 else
                 {
@@ -174,42 +176,61 @@ namespace Element
             {
                 if (e.CtrlKey || e.MetaKey)
                 {
-                    await RemoveTagsFromAsync(selectedTagIndex.Value);
+                    await RemoveTagsFromAsync(e.ShiftKey ? SelectionStart : selectedTagIndex.Value);
                 }
                 else
                 {
-                    await RemoveTagAtAsync(selectedTagIndex.Value);
+                    await RemoveSelectedTagsAsync(backwards: false);
                 }
             }
             else if (e.Key == "ArrowLeft" && string.IsNullOrEmpty(inputText) && currentTags.Any())
             {
-                MoveSelectionLeft();
+                MoveSelectionLeft(e.ShiftKey);
             }
             else if (e.Key == "ArrowRight" && string.IsNullOrEmpty(inputText) && currentTags.Any())
             {
-                MoveSelectionRight();
+                MoveSelectionRight(e.ShiftKey);
             }
             else if ((e.Key == "a" || e.Key == "A") && (e.CtrlKey || e.MetaKey) && currentTags.Any() && string.IsNullOrEmpty(inputText))
             {
-                SelectLastTag();
+                SelectTagRange(0, currentTags.Count - 1);
             }
             else if (e.Key == "Home" && string.IsNullOrEmpty(inputText) && currentTags.Any())
             {
-                selectedTagIndex = 0;
+                if (e.ShiftKey && selectedTagIndex.HasValue)
+                {
+                    ExtendSelectionTo(0);
+                }
+                else
+                {
+                    SelectTag(0);
+                }
             }
             else if (e.Key == "End" && string.IsNullOrEmpty(inputText) && currentTags.Any())
             {
-                selectedTagIndex = currentTags.Count - 1;
+                if (e.ShiftKey && selectedTagIndex.HasValue)
+                {
+                    ExtendSelectionTo(currentTags.Count - 1);
+                }
+                else
+                {
+                    SelectTag(currentTags.Count - 1);
+                }
             }
             else if ((e.Key == "Escape" || e.Key == "Esc") && selectedTagIndex.HasValue)
             {
-                selectedTagIndex = null;
+                ClearSelection();
             }
+        }
+
+        private static bool HasCommandModifier(KeyboardEventArgs e)
+        {
+            return e.CtrlKey || e.MetaKey || e.AltKey;
         }
 
         private async Task OnBlurAsync(FocusEventArgs e)
         {
-            selectedTagIndex = null;
+            ClearSelection();
             if (AddOnBlur)
             {
                 await AddInputTagAsync();
@@ -236,7 +257,7 @@ namespace Element
 
             currentTags.Add(tag);
             inputText = string.Empty;
-            selectedTagIndex = null;
+            ClearSelection();
             await CommitTagsAsync(ValidateEvent);
             if (OnAdd.HasDelegate)
             {
@@ -244,20 +265,16 @@ namespace Element
             }
         }
 
-        private async Task RemoveTagAsync(string tag)
+        private async Task RemoveTagAtAsync(int index)
         {
-            if (effectiveDisabled || Readonly)
+            if (effectiveDisabled || Readonly || index < 0 || index >= currentTags.Count)
             {
                 return;
             }
 
-            var index = currentTags.IndexOf(tag);
-            if (index < 0)
-            {
-                return;
-            }
+            var tag = currentTags[index];
             currentTags.RemoveAt(index);
-            selectedTagIndex = ResolveSelectionAfterRemoval(index);
+            ResolveSelectionAfterRemoval(index);
             await CommitTagsAsync(ValidateEvent);
             if (OnRemove.HasDelegate)
             {
@@ -265,21 +282,14 @@ namespace Element
             }
         }
 
-        private async Task RemoveTagAtAsync(int index)
+        private async Task RemoveSelectedTagsAsync(bool backwards)
         {
-            if (index < 0 || index >= currentTags.Count)
+            if (effectiveDisabled || Readonly || !selectedTagIndex.HasValue)
             {
                 return;
             }
 
-            var tag = currentTags[index];
-            currentTags.RemoveAt(index);
-            selectedTagIndex = ResolveSelectionAfterRemoval(index);
-            await CommitTagsAsync(ValidateEvent);
-            if (OnRemove.HasDelegate)
-            {
-                await OnRemove.InvokeAsync(tag);
-            }
+            await RemoveTagsRangeAsync(SelectionStart, SelectionEnd, backwards);
         }
 
         private async Task RemoveTagsFromAsync(int startIndex)
@@ -291,7 +301,7 @@ namespace Element
 
             var removedTags = currentTags.Skip(startIndex).ToList();
             currentTags.RemoveRange(startIndex, currentTags.Count - startIndex);
-            selectedTagIndex = ResolveSelectionAfterRemoval(startIndex);
+            SelectAfterRangeRemoval(startIndex, removedTags.Count, backwards: false);
             await CommitTagsAsync(ValidateEvent);
             if (OnRemove.HasDelegate)
             {
@@ -302,13 +312,42 @@ namespace Element
             }
         }
 
-        private async Task RemoveTagsBackwardsAsync()
+        private async Task RemoveTagsBackwardsAsync(bool selectionOnly)
         {
             if (effectiveDisabled || Readonly || !currentTags.Any())
             {
                 return;
             }
-            await RemoveTagsFromAsync(0);
+
+            if (selectionOnly && selectedTagIndex.HasValue)
+            {
+                await RemoveTagsRangeAsync(0, SelectionEnd, backwards: true);
+                return;
+            }
+
+            await RemoveTagsRangeAsync(0, currentTags.Count - 1, backwards: true);
+        }
+
+        private async Task RemoveTagsRangeAsync(int startIndex, int endIndex, bool backwards)
+        {
+            if (effectiveDisabled || Readonly || startIndex < 0 || endIndex < startIndex || startIndex >= currentTags.Count)
+            {
+                return;
+            }
+
+            endIndex = Math.Min(endIndex, currentTags.Count - 1);
+            var count = endIndex - startIndex + 1;
+            var removedTags = currentTags.Skip(startIndex).Take(count).ToList();
+            currentTags.RemoveRange(startIndex, count);
+            SelectAfterRangeRemoval(startIndex, count, backwards);
+            await CommitTagsAsync(ValidateEvent);
+            if (OnRemove.HasDelegate)
+            {
+                foreach (var removedTag in removedTags)
+                {
+                    await OnRemove.InvokeAsync(removedTag);
+                }
+            }
         }
 
         private async Task CommitTagsAsync(bool validate)
@@ -335,7 +374,7 @@ namespace Element
             {
                 return;
             }
-            selectedTagIndex = null;
+            ClearSelection();
             await inputElement.Dom(JSRuntime).FocusAsync();
         }
 
@@ -346,7 +385,7 @@ namespace Element
                 return Task.CompletedTask;
             }
 
-            selectedTagIndex = index;
+            SelectTag(index);
             return Task.CompletedTask;
         }
 
@@ -357,6 +396,7 @@ namespace Element
                 return Task.CompletedTask;
             }
 
+            ClearSelection();
             draggingIndex = index;
             dropIndex = index;
             return Task.CompletedTask;
@@ -364,7 +404,7 @@ namespace Element
 
         private Task OnTagDragOverAsync(int index, DragEventArgs e)
         {
-            if (!IsTagDraggable || !draggingIndex.HasValue)
+            if (!IsTagDraggable || !draggingIndex.HasValue || index < 0 || index >= currentTags.Count)
             {
                 return Task.CompletedTask;
             }
@@ -375,7 +415,7 @@ namespace Element
 
         private async Task OnTagDropAsync(int index, DragEventArgs e)
         {
-            if (!IsTagDraggable || !draggingIndex.HasValue)
+            if (!IsTagDraggable || !draggingIndex.HasValue || index < 0 || index >= currentTags.Count)
             {
                 return;
             }
@@ -416,7 +456,7 @@ namespace Element
             var tag = currentTags[oldIndex];
             currentTags.RemoveAt(oldIndex);
             currentTags.Insert(newIndex, tag);
-            selectedTagIndex = newIndex;
+            SelectTag(newIndex);
 
             await CommitTagsAsync(ValidateEvent);
             if (OnDrag.HasDelegate)
@@ -431,7 +471,11 @@ namespace Element
             currentTags.AddRange(Value ?? Enumerable.Empty<string>());
             if (selectedTagIndex.HasValue && selectedTagIndex.Value >= currentTags.Count)
             {
-                selectedTagIndex = currentTags.Count > 0 ? currentTags.Count - 1 : null;
+                SelectTag(currentTags.Count > 0 ? currentTags.Count - 1 : null);
+            }
+            if (selectionAnchorIndex.HasValue && selectionAnchorIndex.Value >= currentTags.Count)
+            {
+                selectionAnchorIndex = selectedTagIndex;
             }
         }
 
@@ -447,16 +491,18 @@ namespace Element
 
         private string GetTagClass(int index) => HtmlPropertyBuilder.CreateCssClassBuilder()
             .Add("el-tag", "el-tag--info", "el-tag--small", "el-tag--light")
-            .AddIf(index == selectedTagIndex, "is-focus")
+            .AddIf(IsTagSelected(index), "is-focus")
             .AddIf(IsTagDraggable, "is-draggable")
+            .AddIf(index == draggingIndex, "is-dragging")
+            .AddIf(index == dropIndex && draggingIndex.HasValue && dropIndex != draggingIndex, "is-drop-target")
             .ToString();
 
         private void SelectLastTag()
         {
-            selectedTagIndex = currentTags.Count > 0 ? currentTags.Count - 1 : null;
+            SelectTag(currentTags.Count > 0 ? currentTags.Count - 1 : null);
         }
 
-        private void MoveSelectionLeft()
+        private void MoveSelectionLeft(bool extend)
         {
             if (!selectedTagIndex.HasValue)
             {
@@ -464,44 +510,131 @@ namespace Element
                 return;
             }
 
-            selectedTagIndex = Math.Max(0, selectedTagIndex.Value - 1);
+            var next = Math.Max(0, selectedTagIndex.Value - 1);
+            if (extend)
+            {
+                ExtendSelectionTo(next);
+                return;
+            }
+
+            SelectTag(next);
         }
 
-        private void MoveSelectionRight()
+        private void MoveSelectionRight(bool extend)
         {
             if (!selectedTagIndex.HasValue)
             {
+                return;
+            }
+
+            if (extend)
+            {
+                ExtendSelectionTo(Math.Min(currentTags.Count - 1, selectedTagIndex.Value + 1));
                 return;
             }
 
             if (selectedTagIndex.Value >= currentTags.Count - 1)
             {
-                selectedTagIndex = null;
+                ClearSelection();
                 return;
             }
 
-            selectedTagIndex++;
+            SelectTag(selectedTagIndex.Value + 1);
         }
 
-        private int? ResolveSelectionAfterRemoval(int removedIndex)
+        private void ResolveSelectionAfterRemoval(int removedIndex)
         {
             if (!currentTags.Any())
             {
-                return null;
+                ClearSelection();
+                return;
             }
 
             if (!selectedTagIndex.HasValue)
             {
-                return null;
+                ClearSelection();
+                return;
+            }
+
+            if (IsRangeSelected)
+            {
+                SelectAfterRangeRemoval(removedIndex, 1, backwards: false);
+                return;
             }
 
             if (selectedTagIndex.Value > removedIndex)
             {
-                return selectedTagIndex.Value - 1;
+                SelectTag(selectedTagIndex.Value - 1);
+                return;
             }
 
-            return Math.Min(selectedTagIndex.Value, currentTags.Count - 1);
+            SelectTag(Math.Min(selectedTagIndex.Value, currentTags.Count - 1));
         }
+
+        private void SelectAfterRangeRemoval(int startIndex, int count, bool backwards)
+        {
+            if (!currentTags.Any())
+            {
+                ClearSelection();
+                return;
+            }
+
+            var next = backwards ? startIndex - 1 : startIndex;
+            next = Math.Clamp(next, 0, currentTags.Count - 1);
+            SelectTag(next);
+        }
+
+        private void SelectTag(int? index)
+        {
+            selectedTagIndex = index;
+            selectionAnchorIndex = index;
+        }
+
+        private void SelectTagRange(int anchorIndex, int activeIndex)
+        {
+            if (!currentTags.Any())
+            {
+                ClearSelection();
+                return;
+            }
+
+            selectionAnchorIndex = Math.Clamp(anchorIndex, 0, currentTags.Count - 1);
+            selectedTagIndex = Math.Clamp(activeIndex, 0, currentTags.Count - 1);
+        }
+
+        private void ExtendSelectionTo(int index)
+        {
+            if (!selectedTagIndex.HasValue)
+            {
+                SelectTag(index);
+                return;
+            }
+
+            selectionAnchorIndex ??= selectedTagIndex;
+            selectedTagIndex = Math.Clamp(index, 0, currentTags.Count - 1);
+        }
+
+        private void ClearSelection()
+        {
+            selectedTagIndex = null;
+            selectionAnchorIndex = null;
+        }
+
+        private bool IsTagSelected(int index)
+        {
+            return selectedTagIndex.HasValue
+                && selectionAnchorIndex.HasValue
+                && index >= SelectionStart
+                && index <= SelectionEnd;
+        }
+
+        private int SelectionStart => Math.Min(selectionAnchorIndex ?? selectedTagIndex ?? 0, selectedTagIndex ?? 0);
+
+        private int SelectionEnd => Math.Max(selectionAnchorIndex ?? selectedTagIndex ?? 0, selectedTagIndex ?? 0);
+
+        private bool IsRangeSelected => selectedTagIndex.HasValue && selectionAnchorIndex.HasValue && selectedTagIndex != selectionAnchorIndex;
+
+        private static string GetAriaBoolean(bool value) => value ? "true" : "false";
 
         private static IList<string> NormalizeValue(object value)
         {

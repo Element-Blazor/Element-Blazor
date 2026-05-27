@@ -956,6 +956,19 @@ textarea.el-input__inner,
     color: var(--el-text-color-placeholder);
 }
 
+.el-input-tag .el-tag.is-draggable {
+    cursor: grab;
+}
+
+.el-input-tag .el-tag.is-dragging {
+    opacity: 0.6;
+}
+
+.el-input-tag .el-tag.is-drop-target {
+    outline: 1px dashed var(--el-color-primary);
+    outline-offset: 2px;
+}
+
 .el-input-otp {
     display: inline-flex;
     gap: 8px;

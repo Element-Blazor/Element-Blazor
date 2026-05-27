@@ -115,6 +115,33 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public async Task AsyncRulesRunOnlyThroughAsyncValidationPath()
+        {
+            var rule = new AsyncOnlyRule();
+            var rules = new Dictionary<string, IList<IValidationRule>>
+            {
+                [nameof(DataAnnotationFormModel.Name)] = new List<IValidationRule>
+                {
+                    rule
+                }
+            };
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.Rules, rules)
+                .AddChildContent<ElFormItem<string>>(item => item
+                    .Add(x => x.Prop, nameof(DataAnnotationFormModel.Name))
+                    .AddChildContent<ElInput<string>>()));
+
+            Assert.True(await cut.InvokeAsync(() => cut.Instance.Validate()));
+            Assert.Equal(0, rule.SyncCalls);
+            Assert.Equal(0, rule.AsyncCalls);
+
+            Assert.False(await cut.InvokeAsync(() => cut.Instance.ValidateAsync()));
+            Assert.Equal(0, rule.SyncCalls);
+            Assert.Equal(1, rule.AsyncCalls);
+        }
+
+        [Fact]
         public void SupportsLabelAndErrorSlots()
         {
             RenderFragment label = builder =>
@@ -167,6 +194,16 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void GeneratedFormKeepsLegacyRequiredDefault()
+        {
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(PlainFormModel))
+                .Add(x => x.Model, new PlainFormModel()));
+
+            Assert.Contains("is-required", cut.Find(".el-form-item").ClassList);
+        }
+
+        [Fact]
         public async Task CanUseCascadedEditContextModel()
         {
             var model = new DataAnnotationFormModel
@@ -191,6 +228,21 @@ namespace Element.ComponentTests
             Assert.True(await form.InvokeAsync(() => form.Instance.Validate()));
         }
 
+        [Fact]
+        public async Task RebuildsDataAnnotationRulesWhenModelChanges()
+        {
+            var cut = Render<FormModelSwapHost>();
+
+            var form = cut.FindComponent<ElForm>();
+            Assert.False(await form.InvokeAsync(() => form.Instance.Validate()));
+
+            await cut.InvokeAsync(() => cut.Instance.Model = new PlainFormModel());
+            cut.Render();
+
+            form = cut.FindComponent<ElForm>();
+            Assert.True(await form.InvokeAsync(() => form.Instance.Validate()));
+        }
+
         private class ProfileFormModel
         {
             public ProfileUser User { get; set; }
@@ -205,6 +257,34 @@ namespace Element.ComponentTests
         {
             [Required(ErrorMessage = "Name is required")]
             public string Name { get; set; }
+        }
+
+        private class PlainFormModel
+        {
+            public string Name { get; set; }
+        }
+
+        private class FormModelSwapHost : ComponentBase
+        {
+            public object Model { get; set; } = new DataAnnotationFormModel();
+
+            protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)
+            {
+                builder.OpenComponent<ElForm>(0);
+                builder.AddAttribute(1, nameof(ElForm.Model), Model);
+                builder.AddAttribute(2, nameof(ElForm.ChildContent), (RenderFragment)(childBuilder =>
+                {
+                    childBuilder.OpenComponent<ElFormItem<string>>(0);
+                    childBuilder.AddAttribute(1, nameof(ElFormItem<string>.Prop), nameof(DataAnnotationFormModel.Name));
+                    childBuilder.AddAttribute(2, nameof(ElFormItem<string>.ChildContent), (RenderFragment)(inputBuilder =>
+                    {
+                        inputBuilder.OpenComponent<ElInput<string>>(0);
+                        inputBuilder.CloseComponent();
+                    }));
+                    childBuilder.CloseComponent();
+                }));
+                builder.CloseComponent();
+            }
         }
 
         private class GeneratedAnnotationModel
@@ -227,6 +307,27 @@ namespace Element.ComponentTests
             {
                 await Task.Delay(1);
                 return false;
+            }
+        }
+
+        private class AsyncOnlyRule : IAsyncValidationRule
+        {
+            public int SyncCalls { get; private set; }
+
+            public int AsyncCalls { get; private set; }
+
+            public string ErrorMessage { get; set; } = "Async only invalid";
+
+            public bool Validate(object value)
+            {
+                SyncCalls++;
+                return true;
+            }
+
+            public Task<bool> ValidateAsync(object value)
+            {
+                AsyncCalls++;
+                return Task.FromResult(false);
             }
         }
     }

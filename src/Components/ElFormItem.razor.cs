@@ -118,8 +118,13 @@ namespace Element
                 }
 
                 bool isValid;
-                if (includeAsyncRules && item is IAsyncValidationRule asyncRule)
+                if (item is IAsyncValidationRule asyncRule)
                 {
+                    if (!includeAsyncRules)
+                    {
+                        continue;
+                    }
+
                     ValidateStatus = "validating";
                     isValid = await asyncRule.ValidateAsync(Value);
                 }

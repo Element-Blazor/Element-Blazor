@@ -391,14 +391,15 @@ namespace Element
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
-            var rulesChanged = !ReferenceEquals(Rules, lastRulesReference) || !ReferenceEquals(Validations, lastValidationsReference);
             var model = GetModel();
+            var rulesChanged = !ReferenceEquals(Rules, lastRulesReference)
+                || !ReferenceEquals(Validations, lastValidationsReference)
+                || !ReferenceEquals(model, lastValueReference);
             var modelChanged = !ReferenceEquals(model, lastValueReference);
             SetValues();
             if (modelChanged)
             {
                 RefreshFieldInitialValues(resetCurrentValue: true);
-                lastValueReference = model;
             }
             if (rulesChanged && hasResolvedRules)
             {
@@ -418,6 +419,7 @@ namespace Element
 
             lastRulesReference = Rules;
             lastValidationsReference = Validations;
+            lastValueReference = model;
             hasResolvedRules = true;
         }
 

@@ -38,6 +38,43 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void ModifiedNavigationKeysDoNotSpinValue()
+        {
+            var cut = Render<InputNumberKeyboardHost>();
+
+            var input = cut.Find("input");
+
+            input.KeyDown(new KeyboardEventArgs { Key = "ArrowUp", ShiftKey = true });
+            input.KeyDown(new KeyboardEventArgs { Key = "PageUp", CtrlKey = true });
+            input.KeyDown(new KeyboardEventArgs { Key = "Home", MetaKey = true });
+            input.KeyDown(new KeyboardEventArgs { Key = "End", AltKey = true });
+
+            Assert.Equal(5, cut.Instance.Value);
+        }
+
+        [Fact]
+        public void DisabledAndReadonlyKeyboardDoesNotSpinValue()
+        {
+            decimal? disabledValue = 5;
+            var disabled = Render<ElInputNumber>(parameters => parameters
+                .Add(x => x.Value, disabledValue)
+                .Add(x => x.ValueChanged, next => disabledValue = next)
+                .Add(x => x.Disabled, true));
+
+            disabled.Find("input").KeyDown(new KeyboardEventArgs { Key = "ArrowUp" });
+            Assert.Equal(5, disabledValue);
+
+            decimal? readonlyValue = 5;
+            var readOnly = Render<ElInputNumber>(parameters => parameters
+                .Add(x => x.Value, readonlyValue)
+                .Add(x => x.ValueChanged, next => readonlyValue = next)
+                .Add(x => x.Readonly, true));
+
+            readOnly.Find("input").KeyDown(new KeyboardEventArgs { Key = "ArrowUp" });
+            Assert.Equal(5, readonlyValue);
+        }
+
+        [Fact]
         public void EnterCommitsPendingTypedValue()
         {
             decimal? value = 1;
@@ -60,6 +97,34 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void InvalidTypedValueIsNotCommittedAndResetsOnBlur()
+        {
+            decimal? value = 3;
+            decimal? inputValue = null;
+            decimal? changedValue = null;
+            var cut = Render<ElInputNumber>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.OnInput, next => inputValue = next)
+                .Add(x => x.OnChange, next => changedValue = next));
+
+            var input = cut.Find("input");
+            input.Input("abc");
+
+            Assert.Equal(3, value);
+            Assert.Null(inputValue);
+            Assert.Null(input.GetAttribute("aria-valuenow"));
+            Assert.Null(input.GetAttribute("aria-valuetext"));
+
+            input.Blur();
+
+            Assert.Equal(3, value);
+            Assert.Null(changedValue);
+            Assert.Equal("3", cut.Find("input").GetAttribute("value"));
+            Assert.Equal("3", cut.Find("input").GetAttribute("aria-valuenow"));
+        }
+
+        [Fact]
         public void RendersSpinbuttonAriaAttributesOnInput()
         {
             var cut = Render<ElInputNumber>(parameters => parameters
@@ -78,6 +143,42 @@ namespace Element.ComponentTests
             Assert.Equal("2.5", input.GetAttribute("aria-valuenow"));
             Assert.Equal("2.5", input.GetAttribute("aria-valuetext"));
             Assert.Equal("true", input.GetAttribute("aria-readonly"));
+        }
+
+        [Fact]
+        public void RendersTextInputSemanticsAndConfigurableAria()
+        {
+            var cut = Render<ElInputNumber>(parameters => parameters
+                .Add(x => x.Value, 2m)
+                .Add(x => x.Autocomplete, "one-time-code")
+                .Add(x => x.Inputmode, "numeric")
+                .Add(x => x.Tabindex, 3)
+                .Add(x => x.AriaLabel, "Quantity")
+                .Add(x => x.AriaLabelledby, "quantity-label")
+                .Add(x => x.AriaDescribedby, "quantity-help"));
+
+            var input = cut.Find("input");
+
+            Assert.Equal("text", input.GetAttribute("type"));
+            Assert.Equal("one-time-code", input.GetAttribute("autocomplete"));
+            Assert.Equal("numeric", input.GetAttribute("inputmode"));
+            Assert.Equal("3", input.GetAttribute("tabindex"));
+            Assert.Equal("Quantity", input.GetAttribute("aria-label"));
+            Assert.Equal("quantity-label", input.GetAttribute("aria-labelledby"));
+            Assert.Equal("quantity-help", input.GetAttribute("aria-describedby"));
+        }
+
+        [Fact]
+        public void EmptyValueOmitsCurrentAriaValue()
+        {
+            var cut = Render<ElInputNumber>();
+
+            var input = cut.Find("input");
+
+            Assert.Null(input.GetAttribute("aria-valuenow"));
+            Assert.Null(input.GetAttribute("aria-valuetext"));
+            Assert.Equal("false", input.GetAttribute("aria-invalid"));
+            Assert.Equal("false", input.GetAttribute("aria-disabled"));
         }
 
         [Fact]
@@ -105,6 +206,24 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void FormItemMergesCustomAndValidationDescriptions()
+        {
+            var cut = Render<ElForm>(parameters => parameters
+                .AddChildContent<ElFormItem<decimal?>>(item => item
+                    .Add(x => x.Name, "count")
+                    .Add(x => x.Label, "Count")
+                    .Add(x => x.Required, true)
+                    .AddChildContent<ElInputNumber>(input => input
+                        .Add(x => x.Value, (decimal?)null)
+                        .Add(x => x.AriaDescribedby, "count-help"))));
+
+            cut.InvokeAsync(() => cut.Instance.Validate());
+            cut.Render();
+
+            Assert.Equal("count-help count-error", cut.Find("input").GetAttribute("aria-describedby"));
+        }
+
+        [Fact]
         public void ControlsExposeAriaDisabledAndControlTargetInput()
         {
             var cut = Render<ElInputNumber>(parameters => parameters
@@ -120,6 +239,26 @@ namespace Element.ComponentTests
             Assert.Equal(input.Id, decrease.GetAttribute("aria-controls"));
             Assert.Equal("true", increase.GetAttribute("aria-disabled"));
             Assert.Equal("false", decrease.GetAttribute("aria-disabled"));
+            Assert.Equal("-1", increase.GetAttribute("tabindex"));
+            Assert.Equal("0", decrease.GetAttribute("tabindex"));
+            Assert.Equal("true", cut.Find(".el-input-number__increase i").GetAttribute("aria-hidden"));
+        }
+
+        [Fact]
+        public void ControlButtonsSupportKeyboardActivation()
+        {
+            decimal? value = 1;
+            var cut = Render<ElInputNumber>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.Min, 0m)
+                .Add(x => x.Max, 3m));
+
+            cut.Find(".el-input-number__increase").KeyDown(new KeyboardEventArgs { Key = "Enter" });
+            Assert.Equal(2, value);
+
+            cut.Find(".el-input-number__decrease").KeyDown(new KeyboardEventArgs { Key = " " });
+            Assert.Equal(1, value);
         }
 
         private class InputNumberKeyboardHost : ComponentBase

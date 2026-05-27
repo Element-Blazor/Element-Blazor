@@ -16,6 +16,7 @@ namespace Element
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
         private string inputText;
+        private bool hasInvalidInput;
 
         [Parameter]
         public decimal? Value { get; set; }
@@ -77,6 +78,24 @@ namespace Element
         public string Placeholder { get; set; }
 
         [Parameter]
+        public string Autocomplete { get; set; } = "off";
+
+        [Parameter]
+        public string Inputmode { get; set; } = "decimal";
+
+        [Parameter]
+        public object Tabindex { get; set; } = 0;
+
+        [Parameter]
+        public string AriaLabel { get; set; }
+
+        [Parameter]
+        public string AriaLabelledby { get; set; }
+
+        [Parameter]
+        public string AriaDescribedby { get; set; }
+
+        [Parameter]
         public bool ValidateEvent { get; set; } = true;
 
         [Parameter]
@@ -98,7 +117,7 @@ namespace Element
             effectiveSize = Size == InputSize.Normal
                 ? FormItem?.Size ?? FormItem?.Form?.EffectiveSize ?? ResolveInputSize(InputSize.Normal)
                 : Size;
-            Id = string.IsNullOrWhiteSpace(Id) && FormItem != null ? generatedInputId : Id;
+            Id = string.IsNullOrWhiteSpace(Id) ? ResolveAttributeId() ?? generatedInputId : Id;
             if (FormItem?.Form != null)
             {
                 FormItem.Form.RegisterInput(FormItem.Name, Id, this, FormItem);
@@ -121,13 +140,17 @@ namespace Element
                 SetFieldValue(Value, false);
             }
 
-            inputText = FormatValue(Value);
+            if (!hasInvalidInput)
+            {
+                inputText = FormatValue(Value);
+            }
         }
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             Value = ConvertToDecimal(value);
             inputText = FormatValue(Value);
+            hasInvalidInput = false;
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -145,12 +168,13 @@ namespace Element
         private async Task OnInputAsync(ChangeEventArgs e)
         {
             inputText = Convert.ToString(e.Value);
-            var parsed = ParseInput(inputText);
-            if (!parsed.HasValue && !string.IsNullOrWhiteSpace(inputText))
+            if (!TryParseInput(inputText, out var parsed))
             {
+                hasInvalidInput = true;
                 return;
             }
 
+            hasInvalidInput = false;
             Value = parsed;
             SetFieldValue(Value, false);
             if (ValueChanged.HasDelegate)
@@ -169,8 +193,7 @@ namespace Element
 
         private async Task OnChangeAsync(ChangeEventArgs e)
         {
-            var parsed = ParseInput(Convert.ToString(e.Value));
-            await CommitValueAsync(parsed, ValidateEvent, notifyChange: true);
+            await CommitTextAsync(Convert.ToString(e.Value), ValidateEvent, notifyChange: true);
         }
 
         private async Task OnFocusAsync(FocusEventArgs e)
@@ -183,7 +206,7 @@ namespace Element
 
         private async Task OnBlurAsync(FocusEventArgs e)
         {
-            await CommitValueAsync(ParseInput(inputText), ValidateEvent, notifyChange: false);
+            await CommitTextAsync(inputText, ValidateEvent, notifyChange: false);
             if (OnBlur.HasDelegate)
             {
                 await OnBlur.InvokeAsync(e);
@@ -193,6 +216,11 @@ namespace Element
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
             if (effectiveDisabled || Readonly)
+            {
+                return;
+            }
+
+            if (HasModifierKey(e))
             {
                 return;
             }
@@ -223,8 +251,23 @@ namespace Element
             }
             else if (e.Key == "Enter")
             {
-                await CommitValueAsync(ParseInput(inputText), ValidateEvent, notifyChange: true);
+                await CommitTextAsync(inputText, ValidateEvent, notifyChange: true);
             }
+        }
+
+        private static bool HasModifierKey(KeyboardEventArgs e)
+        {
+            return e.AltKey || e.CtrlKey || e.MetaKey || e.ShiftKey;
+        }
+
+        private async Task OnControlKeyDownAsync(KeyboardEventArgs e, Func<Task> action)
+        {
+            if (e.Key != "Enter" && e.Key != " ")
+            {
+                return;
+            }
+
+            await action();
         }
 
         private Task IncreaseAsync()
@@ -253,12 +296,14 @@ namespace Element
             var normalized = Normalize(value);
             if (TypeHelper.Equal(Value, normalized) && inputText == FormatValue(normalized))
             {
+                hasInvalidInput = false;
                 SetFieldValue(normalized, validate);
                 return;
             }
 
             Value = normalized;
             inputText = FormatValue(Value);
+            hasInvalidInput = false;
             SetFieldValue(Value, validate);
             if (ValueChanged.HasDelegate)
             {
@@ -301,21 +346,38 @@ namespace Element
             return result;
         }
 
-        private decimal? ParseInput(string value)
+        private async Task CommitTextAsync(string text, bool validate, bool notifyChange)
+        {
+            if (!TryParseInput(text, out var parsed))
+            {
+                inputText = FormatValue(Value);
+                hasInvalidInput = false;
+                SetFieldValue(Value, validate);
+                return;
+            }
+
+            await CommitValueAsync(parsed, validate, notifyChange);
+        }
+
+        private bool TryParseInput(string value, out decimal? result)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return null;
+                result = null;
+                return true;
             }
             if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var invariantValue))
             {
-                return invariantValue;
+                result = invariantValue;
+                return true;
             }
             if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.CurrentCulture, out var currentValue))
             {
-                return currentValue;
+                result = currentValue;
+                return true;
             }
-            return Value;
+            result = null;
+            return false;
         }
 
         private decimal ResolveStepStartValue(decimal step)
@@ -395,9 +457,32 @@ namespace Element
 
         private string AriaValueMax => Max?.ToString(CultureInfo.InvariantCulture);
 
-        private string AriaValueNow => Value?.ToString(CultureInfo.InvariantCulture);
+        private string AriaValueNow => hasInvalidInput ? null : Value?.ToString(CultureInfo.InvariantCulture);
 
-        private string AriaValueText => string.IsNullOrWhiteSpace(FormattedValue) ? null : FormattedValue;
+        private string AriaValueText => string.IsNullOrWhiteSpace(FormattedValue) || hasInvalidInput ? null : FormattedValue;
+
+        private string InputAriaDescribedBy => JoinAriaIds(AriaDescribedby, AriaDescribedBy);
+
+        private string ResolveAttributeId()
+        {
+            if (Attributes == null)
+            {
+                return null;
+            }
+
+            return Attributes.TryGetValue("id", out var id) ? Convert.ToString(id, CultureInfo.InvariantCulture) : null;
+        }
+
+        private int GetControlTabIndex(bool disabled)
+        {
+            return disabled ? -1 : 0;
+        }
+
+        private static string JoinAriaIds(params string[] ids)
+        {
+            var value = string.Join(" ", ids.Where(id => !string.IsNullOrWhiteSpace(id)));
+            return string.IsNullOrWhiteSpace(value) ? null : value;
+        }
 
         private static string GetAriaBoolean(bool value) => value ? "true" : "false";
 

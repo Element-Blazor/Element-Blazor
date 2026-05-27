@@ -3,35 +3,37 @@
 <div class="@wrapperClsBuilder.ToString()" style="@Style" aria-disabled="@AriaDisabled">
     @if (Controls && ControlsPosition != "right")
     {
-        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync">
-            <i class="el-icon-minus"></i>
+        <span class="@DecreaseButtonClass" role="button" tabindex="@GetControlTabIndex(IsDecreaseDisabled)" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync" @onkeydown="e => OnControlKeyDownAsync(e, DecreaseAsync)">
+            <i class="el-icon-minus" aria-hidden="true"></i>
         </span>
-        <span class="@IncreaseButtonClass" role="button" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync">
-            <i class="el-icon-plus"></i>
+        <span class="@IncreaseButtonClass" role="button" tabindex="@GetControlTabIndex(IsIncreaseDisabled)" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync" @onkeydown="e => OnControlKeyDownAsync(e, IncreaseAsync)">
+            <i class="el-icon-plus" aria-hidden="true"></i>
         </span>
     }
     <div class="el-input">
         <input class="el-input__inner"
                id="@Id"
                @attributes="Attributes"
-               type="number"
+               type="text"
                role="spinbutton"
                value="@FormattedValue"
                name="@Name"
                placeholder="@Placeholder"
+               autocomplete="@Autocomplete"
+               inputmode="@Inputmode"
+               tabindex="@Tabindex"
                disabled="@IsInputNumberDisabled"
                readonly="@Readonly"
-               min="@Min"
-               max="@Max"
-               step="@Step"
                aria-valuemin="@AriaValueMin"
                aria-valuemax="@AriaValueMax"
                aria-valuenow="@AriaValueNow"
                aria-valuetext="@AriaValueText"
+               aria-label="@AriaLabel"
+               aria-labelledby="@AriaLabelledby"
                aria-disabled="@AriaDisabled"
                aria-readonly="@AriaReadonly"
                aria-invalid="@AriaInvalid"
-               aria-describedby="@AriaDescribedBy"
+               aria-describedby="@InputAriaDescribedBy"
                @oninput="OnInputAsync"
                @onchange="OnChangeAsync"
                @onfocus="OnFocusAsync"
@@ -40,11 +42,11 @@
     </div>
     @if (Controls && ControlsPosition == "right")
     {
-        <span class="@IncreaseButtonClass" role="button" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync">
-            <i class="el-icon-arrow-up"></i>
+        <span class="@IncreaseButtonClass" role="button" tabindex="@GetControlTabIndex(IsIncreaseDisabled)" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync" @onkeydown="e => OnControlKeyDownAsync(e, IncreaseAsync)">
+            <i class="el-icon-arrow-up" aria-hidden="true"></i>
         </span>
-        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync">
-            <i class="el-icon-arrow-down"></i>
+        <span class="@DecreaseButtonClass" role="button" tabindex="@GetControlTabIndex(IsDecreaseDisabled)" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync" @onkeydown="e => OnControlKeyDownAsync(e, DecreaseAsync)">
+            <i class="el-icon-arrow-down" aria-hidden="true"></i>
         </span>
     }
 </div>
