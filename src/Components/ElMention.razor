@@ -13,6 +13,12 @@
               @onchange="OnChangeAsync"
               @onblur="OnBlur"
               @onkeydown="OnKeyDownAsync"></textarea>
+    @if (ShowClear)
+    {
+        <i class="el-input__icon el-input__clear el-icon-circle-close el-mention__clear"
+           @onclick="ClearAsync"
+           @onclick:stopPropagation></i>
+    }
     @if (dropdownVisible)
     {
         <div class="el-mention-dropdown el-select-dropdown el-popper">

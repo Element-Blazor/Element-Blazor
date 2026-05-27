@@ -150,6 +150,31 @@ namespace Element
             }
         }
 
+        private async Task ClearAsync(MouseEventArgs e)
+        {
+            if (!Clearable || effectiveDisabled || Readonly)
+            {
+                return;
+            }
+
+            Value = string.Empty;
+            searchText = null;
+            dropdownVisible = false;
+            SetFieldValue(Value, ValidateEvent);
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(Value);
+            }
+            if (OnChange.HasDelegate)
+            {
+                await OnChange.InvokeAsync(Value);
+            }
+        }
+
         private void OnBlur(FocusEventArgs e)
         {
             dropdownVisible = false;
@@ -259,6 +284,8 @@ namespace Element
         }
 
         private bool IsMentionDisabled => effectiveDisabled;
+
+        private bool ShowClear => Clearable && !effectiveDisabled && !Readonly && !string.IsNullOrEmpty(Value);
 
         private static string GetSizeCssValue(InputSize size) => size switch
         {

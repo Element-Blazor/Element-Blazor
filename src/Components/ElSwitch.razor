@@ -35,7 +35,7 @@
         styleText = string.Empty;
     }
 }
-<div role="switch" class="el-switch @isChecked @isDisabled" aria-checked="@ariaChecked">
+<div role="switch" class="el-switch @isChecked @isDisabled @(Loading ? "is-loading" : string.Empty)" aria-checked="@ariaChecked" aria-disabled="@EffectiveDisabled" aria-busy="@Loading">
     <input type="checkbox" name="" disabled="@EffectiveDisabled" true-value="@ActiveValue" class="el-switch__input">
     @if (showText)
     {
@@ -44,6 +44,10 @@
         </span>
     }
     <span class="el-switch__core" @onclick="OnInternalSwitchChangedAsync" style="width: 40px; @styleText">
+        @if (Loading)
+        {
+            <i class="el-switch__loading @LoadingIcon"></i>
+        }
     </span>
     @if (showText)
     {

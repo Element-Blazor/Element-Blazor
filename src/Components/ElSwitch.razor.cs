@@ -62,7 +62,19 @@ namespace Element
 
         public event Func<MouseEventArgs, Task> OnChangedAsync;
 
-        protected bool EffectiveDisabled => IsDisabled || (FormItem?.Form?.Disabled ?? false);
+        [Parameter]
+        public bool Loading { get; set; }
+
+        [Parameter]
+        public string LoadingIcon { get; set; } = "el-icon-loading";
+
+        [Parameter]
+        public Func<TValue, TValue, Task<bool>> BeforeChange { get; set; }
+
+        [Parameter]
+        public EventCallback<ElementChangeEventArgs<TValue>> ValueChanging { get; set; }
+
+        protected bool EffectiveDisabled => IsDisabled || Loading || (FormItem?.Form?.Disabled ?? false);
 
         protected override void OnInitialized()
         {
@@ -75,14 +87,27 @@ namespace Element
             {
                 return;
             }
-            if (TypeHelper.Equal(Value, InactiveValue))
+            var oldValue = Value;
+            var nextValue = TypeHelper.Equal(Value, InactiveValue) ? ActiveValue : InactiveValue;
+            if (BeforeChange != null && !await BeforeChange(oldValue, nextValue))
             {
-                Value = ActiveValue;
+                return;
             }
-            else
+            if (ValueChanging.HasDelegate)
             {
-                Value = InactiveValue;
+                var args = new ElementChangeEventArgs<TValue>
+                {
+                    OldValue = oldValue,
+                    NewValue = nextValue
+                };
+                await ValueChanging.InvokeAsync(args);
+                if (args.DisallowChange)
+                {
+                    return;
+                }
             }
+
+            Value = nextValue;
             SetFieldValue(Value, true);
             if (ValueChanged.HasDelegate)
             {

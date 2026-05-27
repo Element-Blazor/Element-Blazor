@@ -16,7 +16,7 @@
      aria-expanded="@dropdownVisible"
      aria-disabled="@IsSelectV2Disabled"
      tabindex="@(IsSelectV2Disabled ? -1 : 0)"
-     @onclick="ToggleDropdown">
+     @onclick="OpenDropdown">
     <ElInput TValue="string"
             Clearable="false"
             Disabled="@IsSelectV2Disabled"
@@ -28,7 +28,6 @@
             ValueChanged="OnFilterInputAsync"
             ValidateEvent="false"
             OnInput="OnFilterInputAsync"
-            OnInputClick="OpenDropdownFromInput"
             OnKeyDown="OpenDropdownFromKeyboard">
     </ElInput>
     @if (ShowClear)

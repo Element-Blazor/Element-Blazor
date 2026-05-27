@@ -75,6 +75,12 @@ namespace Element
         [Parameter]
         public EventCallback<TValue> OnChange { get; set; }
 
+        [Parameter]
+        public EventCallback<ElementChangeEventArgs<SelectV2Option>> OnChanging { get; set; }
+
+        [Parameter]
+        public EventCallback<ElementChangeEventArgs<SelectV2Option>> OnSelectedOptionChange { get; set; }
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
@@ -123,13 +129,13 @@ namespace Element
             }
         }
 
-        private void ToggleDropdown()
+        private void OpenDropdown()
         {
             if (effectiveDisabled)
             {
                 return;
             }
-            dropdownVisible = !dropdownVisible;
+            dropdownVisible = true;
         }
 
         private Task OnFilterInputAsync(string value)
@@ -137,14 +143,6 @@ namespace Element
             filterText = value;
             dropdownVisible = true;
             return Task.CompletedTask;
-        }
-
-        private void OpenDropdownFromInput(MouseEventArgs e)
-        {
-            if (!effectiveDisabled)
-            {
-                dropdownVisible = true;
-            }
         }
 
         private void OpenDropdownFromKeyboard(KeyboardEventArgs e)
@@ -162,6 +160,20 @@ namespace Element
                 return;
             }
 
+            var args = new ElementChangeEventArgs<SelectV2Option>
+            {
+                OldValue = SelectedOption,
+                NewValue = option
+            };
+            if (OnChanging.HasDelegate)
+            {
+                await OnChanging.InvokeAsync(args);
+                if (args.DisallowChange)
+                {
+                    return;
+                }
+            }
+
             Value = ConvertOptionValue(option.Value);
             filterText = null;
             dropdownVisible = false;
@@ -177,6 +189,10 @@ namespace Element
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(Value);
+            }
+            if (OnSelectedOptionChange.HasDelegate)
+            {
+                await OnSelectedOptionChange.InvokeAsync(args);
             }
         }
 

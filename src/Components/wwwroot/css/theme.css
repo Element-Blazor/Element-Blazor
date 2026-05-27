@@ -986,6 +986,68 @@ textarea.el-input__inner,
     cursor: not-allowed;
 }
 
+.el-mention {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.el-mention .el-textarea__inner {
+    resize: vertical;
+}
+
+.el-mention.is-disabled .el-textarea__inner {
+    background-color: var(--el-disabled-bg-color);
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+}
+
+.el-mention__clear {
+    color: var(--el-text-color-placeholder);
+    cursor: pointer;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    z-index: 2;
+}
+
+.el-mention-dropdown {
+    box-sizing: border-box;
+    left: 0;
+    margin-top: 4px;
+    max-height: 274px;
+    min-width: 100%;
+    overflow: auto;
+    position: absolute;
+    top: 100%;
+    z-index: var(--el-index-popper);
+}
+
+.el-select-v2 {
+    position: relative;
+}
+
+.el-select-v2__popper {
+    box-sizing: border-box;
+    left: 0;
+    margin-top: 4px;
+    min-width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    z-index: var(--el-index-popper);
+}
+
+.el-select-v2__clear {
+    color: var(--el-text-color-placeholder);
+    cursor: pointer;
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
 .el-rate {
     align-items: center;
     display: inline-flex;
