@@ -12,6 +12,7 @@ namespace Element
     {
         private HtmlPropertyBuilder wrapperClsBuilder;
         private bool effectiveDisabled;
+        private int activeThumbIndex = -1;
 
         [Parameter]
         public double Value { get; set; }
@@ -58,6 +59,21 @@ namespace Element
         public IEnumerable<SliderMark> Marks { get; set; }
 
         [Parameter]
+        public bool ShowTooltip { get; set; } = true;
+
+        [Parameter]
+        public bool Range { get; set; }
+
+        [Parameter]
+        public IList<double> RangeValue { get; set; } = new List<double>();
+
+        [Parameter]
+        public EventCallback<IList<double>> RangeValueChanged { get; set; }
+
+        [Parameter]
+        public Func<double, string> FormatTooltip { get; set; }
+
+        [Parameter]
         public bool ValidateEvent { get; set; } = true;
 
         [Parameter]
@@ -75,10 +91,18 @@ namespace Element
                 Max = Min + 1;
             }
             Step = Step <= 0 ? 1 : Step;
-            Value = Normalize(Value);
+            if (Range)
+            {
+                NormalizeRange();
+            }
+            else
+            {
+                Value = Normalize(Value);
+            }
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-slider", Cls)
                 .AddIf(effectiveDisabled, "is-disabled")
+                .AddIf(Range, "is-range")
                 .AddIf(ShowInput, "el-slider--with-input");
 
             if (FormItem != null && !FormItem.OriginValueHasRendered)
@@ -86,7 +110,14 @@ namespace Element
                 FormItem.OriginValueHasRendered = true;
                 if (FormItem.Form.Values.Any())
                 {
-                    Value = Convert.ToDouble(FormItem.OriginValue, CultureInfo.CurrentCulture);
+                    if (Range)
+                    {
+                        RangeValue = NormalizeRangeValue(FormItem.OriginValue);
+                    }
+                    else
+                    {
+                        Value = Convert.ToDouble(FormItem.OriginValue, CultureInfo.CurrentCulture);
+                    }
                 }
                 SetFieldValue(Value, false);
             }
@@ -124,6 +155,20 @@ namespace Element
             await CommitValueAsync(ParseValue(e.Value), ValidateEvent, notifyChange: true);
         }
 
+        private async Task OnRangeInputAsync(int index, ChangeEventArgs e)
+        {
+            await CommitRangeValueAsync(index, ParseValue(e.Value), validate: false, notifyChange: false);
+            if (OnInput.HasDelegate)
+            {
+                await OnInput.InvokeAsync(RangeValue[index]);
+            }
+        }
+
+        private async Task OnRangeChangeAsync(int index, ChangeEventArgs e)
+        {
+            await CommitRangeValueAsync(index, ParseValue(e.Value), ValidateEvent, notifyChange: true);
+        }
+
         private async Task OnInputNumberChangedAsync(decimal? value)
         {
             await CommitValueAsync(value.HasValue ? (double)value.Value : Min, ValidateEvent, notifyChange: true);
@@ -138,6 +183,35 @@ namespace Element
         {
             Value = Normalize(next);
             SetFieldValue(Value, validate);
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(Value);
+            }
+            if (notifyChange && OnChange.HasDelegate)
+            {
+                await OnChange.InvokeAsync(Value);
+            }
+        }
+
+        private async Task CommitRangeValueAsync(int index, double next, bool validate, bool notifyChange)
+        {
+            var range = CurrentRange.ToList();
+            range[index] = Normalize(next);
+            if (range[0] > range[1])
+            {
+                range.Sort();
+            }
+            RangeValue = range;
+            Value = range.LastOrDefault();
+            SetFieldValue(Value, validate);
+            if (RangeValueChanged.HasDelegate)
+            {
+                await RangeValueChanged.InvokeAsync(RangeValue);
+            }
             if (ValueChanged.HasDelegate)
             {
                 await ValueChanged.InvokeAsync(Value);
@@ -187,8 +261,54 @@ namespace Element
 
         private string ButtonStyle => $"left:{GetPercent(Value)}%;";
 
+        private IReadOnlyList<double> CurrentRange
+        {
+            get
+            {
+                var source = RangeValue ?? new List<double>();
+                var start = source.Count > 0 ? source[0] : Min;
+                var end = source.Count > 1 ? source[1] : Max;
+                return new[] { Normalize(start), Normalize(end) }.OrderBy(x => x).ToList();
+            }
+        }
+
+        private string RangeBarStyle => $"left:{GetPercent(CurrentRange[0])}%;width:{GetPercent(CurrentRange[1]) - GetPercent(CurrentRange[0])}%;";
+
+        private string GetRangeButtonStyle(int index) => $"left:{GetPercent(CurrentRange[index])}%;";
+
+        private string GetTooltipText(double value)
+        {
+            return FormatTooltip != null
+                ? FormatTooltip(value)
+                : value.ToString(CultureInfo.CurrentCulture);
+        }
+
         private decimal? DecimalValue => (decimal)Value;
 
         private bool IsSliderDisabled => effectiveDisabled;
+
+        private void NormalizeRange()
+        {
+            RangeValue = CurrentRange.ToList();
+            Value = RangeValue.LastOrDefault();
+        }
+
+        private IList<double> NormalizeRangeValue(object value)
+        {
+            if (value is IEnumerable<double> doubleValues)
+            {
+                return doubleValues.Select(Normalize).OrderBy(x => x).Take(2).ToList();
+            }
+            if (value is System.Collections.IEnumerable enumerable && value is not string)
+            {
+                return enumerable.Cast<object>()
+                    .Select(x => Convert.ToDouble(x, CultureInfo.CurrentCulture))
+                    .Select(Normalize)
+                    .OrderBy(x => x)
+                    .Take(2)
+                    .ToList();
+            }
+            return new List<double> { Min, Max };
+        }
     }
 }

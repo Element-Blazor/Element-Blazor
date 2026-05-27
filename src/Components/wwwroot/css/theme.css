@@ -1118,6 +1118,18 @@ textarea.el-input__inner,
     z-index: 2;
 }
 
+.el-slider__input--range {
+    pointer-events: none;
+}
+
+.el-slider__input--range::-webkit-slider-thumb {
+    pointer-events: auto;
+}
+
+.el-slider__input--range::-moz-range-thumb {
+    pointer-events: auto;
+}
+
 .el-slider__button-wrapper {
     height: 36px;
     position: absolute;
@@ -1125,6 +1137,10 @@ textarea.el-input__inner,
     transform: translateX(-50%);
     width: 36px;
     z-index: 1;
+}
+
+.el-slider__button-wrapper.is-hover {
+    z-index: 3;
 }
 
 .el-slider__button {
@@ -1135,6 +1151,26 @@ textarea.el-input__inner,
     height: 16px;
     margin: 10px;
     width: 16px;
+}
+
+.el-slider__tooltip {
+    background-color: var(--el-text-color-primary);
+    border-radius: var(--el-border-radius-base);
+    bottom: 34px;
+    color: var(--el-color-white);
+    display: none;
+    font-size: var(--el-font-size-extra-small);
+    left: 50%;
+    line-height: 1;
+    padding: 6px 8px;
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.el-slider__button-wrapper:hover .el-slider__tooltip,
+.el-slider__button-wrapper.is-hover .el-slider__tooltip {
+    display: block;
 }
 
 .el-slider__stop {
@@ -1171,6 +1207,19 @@ textarea.el-input__inner,
 
 .el-slider.is-disabled .el-slider__bar {
     background-color: var(--el-disabled-text-color);
+}
+
+.el-switch.is-loading {
+    cursor: default;
+}
+
+.el-switch__loading {
+    color: var(--el-color-white);
+    font-size: 12px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .el-time-select {

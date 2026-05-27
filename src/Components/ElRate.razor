@@ -14,7 +14,21 @@
               @onclick="e => SelectRateAsync(index)"
               @onmousemove="e => HoverRate(index, e)"
               @onmouseleave="ClearHover">
-            <i class="@GetIconClass(index)" style="@GetIconStyle(index)"></i>
+            @if (IconTemplate != null)
+            {
+                @IconTemplate(new RateIconContext
+                {
+                    Index = index,
+                    Active = IsActive(index),
+                    Half = AllowHalf && CurrentValue > index - 1 && CurrentValue < index,
+                    IconClass = GetIconClass(index),
+                    IconStyle = GetIconStyle(index)
+                })
+            }
+            else
+            {
+                <i class="@GetIconClass(index)" style="@GetIconStyle(index)"></i>
+            }
         </span>
     }
     @if (ShowText || ShowScore)

@@ -77,6 +77,9 @@ namespace Element
         public string VoidIcon { get; set; } = "el-icon-star-off";
 
         [Parameter]
+        public RenderFragment<RateIconContext> IconTemplate { get; set; }
+
+        [Parameter]
         public bool ValidateEvent { get; set; } = true;
 
         [Parameter]
@@ -236,5 +239,18 @@ namespace Element
             }
             return Convert.ToDouble(value, CultureInfo.CurrentCulture);
         }
+    }
+
+    public class RateIconContext
+    {
+        public int Index { get; set; }
+
+        public bool Active { get; set; }
+
+        public bool Half { get; set; }
+
+        public string IconClass { get; set; }
+
+        public string IconStyle { get; set; }
     }
 }

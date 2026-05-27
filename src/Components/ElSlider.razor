@@ -2,19 +2,55 @@
 
 <div class="@wrapperClsBuilder.ToString()" style="@Style">
     <div class="el-slider__runway" @onclick="OnRunwayClickAsync">
-        <div class="el-slider__bar" style="@BarStyle"></div>
-        <input class="el-slider__input"
-               type="range"
-               min="@Min"
-               max="@Max"
-               step="@Step"
-               value="@Value"
-               disabled="@IsSliderDisabled"
-               @oninput="OnInputAsync"
-               @onchange="OnChangeAsync" />
-        <div class="el-slider__button-wrapper" style="@ButtonStyle">
-            <div class="el-slider__button"></div>
-        </div>
+        <div class="el-slider__bar" style="@(Range ? RangeBarStyle : BarStyle)"></div>
+        @if (Range)
+        {
+            @for (var i = 0; i < 2; i++)
+            {
+                var index = i;
+                <input class="el-slider__input el-slider__input--range"
+                       type="range"
+                       min="@Min"
+                       max="@Max"
+                       step="@Step"
+                       value="@CurrentRange[index]"
+                       disabled="@IsSliderDisabled"
+                       @oninput="e => OnRangeInputAsync(index, e)"
+                       @onchange="e => OnRangeChangeAsync(index, e)" />
+                <div class="el-slider__button-wrapper @(activeThumbIndex == index ? "is-hover" : string.Empty)"
+                     style="@GetRangeButtonStyle(index)"
+                     @onmouseover="e => activeThumbIndex = index"
+                     @onmouseout="e => activeThumbIndex = -1">
+                    <div class="el-slider__button"></div>
+                    @if (ShowTooltip)
+                    {
+                        <div class="el-slider__tooltip">@GetTooltipText(CurrentRange[index])</div>
+                    }
+                </div>
+            }
+        }
+        else
+        {
+            <input class="el-slider__input"
+                   type="range"
+                   min="@Min"
+                   max="@Max"
+                   step="@Step"
+                   value="@Value"
+                   disabled="@IsSliderDisabled"
+                   @oninput="OnInputAsync"
+                   @onchange="OnChangeAsync" />
+            <div class="el-slider__button-wrapper @(activeThumbIndex == 0 ? "is-hover" : string.Empty)"
+                 style="@ButtonStyle"
+                 @onmouseover="e => activeThumbIndex = 0"
+                 @onmouseout="e => activeThumbIndex = -1">
+                <div class="el-slider__button"></div>
+                @if (ShowTooltip)
+                {
+                    <div class="el-slider__tooltip">@GetTooltipText(Value)</div>
+                }
+            </div>
+        }
         @if (ShowStops)
         {
             @foreach (var stop in Stops)
