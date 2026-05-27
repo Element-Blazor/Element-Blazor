@@ -41,9 +41,11 @@ namespace Element.ControlRenders
                 if (selectAttr != null)
                 {
                     var dataSource = renderConfig.DataSource;
-                    var dataSourceType = dataSource.GetType().GetGenericArguments()[0];
+                    var dataSourceType = GetDataSourceItemType(dataSource);
                     var valueProperty = dataSourceType.GetProperty(selectAttr.Value);
                     var textProperty = dataSourceType.GetProperty(selectAttr.Display);
+                    var seq = 17;
+                    FormControlRender.AddSelectAttributes(renderTreeBuilder, selectAttr, ref seq);
                     renderTreeBuilder.AddAttribute(1, nameof(ElSelect<string>.ChildContent), (RenderFragment)(builder =>
                     {
                         foreach (var item in dataSource as IEnumerable)
@@ -58,6 +60,12 @@ namespace Element.ControlRenders
                     CreateBind(renderConfig, renderTreeBuilder, 6);
                     renderTreeBuilder.AddComponentReferenceCapture(9, e => renderConfig.InputControl = e);
                     return;
+                }
+                else
+                {
+                    var selectAttribute = (SelectAttribute)renderConfig.ControlAttribute;
+                    var seq = 17;
+                    FormControlRender.AddSelectAttributes(renderTreeBuilder, selectAttribute, ref seq);
                 }
                 if (!finalValueType.IsEnum)
                 {
@@ -103,6 +111,19 @@ namespace Element.ControlRenders
             }
 
 
+        }
+
+        private static Type GetDataSourceItemType(object dataSource)
+        {
+            if (dataSource == null)
+            {
+                return typeof(object);
+            }
+            var enumerableType = dataSource.GetType()
+                .GetInterfaces()
+                .Concat(new[] { dataSource.GetType() })
+                .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+            return enumerableType?.GetGenericArguments()[0] ?? typeof(object);
         }
     }
 }

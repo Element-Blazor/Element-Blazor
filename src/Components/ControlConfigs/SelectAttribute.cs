@@ -20,5 +20,25 @@ namespace Element.ControlConfigs
         /// 数据加载器
         /// </summary>
         public Type DataSourceLoader { get; set; }
+
+        public string Placeholder { get; set; }
+
+        public bool IsDisabled { get; set; }
+
+        public bool Clearable { get; set; } = true;
+
+        public bool Filterable { get; set; }
+
+        public bool Multiple { get; set; }
+
+        public bool CollapseTags { get; set; }
+
+        public int MaxCollapseTags { get; set; } = 1;
+
+        public bool Virtualized { get; set; }
+
+        public int ItemHeight { get; set; } = 34;
+
+        public int Height { get; set; } = 274;
     }
 }

@@ -12,36 +12,41 @@ namespace Element.ControlRenders
     {
         protected virtual void CreateBind(RenderConfig config, RenderTreeBuilder builder, int startIndex)
         {
-            Type valueType = CreateTwoWayBinding(config, builder, startIndex);
+            CreateBind(config, builder, startIndex, nameof(ElInput<string>.ValueChanged), nameof(ElInput<string>.Value));
+        }
+
+        protected void CreateBind(RenderConfig config, RenderTreeBuilder builder, int startIndex, string valueChangedName, string valueName, Type valueType = null)
+        {
+            valueType = CreateTwoWayBinding(config, builder, startIndex, valueChangedName, valueType);
             var finalType = Nullable.GetUnderlyingType(valueType) ?? valueType;
             var value = config.EditingValue ?? config.RawValue;
             if (value == null)
             {
-                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Nullable.GetUnderlyingType(valueType) != null ? null : GetDefaultValue(valueType));
+                builder.AddAttribute(startIndex + 1, valueName, Nullable.GetUnderlyingType(valueType) != null ? null : GetDefaultValue(valueType));
                 return;
             }
             if (finalType.IsEnum)
             {
                 if (finalType.IsInstanceOfType(value))
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), value);
+                    builder.AddAttribute(startIndex + 1, valueName, value);
                 }
                 else if (config.RawValue == null && finalType != valueType)
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), (object)null);
+                    builder.AddAttribute(startIndex + 1, valueName, (object)null);
                 }
                 else if (config.RawValue == null)
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Activator.CreateInstance(finalType));
+                    builder.AddAttribute(startIndex + 1, valueName, Activator.CreateInstance(finalType));
                 }
                 else
                 {
-                    builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), Enum.Parse(finalType, Convert.ToString(value)));
+                    builder.AddAttribute(startIndex + 1, valueName, Enum.Parse(finalType, Convert.ToString(value)));
                 }
             }
             else
             {
-                builder.AddAttribute(startIndex + 1, nameof(ElInput<string>.Value), TypeHelper.ChangeType(value, valueType));
+                builder.AddAttribute(startIndex + 1, valueName, TypeHelper.ChangeType(value, valueType));
             }
         }
 

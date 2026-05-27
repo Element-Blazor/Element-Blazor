@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components;
+using Element.ControlConfigs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,15 @@ namespace Element.ControlRenders
             renderTreeBuilder.AddAttribute(1, nameof(ElFormItemObject.EnableAlwaysRender), true);
             renderTreeBuilder.AddAttribute(2, nameof(ElSwitch<bool>.ActiveValue), ConvertSwitchValue(true, valueType));
             renderTreeBuilder.AddAttribute(3, nameof(ElSwitch<bool>.InactiveValue), ConvertSwitchValue(false, valueType));
+            var switchAttribute = config.ControlAttribute as SwitchAttribute;
+            if (switchAttribute != null)
+            {
+                renderTreeBuilder.AddAttribute(7, nameof(ElSwitch<bool>.IsDisabled), switchAttribute.IsDisabled);
+                renderTreeBuilder.AddAttribute(8, nameof(ElSwitch<bool>.ActiveText), switchAttribute.ActiveText);
+                renderTreeBuilder.AddAttribute(9, nameof(ElSwitch<bool>.InactiveText), switchAttribute.InactiveText);
+                renderTreeBuilder.AddAttribute(10, nameof(ElSwitch<bool>.ActiveColor), switchAttribute.ActiveColor);
+                renderTreeBuilder.AddAttribute(11, nameof(ElSwitch<bool>.InactiveColor), switchAttribute.InactiveColor);
+            }
             var value = config.EditingValue ?? config.RawValue;
             renderTreeBuilder.AddAttribute(4, nameof(ElSwitch<bool>.Value), ConvertSwitchValue(value, valueType));
             if (config.Page != null)

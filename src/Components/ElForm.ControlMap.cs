@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Element
@@ -30,7 +29,9 @@ namespace Element
             fieldsControlMap.Add(property => property.PropertyType == typeof(double), typeof(ElInput<double>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool), typeof(ElSwitch<bool>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool?), typeof(ElSwitch<bool?>));
-            fieldsControlMap.Add(property => property.PropertyType == typeof(List<string>), typeof(ElSelect<string>));
+            fieldsControlMap.Add(property => property.PropertyType == typeof(List<string>)
+                || property.PropertyType == typeof(IList<string>)
+                || property.PropertyType == typeof(string[]), typeof(ElInputTag));
             fieldsControlMap.Add(property =>
             {
                 if (property.PropertyType == typeof(IDictionary<string, string>))
@@ -76,19 +77,6 @@ namespace Element
             var index = 0;
             foreach (var property in properties)
             {
-                Type controlType = null;
-                foreach (var map in fieldsControlMap)
-                {
-                    if (!map.Key(property))
-                    {
-                        continue;
-                    }
-                    controlType = map.Value;
-                }
-                if (controlType == null)
-                {
-                    throw new ElementException($"类型 {property.PropertyType.FullName} 没有配置对应的组件，表单无法生成");
-                }
                 var formControl = property.GetCustomAttribute<FormControlAttribute>() ?? new FormControlAttribute()
                 {
                     LabelWidth = 100
@@ -98,11 +86,12 @@ namespace Element
                     formControl.LabelWidth = 100;
                 }
                 var editorGeneratorAttr = property.GetCustomAttribute<EditorGeneratorAttribute>();
+                var controlType = GetInputControlType(property, formControl, editorGeneratorAttr);
                 var formItemValueType = GetFormItemValueType(property, controlType);
                 var formItemType = typeof(ElFormItem<>).MakeGenericType(formItemValueType);
-                if (controlType.IsGenericType && controlType.GetGenericTypeDefinition() == typeof(ElSelect<>))
+                if (controlType.IsGenericTypeDefinition)
                 {
-                    controlType = controlType.MakeGenericType(property.PropertyType);
+                    controlType = CloseGenericControlType(controlType, property.PropertyType);
                 }
 
                 formItems.Add(new FormItemConfig()
@@ -121,13 +110,71 @@ namespace Element
                     Placeholder = editorGeneratorAttr?.Placeholder,
                     Name = property.Name,
                     Property = property,
-                    ControlAttribute = GetInputControlConfig(property, controlType)
+                    ControlAttribute = GetInputControlConfig(property, controlType),
+                    DataSourceLoader = GetDataSourceLoader(property, controlType)
                 });
                 index += 11;
             }
             return formItems.Any(x => x.SortNo > 0) ? formItems.OrderBy(x => x.SortNo).ToList() : formItems;
         }
 
+        private Type GetInputControlType(PropertyInfo property, FormControlAttribute formControl, EditorGeneratorAttribute editorGeneratorAttr)
+        {
+            var explicitControl = formControl?.Control ?? editorGeneratorAttr?.Control;
+            if (explicitControl != null)
+            {
+                return CloseGenericControlType(explicitControl, property.PropertyType);
+            }
+
+            if (property.GetCustomAttribute<InputNumberAttribute>() != null)
+            {
+                return typeof(ElInputNumber);
+            }
+            if (property.GetCustomAttribute<InputTagAttribute>() != null)
+            {
+                return typeof(ElInputTag);
+            }
+            if (property.GetCustomAttribute<InputOtpAttribute>() != null)
+            {
+                return typeof(ElInputOtp);
+            }
+            if (property.GetCustomAttribute<MentionAttribute>() != null)
+            {
+                return typeof(ElMention);
+            }
+            if (property.GetCustomAttribute<RadioAttribute>() != null)
+            {
+                return typeof(ElRadioGroup<>).MakeGenericType(property.PropertyType);
+            }
+            if (property.GetCustomAttribute<RateAttribute>() != null)
+            {
+                return typeof(ElRate);
+            }
+            if (property.GetCustomAttribute<SliderAttribute>() != null)
+            {
+                return typeof(ElSlider);
+            }
+            var selectAttribute = property.GetCustomAttribute<SelectAttribute>();
+            if (selectAttribute?.Virtualized == true)
+            {
+                return typeof(ElSelectV2<>).MakeGenericType(property.PropertyType);
+            }
+
+            Type controlType = null;
+            foreach (var map in fieldsControlMap)
+            {
+                if (!map.Key(property))
+                {
+                    continue;
+                }
+                controlType = map.Value;
+            }
+            if (controlType == null)
+            {
+                throw new ElementException($"类型 {property.PropertyType.FullName} 没有配置对应的组件，表单无法生成");
+            }
+            return CloseGenericControlType(controlType, property.PropertyType);
+        }
 
         private object GetInputControlConfig(PropertyInfo propertyInfo, Type controlType)
         {
@@ -145,14 +192,70 @@ namespace Element
             {
                 return propertyInfo.GetCustomAttribute<InputAttribute>();
             }
+            if (controlType == typeof(ElInputNumber))
+            {
+                return propertyInfo.GetCustomAttribute<InputNumberAttribute>();
+            }
+            if (controlType == typeof(ElInputTag))
+            {
+                return propertyInfo.GetCustomAttribute<InputTagAttribute>();
+            }
+            if (controlType == typeof(ElInputOtp))
+            {
+                return propertyInfo.GetCustomAttribute<InputOtpAttribute>();
+            }
+            if (controlType == typeof(ElMention))
+            {
+                return propertyInfo.GetCustomAttribute<MentionAttribute>();
+            }
+            if (controlType == typeof(ElRate))
+            {
+                return propertyInfo.GetCustomAttribute<RateAttribute>();
+            }
+            if (controlType == typeof(ElSlider))
+            {
+                return propertyInfo.GetCustomAttribute<SliderAttribute>();
+            }
+            if (genericControlDefinition == typeof(ElRadioGroup<>))
+            {
+                return propertyInfo.GetCustomAttribute<RadioAttribute>();
+            }
             if (genericControlDefinition == typeof(ElCheckbox<>))
             {
                 return propertyInfo.GetCustomAttribute<CheckBoxAttribute>() ?? throw new ElementException($"复选框对应属性必须设置 {nameof(CheckBoxAttribute)}。");
+            }
+            if (genericControlDefinition == typeof(ElSelect<>)
+                || genericControlDefinition == typeof(ElSelectV2<>))
+            {
+                return propertyInfo.GetCustomAttribute<SelectAttribute>();
+            }
+            if (genericControlDefinition == typeof(ElSwitch<>))
+            {
+                return propertyInfo.GetCustomAttribute<SwitchAttribute>();
             }
             if (propertyInfo.PropertyType == typeof(IDictionary<string, string>)
                 || propertyInfo.PropertyType == typeof(Dictionary<string, string>))
             {
                 return propertyInfo.GetCustomAttribute<TableAttribute>();
+            }
+            return null;
+        }
+
+        private static Type GetDataSourceLoader(PropertyInfo propertyInfo, Type controlType)
+        {
+            var genericControlDefinition = controlType.IsGenericType ? controlType.GetGenericTypeDefinition() : null;
+            if (genericControlDefinition == typeof(ElSelect<>)
+                || genericControlDefinition == typeof(ElSelectV2<>))
+            {
+                return propertyInfo.GetCustomAttribute<SelectAttribute>()?.DataSourceLoader;
+            }
+            if (genericControlDefinition == typeof(ElRadioGroup<>))
+            {
+                return propertyInfo.GetCustomAttribute<RadioAttribute>()?.DataSourceLoader;
+            }
+            if (controlType == typeof(ElMention))
+            {
+                return propertyInfo.GetCustomAttribute<MentionAttribute>()?.DataSourceLoader;
             }
             return null;
         }
@@ -163,7 +266,36 @@ namespace Element
             {
                 return typeof(DateTime?);
             }
+            if (controlType == typeof(ElInputNumber))
+            {
+                return typeof(decimal?);
+            }
+            if (controlType == typeof(ElInputTag))
+            {
+                return typeof(IList<string>);
+            }
+            if (controlType == typeof(ElInputOtp) || controlType == typeof(ElMention))
+            {
+                return typeof(string);
+            }
+            if (controlType == typeof(ElRate))
+            {
+                return typeof(double?);
+            }
+            if (controlType == typeof(ElSlider))
+            {
+                return typeof(double);
+            }
             return property.PropertyType;
+        }
+
+        private static Type CloseGenericControlType(Type controlType, Type propertyType)
+        {
+            if (!controlType.IsGenericTypeDefinition)
+            {
+                return controlType;
+            }
+            return controlType.MakeGenericType(propertyType);
         }
 
         private IControlRender GetInputControlRender(Type controlType)
@@ -179,6 +311,15 @@ namespace Element
             if (controlType == typeof(ElUpload))
             {
                 return this.provider.GetRequiredService<IUploadRender>();
+            }
+            if (controlType == typeof(ElInputNumber)
+                || controlType == typeof(ElInputTag)
+                || controlType == typeof(ElInputOtp)
+                || controlType == typeof(ElMention)
+                || controlType == typeof(ElRate)
+                || controlType == typeof(ElSlider))
+            {
+                return new FormControlRender();
             }
             if (!controlType.IsGenericType)
             {
@@ -202,6 +343,11 @@ namespace Element
             if (genericDefine == typeof(ElSelect<>))
             {
                 return this.provider.GetRequiredService<ISelectRender>();
+            }
+            if (genericDefine == typeof(ElRadioGroup<>)
+                || genericDefine == typeof(ElSelectV2<>))
+            {
+                return new FormControlRender();
             }
             throw new ElementException($"组件 {controlType.FullName} 尚未实现对应的渲染器");
         }

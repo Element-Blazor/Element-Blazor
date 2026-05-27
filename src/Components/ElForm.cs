@@ -225,13 +225,13 @@ namespace Element
             builder.OpenElement(0, "form");
             if (Attributes != null)
             {
-                builder.AddMultipleAttributes(1, Attributes);
+            builder.AddMultipleAttributes(1, Attributes);
             }
             builder.AddAttribute(2, "class", string.Join(" ", clsList));
             builder.AddAttribute(3, "style", Style);
-            builder.AddElementReferenceCapture(4, value => Container = value);
             builder.AddAttribute(5, "onsubmit", EventCallback.Factory.Create(this, OnSubmitAsync));
             builder.AddEventPreventDefaultAttribute(6, "onsubmit", true);
+            builder.AddElementReferenceCapture(4, value => Container = value);
             TypeInference.CreateCascadingValue_0(builder, 7, 8, this, 9, (__builder2) =>
              {
                  if (EntityType != null)
@@ -258,7 +258,10 @@ namespace Element
                              formItemsBuilder.AddAttribute(7, nameof(ElFormItemObject.LabelWidth), formItemConfig.LabelWidth);
                              formItemsBuilder.AddAttribute(8, nameof(ElFormItemObject.ChildContent), (RenderFragment)(inputControlBuilder =>
                              {
-                                 formItemConfig.InputControlRender.Render(inputControlBuilder, formItemConfig);
+                                 inputControlBuilder.OpenComponent<ElDynamicComponent>(0);
+                                 inputControlBuilder.AddAttribute(1, nameof(ElDynamicComponent.Component), formItemConfig.InputControlRender);
+                                 inputControlBuilder.AddAttribute(2, nameof(ElDynamicComponent.Config), formItemConfig);
+                                 inputControlBuilder.CloseComponent();
                              }
                              ));
                              formItemsBuilder.AddAttribute(9, nameof(ElFormItemObject.EnableAlwaysRender), true);
@@ -711,6 +714,40 @@ namespace Element
                     return Enum.Parse(finalType, stringValue);
                 }
                 return Enum.ToObject(finalType, value);
+            }
+
+            if (destinationType == typeof(string[]))
+            {
+                if (value is IEnumerable<string> stringEnumerable)
+                {
+                    return stringEnumerable.ToArray();
+                }
+            }
+
+            if (destinationType == typeof(List<string>))
+            {
+                if (value is IEnumerable<string> stringEnumerable)
+                {
+                    return stringEnumerable.ToList();
+                }
+            }
+
+            if (destinationType == typeof(IList<string>))
+            {
+                if (value is IEnumerable<string> stringEnumerable)
+                {
+                    return stringEnumerable.ToList();
+                }
+            }
+
+            if (destinationType == typeof(decimal?) && value is double doubleValue)
+            {
+                return (decimal)doubleValue;
+            }
+
+            if (destinationType == typeof(double?) && value is decimal decimalValue)
+            {
+                return (double)decimalValue;
             }
 
             return TypeHelper.ChangeType(value, destinationType);

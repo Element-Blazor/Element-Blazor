@@ -29,6 +29,7 @@ namespace Element.ControlRenders
                 builder.AddAttribute(7, nameof(inputConfig.Type), inputConfig.Type);
                 builder.AddAttribute(8, nameof(inputConfig.Image), inputConfig.Image);
                 builder.AddAttribute(9, nameof(inputConfig.Style), inputConfig.Style);
+                builder.AddAttribute(12, nameof(inputConfig.Size), inputConfig.Size);
             }
             builder.AddAttribute(10, nameof(ElFormItemObject.EnableAlwaysRender), true);
             CreateBind(config, builder, 11);

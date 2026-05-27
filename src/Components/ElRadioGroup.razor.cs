@@ -57,6 +57,27 @@ namespace Element
             SetFieldValue(SelectedValue, false);
         }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            if (FormItem == null)
+            {
+                return;
+            }
+            if (FormItem.OriginValueHasRendered)
+            {
+                return;
+            }
+            FormItem.OriginValueHasRendered = true;
+            if (FormItem.Form.Values.Any())
+            {
+                SelectedValue = FormItem.OriginValue == null
+                    ? default
+                    : (TValue)TypeHelper.ChangeType(FormItem.OriginValue, typeof(TValue));
+            }
+            SetFieldValue(SelectedValue, false);
+        }
+
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             if (value == null)

@@ -1,0 +1,41 @@
+@inherits ElementFieldComponentBase<string>
+
+<div class="@wrapperClsBuilder.ToString()" style="@Style">
+    <textarea class="el-textarea__inner"
+              value="@Value"
+              placeholder="@Placeholder"
+              rows="@Rows"
+              disabled="@IsMentionDisabled"
+              readonly="@Readonly"
+              aria-invalid="@IsAriaInvalid"
+              aria-describedby="@AriaDescribedBy"
+              @oninput="OnInputAsync"
+              @onchange="OnChangeAsync"
+              @onblur="OnBlur"
+              @onkeydown="OnKeyDownAsync"></textarea>
+    @if (dropdownVisible)
+    {
+        <div class="el-mention-dropdown el-select-dropdown el-popper">
+            <ul class="el-scrollbar__view el-select-dropdown__list" role="listbox">
+                @{
+                    var options = FilteredOptions.ToList();
+                }
+                @for (var i = 0; i < options.Count; i++)
+                {
+                    var option = options[i];
+                    var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                        .Add("el-select-dropdown__item")
+                        .AddIf(option.Disabled, "is-disabled")
+                        .AddIf(i == activeIndex, "hover");
+                    <li class="@clsBuilder.ToString()"
+                        role="option"
+                        aria-disabled="@option.Disabled"
+                        @onmousedown:preventDefault
+                        @onclick="e => SelectOptionAsync(option)">
+                        <span>@(option.Label ?? option.Value)</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>

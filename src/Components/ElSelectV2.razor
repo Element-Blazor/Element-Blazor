@@ -1,0 +1,76 @@
+@inherits ElementFieldComponentBase<TValue>
+@typeparam TValue
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@{
+    var suffixIconClsList = new List<string>();
+    suffixIconClsList.Add("el-select__caret");
+    suffixIconClsList.Add("el-icon-arrow-up");
+    if (dropdownVisible)
+    {
+        suffixIconClsList.Add("is-reverse");
+    }
+}
+<div class="@wrapperClsBuilder.ToString()"
+     role="combobox"
+     aria-haspopup="listbox"
+     aria-expanded="@dropdownVisible"
+     aria-disabled="@IsSelectV2Disabled"
+     tabindex="@(IsSelectV2Disabled ? -1 : 0)"
+     @onclick="ToggleDropdown">
+    <ElInput TValue="string"
+            Clearable="false"
+            Disabled="@IsSelectV2Disabled"
+            Readonly="@(!Filterable)"
+            Size="@effectiveSize"
+            SuffixIcon="@string.Join(" ", suffixIconClsList)"
+            Placeholder="@EffectivePlaceholder"
+            Value="@DisplayLabel"
+            ValueChanged="OnFilterInputAsync"
+            ValidateEvent="false"
+            OnInput="OnFilterInputAsync"
+            OnInputClick="OpenDropdownFromInput"
+            OnKeyDown="OpenDropdownFromKeyboard">
+    </ElInput>
+    @if (ShowClear)
+    {
+        <i class="el-input__icon el-input__clear el-icon-circle-close el-select-v2__clear"
+           @onclick="ClearAsync"
+           @onclick:stopPropagation></i>
+    }
+    @if (dropdownVisible)
+    {
+        <div class="el-select-dropdown el-popper el-select-v2__popper" style="max-height:@(Height)px;">
+            <div class="el-scrollbar">
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="max-height:@(Height)px;">
+                    @if (!FilteredOptions.Any())
+                    {
+                        <p class="el-select-dropdown__empty">无数据</p>
+                    }
+                    else
+                    {
+                        <ul class="el-scrollbar__view el-select-dropdown__list" role="listbox">
+                            <Virtualize TItem="SelectV2Option" Items="@FilteredOptions" ItemSize="@ItemHeight" Context="option">
+                                    @{
+                                        var isSelected = TypeHelper.Equal(ConvertOptionValue(option.Value), Value);
+                                        var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                                            .Add("el-select-dropdown__item")
+                                            .AddIf(option.Disabled, "is-disabled")
+                                            .AddIf(isSelected, "selected");
+                                    }
+                                    <li class="@clsBuilder.ToString()"
+                                        style="height:@(ItemHeight)px;line-height:@(ItemHeight)px;"
+                                        role="option"
+                                        aria-selected="@isSelected"
+                                        aria-disabled="@option.Disabled"
+                                        @onclick="e => SelectOptionAsync(option)"
+                                        @onclick:stopPropagation>
+                                        <span>@option.Label</span>
+                                    </li>
+                            </Virtualize>
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
