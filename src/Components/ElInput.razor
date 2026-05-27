@@ -39,11 +39,18 @@
     }
     else
     {
-        @if (!string.IsNullOrWhiteSpace(PrefixIcon))
+        @if (HasPrefix)
         {
             <span class="el-input__prefix">
                 <span class="el-input__prefix-inner">
-                    <i class="el-input__icon @PrefixIcon" @onclick="OnPrefixIconClick"></i>
+                    @if (Prefix != null)
+                    {
+                        @Prefix
+                    }
+                    @if (!string.IsNullOrWhiteSpace(PrefixIcon))
+                    {
+                        <i class="el-input__icon @PrefixIcon" @onclick="OnPrefixIconClick"></i>
+                    }
                 </span>
             </span>
         }
@@ -59,6 +66,10 @@
                     else if (!string.IsNullOrWhiteSpace(SuffixIcon))
                     {
                         <i class="el-input__icon @SuffixIcon" @onclick="OnSuffixIconClick"></i>
+                    }
+                    @if (Suffix != null)
+                    {
+                        @Suffix
                     }
                     @if (ShowPasswordToggle)
                     {

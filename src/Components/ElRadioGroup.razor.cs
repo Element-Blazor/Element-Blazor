@@ -8,6 +8,8 @@ namespace Element
 {
     public partial class ElRadioGroup<TValue> : ElementFieldComponentBase<TValue>
     {
+        private readonly List<ElRadio<TValue>> radios = new List<ElRadio<TValue>>();
+
         [Parameter]
         public EventCallback<TValue> SelectedValueChanged { get; set; }
 
@@ -46,8 +48,10 @@ namespace Element
 
         [Parameter]
         public EventCallback<ElementChangeEventArgs<TValue>> SelectedValueChanging { get; set; }
+
         [Parameter]
         public TValue SelectedValue { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -90,9 +94,93 @@ namespace Element
             }
         }
 
+        internal void RegisterRadio(ElRadio<TValue> radio)
+        {
+            if (radio == null || radios.Contains(radio))
+            {
+                return;
+            }
+
+            radios.Add(radio);
+        }
+
+        internal void UnregisterRadio(ElRadio<TValue> radio)
+        {
+            if (radio == null)
+            {
+                return;
+            }
+
+            radios.Remove(radio);
+        }
+
+        internal int GetTabIndex(ElRadio<TValue> radio)
+        {
+            if (radio == null || radio.EffectiveDisabled)
+            {
+                return -1;
+            }
+
+            var enabled = radios.Where(x => !x.EffectiveDisabled).ToList();
+            if (!enabled.Any())
+            {
+                return -1;
+            }
+
+            var selected = enabled.FirstOrDefault(x => x.IsChecked);
+            if (selected != null)
+            {
+                return ReferenceEquals(selected, radio) ? 0 : -1;
+            }
+
+            return ReferenceEquals(enabled[0], radio) ? 0 : -1;
+        }
+
+        internal async Task MoveSelectionAsync(ElRadio<TValue> current, int step)
+        {
+            var enabled = radios.Where(x => !x.EffectiveDisabled).ToList();
+            if (!enabled.Any())
+            {
+                return;
+            }
+
+            var index = enabled.IndexOf(current);
+            if (index < 0)
+            {
+                index = enabled.FindIndex(x => x.IsChecked);
+            }
+            if (index < 0)
+            {
+                index = 0;
+            }
+
+            var target = enabled[(index + step + enabled.Count) % enabled.Count];
+            var changed = await TrySetValueAsync(target.Value, requireRefresh: true);
+            if (changed)
+            {
+                await target.FocusAsync();
+            }
+        }
+
+        internal async Task SelectEdgeAsync(bool selectFirst)
+        {
+            var enabled = radios.Where(x => !x.EffectiveDisabled).ToList();
+            if (!enabled.Any())
+            {
+                return;
+            }
+
+            var target = selectFirst ? enabled[0] : enabled[enabled.Count - 1];
+            var changed = await TrySetValueAsync(target.Value, requireRefresh: true);
+            if (changed)
+            {
+                await target.FocusAsync();
+            }
+        }
+
         internal async Task<bool> TrySetValueAsync(TValue value, bool requireRefresh)
         {
-            var arg = new ElementChangeEventArgs<TValue>()
+            var arg = new ElementChangeEventArgs<TValue>
             {
                 NewValue = value,
                 OldValue = SelectedValue

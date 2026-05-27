@@ -8,6 +8,8 @@ namespace Element.ControlConfigs
 
         public string Prefix { get; set; } = "@";
 
+        public string[] Prefixes { get; set; }
+
         public int Rows { get; set; } = 2;
 
         public bool IsDisabled { get; set; }

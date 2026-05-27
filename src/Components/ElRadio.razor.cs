@@ -1,5 +1,3 @@
-
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
@@ -11,12 +9,11 @@ namespace Element
 {
     public partial class ElRadio<TValue> : ElementFieldComponentBase<TValue>
     {
+        private ElementReference radioElement;
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
-        /// <summary>
-        /// 每个单选组件自己的值
-        /// </summary>
         [Parameter]
         public TValue Value { get; set; }
 
@@ -27,21 +24,12 @@ namespace Element
             set => Value = value;
         }
 
-        /// <summary>
-        /// 多个单选组件选择的值
-        /// </summary>
         [Parameter]
         public TValue SelectedValue { get; set; }
 
-        /// <summary>
-        /// 当选择状态发生改变时触发
-        /// </summary>
         [Parameter]
         public EventCallback<RadioStatus> StatusChanged { get; set; }
 
-        /// <summary>
-        /// 当选择的值发生改变时触发
-        /// </summary>
         [Parameter]
         public EventCallback<TValue> SelectedValueChanged { get; set; }
 
@@ -56,12 +44,15 @@ namespace Element
 
         [Parameter]
         public RadioSize Size { get; set; }
+
         [Parameter]
         public bool IsBordered { get; set; }
+
         [Parameter]
         public bool IsDisabled { get; set; }
 
         internal bool EffectiveDisabled => IsDisabled || (RadioGroup?.EffectiveDisabled ?? false) || (FormItem?.Form?.Disabled ?? false);
+
         [Parameter]
         public bool Disabled
         {
@@ -69,11 +60,50 @@ namespace Element
             set => IsDisabled = value;
         }
 
+        internal bool IsChecked => TypeHelper.Equal(Value, CurrentSelectedValue);
+
+        internal TValue CurrentSelectedValue
+        {
+            get
+            {
+                if (RadioGroup != null)
+                {
+                    return RadioGroup.SelectedValue;
+                }
+
+                if (FormItem != null)
+                {
+                    return FormItem.Value;
+                }
+
+                return SelectedValue;
+            }
+        }
+
+        internal int TabIndex
+        {
+            get
+            {
+                if (EffectiveDisabled)
+                {
+                    return -1;
+                }
+
+                if (RadioGroup == null)
+                {
+                    return 0;
+                }
+
+                return RadioGroup.GetTabIndex(this);
+            }
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
             if (RadioGroup != null)
             {
+                RadioGroup.RegisterRadio(this);
                 if (TypeHelper.Equal(RadioGroup.SelectedValue, Value))
                 {
                     Status = RadioStatus.Selected;
@@ -84,17 +114,14 @@ namespace Element
                     Status = RadioStatus.UnSelected;
                 }
             }
+            else if (TypeHelper.Equal(SelectedValue, Value))
+            {
+                Status = RadioStatus.Selected;
+                SetFieldValue(SelectedValue, false);
+            }
             else
             {
-                if (TypeHelper.Equal(SelectedValue, Value))
-                {
-                    Status = RadioStatus.Selected;
-                    SetFieldValue(SelectedValue, false);
-                }
-                else
-                {
-                    Status = RadioStatus.UnSelected;
-                }
+                Status = RadioStatus.UnSelected;
             }
         }
 
@@ -136,16 +163,17 @@ namespace Element
             var newStatus = Status == RadioStatus.Selected ? RadioStatus.UnSelected : RadioStatus.Selected;
             if (StatusChanging.HasDelegate)
             {
-                var arg = new ElementChangeEventArgs<RadioStatus>();
-                arg.OldValue = Status;
-                arg.NewValue = newStatus;
+                var arg = new ElementChangeEventArgs<RadioStatus>
+                {
+                    OldValue = Status,
+                    NewValue = newStatus
+                };
                 StatusChanging.InvokeAsync(arg).Wait();
                 if (arg.DisallowChange)
                 {
                     return;
                 }
             }
-
 
             if (newStatus == RadioStatus.Selected && !TypeHelper.Equal(SelectedValue, Value))
             {
@@ -166,31 +194,74 @@ namespace Element
             }
         }
 
+        protected async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (EffectiveDisabled)
+            {
+                return;
+            }
+
+            if (RadioGroup == null)
+            {
+                if (e.Key == " " || e.Key == "Spacebar" || e.Key == "Enter")
+                {
+                    ChangeRadio(null);
+                }
+                return;
+            }
+
+            switch (e.Key)
+            {
+                case " ":
+                case "Spacebar":
+                case "Enter":
+                    await RadioGroup.TrySetValueAsync(Value, !SelectedValueChanged.HasDelegate);
+                    break;
+                case "ArrowRight":
+                case "ArrowDown":
+                    await RadioGroup.MoveSelectionAsync(this, 1);
+                    break;
+                case "ArrowLeft":
+                case "ArrowUp":
+                    await RadioGroup.MoveSelectionAsync(this, -1);
+                    break;
+                case "Home":
+                    await RadioGroup.SelectEdgeAsync(selectFirst: true);
+                    break;
+                case "End":
+                    await RadioGroup.SelectEdgeAsync(selectFirst: false);
+                    break;
+            }
+        }
+
+        internal ValueTask FocusAsync()
+        {
+            return radioElement.Dom(JSRuntime).FocusAsync();
+        }
+
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnAfterRender(firstRender);
             var oldStatus = Status;
-            if (TypeHelper.Equal(SelectedValue, Value))
+            Status = TypeHelper.Equal(SelectedValue, Value)
+                ? RadioStatus.Selected
+                : RadioStatus.UnSelected;
+            if (oldStatus != Status && StatusChanged.HasDelegate)
             {
-                Status = RadioStatus.Selected;
-            }
-            else
-            {
-                Status = RadioStatus.UnSelected;
-            }
-            if (oldStatus != Status)
-            {
-                if (StatusChanged.HasDelegate)
-                {
-                    RequireRender = true;
-                    _ = StatusChanged.InvokeAsync(Status);
-                }
+                RequireRender = true;
+                _ = StatusChanged.InvokeAsync(Status);
             }
         }
 
         protected override bool ShouldRender()
         {
             return true;
+        }
+
+        public override void Dispose()
+        {
+            RadioGroup?.UnregisterRadio(this);
+            base.Dispose();
         }
     }
 }

@@ -2,11 +2,20 @@
 
 <div class="@wrapperClsBuilder.ToString()" style="@Style">
     <textarea class="el-textarea__inner"
+              id="@inputId"
+              @ref="textareaElement"
               value="@Value"
               placeholder="@Placeholder"
               rows="@Rows"
               disabled="@IsMentionDisabled"
               readonly="@Readonly"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-haspopup="listbox"
+              aria-expanded="@(dropdownVisible ? "true" : "false")"
+              aria-controls="@dropdownId"
+              aria-activedescendant="@ActiveDescendantId"
+              aria-disabled="@(IsMentionDisabled ? "true" : "false")"
               aria-invalid="@IsAriaInvalid"
               aria-describedby="@AriaDescribedBy"
               @oninput="OnInputAsync"
@@ -21,7 +30,7 @@
     }
     @if (dropdownVisible)
     {
-        <div class="el-mention-dropdown el-select-dropdown el-popper">
+        <div class="el-mention-dropdown el-select-dropdown el-popper" id="@dropdownId">
             <ul class="el-scrollbar__view el-select-dropdown__list" role="listbox">
                 @{
                     var options = FilteredOptions.ToList();
@@ -34,11 +43,20 @@
                         .AddIf(option.Disabled, "is-disabled")
                         .AddIf(i == activeIndex, "hover");
                     <li class="@clsBuilder.ToString()"
+                        id="@GetOptionId(i)"
                         role="option"
-                        aria-disabled="@option.Disabled"
+                        aria-selected="@((i == activeIndex) ? "true" : "false")"
+                        aria-disabled="@(option.Disabled ? "true" : "false")"
                         @onmousedown:preventDefault
                         @onclick="e => SelectOptionAsync(option)">
-                        <span>@(option.Label ?? option.Value)</span>
+                        @if (ItemTemplate != null)
+                        {
+                            @ItemTemplate(option)
+                        }
+                        else
+                        {
+                            <span>@(option.Label ?? option.Value)</span>
+                        }
                     </li>
                 }
             </ul>

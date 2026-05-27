@@ -126,6 +126,7 @@ namespace Element.ControlRenders
                 builder.AddAttribute(seq++, nameof(ElInputTag.AllowDuplicates), attribute.AllowDuplicates);
                 builder.AddAttribute(seq++, nameof(ElInputTag.TriggerKeys), attribute.TriggerKeys);
                 builder.AddAttribute(seq++, nameof(ElInputTag.AddOnBlur), attribute.AddOnBlur);
+                builder.AddAttribute(seq++, nameof(ElInputTag.Draggable), attribute.Draggable);
             }
             else if (!string.IsNullOrWhiteSpace(config.Placeholder))
             {
@@ -157,6 +158,10 @@ namespace Element.ControlRenders
             {
                 builder.AddAttribute(seq++, nameof(ElMention.Placeholder), attribute.Placeholder ?? config.Placeholder);
                 builder.AddAttribute(seq++, nameof(ElMention.Prefix), attribute.Prefix);
+                if (attribute.Prefixes != null)
+                {
+                    builder.AddAttribute(seq++, nameof(ElMention.Prefixes), attribute.Prefixes);
+                }
                 builder.AddAttribute(seq++, nameof(ElMention.Rows), attribute.Rows);
                 builder.AddAttribute(seq++, nameof(ElMention.IsDisabled), attribute.IsDisabled);
                 builder.AddAttribute(seq++, nameof(ElMention.Readonly), attribute.Readonly);

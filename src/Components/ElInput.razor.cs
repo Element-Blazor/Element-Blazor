@@ -207,6 +207,12 @@ namespace Element
         public virtual string PrefixIcon { get; set; }
 
         [Parameter]
+        public RenderFragment Prefix { get; set; }
+
+        [Parameter]
+        public RenderFragment Suffix { get; set; }
+
+        [Parameter]
         public virtual EventCallback<MouseEventArgs> OnSuffixIconClick { get; set; }
         [Parameter]
         public virtual EventCallback<MouseEventArgs> OnPrefixIconClick { get; set; }
@@ -454,7 +460,7 @@ namespace Element
                 .Add(Type == InputType.Textarea ? "el-textarea" : "el-input", Cls)
                 .AddIf(inputSizeCssValue != null, Type == InputType.Textarea ? $"el-textarea--{inputSizeCssValue}" : $"el-input--{inputSizeCssValue}")
                 .AddIf(HasSuffix, "el-input--suffix")
-                .AddIf(!string.IsNullOrWhiteSpace(PrefixIcon), "el-input--prefix")
+                .AddIf(HasPrefix, "el-input--prefix")
                 .AddIf(effectiveDisabled, "is-disabled")
                 .AddIf(IsFocus, "is-focus")
                 .AddIf(IsExceed, "is-exceed")
@@ -495,7 +501,9 @@ namespace Element
             && !effectiveDisabled
             && !string.IsNullOrEmpty(Formatter(Value));
 
-        protected bool HasSuffix => Clearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPasswordToggle || IsWordLimitVisible || HasValidationStatusIcon;
+        protected bool HasPrefix => Prefix != null || !string.IsNullOrWhiteSpace(PrefixIcon);
+
+        protected bool HasSuffix => Suffix != null || Clearable || !string.IsNullOrWhiteSpace(SuffixIcon) || ShowPasswordToggle || IsWordLimitVisible || HasValidationStatusIcon;
 
         protected string InputElementClass => Type == InputType.Textarea
             ? HtmlPropertyBuilder.CreateCssClassBuilder()

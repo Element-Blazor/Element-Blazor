@@ -37,6 +37,18 @@ window.execSelect = function (el) {
     }
     el.select();
 }
+window.elementMentionGetSelection = function (el) {
+    if (!el) {
+        return [0, 0];
+    }
+    return [el.selectionStart || 0, el.selectionEnd || 0];
+}
+window.elementMentionSetSelection = function (el, start, end) {
+    if (!el || !el.setSelectionRange) {
+        return;
+    }
+    el.setSelectionRange(start || 0, end || 0);
+}
 window.scrollElementIntoViewById = function (id, options) {
     if (!id) {
         return;

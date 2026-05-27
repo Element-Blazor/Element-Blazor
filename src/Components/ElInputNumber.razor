@@ -1,25 +1,37 @@
 @inherits ElementFieldComponentBase<decimal?>
 
-<div class="@wrapperClsBuilder.ToString()" style="@Style" role="spinbutton" aria-valuemin="@Min" aria-valuemax="@Max" aria-valuenow="@Value" aria-disabled="@IsInputNumberDisabled">
+<div class="@wrapperClsBuilder.ToString()" style="@Style" aria-disabled="@AriaDisabled">
     @if (Controls && ControlsPosition != "right")
     {
-        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" @onclick="DecreaseAsync">
+        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync">
             <i class="el-icon-minus"></i>
         </span>
-        <span class="@IncreaseButtonClass" role="button" aria-label="increase" @onclick="IncreaseAsync">
+        <span class="@IncreaseButtonClass" role="button" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync">
             <i class="el-icon-plus"></i>
         </span>
     }
     <div class="el-input">
         <input class="el-input__inner"
+               id="@Id"
+               @attributes="Attributes"
                type="number"
+               role="spinbutton"
                value="@FormattedValue"
+               name="@Name"
                placeholder="@Placeholder"
                disabled="@IsInputNumberDisabled"
                readonly="@Readonly"
                min="@Min"
                max="@Max"
                step="@Step"
+               aria-valuemin="@AriaValueMin"
+               aria-valuemax="@AriaValueMax"
+               aria-valuenow="@AriaValueNow"
+               aria-valuetext="@AriaValueText"
+               aria-disabled="@AriaDisabled"
+               aria-readonly="@AriaReadonly"
+               aria-invalid="@AriaInvalid"
+               aria-describedby="@AriaDescribedBy"
                @oninput="OnInputAsync"
                @onchange="OnChangeAsync"
                @onfocus="OnFocusAsync"
@@ -28,10 +40,10 @@
     </div>
     @if (Controls && ControlsPosition == "right")
     {
-        <span class="@IncreaseButtonClass" role="button" aria-label="increase" @onclick="IncreaseAsync">
+        <span class="@IncreaseButtonClass" role="button" aria-label="increase" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsIncreaseDisabled)" @onclick="IncreaseAsync">
             <i class="el-icon-arrow-up"></i>
         </span>
-        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" @onclick="DecreaseAsync">
+        <span class="@DecreaseButtonClass" role="button" aria-label="decrease" aria-controls="@Id" aria-disabled="@GetAriaBoolean(IsDecreaseDisabled)" @onclick="DecreaseAsync">
             <i class="el-icon-arrow-down"></i>
         </span>
     }

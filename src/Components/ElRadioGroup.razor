@@ -1,6 +1,8 @@
 @inherits ElementFieldComponentBase<TValue>
 @typeparam TValue
-<div role="radiogroup" class="el-radio-group">
+<div role="radiogroup"
+     class="el-radio-group"
+     aria-disabled="@(EffectiveDisabled ? "true" : "false")">
     <CascadingValue Value="@this">
         @ChildContent
     </CascadingValue>

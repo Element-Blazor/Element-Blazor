@@ -98,7 +98,7 @@
 | Date Picker | `ElDatePicker`、`DatePickerType`、`DatePickerShortcut` | 🟢 已对齐 | 已基于公开面板补齐单值、范围、快捷项、禁用日期、显示格式、值格式、清空、弹层事件和组件测试。 |
 | DateTime Picker | `ElDateTimePicker`、`DateTimePickerType`、`DateTimePickerShortcut` | 🟢 已对齐 | 已基于公开日期面板补齐单值、范围、时间输入、默认时间、快捷项、禁用日期、显示格式、值格式、清空、弹层事件和组件测试。 |
 | Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟢 已对齐 | 已补齐 label、size、disabled、rules、字段校验、提交、重置、清理校验、字段滚动和自动生成表单绑定闭环。 |
-| Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
+| Input | `ElInput` | 🟢 已对齐 | 已实现 prefix/suffix 插槽、show-word-limit、formatter/parser、禁用/只读、清空、尺寸和表单校验联动，并补充组件测试。 |
 | Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |
 | Input Tag | `ElInputTag` | 🟡 部分对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交和表单校验联动；继续补齐拖拽排序、组合键细节和测试。 |
 | Input OTP | `ElInputOtp` | 🟡 部分对齐 | 已实现分格输入、粘贴填充、焦点流转、掩码、禁用/只读和表单校验联动；继续补齐更细键盘行为和测试。 |

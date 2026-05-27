@@ -19,5 +19,7 @@ namespace Element.ControlConfigs
         public string[] TriggerKeys { get; set; } = new[] { "Enter", "," };
 
         public bool AddOnBlur { get; set; } = true;
+
+        public bool Draggable { get; set; }
     }
 }

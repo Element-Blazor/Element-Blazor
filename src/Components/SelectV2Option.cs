@@ -7,5 +7,7 @@ namespace Element
         public string Label { get; set; }
 
         public bool Disabled { get; set; }
+
+        public string Group { get; set; }
     }
 }

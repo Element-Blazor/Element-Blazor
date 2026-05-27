@@ -4,7 +4,7 @@
 @{
     var suffixIconClsList = new List<string>();
     suffixIconClsList.Add("el-select__caret");
-    suffixIconClsList.Add("el-icon-arrow-up");
+    suffixIconClsList.Add(IsLoading ? "el-icon-loading" : "el-icon-arrow-up");
     if (dropdownVisible)
     {
         suffixIconClsList.Add("is-reverse");
@@ -13,10 +13,34 @@
 <div class="@wrapperClsBuilder.ToString()"
      role="combobox"
      aria-haspopup="listbox"
-     aria-expanded="@dropdownVisible"
-     aria-disabled="@IsSelectV2Disabled"
+     aria-expanded="@(dropdownVisible ? "true" : "false")"
+     aria-disabled="@(IsSelectV2Disabled ? "true" : "false")"
+     aria-controls="@dropdownId"
+     aria-activedescendant="@ActiveDescendantId"
      tabindex="@(IsSelectV2Disabled ? -1 : 0)"
-     @onclick="OpenDropdown">
+     @onclick="OpenDropdown"
+     @onkeydown="OnRootKeyDownAsync">
+    @if (Multiple && SelectedOptions.Any())
+    {
+        <div class="el-select__tags">
+            @foreach (var selected in VisibleSelectedOptions)
+            {
+                <span class="el-tag el-tag--info el-tag--small el-tag--light" @key="selected.Value">
+                    <span class="el-select__tags-text">@selected.Label</span>
+                    @if (!IsSelectV2Disabled)
+                    {
+                        <i class="el-tag__close el-icon-close" @onclick="e => RemoveTagAsync(selected)" @onclick:stopPropagation></i>
+                    }
+                </span>
+            }
+            @if (CollapsedTagCount > 0)
+            {
+                <span class="el-tag el-tag--info el-tag--small el-tag--light">
+                    <span class="el-select__tags-text">+ @CollapsedTagCount</span>
+                </span>
+            }
+        </div>
+    }
     <ElInput TValue="string"
             Clearable="false"
             Disabled="@IsSelectV2Disabled"
@@ -38,33 +62,51 @@
     }
     @if (dropdownVisible)
     {
-        <div class="el-select-dropdown el-popper el-select-v2__popper" style="max-height:@(Height)px;">
+        <div class="el-select-dropdown el-popper el-select-v2__popper" id="@dropdownId" style="max-height:@(EffectiveHeight)px;">
             <div class="el-scrollbar">
-                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="max-height:@(Height)px;">
-                    @if (!FilteredOptions.Any())
+                <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="max-height:@(EffectiveHeight)px;">
+                    @if (IsLoading)
                     {
-                        <p class="el-select-dropdown__empty">无数据</p>
+                        <p class="el-select-dropdown__empty">
+                            <i class="el-icon-loading"></i>
+                            @LoadingText
+                        </p>
+                    }
+                    else if (!VirtualRows.Any())
+                    {
+                        <p class="el-select-dropdown__empty">@EmptyText</p>
                     }
                     else
                     {
                         <ul class="el-scrollbar__view el-select-dropdown__list" role="listbox">
-                            <Virtualize TItem="SelectV2Option" Items="@FilteredOptions" ItemSize="@ItemHeight" Context="option">
-                                    @{
-                                        var isSelected = TypeHelper.Equal(ConvertOptionValue(option.Value), Value);
-                                        var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-                                            .Add("el-select-dropdown__item")
-                                            .AddIf(option.Disabled, "is-disabled")
-                                            .AddIf(isSelected, "selected");
-                                    }
-                                    <li class="@clsBuilder.ToString()"
-                                        style="height:@(ItemHeight)px;line-height:@(ItemHeight)px;"
+                            <Virtualize TItem="SelectV2Row" Items="@VirtualRows" ItemSize="@EffectiveItemHeight" OverscanCount="@OverscanCount" Context="row">
+                                @if (row.IsGroup)
+                                {
+                                    <li class="el-select-group__wrap" role="presentation" style="height:@(EffectiveItemHeight)px;">
+                                        <span class="el-select-group__title">@row.Group</span>
+                                    </li>
+                                }
+                                else
+                                {
+                                    var option = row.Option;
+                                    var isSelected = IsSelected(option);
+                                    var isActive = activeOptionId == row.Id;
+                                    var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
+                                        .Add("el-select-dropdown__item")
+                                        .AddIf(option.Disabled, "is-disabled")
+                                        .AddIf(isSelected, "selected")
+                                        .AddIf(isActive, "hover");
+                                    <li id="@row.Id"
+                                        class="@clsBuilder.ToString()"
+                                        style="height:@(EffectiveItemHeight)px;line-height:@(EffectiveItemHeight)px;"
                                         role="option"
-                                        aria-selected="@isSelected"
-                                        aria-disabled="@option.Disabled"
+                                        aria-selected="@(isSelected ? "true" : "false")"
+                                        aria-disabled="@(option.Disabled ? "true" : "false")"
                                         @onclick="e => SelectOptionAsync(option)"
                                         @onclick:stopPropagation>
                                         <span>@option.Label</span>
                                     </li>
+                                }
                             </Virtualize>
                         </ul>
                     }

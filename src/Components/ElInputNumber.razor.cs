@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Element
 {
     public partial class ElInputNumber : ElementFieldComponentBase<decimal?>
     {
+        private static long inputIdSeed;
+        private readonly string generatedInputId = $"el-input-number-{Interlocked.Increment(ref inputIdSeed)}";
         private HtmlPropertyBuilder wrapperClsBuilder;
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
@@ -65,6 +68,9 @@ namespace Element
         public bool Readonly { get; set; }
 
         [Parameter]
+        public string Id { get; set; }
+
+        [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
 
         [Parameter]
@@ -92,6 +98,11 @@ namespace Element
             effectiveSize = Size == InputSize.Normal
                 ? FormItem?.Size ?? FormItem?.Form?.EffectiveSize ?? ResolveInputSize(InputSize.Normal)
                 : Size;
+            Id = string.IsNullOrWhiteSpace(Id) && FormItem != null ? generatedInputId : Id;
+            if (FormItem?.Form != null)
+            {
+                FormItem.Form.RegisterInput(FormItem.Name, Id, this, FormItem);
+            }
             var sizeCssValue = GetSizeCssValue(effectiveSize);
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-input-number", Cls)
@@ -181,6 +192,11 @@ namespace Element
 
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
+            if (effectiveDisabled || Readonly)
+            {
+                return;
+            }
+
             if (e.Key == "ArrowUp")
             {
                 await IncreaseAsync();
@@ -188,6 +204,26 @@ namespace Element
             else if (e.Key == "ArrowDown")
             {
                 await DecreaseAsync();
+            }
+            else if (e.Key == "PageUp")
+            {
+                await StepValueAsync(GetPageStep());
+            }
+            else if (e.Key == "PageDown")
+            {
+                await StepValueAsync(-GetPageStep());
+            }
+            else if (e.Key == "Home" && Min.HasValue)
+            {
+                await CommitValueAsync(Min.Value, ValidateEvent, notifyChange: true);
+            }
+            else if (e.Key == "End" && Max.HasValue)
+            {
+                await CommitValueAsync(Max.Value, ValidateEvent, notifyChange: true);
+            }
+            else if (e.Key == "Enter")
+            {
+                await CommitValueAsync(ParseInput(inputText), ValidateEvent, notifyChange: true);
             }
         }
 
@@ -208,7 +244,7 @@ namespace Element
                 return;
             }
 
-            var source = Value ?? 0;
+            var source = Value ?? ResolveStepStartValue(step);
             await CommitValueAsync(source + step, ValidateEvent, notifyChange: true);
         }
 
@@ -282,6 +318,27 @@ namespace Element
             return Value;
         }
 
+        private decimal ResolveStepStartValue(decimal step)
+        {
+            if (step > 0 && Min.HasValue)
+            {
+                return Min.Value;
+            }
+
+            if (step < 0 && Max.HasValue)
+            {
+                return Max.Value;
+            }
+
+            return 0;
+        }
+
+        private decimal GetPageStep()
+        {
+            var normalizedStep = Step == 0 ? 1 : Math.Abs(Step);
+            return normalizedStep * 10;
+        }
+
         private static decimal? ConvertToDecimal(object value)
         {
             if (value == null)
@@ -327,6 +384,22 @@ namespace Element
             .Add("el-input-number__increase")
             .AddIf(IsIncreaseDisabled, "is-disabled")
             .ToString();
+
+        private string AriaDisabled => GetAriaBoolean(IsInputNumberDisabled);
+
+        private string AriaReadonly => Readonly ? "true" : null;
+
+        private string AriaInvalid => IsAriaInvalid ? "true" : "false";
+
+        private string AriaValueMin => Min?.ToString(CultureInfo.InvariantCulture);
+
+        private string AriaValueMax => Max?.ToString(CultureInfo.InvariantCulture);
+
+        private string AriaValueNow => Value?.ToString(CultureInfo.InvariantCulture);
+
+        private string AriaValueText => string.IsNullOrWhiteSpace(FormattedValue) ? null : FormattedValue;
+
+        private static string GetAriaBoolean(bool value) => value ? "true" : "false";
 
         private static string GetSizeCssValue(InputSize size) => size switch
         {

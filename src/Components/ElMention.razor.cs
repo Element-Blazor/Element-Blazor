@@ -3,18 +3,28 @@ using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Element
 {
     public partial class ElMention : ElementFieldComponentBase<string>
     {
+        private static long mentionIdSeed;
         private HtmlPropertyBuilder wrapperClsBuilder;
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
         private string searchText;
         private bool dropdownVisible;
         private int activeIndex;
+        private string activePrefix;
+        private int activeMentionStart = -1;
+        private int activeMentionEnd = -1;
+        private int lastSelectionStart = -1;
+        private int lastSelectionEnd = -1;
+        private readonly string inputId = $"el-mention-input-{Interlocked.Increment(ref mentionIdSeed)}";
+        private readonly string dropdownId = $"el-mention-dropdown-{Interlocked.Increment(ref mentionIdSeed)}";
+        private ElementReference textareaElement;
 
         [Parameter]
         public string Value { get; set; }
@@ -37,6 +47,19 @@ namespace Element
 
         [Parameter]
         public string Prefix { get; set; } = "@";
+
+        [Parameter]
+        public IEnumerable<string> Prefixes { get; set; }
+
+        [Parameter]
+        public RenderFragment<MentionOption> ItemTemplate { get; set; }
+
+        [Parameter]
+        public RenderFragment<MentionOption> SuggestionItemTemplate
+        {
+            get => ItemTemplate;
+            set => ItemTemplate = value;
+        }
 
         [Parameter]
         public string Placeholder { get; set; }
@@ -103,8 +126,7 @@ namespace Element
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             Value = Convert.ToString(value);
-            searchText = null;
-            dropdownVisible = false;
+            ClearSearchState();
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -122,6 +144,7 @@ namespace Element
         private async Task OnInputAsync(ChangeEventArgs e)
         {
             Value = Convert.ToString(e.Value);
+            await CaptureSelectionAsync();
             RefreshSearch();
             SetFieldValue(Value, false);
             if (ValueChanged.HasDelegate)
@@ -158,8 +181,7 @@ namespace Element
             }
 
             Value = string.Empty;
-            searchText = null;
-            dropdownVisible = false;
+            ClearSearchState();
             SetFieldValue(Value, ValidateEvent);
             if (ValueChanged.HasDelegate)
             {
@@ -186,6 +208,17 @@ namespace Element
 
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
+            if (effectiveDisabled || Readonly)
+            {
+                return;
+            }
+
+            if (e.Key == "ArrowDown" && !dropdownVisible)
+            {
+                RefreshSearch();
+                return;
+            }
+
             var options = FilteredOptions.ToList();
             if (!dropdownVisible || !options.Any())
             {
@@ -194,19 +227,27 @@ namespace Element
 
             if (e.Key == "ArrowDown")
             {
-                activeIndex = (activeIndex + 1) % options.Count;
+                MoveActiveIndex(options, 1);
             }
             else if (e.Key == "ArrowUp")
             {
-                activeIndex = (activeIndex - 1 + options.Count) % options.Count;
+                MoveActiveIndex(options, -1);
             }
-            else if (e.Key == "Enter")
+            else if (e.Key == "Enter" || e.Key == "Tab")
             {
                 await SelectOptionAsync(options[activeIndex]);
             }
             else if (e.Key == "Escape")
             {
                 dropdownVisible = false;
+            }
+            else if (e.Key == "Home")
+            {
+                activeIndex = FindNextEnabledIndex(options, 0, 1);
+            }
+            else if (e.Key == "End")
+            {
+                activeIndex = FindNextEnabledIndex(options, options.Count - 1, -1);
             }
         }
 
@@ -217,15 +258,13 @@ namespace Element
                 return;
             }
 
-            var token = $"{Prefix}{searchText}";
             var text = Value ?? string.Empty;
-            var index = text.LastIndexOf(token, StringComparison.Ordinal);
-            var mentionValue = $"{Prefix}{(string.IsNullOrWhiteSpace(option.Value) ? option.Label : option.Value)}";
-            Value = index >= 0
-                ? text.Substring(0, index) + mentionValue + text.Substring(index + token.Length)
-                : text + mentionValue;
-            dropdownVisible = false;
-            searchText = null;
+            var prefix = activePrefix ?? ResolvePrefixes().FirstOrDefault() ?? "@";
+            var mentionValue = $"{prefix}{(string.IsNullOrWhiteSpace(option.Value) ? option.Label : option.Value)}";
+            var start = activeMentionStart >= 0 ? activeMentionStart : text.Length;
+            var end = activeMentionEnd >= start ? activeMentionEnd : start;
+            Value = text.Substring(0, start) + mentionValue + text.Substring(Math.Min(end, text.Length));
+            ClearSearchState();
             SetFieldValue(Value, ValidateEvent);
             if (ValueChanged.HasDelegate)
             {
@@ -239,33 +278,28 @@ namespace Element
             {
                 await OnSelect.InvokeAsync(option);
             }
+
+            await SetSelectionAsync(start + mentionValue.Length);
         }
 
         private void RefreshSearch()
         {
             var text = Value ?? string.Empty;
-            var prefix = string.IsNullOrEmpty(Prefix) ? "@" : Prefix;
-            var index = text.LastIndexOf(prefix, StringComparison.Ordinal);
-            if (index < 0)
+            if (!TryGetActiveMention(text, out var context))
             {
-                searchText = null;
-                dropdownVisible = false;
-                activeIndex = 0;
+                ClearSearchState();
                 return;
             }
 
-            var query = text.Substring(index + prefix.Length);
-            if (query.Any(char.IsWhiteSpace))
-            {
-                searchText = null;
-                dropdownVisible = false;
-                activeIndex = 0;
-                return;
-            }
-
-            searchText = query;
+            activePrefix = context.Prefix;
+            activeMentionStart = context.Start;
+            activeMentionEnd = context.End;
+            searchText = context.Query;
             dropdownVisible = FilteredOptions.Any();
-            activeIndex = Math.Min(activeIndex, Math.Max(FilteredOptions.Count() - 1, 0));
+            var options = FilteredOptions.ToList();
+            activeIndex = options.Any()
+                ? FindNextEnabledIndex(options, Math.Min(activeIndex, options.Count - 1), 1)
+                : 0;
         }
 
         private IEnumerable<MentionOption> FilteredOptions
@@ -283,9 +317,207 @@ namespace Element
             }
         }
 
+        private string ActiveDescendantId => dropdownVisible ? GetOptionId(activeIndex) : null;
+
         private bool IsMentionDisabled => effectiveDisabled;
 
         private bool ShowClear => Clearable && !effectiveDisabled && !Readonly && !string.IsNullOrEmpty(Value);
+
+        private string GetOptionId(int index) => $"{dropdownId}-option-{index}";
+
+        private IEnumerable<string> ResolvePrefixes()
+        {
+            var configured = (Prefixes ?? Enumerable.Empty<string>())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+
+            if (!configured.Any())
+            {
+                configured.Add(string.IsNullOrWhiteSpace(Prefix) ? "@" : Prefix);
+            }
+            else if (!string.IsNullOrWhiteSpace(Prefix) && !configured.Contains(Prefix, StringComparer.Ordinal))
+            {
+                configured.Insert(0, Prefix);
+            }
+
+            return configured.OrderByDescending(x => x.Length);
+        }
+
+        private async Task CaptureSelectionAsync()
+        {
+            try
+            {
+                var selection = await JSRuntime.InvokeAsync<int[]>("elementMentionGetSelection", new object[] { textareaElement });
+                if (selection?.Length >= 2)
+                {
+                    lastSelectionStart = selection[0];
+                    lastSelectionEnd = selection[1];
+                    return;
+                }
+            }
+            catch
+            {
+            }
+
+            var length = (Value ?? string.Empty).Length;
+            lastSelectionStart = length;
+            lastSelectionEnd = length;
+        }
+
+        private async Task SetSelectionAsync(int position)
+        {
+            lastSelectionStart = position;
+            lastSelectionEnd = position;
+            try
+            {
+                await JSRuntime.InvokeAsync<object>("elementMentionSetSelection", new object[] { textareaElement, position, position });
+                await textareaElement.Dom(JSRuntime).FocusAsync();
+            }
+            catch
+            {
+            }
+        }
+
+        private void MoveActiveIndex(IReadOnlyList<MentionOption> options, int step)
+        {
+            if (options == null || options.Count == 0)
+            {
+                activeIndex = 0;
+                return;
+            }
+
+            activeIndex = FindNextEnabledIndex(options, activeIndex + step, step);
+        }
+
+        private static int FindNextEnabledIndex(IReadOnlyList<MentionOption> options, int startIndex, int step)
+        {
+            if (options == null || options.Count == 0)
+            {
+                return 0;
+            }
+
+            if (options.All(x => x.Disabled))
+            {
+                return 0;
+            }
+
+            var index = ((startIndex % options.Count) + options.Count) % options.Count;
+            for (var i = 0; i < options.Count; i++)
+            {
+                if (!options[index].Disabled)
+                {
+                    return index;
+                }
+
+                index = (index + step + options.Count) % options.Count;
+            }
+
+            return 0;
+        }
+
+        private bool TryGetActiveMention(string text, out MentionContext context)
+        {
+            context = null;
+            var caret = ResolveCaret(text);
+            foreach (var prefix in ResolvePrefixes())
+            {
+                var searchIndex = Math.Min(caret, text.Length);
+                while (searchIndex >= 0)
+                {
+                    var index = text.LastIndexOf(prefix, searchIndex, StringComparison.Ordinal);
+                    if (index < 0)
+                    {
+                        break;
+                    }
+
+                    if (!IsValidMentionBoundary(text, index))
+                    {
+                        searchIndex = index - 1;
+                        continue;
+                    }
+
+                    var tokenStart = index + prefix.Length;
+                    if (tokenStart > caret)
+                    {
+                        searchIndex = index - 1;
+                        continue;
+                    }
+
+                    var tokenEnd = tokenStart;
+                    while (tokenEnd < text.Length && !char.IsWhiteSpace(text[tokenEnd]))
+                    {
+                        tokenEnd++;
+                    }
+
+                    if (caret > tokenEnd)
+                    {
+                        searchIndex = index - 1;
+                        continue;
+                    }
+
+                    var query = text.Substring(tokenStart, Math.Max(caret - tokenStart, 0));
+                    if (query.Any(char.IsWhiteSpace))
+                    {
+                        searchIndex = index - 1;
+                        continue;
+                    }
+
+                    context = new MentionContext
+                    {
+                        Prefix = prefix,
+                        Start = index,
+                        End = tokenEnd,
+                        Query = query
+                    };
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private int ResolveCaret(string text)
+        {
+            var length = (text ?? string.Empty).Length;
+            if (lastSelectionStart < 0)
+            {
+                return length;
+            }
+
+            return Math.Max(0, Math.Min(lastSelectionStart, length));
+        }
+
+        private static bool IsValidMentionBoundary(string text, int index)
+        {
+            if (index <= 0)
+            {
+                return true;
+            }
+
+            return char.IsWhiteSpace(text[index - 1]);
+        }
+
+        private void ClearSearchState()
+        {
+            searchText = null;
+            activePrefix = null;
+            activeMentionStart = -1;
+            activeMentionEnd = -1;
+            dropdownVisible = false;
+            activeIndex = 0;
+        }
+
+        private sealed class MentionContext
+        {
+            public string Prefix { get; set; }
+
+            public int Start { get; set; }
+
+            public int End { get; set; }
+
+            public string Query { get; set; }
+        }
 
         private static string GetSizeCssValue(InputSize size) => size switch
         {

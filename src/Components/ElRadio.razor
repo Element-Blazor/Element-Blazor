@@ -1,36 +1,11 @@
 @inherits ElementFieldComponentBase<TValue>
 @typeparam TValue
 @{
-    var isChecked = string.Empty;
-    var ariaChecked = false;
-
-    var currentSelectedValue = default(TValue);
-    if (RadioGroup != null)
-    {
-        currentSelectedValue = RadioGroup.SelectedValue;
-    }
-    else if (FormItem != null)
-    {
-        currentSelectedValue = FormItem.Value;
-    }
-    else
-    {
-        currentSelectedValue = SelectedValue;
-    }
-    if (TypeHelper.Equal(Value, currentSelectedValue))
-    {
-        isChecked = "is-checked";
-        ariaChecked = true;
-    }
-
-    var checkedValue = TypeHelper.Equal(Value, currentSelectedValue);
-    var isDisabled = string.Empty;
-    var ariaDisabled = false;
-    if (EffectiveDisabled)
-    {
-        isDisabled = "is-disabled";
-        ariaDisabled = true;
-    }
+    var checkedValue = IsChecked;
+    var isChecked = checkedValue ? "is-checked" : string.Empty;
+    var ariaChecked = checkedValue ? "true" : "false";
+    var isDisabled = EffectiveDisabled ? "is-disabled" : string.Empty;
+    var ariaDisabled = EffectiveDisabled ? "true" : "false";
     var isBordered = IsBordered ? "is-bordered" : string.Empty;
     var effectiveSize = RadioGroup == null
         ? Size != RadioSize.Default
@@ -43,13 +18,20 @@
             }
         : RadioGroup.EffectiveSize;
     var size = effectiveSize == RadioSize.Default
-        ? "el-radio-button--default"
+        ? string.Empty
         : "el-radio--" + effectiveSize.ToString().ToLowerInvariant();
 }
-<label role="radio" tabindex="0" class="el-radio @isChecked @isDisabled @isBordered @size" @onclick="ChangeRadio" aria-checked="@ariaChecked" aria-disabled="@ariaDisabled">
+<label role="radio"
+       @ref="radioElement"
+       tabindex="@TabIndex"
+       class="el-radio @isChecked @isDisabled @isBordered @size"
+       @onclick="ChangeRadio"
+       @onkeydown="OnKeyDownAsync"
+       aria-checked="@ariaChecked"
+       aria-disabled="@ariaDisabled">
     <span class="el-radio__input @isChecked @isDisabled">
         <span class="el-radio__inner"></span>
-        <input type="radio" aria-hidden="true" tabindex="-1" disabled="@EffectiveDisabled" checked="@checkedValue" class="el-radio__original" value="@currentSelectedValue">
+        <input type="radio" aria-hidden="true" tabindex="-1" disabled="@EffectiveDisabled" checked="@checkedValue" class="el-radio__original" value="@CurrentSelectedValue">
     </span>
     <span class="el-radio__label">@ChildContent</span>
 </label>

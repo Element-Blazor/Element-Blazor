@@ -122,15 +122,13 @@ namespace Element
 
             var chars = EnsureCells();
             chars[index] = text.FirstOrDefault();
-            await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+            var nextValue = new string(chars).TrimEnd('\0');
+            var shouldNotifyChange = IsValueComplete(nextValue);
+            await CommitAsync(nextValue, validate: shouldNotifyChange ? ValidateEvent : false, notifyChange: shouldNotifyChange);
 
             if (!string.IsNullOrEmpty(text) && index < Length - 1)
             {
                 await FocusCellAsync(index + 1);
-            }
-            if (internalValue.Length >= Length)
-            {
-                await NotifyChangeAsync();
             }
         }
 
@@ -141,9 +139,9 @@ namespace Element
                 return;
             }
 
-            if (e.Key == "Backspace" && string.IsNullOrEmpty(GetCellValue(index)) && index > 0)
+            if (e.Key == "Backspace")
             {
-                await FocusCellAsync(index - 1);
+                await HandleBackspaceAsync(index);
             }
             else if (e.Key == "ArrowLeft" && index > 0)
             {
@@ -152,6 +150,18 @@ namespace Element
             else if (e.Key == "ArrowRight" && index < Length - 1)
             {
                 await FocusCellAsync(index + 1);
+            }
+            else if (e.Key == "Delete")
+            {
+                await HandleDeleteAsync(index);
+            }
+            else if (e.Key == "Home")
+            {
+                await FocusCellAsync(0);
+            }
+            else if (e.Key == "End")
+            {
+                await FocusCellAsync(Math.Max(Length - 1, 0));
             }
         }
 
@@ -173,8 +183,9 @@ namespace Element
                 chars[writeIndex++] = value;
             }
 
-            await CommitAsync(new string(chars).TrimEnd('\0'), validate: ValidateEvent, notifyChange: true);
-            await FocusCellAsync(Math.Min(writeIndex, Length - 1));
+            var nextValue = new string(chars).TrimEnd('\0');
+            await CommitAsync(nextValue, validate: ValidateEvent, notifyChange: true);
+            await FocusCellAsync(GetNextFocusIndex(writeIndex));
         }
 
         private async Task CommitAsync(string value, bool validate, bool notifyChange)
@@ -208,6 +219,39 @@ namespace Element
             }
         }
 
+        private async Task HandleBackspaceAsync(int index)
+        {
+            var chars = EnsureCells();
+            if (chars[index] != '\0')
+            {
+                chars[index] = '\0';
+                await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+                return;
+            }
+
+            if (index <= 0)
+            {
+                await CommitAsync(string.Empty, validate: false, notifyChange: false);
+                return;
+            }
+
+            chars[index - 1] = '\0';
+            await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+            await FocusCellAsync(index - 1);
+        }
+
+        private async Task HandleDeleteAsync(int index)
+        {
+            var chars = EnsureCells();
+            if (chars[index] == '\0')
+            {
+                return;
+            }
+
+            chars[index] = '\0';
+            await CommitAsync(new string(chars).TrimEnd('\0'), validate: false, notifyChange: false);
+        }
+
         private async Task FocusCellAsync(int index)
         {
             if (index < 0 || index >= inputElements.Length)
@@ -223,7 +267,13 @@ namespace Element
             {
                 return string.Empty;
             }
-            var value = internalValue[index].ToString();
+            var cell = internalValue[index];
+            if (cell == '\0')
+            {
+                return string.Empty;
+            }
+
+            var value = cell.ToString();
             return Mask && !string.IsNullOrEmpty(value) ? "*" : value;
         }
 
@@ -242,8 +292,20 @@ namespace Element
         {
             return string.IsNullOrEmpty(value)
                 ? string.Empty
-                : new string(value.Take(Length).ToArray());
+                : new string(value.Where(x => x != '\0').Take(Length).ToArray());
         }
+
+        private int GetNextFocusIndex(int writeIndex)
+        {
+            if (writeIndex <= 0)
+            {
+                return 0;
+            }
+
+            return Math.Min(writeIndex >= Length ? Length - 1 : writeIndex, Length - 1);
+        }
+
+        private bool IsValueComplete(string value) => !string.IsNullOrEmpty(value) && value.Length >= Length;
 
         private bool IsInputOtpDisabled => effectiveDisabled;
     }

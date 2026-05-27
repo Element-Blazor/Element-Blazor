@@ -3,9 +3,21 @@
 <div class="@wrapperClsBuilder.ToString()"
      style="@Style"
      @onclick="FocusInputAsync">
-    @foreach (var tag in CurrentTags)
+    @for (var i = 0; i < CurrentTags.Count; i++)
     {
-        <span class="el-tag el-tag--info el-tag--small el-tag--light" @key="tag">
+        var index = i;
+        var tag = CurrentTags[index];
+        <span class="@GetTagClass(index)"
+              @key="@($"{index}-{tag}")"
+              draggable="@IsTagDraggable"
+              @ondragstart="e => OnTagDragStartAsync(index, e)"
+              @ondragover:preventDefault
+              @ondragover="e => OnTagDragOverAsync(index, e)"
+              @ondrop:preventDefault
+              @ondrop="e => OnTagDropAsync(index, e)"
+              @ondragend="OnTagDragEndAsync"
+              @onclick="e => SelectTagAsync(index)"
+              @onclick:stopPropagation>
             <span class="el-select__tags-text">@tag</span>
             @if (!IsInputTagDisabled && !Readonly)
             {

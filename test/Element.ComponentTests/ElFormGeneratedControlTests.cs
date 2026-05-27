@@ -136,6 +136,59 @@ namespace Element.ComponentTests
             Assert.Equal("section", input.GetAttribute("style"));
         }
 
+        [Fact]
+        public void GeneratedInputTagAppliesDragAndTagConfiguration()
+        {
+            var model = new GeneratedInputTagFormModel
+            {
+                Tags = new List<string> { "one", "two" }
+            };
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(GeneratedInputTagFormModel))
+                .Add(x => x.Value, model));
+
+            var wrapper = cut.Find(".el-input-tag");
+            var input = cut.Find("input");
+
+            Assert.Contains("el-input-tag--large", wrapper.ClassList);
+            Assert.False(input.HasAttribute("placeholder"));
+
+            input.Input("three");
+            input.KeyDown(new Microsoft.AspNetCore.Components.Web.KeyboardEventArgs { Key = "Enter" });
+
+            var tags = cut.FindAll(".el-tag");
+            Assert.Equal(3, tags.Count);
+            Assert.True(tags[0].HasAttribute("draggable"));
+            Assert.Contains("is-draggable", tags[0].ClassList);
+            Assert.Equal(new[] { "one", "two", "three" }, model.Tags);
+        }
+
+        [Fact]
+        public void GeneratedRadioAppliesBorderedSizeAndDisabledConfiguration()
+        {
+            var model = new GeneratedRadioFormModel
+            {
+                Choice = GeneratedMode.Fast
+            };
+
+            var cut = Render<ElForm>(parameters => parameters
+                .Add(x => x.EntityType, typeof(GeneratedRadioFormModel))
+                .Add(x => x.Value, model));
+
+            var group = cut.Find(".el-radio-group");
+            var radios = cut.FindAll("label.el-radio");
+
+            Assert.Equal("true", group.GetAttribute("aria-disabled"));
+            Assert.All(radios, radio =>
+            {
+                Assert.Contains("is-disabled", radio.ClassList);
+                Assert.Contains("is-bordered", radio.ClassList);
+                Assert.Contains("el-radio--small", radio.ClassList);
+                Assert.Equal("-1", radio.GetAttribute("tabindex"));
+            });
+        }
+
         private class GeneratedFormModel
         {
             public string Name { get; set; }
@@ -218,6 +271,22 @@ namespace Element.ComponentTests
                 Inputmode = "search",
                 InputStyle = "section")]
             public string Query { get; set; }
+        }
+
+        private class GeneratedInputTagFormModel
+        {
+            [InputTag(
+                Placeholder = "Tag item",
+                Size = InputSize.Large,
+                Max = 4,
+                Draggable = true)]
+            public List<string> Tags { get; set; }
+        }
+
+        private class GeneratedRadioFormModel
+        {
+            [Radio(Size = RadioSize.Small, Bordered = true, IsDisabled = true)]
+            public GeneratedMode Choice { get; set; }
         }
 
         private class MentionLoader : IDataSourceLoader
