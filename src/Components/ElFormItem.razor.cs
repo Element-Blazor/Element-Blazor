@@ -81,6 +81,16 @@ namespace Element
 
         public override void Validate()
         {
+            ValidateCore(includeAsyncRules: false).GetAwaiter().GetResult();
+        }
+
+        public override Task ValidateAsync()
+        {
+            return ValidateCore(includeAsyncRules: true);
+        }
+
+        private async Task ValidateCore(bool includeAsyncRules)
+        {
             if (!string.IsNullOrWhiteSpace(Error))
             {
                 ValidateStatus = "error";
@@ -106,7 +116,19 @@ namespace Element
                 {
                     continue;
                 }
-                if (item.Validate(Value))
+
+                bool isValid;
+                if (includeAsyncRules && item is IAsyncValidationRule asyncRule)
+                {
+                    ValidateStatus = "validating";
+                    isValid = await asyncRule.ValidateAsync(Value);
+                }
+                else
+                {
+                    isValid = item.Validate(Value);
+                }
+
+                if (isValid)
                 {
                     continue;
                 }

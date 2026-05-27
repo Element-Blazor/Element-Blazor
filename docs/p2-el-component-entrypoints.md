@@ -52,3 +52,5 @@ Public examples in `demo`, `template`, and `community` use `El*` tags. Element P
 | `Validate` / `ValidateField` | Validate all fields or selected fields. |
 | `ResetFields` / `ClearValidate` | Reset field values or clear validation state. |
 | `ScrollToFieldAsync` | Scroll a form field into view. |
+| `OnSubmitForm` / `OnValidSubmitForm` / `OnInvalidSubmitForm` | Typed form submit callbacks with the `ElForm` instance and validation result. |
+| `LabelContent` / `ErrorContent` | Form item label and error render fragments. |

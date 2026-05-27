@@ -34,6 +34,9 @@ namespace Element
         public string Label { get; set; }
 
         [Parameter]
+        public RenderFragment LabelContent { get; set; }
+
+        [Parameter]
         public string For { get; set; }
 
         /// <summary>
@@ -74,6 +77,9 @@ namespace Element
 
         [Parameter]
         public string Error { get; set; }
+
+        [Parameter]
+        public RenderFragment ErrorContent { get; set; }
 
         [Parameter]
         public string ValidateStatus { get; set; }
@@ -155,6 +161,7 @@ namespace Element
             {
                 rules.AddRange(validation.Rules);
             }
+            rules.AddRange(Form.GetDataAnnotationRules(this));
             if (Form.Rules != null && !string.IsNullOrWhiteSpace(Name) && Form.Rules.TryGetValue(Name, out var formRules))
             {
                 rules.AddRange(formRules);
@@ -163,7 +170,9 @@ namespace Element
             {
                 rules.AddRange(parameterRules.Where(x => x != null && !rules.Contains(x)));
             }
-            if (Required && !rules.OfType<RequiredRule>().Any())
+            if (Required
+                && !rules.OfType<RequiredRule>().Any()
+                && !rules.OfType<ValidationAttributeRule>().Any(x => x.Attribute is System.ComponentModel.DataAnnotations.RequiredAttribute))
             {
                 var requiredRule = new RequiredRule
                 {
@@ -197,6 +206,12 @@ namespace Element
 
         }
 
+        public virtual Task ValidateAsync()
+        {
+            Validate();
+            return Task.CompletedTask;
+        }
+
 
         public virtual void Reset()
         {
@@ -210,6 +225,17 @@ namespace Element
             IsShowing = true;
             MarkAsRequireRender();
         }
+
+        internal RenderFragment BuildErrorContent(string message) => builder =>
+        {
+            if (ErrorContent != null)
+            {
+                builder.AddContent(0, ErrorContent);
+                return;
+            }
+
+            builder.AddContent(1, message);
+        };
 
         internal void NotifyValueChanged(object value, bool validate)
         {

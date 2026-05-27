@@ -41,6 +41,19 @@ Use `El*` components:
 <ElInput TValue="string" Placeholder="Search" Clearable="true" />
 ```
 
+Form example:
+
+```razor
+<ElForm Model="@profile" OnValidSubmitForm="SaveAsync">
+    <ElFormItem TValue="string" Prop="User.Name" Label="Name">
+        <ElInput TValue="string" />
+    </ElFormItem>
+    <ElFormActionItem>
+        <ElButton Type="@ButtonType.Primary" NativeType="submit">Save</ElButton>
+    </ElFormActionItem>
+</ElForm>
+```
+
 ## Build
 
 Build the component library:

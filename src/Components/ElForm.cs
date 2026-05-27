@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Element
@@ -21,9 +24,13 @@ namespace Element
         private IDictionary<string, IList<IValidationRule>> lastRulesReference;
         private List<FormFieldValidation> lastValidationsReference;
         private object lastValueReference;
+        private Type lastEntityTypeReference;
         private bool hasResolvedRules;
         private string labelPosition;
         public ElementReference Container { get; set; }
+
+        [CascadingParameter]
+        public EditContext CascadedEditContext { get; set; }
 
         internal List<ElFormItemObject> Items { get; set; } = new List<ElFormItemObject>();
 
@@ -75,6 +82,15 @@ namespace Element
 
         [Parameter]
         public EventCallback OnInvalidSubmit { get; set; }
+
+        [Parameter]
+        public EventCallback<ElFormSubmitEventArgs> OnSubmitForm { get; set; }
+
+        [Parameter]
+        public EventCallback<ElFormSubmitEventArgs> OnValidSubmitForm { get; set; }
+
+        [Parameter]
+        public EventCallback<ElFormSubmitEventArgs> OnInvalidSubmitForm { get; set; }
 
         [Parameter]
         public object LabelPosition
@@ -169,23 +185,36 @@ namespace Element
 
         private async Task OnSubmitAsync()
         {
+            var submitArgs = new ElFormSubmitEventArgs(this);
             if (OnSubmit.HasDelegate)
             {
                 await OnSubmit.InvokeAsync();
             }
 
-            if (!OnValidSubmit.HasDelegate && !OnInvalidSubmit.HasDelegate)
+            if (OnSubmitForm.HasDelegate)
+            {
+                await OnSubmitForm.InvokeAsync(submitArgs);
+            }
+
+            if (!OnValidSubmit.HasDelegate
+                && !OnInvalidSubmit.HasDelegate
+                && !OnValidSubmitForm.HasDelegate
+                && !OnInvalidSubmitForm.HasDelegate)
             {
                 return;
             }
 
-            if (Validate())
+            var isValid = await ValidateAsync();
+            submitArgs.IsValid = isValid;
+            if (isValid)
             {
                 await OnValidSubmit.InvokeAsync();
+                await OnValidSubmitForm.InvokeAsync(submitArgs);
                 return;
             }
 
             await OnInvalidSubmit.InvokeAsync();
+            await OnInvalidSubmitForm.InvokeAsync(submitArgs);
         }
 
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder)
@@ -223,25 +252,32 @@ namespace Element
             }
 
             builder.OpenElement(0, "form");
+            var seq = 1;
             if (Attributes != null)
             {
-            builder.AddMultipleAttributes(1, Attributes);
+                builder.AddMultipleAttributes(seq++, Attributes);
             }
-            builder.AddAttribute(2, "class", string.Join(" ", clsList));
-            builder.AddAttribute(3, "style", Style);
-            builder.AddAttribute(5, "onsubmit", EventCallback.Factory.Create(this, OnSubmitAsync));
-            builder.AddEventPreventDefaultAttribute(6, "onsubmit", true);
-            builder.AddElementReferenceCapture(4, value => Container = value);
+            builder.AddAttribute(seq++, "class", string.Join(" ", clsList));
+            builder.AddAttribute(seq++, "style", Style);
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                builder.AddAttribute(seq++, "name", Name);
+            }
+            builder.AddAttribute(seq++, "onsubmit", EventCallback.Factory.Create(this, OnSubmitAsync));
+            builder.AddEventPreventDefaultAttribute(seq++, "onsubmit", true);
+            builder.AddElementReferenceCapture(seq++, value => Container = value);
             TypeInference.CreateCascadingValue_0(builder, 7, 8, this, 9, (__builder2) =>
              {
                  if (EntityType != null)
                  {
-                     if (formItemConfigs == null)
+                     if (formItemConfigs == null || EntityType != lastEntityTypeReference)
                      {
                          formItemConfigs = formFieldControlMap.GetFormItems(EntityType);
+                         lastEntityTypeReference = EntityType;
                      }
                      ChildContent = formItemsBuilder =>
                      {
+                         var itemSeq = 0;
                          foreach (var formItemConfig in formItemConfigs)
                          {
                              formItemConfig.Page = Page;
@@ -249,14 +285,14 @@ namespace Element
                              {
                                  continue;
                              }
-                             formItemsBuilder.OpenComponent(1, formItemConfig.FormItem);
-                             formItemsBuilder.AddAttribute(2, nameof(ElFormItemObject.IsRequired), formItemConfig.IsRequired);
-                             formItemsBuilder.AddAttribute(3, nameof(ElFormItemObject.RequiredMessage), formItemConfig.RequiredMessage);
-                             formItemsBuilder.AddAttribute(4, nameof(ElFormItemObject.Label), formItemConfig.Label);
-                             formItemsBuilder.AddAttribute(5, nameof(ElFormItemObject.Image), formItemConfig.Image);
-                             formItemsBuilder.AddAttribute(6, nameof(ElFormItemObject.Name), formItemConfig.Name);
-                             formItemsBuilder.AddAttribute(7, nameof(ElFormItemObject.LabelWidth), formItemConfig.LabelWidth);
-                             formItemsBuilder.AddAttribute(8, nameof(ElFormItemObject.ChildContent), (RenderFragment)(inputControlBuilder =>
+                             formItemsBuilder.OpenComponent(itemSeq++, formItemConfig.FormItem);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.IsRequired), formItemConfig.IsRequired);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.RequiredMessage), formItemConfig.RequiredMessage);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.Label), formItemConfig.Label);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.Image), formItemConfig.Image);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.Name), formItemConfig.Name);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.LabelWidth), formItemConfig.LabelWidth);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.ChildContent), (RenderFragment)(inputControlBuilder =>
                              {
                                  inputControlBuilder.OpenComponent<ElDynamicComponent>(0);
                                  inputControlBuilder.AddAttribute(1, nameof(ElDynamicComponent.Component), formItemConfig.InputControlRender);
@@ -264,14 +300,14 @@ namespace Element
                                  inputControlBuilder.CloseComponent();
                              }
                              ));
-                             formItemsBuilder.AddAttribute(9, nameof(ElFormItemObject.EnableAlwaysRender), true);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.EnableAlwaysRender), true);
                              formItemsBuilder.CloseComponent();
                          }
                          if (Buttons != null)
                          {
-                             formItemsBuilder.OpenComponent<ElFormActionItem>(11);
-                             formItemsBuilder.AddAttribute(12, nameof(Style), "text-align:right");
-                             formItemsBuilder.AddAttribute(13, nameof(ElFormItemObject.ChildContent), Buttons);
+                             formItemsBuilder.OpenComponent<ElFormActionItem>(itemSeq++);
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(Style), "text-align:right");
+                             formItemsBuilder.AddAttribute(itemSeq++, nameof(ElFormItemObject.ChildContent), Buttons);
                              formItemsBuilder.CloseComponent();
                          }
                      };
@@ -305,13 +341,13 @@ namespace Element
             var properties = typeof(T).GetProperties();
             foreach (var property in properties)
             {
-                var formItem = Items.FirstOrDefault(x => x.Name == property.Name);
+                var formItem = Items.FirstOrDefault(x => string.Equals(x.Name, property.Name, StringComparison.OrdinalIgnoreCase));
                 if (formItem == null)
                 {
                     continue;
                 }
 
-                object destValue = formItem.GetType().GetProperty("Value").GetValue(formItem);
+                object destValue = formItem.CurrentValue;
                 try
                 {
                     property.SetValue(value, ConvertValue(destValue, property.PropertyType));
@@ -326,7 +362,8 @@ namespace Element
 
         private void SetValues()
         {
-            if (Value == null)
+            var model = GetModel();
+            if (model == null)
             {
                 Values = Items
                     .Where(x => !string.IsNullOrWhiteSpace(x.Name))
@@ -334,19 +371,34 @@ namespace Element
                     .ToDictionary(x => x.Key, x => x.Last().CurrentValue);
                 return;
             }
-            Values = Value.GetType().GetProperties().Reverse().ToDictionary(x => x.Name, x => x.GetValue(Value));
+            Values = Items
+                .Where(x => !string.IsNullOrWhiteSpace(x.Name))
+                .GroupBy(x => x.Name)
+                .ToDictionary(x => x.Key, x => TryGetModelValue(x.Key, out var value) ? value : x.Last().CurrentValue);
+
+            var modelValues = model.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead)
+                .Reverse()
+                .ToDictionary(x => x.Name, x => x.GetValue(model));
+
+            foreach (var item in modelValues)
+            {
+                Values[item.Key] = item.Value;
+            }
         }
 
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
             var rulesChanged = !ReferenceEquals(Rules, lastRulesReference) || !ReferenceEquals(Validations, lastValidationsReference);
-            var modelChanged = !ReferenceEquals(Value, lastValueReference);
+            var model = GetModel();
+            var modelChanged = !ReferenceEquals(model, lastValueReference);
             SetValues();
             if (modelChanged)
             {
                 RefreshFieldInitialValues(resetCurrentValue: true);
-                lastValueReference = Value;
+                lastValueReference = model;
             }
             if (rulesChanged && hasResolvedRules)
             {
@@ -411,6 +463,7 @@ namespace Element
             {
                 item.MarkAsRequireRender();
                 item.Reset();
+                NotifyFieldValueChanged(item, item.CurrentValue, validate: false);
             }
             RequireRender = true;
             StateHasChanged();
@@ -422,6 +475,7 @@ namespace Element
             {
                 item.MarkAsRequireRender();
                 item.Reset();
+                NotifyFieldValueChanged(item, item.CurrentValue, validate: false);
             }
             RequireRender = true;
             StateHasChanged();
@@ -454,7 +508,7 @@ namespace Element
 
         public ElFormItemObject GetField(string prop)
         {
-            return Items.FirstOrDefault(x => x.Name == prop);
+            return Items.FirstOrDefault(x => string.Equals(x.Name, prop, StringComparison.OrdinalIgnoreCase));
         }
 
         public ElFormItemObject GetField(params string[] prop)
@@ -479,12 +533,12 @@ namespace Element
 
         public Task<bool> ValidateFieldAsync(params string[] props)
         {
-            return Task.FromResult(ValidateField(props));
+            return ValidateItemsAsync(FilterItems(props), scrollToError: ScrollToError);
         }
 
         public Task<bool> ValidateFieldAsync(IEnumerable<string> props)
         {
-            return Task.FromResult(ValidateField(props));
+            return ValidateFieldAsync(props?.ToArray() ?? Array.Empty<string>());
         }
 
         public async Task ScrollToFieldAsync(string prop)
@@ -512,7 +566,7 @@ namespace Element
 
         public Task<bool> ValidateAsync()
         {
-            return Task.FromResult(Validate());
+            return ValidateItemsAsync(Items, scrollToError: ScrollToError);
         }
 
         internal void RegisterInput(string prop, string id, object input, ElFormItemObject field = null)
@@ -570,24 +624,15 @@ namespace Element
                 item.Validate();
                 item.ShowErrorMessage();
             }
-            if (Value == null)
+            var model = GetModel();
+            if (model == null)
             {
                 return;
             }
 
-            var property = Value.GetType().GetProperty(item.Name);
-            if (property == null || !property.CanWrite)
+            if (FormModelPath.TrySetValue(model, item.Name, value, ConvertValue))
             {
                 return;
-            }
-
-            try
-            {
-                property.SetValue(Value, ConvertValue(value, property.PropertyType));
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is InvalidCastException || ex is FormatException)
-            {
-                throw new ElementException($"字段 {item.Name} 输入的类型为 {value?.GetType().ToString() ?? "null"}，但实体 {Value.GetType()} 对应的属性的类型为 {property.PropertyType}", ex);
             }
         }
 
@@ -621,8 +666,8 @@ namespace Element
                 return null;
             }
 
-            return inputRegistrations.LastOrDefault(x => x.Prop == item.Name && ReferenceEquals(x.Field, item)).Id
-                ?? inputRegistrations.LastOrDefault(x => x.Prop == item.Name).Id;
+            return inputRegistrations.LastOrDefault(x => string.Equals(x.Prop, item.Name, StringComparison.OrdinalIgnoreCase) && ReferenceEquals(x.Field, item)).Id
+                ?? inputRegistrations.LastOrDefault(x => string.Equals(x.Prop, item.Name, StringComparison.OrdinalIgnoreCase)).Id;
         }
 
         private bool ValidateItems(IEnumerable<ElFormItemObject> items, bool scrollToError)
@@ -652,6 +697,33 @@ namespace Element
             return isValid;
         }
 
+        private async Task<bool> ValidateItemsAsync(IEnumerable<ElFormItemObject> items, bool scrollToError)
+        {
+            var itemList = items.Where(x => x != null).ToList();
+            RequireRender = true;
+            foreach (var item in itemList)
+            {
+                item.MarkAsRequireRender();
+                await item.ValidateAsync();
+                item.IsShowing = true;
+            }
+            var isValid = itemList.All(x => x.ValidationResult == null || x.ValidationResult.IsValid);
+            if (!isValid)
+            {
+                ShowErrorMessage();
+            }
+            if (!isValid && scrollToError)
+            {
+                var firstErrorItem = itemList.FirstOrDefault(x => x.ValidationResult != null && !x.ValidationResult.IsValid);
+                if (firstErrorItem != null)
+                {
+                    await ScrollToFieldAsync(firstErrorItem.Name);
+                }
+            }
+            StateHasChanged();
+            return isValid;
+        }
+
         private Task ScrollToFirstErrorAsync()
         {
             var firstErrorItem = Items.FirstOrDefault(x => x.ValidationResult != null && !x.ValidationResult.IsValid);
@@ -660,6 +732,66 @@ namespace Element
                 return Task.CompletedTask;
             }
             return ScrollToFieldAsync(firstErrorItem.Name);
+        }
+
+        private object GetModel()
+        {
+            return Value ?? CascadedEditContext?.Model;
+        }
+
+        private bool TryGetModelValue(string prop, out object value)
+        {
+            value = null;
+            var model = GetModel();
+            if (model == null || string.IsNullOrWhiteSpace(prop))
+            {
+                return false;
+            }
+
+            return FormModelPath.TryGetValue(model, prop, out value);
+        }
+
+        internal IEnumerable<IValidationRule> GetDataAnnotationRules(ElFormItemObject item)
+        {
+            var model = GetModel();
+            if (model == null || item == null || string.IsNullOrWhiteSpace(item.Name))
+            {
+                return Enumerable.Empty<IValidationRule>();
+            }
+
+            if (!FormModelPath.TryGetPropertyInfo(model.GetType(), item.Name, out var property))
+            {
+                return Enumerable.Empty<IValidationRule>();
+            }
+
+            var attributes = property.GetCustomAttributes<ValidationAttribute>(inherit: true).ToArray();
+            if (attributes.Length == 0)
+            {
+                return Enumerable.Empty<IValidationRule>();
+            }
+
+            return attributes.Select(attribute => new ValidationAttributeRule(attribute, () =>
+            {
+                FormModelPath.TryGetParentObject(model, item.Name, out var parent);
+                var context = new ValidationContext(parent ?? model)
+                {
+                    MemberName = property.Name,
+                    DisplayName = ResolveDisplayName(property)
+                };
+                return context;
+            })).ToArray();
+        }
+
+        private static string ResolveDisplayName(PropertyInfo property)
+        {
+            var display = property.GetCustomAttribute<DisplayAttribute>();
+            if (display != null)
+            {
+                return display.GetName() ?? display.Name ?? property.Name;
+            }
+
+            var displayName = property.GetCustomAttribute<System.ComponentModel.DisplayNameAttribute>();
+            return displayName?.DisplayName ?? property.Name;
         }
 
         private IEnumerable<ElFormItemObject> FilterItems(params string[] props)
@@ -688,7 +820,7 @@ namespace Element
                 return;
             }
 
-            if (Values.TryGetValue(item.Name, out var value))
+            if (Values.TryGetValue(item.Name, out var value) || TryGetModelValue(item.Name, out value))
             {
                 item.SetInitialValue(value, resetCurrentValue);
             }
@@ -696,6 +828,11 @@ namespace Element
 
         private static object ConvertValue(object value, Type destinationType)
         {
+            if (destinationType == null)
+            {
+                return value;
+            }
+
             if (value == null)
             {
                 return null;
@@ -794,6 +931,18 @@ namespace Element
         public bool IsValid { get; set; }
 
         public string Message { get; set; }
+    }
+
+    public class ElFormSubmitEventArgs
+    {
+        public ElFormSubmitEventArgs(ElForm form)
+        {
+            Form = form;
+        }
+
+        public ElForm Form { get; }
+
+        public bool IsValid { get; set; }
     }
 
 

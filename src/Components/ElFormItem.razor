@@ -58,14 +58,15 @@
             labelStyles.Add($"width:{resolvedLabelWidth}");
         }
 
-        if (finalLabelPosition != "top" && !string.IsNullOrWhiteSpace(Label) && !string.IsNullOrWhiteSpace(resolvedLabelWidth))
+        var hasLabel = !string.IsNullOrWhiteSpace(Label) || LabelContent != null || !string.IsNullOrWhiteSpace(Image);
+        if (finalLabelPosition != "top" && hasLabel && !string.IsNullOrWhiteSpace(resolvedLabelWidth))
         {
             bodyStyles.Add($"margin-left:{resolvedLabelWidth}");
         }
     }
     var labelText = string.IsNullOrWhiteSpace(Label) ? Label : $"{Label}{Form.LabelSuffix}";
     var labelFor = Form.ResolveInputId(this);
-    var isGroup = string.IsNullOrWhiteSpace(labelFor) && !string.IsNullOrWhiteSpace(Label);
+    var isGroup = string.IsNullOrWhiteSpace(labelFor) && (!string.IsNullOrWhiteSpace(Label) || LabelContent != null || !string.IsNullOrWhiteSpace(Image));
     var shouldShowValidationMessage = ShowMessage && Form.ShowMessage;
     var errorMessages = new List<string>();
     if (!string.IsNullOrWhiteSpace(Error))
@@ -84,10 +85,17 @@
         {
             <label id="@($"{Name}-label")" for="@labelFor" class="el-form-item__label" style="@string.Join(";", labelStyles)"><img src="@Image" /></label>
         }
-        else if (!string.IsNullOrWhiteSpace(Label))
+        else if (!string.IsNullOrWhiteSpace(Label) || LabelContent != null)
         {
             <label id="@($"{Name}-label")" for="@labelFor" class="el-form-item__label" style="@string.Join(";", labelStyles)">
-                @labelText
+                @if (LabelContent != null)
+                {
+                    @LabelContent
+                }
+                else
+                {
+                    @labelText
+                }
             </label>
         }
         <div class="el-form-item__content" style="@string.Join(";", bodyStyles)">
@@ -101,7 +109,7 @@
                     var marginTop = IsShowing ? "3px" : "0px";
                     var opacity = IsShowing ? "0" : "1";
                     <div id="@ErrorId" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
-                        @errorMessage
+                        @BuildErrorContent(errorMessage)
                     </div>
                 }
             }
@@ -121,7 +129,7 @@ else
             var marginTop = IsShowing ? "3px" : "0px";
             var opacity = IsShowing ? "0" : "1";
             <div id="@ErrorId" class="el-form-item__error @(InlineMessage ?? Form.InlineMessage ? "el-form-item__error--inline" : string.Empty)" style="margin-top:@marginTop;transition:margin-top 0.1s,opacity 0.1s;opacity:@opacity;">
-                @errorMessage
+                @BuildErrorContent(errorMessage)
             </div>
         }
     }

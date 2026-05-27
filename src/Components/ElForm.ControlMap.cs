@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -86,6 +87,14 @@ namespace Element
                     formControl.LabelWidth = 100;
                 }
                 var editorGeneratorAttr = property.GetCustomAttribute<EditorGeneratorAttribute>();
+                var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
+                var displayAttribute = property.GetCustomAttribute<DisplayAttribute>();
+                var displayNameAttribute = property.GetCustomAttribute<System.ComponentModel.DisplayNameAttribute>();
+                var label = editorGeneratorAttr?.Label
+                    ?? displayAttribute?.GetName()
+                    ?? displayAttribute?.Name
+                    ?? displayNameAttribute?.DisplayName
+                    ?? property.Name;
                 var controlType = GetInputControlType(property, formControl, editorGeneratorAttr);
                 var formItemValueType = GetFormItemValueType(property, controlType);
                 var formItemType = typeof(ElFormItem<>).MakeGenericType(formItemValueType);
@@ -99,12 +108,12 @@ namespace Element
                     SortNo = formControl.SortNo,
                     FormItem = formItemType,
                     ValueType = formItemValueType,
-                    IsRequired = editorGeneratorAttr?.IsRequired ?? true,
-                    RequiredMessage = editorGeneratorAttr?.RequiredMessage ?? "请填写该字段",
+                    IsRequired = editorGeneratorAttr?.IsRequired ?? requiredAttribute != null,
+                    RequiredMessage = editorGeneratorAttr?.RequiredMessage ?? requiredAttribute?.ErrorMessage ?? $"请确认{label}",
                     InputControlType = controlType,
                     Ignore = editorGeneratorAttr?.Ignore ?? false,
                     InputControlRender = GetInputControlRender(controlType),
-                    Label = editorGeneratorAttr?.Label ?? property.Name,
+                    Label = label,
                     Image = editorGeneratorAttr?.Image,
                     LabelWidth = formControl.LabelWidth,
                     Placeholder = editorGeneratorAttr?.Placeholder,
