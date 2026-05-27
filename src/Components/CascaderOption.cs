@@ -13,9 +13,13 @@ namespace Element
 
         public bool Leaf { get; set; }
 
+        public bool Loading { get; set; }
+
         public object Data { get; set; }
 
         public IList<CascaderOption> Children { get; set; } = new List<CascaderOption>();
+
+        internal bool Loaded { get; set; }
 
         internal bool HasChildren => Children != null && Children.Any();
 

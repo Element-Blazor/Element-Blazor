@@ -11,9 +11,20 @@
             _isChecked = "is-checked";
             _isIndeterminate = string.Empty;
             break;
+        case Status.Indeterminate:
+            _isChecked = string.Empty;
+            _isIndeterminate = "is-indeterminate";
+            break;
     }
+    if (EffectiveDisabled)
+    {
+        isDisabled = "is-disabled";
+    }
+    var ariaChecked = Status == Status.Indeterminate ? "mixed" : (Status == Status.Checked).ToString().ToLowerInvariant();
+    var isChecked = Status == Status.Checked;
+    var buttonSizeClass = SizeClass.Replace("el-checkbox--", "el-checkbox-button--");
 }
-<label role="checkbox" aria-checked="true" class="el-checkbox-button @_isChecked @isDisabled">
-    <input type="checkbox" class="el-checkbox-button__original @isDisabled" @onchange="ChangeStatus" />
+<label role="checkbox" aria-checked="@ariaChecked" aria-disabled="@EffectiveDisabled" class="el-checkbox-button @_isChecked @_isIndeterminate @isDisabled @buttonSizeClass">
+    <input type="checkbox" class="el-checkbox-button__original @isDisabled" checked="@isChecked" disabled="@EffectiveDisabled" @onchange="ChangeStatus" />
     <span class="el-checkbox-button__inner">@ChildContent</span>
 </label>

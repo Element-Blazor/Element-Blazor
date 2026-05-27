@@ -1,6 +1,7 @@
 
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +16,31 @@ namespace Element
         internal string isDisabled;
 
         /// <summary>
-        /// Èç¹û¸Ã <seealso cref="ElCheckbox{TValue}"/> ÔÚ <seealso cref="ElCheckboxGroup{TValue}"/> ÖĞ£¬Ôò´ËÊôĞÔ»ñÈ¡ <seealso cref="ElCheckboxGroup{TValue}"/> µÄÖµ
+        /// å¦‚æœè¯¥ <seealso cref="ElCheckbox{TValue}"/> åœ¨ <seealso cref="ElCheckboxGroup{TValue}"/> ä¸­ï¼Œåˆ™æ­¤å±æ€§è·å– <seealso cref="ElCheckboxGroup{TValue}"/> çš„å€¼
         /// </summary>
         [CascadingParameter]
         public ElCheckboxGroup<TValue> CheckBoxGroup { get; set; }
 
         [Parameter]
         public Status Status { get; set; }
+
+        [Parameter]
+        public bool Indeterminate
+        {
+            get => Status == Status.Indeterminate;
+            set
+            {
+                if (value)
+                {
+                    Status = Status.Indeterminate;
+                }
+                else if (Status == Status.Indeterminate)
+                {
+                    Status = Status.UnChecked;
+                }
+            }
+        }
+
         [Parameter]
         public TValue Value { get; set; }
         [Parameter]
@@ -34,6 +53,12 @@ namespace Element
         public EventCallback<TValue> ValueChanged { get; set; }
         [Parameter]
         public EventCallback<Status> StatusChanged { get; set; }
+
+        [Parameter]
+        public InputSize Size { get; set; } = InputSize.Normal;
+
+        [Parameter]
+        public bool Border { get; set; }
 
         protected override void OnInitialized()
         {
@@ -113,12 +138,18 @@ namespace Element
             }
         }
 
-        protected void ChangeStatus(ChangeEventArgs uIMouseEvent)
+        protected async Task ChangeStatus(ChangeEventArgs uIMouseEvent)
         {
-            if (IsDisabled)
+            if (EffectiveDisabled)
             {
                 return;
             }
+            if (CheckBoxGroup != null)
+            {
+                await CheckBoxGroup.TryToggleAsync(Value);
+                return;
+            }
+
             var newValue = new CheckBoxValue();
             switch (Status)
             {
@@ -134,30 +165,21 @@ namespace Element
             }
 
             var checkBoxValue = Value;
-            if (newValue.Status == Status.Checked)
+            if (newValue.Status != Status.Checked)
             {
-                CheckBoxGroup?.SelectedItems?.Add(Value);
-            }
-            else
-            {
-                CheckBoxGroup?.SelectedItems?.Remove(Value);
                 checkBoxValue = default;
             }
             Status = newValue.Status;
 
-            //ÓĞ CheckBoxGroup Ê±£¬ÊÓÕû¸öCheckBoxGroupÎªÒ»¸ö×Ö¶Î
-            if (CheckBoxGroup == null)
-            {
-                SetFieldValue(checkBoxValue, true);
-            }
+            SetFieldValue(checkBoxValue, true);
             RequireRender = true;
             if (ValueChanged.HasDelegate)
             {
-                _ = ValueChanged.InvokeAsync(checkBoxValue);
+                await ValueChanged.InvokeAsync(checkBoxValue);
             }
             if (StatusChanged.HasDelegate)
             {
-                _ = StatusChanged.InvokeAsync(newValue.Status);
+                await StatusChanged.InvokeAsync(newValue.Status);
             }
         }
 
@@ -166,7 +188,7 @@ namespace Element
         {
             get
             {
-                return isDisabled == "is-disabled" || (CheckBoxGroup?.EffectiveDisabled ?? false) || (FormItem?.Form?.Disabled ?? false);
+                return isDisabled == "is-disabled" || (CheckBoxGroup?.IsLimitDisabled(Value) ?? false) || (FormItem?.Form?.Disabled ?? false);
             }
             set
             {
@@ -190,6 +212,28 @@ namespace Element
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        internal bool EffectiveDisabled => IsDisabled;
+
+        internal InputSize EffectiveSize => CheckBoxGroup == null
+            ? Size == InputSize.Normal
+                ? FormItem?.Size ?? FormItem?.Form?.EffectiveSize ?? ResolveInputSize(InputSize.Normal)
+                : Size
+            : CheckBoxGroup.EffectiveSize;
+
+        internal string SizeClass
+        {
+            get
+            {
+                var size = EffectiveSize switch
+                {
+                    InputSize.Large => "large",
+                    InputSize.Small => "small",
+                    _ => null
+                };
+                return size == null ? string.Empty : $"el-checkbox--{size}";
+            }
+        }
 
         protected override bool ShouldRender()
         {

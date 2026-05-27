@@ -1,0 +1,109 @@
+@inherits ElementFieldComponentBase<string>
+
+<div class="@PanelClass"
+     style="@PanelStyle"
+     role="group"
+     aria-disabled="@IsColorPickerPanelDisabled"
+     @attributes="Attributes">
+    <div class="el-color-dropdown__main-wrapper">
+        <div class="el-color-svpanel"
+             style="@SvPanelStyle"
+             aria-label="color saturation and value"
+             @onclick="OnSvPanelClickAsync">
+            <div class="el-color-svpanel__white"></div>
+            <div class="el-color-svpanel__black"></div>
+            <div class="el-color-svpanel__cursor" style="@SvCursorStyle">
+                <div></div>
+            </div>
+            <input class="el-color-picker-panel__saturation-input"
+                   style="@SvRangeInputStyle"
+                   type="range"
+                   min="0"
+                   max="100"
+                   step="1"
+                   value="@SaturationValue"
+                   disabled="@IsColorPickerPanelDisabled"
+                   aria-label="saturation"
+                   @oninput="OnSaturationInputAsync" />
+            <input class="el-color-picker-panel__value-input"
+                   style="@SvRangeInputStyle"
+                   type="range"
+                   min="0"
+                   max="100"
+                   step="1"
+                   value="@BrightnessValue"
+                   disabled="@IsColorPickerPanelDisabled"
+                   aria-label="value"
+                   @oninput="OnValueInputAsync" />
+        </div>
+        <div class="el-color-hue-slider @HueSliderClass"
+             style="@HueSliderMergedStyle"
+             aria-label="hue"
+             @onclick="OnHueSliderClickAsync">
+            <div class="el-color-hue-slider__bar"></div>
+            <div class="el-color-hue-slider__thumb" style="@HueThumbStyle"></div>
+            <input class="el-color-picker-panel__hue-input"
+                   style="@SliderRangeInputStyle"
+                   type="range"
+                   min="0"
+                   max="360"
+                   step="1"
+                   value="@HueValue"
+                   disabled="@IsColorPickerPanelDisabled"
+                   aria-label="hue"
+                   @oninput="OnHueInputAsync" />
+        </div>
+        @if (ShowAlpha)
+        {
+            <div class="el-color-alpha-slider" aria-label="alpha" @onclick="OnAlphaSliderClickAsync">
+                <div class="el-color-alpha-slider__bar" style="@AlphaBarStyle"></div>
+                <div class="el-color-alpha-slider__thumb" style="@AlphaThumbStyle"></div>
+                <input class="el-color-picker-panel__alpha-input"
+                       style="@SliderRangeInputStyle"
+                       type="range"
+                       min="0"
+                       max="100"
+                       step="1"
+                       value="@AlphaValue"
+                       disabled="@IsColorPickerPanelDisabled"
+                       aria-label="alpha"
+                       @oninput="OnAlphaInputAsync" />
+            </div>
+        }
+    </div>
+    @if (PredefinedColors.Count > 0)
+    {
+        <div class="el-color-predefine">
+            <div class="el-color-predefine__colors">
+                @foreach (var item in PredefinedColors)
+                {
+                    <div class="@GetPredefineClass(item)"
+                         role="button"
+                         tabindex="@(IsColorPickerPanelDisabled ? -1 : 0)"
+                         aria-label="@($"select color {item.Value}")"
+                         aria-disabled="@IsColorPickerPanelDisabled"
+                         @onclick="() => SelectPredefineAsync(item)">
+                        <div style="@GetPredefineStyle(item)"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    <div class="el-color-dropdown__btns">
+        <input class="el-color-dropdown__value"
+               @ref="InputRef"
+               value="@InputValue"
+               disabled="@IsColorPickerPanelDisabled"
+               aria-label="color value"
+               @oninput="OnColorTextInputAsync"
+               @onchange="OnColorTextChangeAsync" />
+        @if (FooterContent != null)
+        {
+            @FooterContent
+        }
+        else if (Footer != null)
+        {
+            @Footer
+        }
+    </div>
+</div>

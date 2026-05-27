@@ -484,7 +484,7 @@ namespace Element
             var left = await targetEl.GetLeftRelativeBodyAsync();
             option.Left = left;
             option.Top = top + rect.Height;
-            if (autoWidth || option.FitInputWidth)
+            if ((autoWidth && option.AutoWidth) || option.FitInputWidth)
             {
                 option.Width = rect.Width;
             }

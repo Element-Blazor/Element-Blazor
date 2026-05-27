@@ -90,13 +90,13 @@
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
 | Autocomplete | `ElAutocomplete` | 🟢 已对齐 | 已实现输入建议、异步查询、远程节流与旧请求作废、键盘选择、清空、禁用、尺寸、表单校验联动、项模板插槽示例和组件测试。 |
-| Cascader | `ElCascader`、`CascaderOption` | 🟡 部分对齐 | 已实现级联数据模型、面板、选择路径、清空、禁用、尺寸和表单校验联动；继续补齐多选、懒加载、过滤和插槽示例。 |
-| Checkbox | `ElCheckbox`、`ElCheckboxGroup`、`ElCheckboxButton` | 🟡 部分对齐 | 补齐 indeterminate、limit、尺寸和测试。 |
-| Color Picker Panel | 缺少 `ElColorPickerPanel` | 🔴 缺失 | 先抽象颜色模型和面板。 |
-| Color Picker | 缺少 `ElColorPicker` | 🔴 缺失 | 基于面板补输入、透明度、预设色。 |
-| Date Picker Panel | 内部日期面板，缺少公开入口 | 🔴 缺失 | 抽出公开 `ElDatePickerPanel`。 |
-| Date Picker | `ElDatePicker` | 🟡 部分对齐 | 补范围、快捷项、禁用日期、格式和值格式。 |
-| DateTime Picker | 缺少 `ElDateTimePicker` | 🔴 缺失 | 在 Date Picker 基础上补时间选择。 |
+| Cascader | `ElCascader`、`CascaderOption` | 🟢 已对齐 | 已实现级联数据模型、面板、选择路径、多选、懒加载、过滤建议、节点/建议模板、清空、禁用、尺寸、表单校验联动和组件测试。 |
+| Checkbox | `ElCheckbox`、`ElCheckboxGroup`、`ElCheckboxButton` | 🟢 已对齐 | 已补齐 indeterminate、group value 绑定、min/max limit、尺寸传播、button 变体状态和组件测试。 |
+| Color Picker Panel | `ElColorPickerPanel`、`ElementColor` | 🟢 已对齐 | 已实现颜色模型、独立面板、透明度、预设色、颜色格式、禁用、边框、footer 插槽、表单校验联动和组件测试。 |
+| Color Picker | `ElColorPicker` | 🟢 已对齐 | 已基于面板补齐输入触发器、弹层、清空、尺寸、透明度、预设色、颜色格式、禁用、事件和组件测试。 |
+| Date Picker Panel | `ElDatePickerPanel`、`DatePickerPanelType` | 🟢 已对齐 | 已抽出公开日期/月/年面板入口，支持日期模型、面板切换、禁用日期、footer 插槽、表单校验联动和组件测试。 |
+| Date Picker | `ElDatePicker`、`DatePickerType`、`DatePickerShortcut` | 🟢 已对齐 | 已基于公开面板补齐单值、范围、快捷项、禁用日期、显示格式、值格式、清空、弹层事件和组件测试。 |
+| DateTime Picker | `ElDateTimePicker`、`DateTimePickerType`、`DateTimePickerShortcut` | 🟢 已对齐 | 已基于公开日期面板补齐单值、范围、时间输入、默认时间、快捷项、禁用日期、显示格式、值格式、清空、弹层事件和组件测试。 |
 | Form | `ElForm`、`ElFormItem`、`ElFormActionItem` | 🟢 已对齐 | 已补齐 label、size、disabled、rules、字段校验、提交、重置、清理校验、字段滚动和自动生成表单绑定闭环。 |
 | Input | `ElInput` | 🟡 部分对齐 | 补齐 prefix/suffix slot、show-word-limit、formatter/parser。 |
 | Input Number | `ElInputNumber` | 🟡 部分对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读和表单校验联动；继续补齐严格键盘体验、ARIA 细节和测试。 |

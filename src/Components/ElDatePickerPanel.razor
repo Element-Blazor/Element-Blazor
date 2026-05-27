@@ -1,0 +1,69 @@
+@inherits ElementFieldComponentBase<DateTime?>
+
+<div class="@PanelClass"
+     style="@Style"
+     role="group"
+     aria-disabled="@IsDatePickerPanelDisabled"
+     @attributes="Attributes">
+    <div class="el-picker-panel__body-wrapper">
+        <div class="el-picker-panel__body">
+            <div class="@HeaderClass">
+                <ElButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-d-arrow-left"
+                          AppendCustomCls="false"
+                          Disabled="@IsDatePickerPanelDisabled"
+                          OnClick="e => GoPrevYearAsync()" />
+                @if (CurrentView == DatePickerPanelType.Date)
+                {
+                    <ElButton Cls="el-picker-panel__icon-btn el-date-picker__prev-btn el-icon-arrow-left"
+                              AppendCustomCls="false"
+                              Disabled="@IsDatePickerPanelDisabled"
+                              OnClick="e => GoPrevMonthAsync()" />
+                }
+                @if (CurrentView == DatePickerPanelType.Date)
+                {
+                    <span role="button" class="el-date-picker__header-label" @onclick="ShowYearView">@DisplayedYear 年</span>
+                    <span role="button" class="el-date-picker__header-label" @onclick="ShowMonthView">@DisplayedMonth 月</span>
+                }
+                else if (CurrentView == DatePickerPanelType.Month)
+                {
+                    <span role="button" class="el-date-picker__header-label" @onclick="ShowYearView">@DisplayedYear 年</span>
+                }
+                else
+                {
+                    <span class="el-date-picker__header-label">@YearRangeText</span>
+                }
+                @if (CurrentView == DatePickerPanelType.Date)
+                {
+                    <ElButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-arrow-right"
+                              AppendCustomCls="false"
+                              Disabled="@IsDatePickerPanelDisabled"
+                              OnClick="e => GoNextMonthAsync()" />
+                }
+                <ElButton Cls="el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right"
+                          AppendCustomCls="false"
+                          Disabled="@IsDatePickerPanelDisabled"
+                          OnClick="e => GoNextYearAsync()" />
+            </div>
+            <div class="el-picker-panel__content">
+                @if (CurrentView == DatePickerPanelType.Year)
+                {
+                    @BuildYearTable()
+                }
+                else if (CurrentView == DatePickerPanelType.Month)
+                {
+                    @BuildMonthTable()
+                }
+                else
+                {
+                    @BuildDateTable()
+                }
+            </div>
+        </div>
+    </div>
+    @if (FooterContent != null)
+    {
+        <div class="el-picker-panel__footer">
+            @FooterContent
+        </div>
+    }
+</div>

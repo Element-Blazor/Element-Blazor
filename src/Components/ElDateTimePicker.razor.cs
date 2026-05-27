@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Element
 {
-    public partial class ElDatePicker
+    public partial class ElDateTimePicker
     {
         private static long dropDownIdSeed;
-        private readonly string DropDownId = $"el-date-picker-dropdown-{Interlocked.Increment(ref dropDownIdSeed)}";
+        private readonly string DropDownId = $"el-date-time-picker-dropdown-{Interlocked.Increment(ref dropDownIdSeed)}";
         private DropDownOption dropDownOption;
         private ElementReference pickerElement;
         private ElementReference inputElement;
@@ -21,7 +21,9 @@ namespace Element
         private InputSize effectiveSize = InputSize.Normal;
         private bool isFocus;
         private bool isHovering;
+        private DateTime? pendingSingleValue;
         private DateTime? pendingRangeStart;
+        private DateTime? pendingRangeEnd;
 
         [Inject]
         internal PopupService PopupService { get; set; }
@@ -81,10 +83,10 @@ namespace Element
         public EventCallback<IList<string>> StringRangeValueChanged { get; set; }
 
         [Parameter]
-        public DatePickerType Type { get; set; } = DatePickerType.Date;
+        public DateTimePickerType Type { get; set; } = DateTimePickerType.DateTime;
 
         [Parameter]
-        public string Format { get; set; } = "yyyy-MM-dd";
+        public string Format { get; set; } = "yyyy-MM-dd HH:mm:ss";
 
         [Parameter]
         public string ValueFormat { get; set; }
@@ -93,13 +95,22 @@ namespace Element
         public DateTime? DefaultValue { get; set; }
 
         [Parameter]
-        public string Placeholder { get; set; } = "请选择日期";
+        public TimeSpan? DefaultTime { get; set; }
 
         [Parameter]
-        public string StartPlaceholder { get; set; } = "开始日期";
+        public TimeSpan? DefaultStartTime { get; set; }
 
         [Parameter]
-        public string EndPlaceholder { get; set; } = "结束日期";
+        public TimeSpan? DefaultEndTime { get; set; }
+
+        [Parameter]
+        public string Placeholder { get; set; } = "请选择日期时间";
+
+        [Parameter]
+        public string StartPlaceholder { get; set; } = "开始日期时间";
+
+        [Parameter]
+        public string EndPlaceholder { get; set; } = "结束日期时间";
 
         [Parameter]
         public string RangeSeparator { get; set; } = "-";
@@ -127,7 +138,7 @@ namespace Element
         public InputSize Size { get; set; } = InputSize.Normal;
 
         [Parameter]
-        public string PrefixIcon { get; set; } = "el-icon-date";
+        public string PrefixIcon { get; set; } = "el-icon-time";
 
         [Parameter]
         public string ClearIcon { get; set; } = "el-icon-circle-close";
@@ -139,7 +150,7 @@ namespace Element
         public string PopperStyle { get; set; }
 
         [Parameter]
-        public int PopperMaxHeight { get; set; } = 420;
+        public int PopperMaxHeight { get; set; } = 460;
 
         [Parameter]
         public bool SinglePanel { get; set; }
@@ -151,7 +162,7 @@ namespace Element
         public Func<DateTime, bool> DisabledDate { get; set; }
 
         [Parameter]
-        public IEnumerable<DatePickerShortcut> Shortcuts { get; set; }
+        public IEnumerable<DateTimePickerShortcut> Shortcuts { get; set; }
 
         [Parameter]
         public EventCallback<DateTime?> OnChange { get; set; }
@@ -194,7 +205,7 @@ namespace Element
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             Value = ConvertToDateTime(value);
-            pendingRangeStart = null;
+            ClearPendingValues();
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -254,12 +265,12 @@ namespace Element
             }
 
             var text = Convert.ToString(e.Value, CultureInfo.CurrentCulture);
-            if (!TryParseDate(text, Format, out var parsed))
+            if (!TryParseDateTime(text, Format, out var parsed))
             {
                 return;
             }
 
-            await CommitSingleValueAsync(NormalizeValue(parsed), ValidateEvent, notifyChange: true, close: false);
+            await CommitSingleValueAsync(parsed, ValidateEvent, notifyChange: true, close: false);
         }
 
         private async Task OnRangeStartChangedAsync(ChangeEventArgs e)
@@ -278,12 +289,12 @@ namespace Element
             {
                 return;
             }
-            if (!TryParseDate(startText, Format, out var start) || !TryParseDate(endText, Format, out var end))
+            if (!TryParseDateTime(startText, Format, out var start) || !TryParseDateTime(endText, Format, out var end))
             {
                 return;
             }
 
-            await CommitRangeValueAsync(NormalizeRange(new DateTime?[] { NormalizeValue(start), NormalizeValue(end) }), ValidateEvent, notifyChange: true, close: false);
+            await CommitRangeValueAsync(NormalizeRange(new DateTime?[] { start, end }), ValidateEvent, notifyChange: true, close: false);
         }
 
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
@@ -326,11 +337,12 @@ namespace Element
                 return;
             }
 
+            InitializePendingValues();
             dropDownOption = new DropDownOption
             {
                 Target = pickerElement,
                 OptionContent = BuildDropDownContent,
-                PopperClass = string.Join(" ", new[] { "el-date-picker__dropdown", PopperClass }.Where(x => !string.IsNullOrWhiteSpace(x))),
+                PopperClass = string.Join(" ", new[] { "el-date-picker__dropdown", "el-date-time-picker__dropdown", PopperClass }.Where(x => !string.IsNullOrWhiteSpace(x))),
                 PopperStyle = PopperStyle,
                 MaxHeight = PopperMaxHeight,
                 FitInputWidth = false,
@@ -366,7 +378,7 @@ namespace Element
             if (!visible)
             {
                 dropDownOption = null;
-                pendingRangeStart = null;
+                ClearPendingValues();
             }
 
             if (OnVisibleChange.HasDelegate)
@@ -414,6 +426,7 @@ namespace Element
                 BuildSinglePanel(builder, ref seq);
             }
             builder.CloseElement();
+            BuildFooter(builder, ref seq);
             builder.CloseElement();
             builder.CloseElement();
         }
@@ -421,9 +434,9 @@ namespace Element
         private void BuildSinglePanel(RenderTreeBuilder builder, ref int seq)
         {
             builder.OpenComponent<ElDatePickerPanel>(seq++);
-            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Value), IsRange ? pendingRangeStart ?? RangeStart : Value);
-            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Type), PanelType);
-            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.DefaultValue), DefaultValue ?? Value ?? RangeStart ?? DateTime.Today);
+            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Value), IsRange ? pendingRangeStart ?? RangeStart : pendingSingleValue ?? Value);
+            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Type), DatePickerPanelType.Date);
+            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.DefaultValue), DefaultValue ?? pendingSingleValue ?? Value ?? RangeStart ?? DateTime.Today);
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.DisabledDate), DisabledDate);
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Border), false);
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.ValidateEvent), false);
@@ -436,8 +449,8 @@ namespace Element
             builder.OpenElement(seq++, "div");
             builder.AddAttribute(seq++, "class", left ? "el-date-range-picker__content is-left" : "el-date-range-picker__content is-right");
             builder.OpenComponent<ElDatePickerPanel>(seq++);
-            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Value), left ? RangeStart : RangeEnd);
-            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Type), PanelType);
+            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Value), left ? pendingRangeStart ?? RangeStart : pendingRangeEnd ?? RangeEnd);
+            builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Type), DatePickerPanelType.Date);
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.DefaultValue), GetRangePanelDefaultValue(left));
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.DisabledDate), DisabledDate);
             builder.AddAttribute(seq++, nameof(ElDatePickerPanel.Border), false);
@@ -447,34 +460,152 @@ namespace Element
             builder.CloseElement();
         }
 
-        private async Task OnPanelPickAsync(DatePickerPanelSelection selection)
+        private void BuildFooter(RenderTreeBuilder builder, ref int seq)
+        {
+            builder.OpenElement(seq++, "div");
+            builder.AddAttribute(seq++, "class", "el-picker-panel__footer el-date-time-picker__footer");
+            builder.AddAttribute(seq++, "style", "display:flex;align-items:center;justify-content:space-between;gap:8px;");
+            builder.OpenElement(seq++, "div");
+            builder.AddAttribute(seq++, "class", "el-date-time-picker__time-wrapper");
+            builder.AddAttribute(seq++, "style", "display:flex;align-items:center;gap:8px;flex-wrap:wrap;");
+            if (IsRange)
+            {
+                BuildTimeInput(builder, ref seq, "开始", PendingStartTimeValue, "el-date-time-picker__start-time", OnRangeStartTimeChangedAsync);
+                BuildTimeInput(builder, ref seq, "结束", PendingEndTimeValue, "el-date-time-picker__end-time", OnRangeEndTimeChangedAsync);
+            }
+            else
+            {
+                BuildTimeInput(builder, ref seq, "时间", PendingSingleTimeValue, "el-date-time-picker__time-input", OnSingleTimeChangedAsync);
+            }
+            builder.CloseElement();
+            builder.OpenElement(seq++, "button");
+            builder.AddAttribute(seq++, "type", "button");
+            builder.AddAttribute(seq++, "class", "el-button el-button--text el-picker-panel__link-btn el-date-time-picker__confirm");
+            builder.AddAttribute(seq++, "disabled", !CanConfirmPending);
+            builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, ConfirmPendingAsync));
+            builder.OpenElement(seq++, "span");
+            builder.AddContent(seq++, "确认");
+            builder.CloseElement();
+            builder.CloseElement();
+            builder.CloseElement();
+        }
+
+        private void BuildTimeInput(RenderTreeBuilder builder, ref int seq, string label, string value, string cssClass, Func<ChangeEventArgs, Task> onChange)
+        {
+            builder.OpenElement(seq++, "label");
+            builder.AddAttribute(seq++, "class", "el-date-time-picker__time-field");
+            builder.AddAttribute(seq++, "style", "display:inline-flex;align-items:center;gap:6px;color:#606266;");
+            builder.OpenElement(seq++, "span");
+            builder.AddAttribute(seq++, "style", "font-size:12px;");
+            builder.AddContent(seq++, label);
+            builder.CloseElement();
+            builder.OpenElement(seq++, "input");
+            builder.AddAttribute(seq++, "class", $"el-input__inner {cssClass}");
+            builder.AddAttribute(seq++, "style", "width:112px;height:28px;line-height:28px;padding:0 8px;");
+            builder.AddAttribute(seq++, "type", "time");
+            builder.AddAttribute(seq++, "step", "1");
+            builder.AddAttribute(seq++, "value", value);
+            builder.AddAttribute(seq++, "disabled", effectiveDisabled);
+            builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create(this, onChange));
+            builder.CloseElement();
+            builder.CloseElement();
+        }
+
+        private Task OnPanelPickAsync(DatePickerPanelSelection selection)
         {
             if (selection == null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (!IsRange)
             {
-                await CommitSingleValueAsync(NormalizeValue(selection.Value), ValidateEvent, notifyChange: true, close: true);
-                return;
+                pendingSingleValue = CombineDateAndTime(selection.Value, pendingSingleValue?.TimeOfDay ?? Value?.TimeOfDay ?? DefaultTime ?? TimeSpan.Zero);
+                StateHasChanged();
+                return Task.CompletedTask;
             }
 
-            var picked = NormalizeValue(selection.Value);
-            if (!pendingRangeStart.HasValue || HasCompleteRange)
+            var pickedDate = selection.Value.Date;
+            if (!pendingRangeStart.HasValue || HasCompletePendingRange)
             {
-                pendingRangeStart = picked;
-                RangeValue = new List<DateTime?> { picked, null };
-                await NotifyRangeValueChangedAsync(validate: false, notifyChange: false);
-                return;
+                pendingRangeStart = CombineDateAndTime(pickedDate, pendingRangeStart?.TimeOfDay ?? RangeStart?.TimeOfDay ?? DefaultStartTime ?? TimeSpan.Zero);
+                pendingRangeEnd = null;
+                StateHasChanged();
+                return Task.CompletedTask;
             }
 
-            var range = NormalizeRange(new[] { pendingRangeStart, picked });
-            pendingRangeStart = null;
-            await CommitRangeValueAsync(range, ValidateEvent, notifyChange: true, close: true);
+            var startDate = pendingRangeStart.Value.Date;
+            var startTime = pendingRangeStart.Value.TimeOfDay;
+            var endTime = pendingRangeEnd?.TimeOfDay ?? RangeEnd?.TimeOfDay ?? DefaultEndTime ?? TimeSpan.Zero;
+            if (pickedDate < startDate)
+            {
+                pendingRangeEnd = CombineDateAndTime(startDate, endTime);
+                pendingRangeStart = CombineDateAndTime(pickedDate, startTime);
+            }
+            else
+            {
+                pendingRangeEnd = CombineDateAndTime(pickedDate, endTime);
+            }
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
-        private async Task SelectShortcutAsync(DatePickerShortcut shortcut)
+        private async Task OnSingleTimeChangedAsync(ChangeEventArgs e)
+        {
+            if (TryParseTime(Convert.ToString(e.Value, CultureInfo.CurrentCulture), out var time))
+            {
+                pendingSingleValue = CombineDateAndTime((pendingSingleValue ?? Value ?? DefaultValue ?? DateTime.Today).Date, time);
+                await RefreshPendingAsync();
+            }
+        }
+
+        private async Task OnRangeStartTimeChangedAsync(ChangeEventArgs e)
+        {
+            if (TryParseTime(Convert.ToString(e.Value, CultureInfo.CurrentCulture), out var time))
+            {
+                pendingRangeStart = CombineDateAndTime((pendingRangeStart ?? RangeStart ?? DefaultValue ?? DateTime.Today).Date, time);
+                await RefreshPendingAsync();
+            }
+        }
+
+        private async Task OnRangeEndTimeChangedAsync(ChangeEventArgs e)
+        {
+            if (TryParseTime(Convert.ToString(e.Value, CultureInfo.CurrentCulture), out var time))
+            {
+                pendingRangeEnd = CombineDateAndTime((pendingRangeEnd ?? RangeEnd ?? DefaultValue ?? pendingRangeStart ?? DateTime.Today).Date, time);
+                await RefreshPendingAsync();
+            }
+        }
+
+        private Task RefreshPendingAsync()
+        {
+            dropDownOption?.RequestRender?.Invoke();
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
+
+        private async Task ConfirmPendingAsync()
+        {
+            if (IsRange)
+            {
+                if (!pendingRangeStart.HasValue || !pendingRangeEnd.HasValue)
+                {
+                    return;
+                }
+
+                await CommitRangeValueAsync(NormalizeRange(new[] { pendingRangeStart, pendingRangeEnd }), ValidateEvent, notifyChange: true, close: true);
+                return;
+            }
+
+            if (!pendingSingleValue.HasValue)
+            {
+                return;
+            }
+
+            await CommitSingleValueAsync(pendingSingleValue, ValidateEvent, notifyChange: true, close: true);
+        }
+
+        private async Task SelectShortcutAsync(DateTimePickerShortcut shortcut)
         {
             if (shortcut == null)
             {
@@ -487,8 +618,7 @@ namespace Element
                 return;
             }
 
-            var value = shortcut.ResolveValue();
-            await CommitSingleValueAsync(value.HasValue ? NormalizeValue(value.Value) : null, ValidateEvent, notifyChange: true, close: true);
+            await CommitSingleValueAsync(shortcut.ResolveValue(), ValidateEvent, notifyChange: true, close: true);
         }
 
         private async Task CommitSingleValueAsync(DateTime? value, bool validate, bool notifyChange, bool close)
@@ -589,16 +719,30 @@ namespace Element
             base.Dispose();
         }
 
+        private void InitializePendingValues()
+        {
+            pendingSingleValue = Value;
+            pendingRangeStart = RangeStart;
+            pendingRangeEnd = RangeEnd;
+        }
+
+        private void ClearPendingValues()
+        {
+            pendingSingleValue = null;
+            pendingRangeStart = null;
+            pendingRangeEnd = null;
+        }
+
         private void SyncValueFromFormattedParameters()
         {
-            if (!string.IsNullOrWhiteSpace(ValueFormat) && !Value.HasValue && !string.IsNullOrWhiteSpace(StringValue) && TryParseDate(StringValue, ValueFormat, out var parsed))
+            if (!string.IsNullOrWhiteSpace(ValueFormat) && !Value.HasValue && !string.IsNullOrWhiteSpace(StringValue) && TryParseDateTime(StringValue, ValueFormat, out var parsed))
             {
-                Value = NormalizeValue(parsed);
+                Value = parsed;
             }
             if (!string.IsNullOrWhiteSpace(ValueFormat) && IsRange && !HasAnyRangeValue && StringRangeValue?.Count >= 2)
             {
                 var parsedValues = StringRangeValue.Take(2)
-                    .Select(x => TryParseDate(x, ValueFormat, out var parsedDate) ? (DateTime?)NormalizeValue(parsedDate) : null)
+                    .Select(x => TryParseDateTime(x, ValueFormat, out var parsedDate) ? (DateTime?)parsedDate : null)
                     .ToList();
                 if (parsedValues.Any(x => x.HasValue))
                 {
@@ -621,24 +765,14 @@ namespace Element
             return range;
         }
 
-        private DateTime NormalizeValue(DateTime value)
-        {
-            return Type switch
-            {
-                DatePickerType.Year or DatePickerType.YearRange => new DateTime(value.Year, 1, 1),
-                DatePickerType.Month or DatePickerType.MonthRange => new DateTime(value.Year, value.Month, 1),
-                _ => value.Date
-            };
-        }
-
         private DateTime? GetRangePanelDefaultValue(bool left)
         {
-            var fallback = DefaultValue ?? RangeStart ?? Value ?? DateTime.Today;
+            var fallback = DefaultValue ?? pendingRangeStart ?? RangeStart ?? Value ?? DateTime.Today;
             if (left)
             {
                 return fallback;
             }
-            return Type == DatePickerType.YearRange ? fallback.AddYears(10) : fallback.AddMonths(1);
+            return fallback.AddMonths(1);
         }
 
         private string FormatDisplayValue(DateTime? value)
@@ -647,7 +781,7 @@ namespace Element
             {
                 return string.Empty;
             }
-            return FormatDate(value.Value, Format);
+            return FormatDateTime(value.Value, Format);
         }
 
         private string FormatBindingValue(DateTime? value)
@@ -656,10 +790,10 @@ namespace Element
             {
                 return string.Empty;
             }
-            return string.IsNullOrWhiteSpace(ValueFormat) ? null : FormatDate(value.Value, ValueFormat);
+            return string.IsNullOrWhiteSpace(ValueFormat) ? null : FormatDateTime(value.Value, ValueFormat);
         }
 
-        private string FormatDate(DateTime value, string format)
+        private string FormatDateTime(DateTime value, string format)
         {
             if (string.Equals(format, "x", StringComparison.Ordinal))
             {
@@ -672,7 +806,7 @@ namespace Element
             return value.ToString(ToDotNetDateFormat(format), CultureInfo.CurrentCulture);
         }
 
-        private bool TryParseDate(string value, string format, out DateTime result)
+        private bool TryParseDateTime(string value, string format, out DateTime result)
         {
             result = default;
             if (string.IsNullOrWhiteSpace(value))
@@ -693,6 +827,22 @@ namespace Element
             return DateTime.TryParseExact(value, ToDotNetDateFormat(format), CultureInfo.CurrentCulture, DateTimeStyles.None, out result)
                 || DateTime.TryParse(value, CultureInfo.CurrentCulture, DateTimeStyles.None, out result)
                 || DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out result);
+        }
+
+        private static bool TryParseTime(string value, out TimeSpan result)
+        {
+            result = default;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+            return TimeSpan.TryParse(value, CultureInfo.CurrentCulture, out result)
+                || TimeSpan.TryParse(value, CultureInfo.InvariantCulture, out result);
+        }
+
+        private static DateTime CombineDateAndTime(DateTime date, TimeSpan time)
+        {
+            return date.Date.Add(time);
         }
 
         private static DateTime? ConvertToDateTime(object value)
@@ -720,7 +870,7 @@ namespace Element
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                return "yyyy-MM-dd";
+                return "yyyy-MM-dd HH:mm:ss";
             }
             return format
                 .Replace("YYYY", "yyyy", StringComparison.Ordinal)
@@ -728,11 +878,11 @@ namespace Element
                 .Replace("DD", "dd", StringComparison.Ordinal);
         }
 
-        private bool IsRange => Type is DatePickerType.DateRange or DatePickerType.MonthRange or DatePickerType.YearRange;
+        private bool IsRange => Type == DateTimePickerType.DateTimeRange;
 
         private bool HasAnyRangeValue => RangeValue?.Any(x => x.HasValue) == true;
 
-        private bool HasCompleteRange => RangeStart.HasValue && RangeEnd.HasValue;
+        private bool HasCompletePendingRange => pendingRangeStart.HasValue && pendingRangeEnd.HasValue;
 
         private DateTime? RangeStart => RangeValue?.ElementAtOrDefault(0);
 
@@ -744,29 +894,33 @@ namespace Element
 
         private string SingleDisplayValue => FormatDisplayValue(Value);
 
-        private IReadOnlyList<DatePickerShortcut> ShortcutList => Shortcuts?.Where(x => x != null).ToList() ?? new List<DatePickerShortcut>();
+        private string PendingSingleTimeValue => FormatTime(pendingSingleValue?.TimeOfDay ?? Value?.TimeOfDay ?? DefaultTime ?? TimeSpan.Zero);
 
-        private DatePickerPanelType PanelType => Type switch
+        private string PendingStartTimeValue => FormatTime(pendingRangeStart?.TimeOfDay ?? RangeStart?.TimeOfDay ?? DefaultStartTime ?? TimeSpan.Zero);
+
+        private string PendingEndTimeValue => FormatTime(pendingRangeEnd?.TimeOfDay ?? RangeEnd?.TimeOfDay ?? DefaultEndTime ?? TimeSpan.Zero);
+
+        private static string FormatTime(TimeSpan value)
         {
-            DatePickerType.Month or DatePickerType.MonthRange => DatePickerPanelType.Month,
-            DatePickerType.Year or DatePickerType.YearRange => DatePickerPanelType.Year,
-            _ => DatePickerPanelType.Date
-        };
+            return value.ToString(@"hh\:mm\:ss", CultureInfo.InvariantCulture);
+        }
+
+        private IReadOnlyList<DateTimePickerShortcut> ShortcutList => Shortcuts?.Where(x => x != null).ToList() ?? new List<DateTimePickerShortcut>();
 
         private string DropDownPanelClass => HtmlPropertyBuilder.CreateCssClassBuilder()
-            .Add(IsRange && !SinglePanel ? "el-picker-panel el-date-range-picker" : "el-picker-panel el-date-picker")
+            .Add(IsRange && !SinglePanel ? "el-picker-panel el-date-range-picker el-date-time-range-picker" : "el-picker-panel el-date-picker el-date-time-picker")
             .AddIf(ShortcutList.Any(), "has-sidebar")
             .ToString();
 
         private string SingleWrapperClass => HtmlPropertyBuilder.CreateCssClassBuilder()
-            .Add("el-input", "el-date-editor", "el-input--prefix", "el-input--suffix", $"el-date-editor--{TypeCssValue}", Cls)
+            .Add("el-input", "el-date-editor", "el-input--prefix", "el-input--suffix", "el-date-editor--datetime", Cls)
             .AddIf(SizeCssValue != null, $"el-input--{SizeCssValue}")
             .AddIf(effectiveDisabled, "is-disabled")
             .AddIf(isFocus || IsDropDownOpen, "is-focus")
             .ToString();
 
         private string RangeWrapperClass => HtmlPropertyBuilder.CreateCssClassBuilder()
-            .Add("el-date-editor", "el-range-editor", "el-input__inner", $"el-date-editor--{TypeCssValue}", Cls)
+            .Add("el-date-editor", "el-range-editor", "el-input__inner", "el-date-editor--datetimerange", Cls)
             .AddIf(SizeCssValue != null, $"el-range-editor--{SizeCssValue}")
             .AddIf(effectiveDisabled, "is-disabled")
             .AddIf(isFocus || IsDropDownOpen, "is-active")
@@ -777,16 +931,6 @@ namespace Element
             InputSize.Large => "large",
             InputSize.Small => "small",
             _ => null
-        };
-
-        private string TypeCssValue => Type switch
-        {
-            DatePickerType.Month => "month",
-            DatePickerType.Year => "year",
-            DatePickerType.DateRange => "daterange",
-            DatePickerType.MonthRange => "monthrange",
-            DatePickerType.YearRange => "yearrange",
-            _ => "date"
         };
 
         private string SuffixIconClass => HtmlPropertyBuilder.CreateCssClassBuilder()
@@ -805,5 +949,7 @@ namespace Element
         private bool IsDropDownOpen => dropDownOption != null && dropDownOption.IsShow;
 
         private bool IsInputReadonly => Readonly || !Editable;
+
+        private bool CanConfirmPending => IsRange ? pendingRangeStart.HasValue && pendingRangeEnd.HasValue : pendingSingleValue.HasValue;
     }
 }

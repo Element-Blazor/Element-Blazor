@@ -20,6 +20,7 @@ namespace Element
         public string PopperStyle { get; set; }
         public int MaxHeight { get; set; }
         public bool FitInputWidth { get; set; }
+        internal bool AutoWidth { get; set; } = true;
         internal string DropDownId { get; set; }
         internal string Placement { get; set; } = "bottom-start";
         internal string TransformOrigin { get; set; } = "center top 0px";

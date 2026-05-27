@@ -20,10 +20,13 @@
     {
         isDisabled = "is-disabled";
     }
-    <label role="checkbox" aria-checked="true" class="el-checkbox @_isChecked @isDisabled @Cls">
-        <span aria-checked="mixed" class="el-checkbox__input @_isChecked @isDisabled @_isIndeterminate">
+    var ariaChecked = Status == Status.Indeterminate ? "mixed" : (Status == Status.Checked).ToString().ToLowerInvariant();
+    var isChecked = Status == Status.Checked;
+    var borderClass = Border ? "is-bordered" : string.Empty;
+    <label role="checkbox" aria-checked="@ariaChecked" aria-disabled="@EffectiveDisabled" class="el-checkbox @_isChecked @isDisabled @_isIndeterminate @borderClass @SizeClass @Cls">
+        <span class="el-checkbox__input @_isChecked @isDisabled @_isIndeterminate">
             <span class="el-checkbox__inner"></span>
-            <input type="checkbox" aria-hidden="true" @onchange="ChangeStatus" class="el-checkbox__original @isDisabled" name="@Name" value="@Value" disabled="@IsDisabled" />
+            <input type="checkbox" aria-hidden="true" checked="@isChecked" @onchange="ChangeStatus" class="el-checkbox__original @isDisabled" name="@Name" value="@Value" disabled="@EffectiveDisabled" />
         </span>
         <span class="el-checkbox__label">
             @ChildContent

@@ -1,0 +1,39 @@
+@inherits ElementFieldComponentBase<string>
+
+<div class="@WrapperClass"
+     style="@Style"
+     @ref="colorPickerElement"
+     role="combobox"
+     aria-haspopup="dialog"
+     aria-expanded="@IsDropDownOpen"
+     aria-disabled="@IsColorPickerDisabled"
+     aria-controls="@DropDownId"
+     tabindex="@(IsColorPickerDisabled ? -1 : Tabindex)"
+     @onclick="OnColorPickerClickAsync"
+     @onfocus="OnFocusAsync"
+     @onblur="OnBlurAsync"
+     @onkeydown="OnKeyDownAsync"
+     @onmouseover="e => isHovering = true"
+     @onmouseout="e => isHovering = false"
+     @attributes="Attributes">
+    <span class="el-color-picker__trigger">
+        <span class="@ColorBlockClass">
+            @if (HasColor)
+            {
+                <span class="el-color-picker__color-inner" style="@ColorInnerStyle"></span>
+            }
+            else
+            {
+                <i class="el-color-picker__empty el-icon-close"></i>
+            }
+        </span>
+        @if (HasColor)
+        {
+            <i class="@TriggerIconClass" @onclick="OnClearIconClickAsync" @onclick:stopPropagation></i>
+        }
+        @if (IsColorPickerDisabled)
+        {
+            <span class="el-color-picker__mask"></span>
+        }
+    </span>
+</div>

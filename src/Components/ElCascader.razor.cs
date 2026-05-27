@@ -15,9 +15,12 @@ namespace Element
         private readonly string DropDownId = $"el-cascader-dropdown-{Interlocked.Increment(ref dropDownIdSeed)}";
         private readonly List<IList<CascaderOption>> menus = new List<IList<CascaderOption>>();
         private readonly List<CascaderOption> activePath = new List<CascaderOption>();
+        private readonly List<IList<string>> checkedValues = new List<IList<string>>();
+        private readonly List<CascaderSuggestion> suggestions = new List<CascaderSuggestion>();
         private DropDownOption dropDownOption;
         private ElementReference cascaderElement;
         private HtmlPropertyBuilder wrapperClsBuilder;
+        private string filterText;
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
 
@@ -39,6 +42,22 @@ namespace Element
 
         [Parameter]
         public EventCallback<IList<string>> ModelValueChanged { get; set; }
+
+        [Parameter]
+        public IList<IList<string>> Values { get; set; } = new List<IList<string>>();
+
+        [Parameter]
+        public IList<IList<string>> ModelValues
+        {
+            get => Values;
+            set => Values = value;
+        }
+
+        [Parameter]
+        public EventCallback<IList<IList<string>>> ValuesChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<IList<IList<string>>> ModelValuesChanged { get; set; }
 
         [Parameter]
         public IEnumerable<CascaderOption> Options { get; set; }
@@ -69,7 +88,28 @@ namespace Element
         public bool CheckStrictly { get; set; }
 
         [Parameter]
+        public bool Multiple { get; set; }
+
+        [Parameter]
+        public bool Lazy { get; set; }
+
+        [Parameter]
+        public Func<CascaderOption, Task<IEnumerable<CascaderOption>>> LazyLoad { get; set; }
+
+        [Parameter]
+        public bool Filterable { get; set; }
+
+        [Parameter]
+        public Func<CascaderOption, string, bool> FilterMethod { get; set; }
+
+        [Parameter]
         public bool ExpandTriggerHover { get; set; }
+
+        [Parameter]
+        public RenderFragment<CascaderOption> NodeTemplate { get; set; }
+
+        [Parameter]
+        public RenderFragment<CascaderSuggestion> SuggestionItemTemplate { get; set; }
 
         [Parameter]
         public string PrefixIcon { get; set; }
@@ -91,6 +131,9 @@ namespace Element
 
         [Parameter]
         public EventCallback<IList<string>> OnChange { get; set; }
+
+        [Parameter]
+        public EventCallback<IList<IList<string>>> OnValuesChange { get; set; }
 
         [Parameter]
         public EventCallback<CascaderOption> OnExpandChange { get; set; }
@@ -129,12 +172,14 @@ namespace Element
             }
 
             SyncPathFromValue();
+            SyncCheckedValuesFromValues();
         }
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
             Value = NormalizeValue(value);
             SyncPathFromValue();
+            SyncCheckedValuesFromValues();
             if (ValueChanged.HasDelegate)
             {
                 _ = ValueChanged.InvokeAsync(Value);
@@ -162,6 +207,8 @@ namespace Element
                 return;
             }
 
+            filterText = null;
+            suggestions.Clear();
             OpenMenus();
             await OpenDropDownAsync();
         }
@@ -169,7 +216,11 @@ namespace Element
         private async Task OnInputClearAsync(MouseEventArgs e)
         {
             Value = new List<string>();
+            Values = new List<IList<string>>();
             activePath.Clear();
+            checkedValues.Clear();
+            filterText = null;
+            suggestions.Clear();
             OpenMenus();
             SetFieldValue(Value, ValidateEvent);
             if (ValueChanged.HasDelegate)
@@ -180,9 +231,21 @@ namespace Element
             {
                 await ModelValueChanged.InvokeAsync(Value);
             }
+            if (ValuesChanged.HasDelegate)
+            {
+                await ValuesChanged.InvokeAsync(Values);
+            }
+            if (ModelValuesChanged.HasDelegate)
+            {
+                await ModelValuesChanged.InvokeAsync(Values);
+            }
             if (OnChange.HasDelegate)
             {
                 await OnChange.InvokeAsync(Value);
+            }
+            if (OnValuesChange.HasDelegate)
+            {
+                await OnValuesChange.InvokeAsync(Values);
             }
             await CloseDropDownAsync();
         }
@@ -218,6 +281,11 @@ namespace Element
             activePath.Add(option);
             TrimMenus(menuIndex + 1);
 
+            if (Lazy)
+            {
+                await EnsureLazyLoadedAsync(option);
+            }
+
             if (option.HasChildren)
             {
                 menus.Add(option.Children);
@@ -229,9 +297,32 @@ namespace Element
 
             if (CheckStrictly || option.Leaf || !option.HasChildren)
             {
-                await CommitSelectionAsync(option);
+                if (Multiple)
+                {
+                    await ToggleMultipleSelectionAsync(activePath);
+                }
+                else
+                {
+                    await CommitSelectionAsync(option);
+                }
             }
 
+            RefreshDropDown();
+        }
+
+        private async Task OnInputValueChangedAsync(string value)
+        {
+            if (!Filterable)
+            {
+                return;
+            }
+
+            filterText = value;
+            BuildSuggestions();
+            if (!IsDropDownOpen)
+            {
+                await OpenDropDownAsync();
+            }
             RefreshDropDown();
         }
 
@@ -256,6 +347,88 @@ namespace Element
             {
                 await CloseDropDownAsync();
             }
+        }
+
+        private async Task ToggleMultipleSelectionAsync(IEnumerable<CascaderOption> path)
+        {
+            var values = path.Select(x => x.Value).Where(x => x != null).ToList();
+            if (!values.Any())
+            {
+                return;
+            }
+
+            var existing = checkedValues.FindIndex(x => SamePath(x, values));
+            if (existing >= 0)
+            {
+                checkedValues.RemoveAt(existing);
+            }
+            else
+            {
+                checkedValues.Add(values);
+            }
+
+            Values = checkedValues.Select(x => (IList<string>)x.ToList()).ToList();
+            Value = Values.LastOrDefault()?.ToList() ?? new List<string>();
+            SetFieldValue(Value, ValidateEvent);
+
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(Value);
+            }
+            if (ValuesChanged.HasDelegate)
+            {
+                await ValuesChanged.InvokeAsync(Values);
+            }
+            if (ModelValuesChanged.HasDelegate)
+            {
+                await ModelValuesChanged.InvokeAsync(Values);
+            }
+            if (OnChange.HasDelegate)
+            {
+                await OnChange.InvokeAsync(Value);
+            }
+            if (OnValuesChange.HasDelegate)
+            {
+                await OnValuesChange.InvokeAsync(Values);
+            }
+        }
+
+        private async Task SelectSuggestionAsync(CascaderSuggestion suggestion)
+        {
+            if (suggestion?.Path == null || !suggestion.Path.Any())
+            {
+                return;
+            }
+
+            activePath.Clear();
+            activePath.AddRange(suggestion.Path);
+            Value = suggestion.Values.ToList();
+            OpenMenus();
+
+            if (Multiple)
+            {
+                await ToggleMultipleSelectionAsync(suggestion.Path);
+                return;
+            }
+
+            SetFieldValue(Value, ValidateEvent);
+            if (ValueChanged.HasDelegate)
+            {
+                await ValueChanged.InvokeAsync(Value);
+            }
+            if (ModelValueChanged.HasDelegate)
+            {
+                await ModelValueChanged.InvokeAsync(Value);
+            }
+            if (OnChange.HasDelegate)
+            {
+                await OnChange.InvokeAsync(Value);
+            }
+            await CloseDropDownAsync();
         }
 
         private void OpenMenus()
@@ -301,6 +474,19 @@ namespace Element
 
                 activePath.Add(option);
                 currentOptions = option.Children ?? new List<CascaderOption>();
+            }
+        }
+
+        private void SyncCheckedValuesFromValues()
+        {
+            checkedValues.Clear();
+            foreach (var value in Values ?? Enumerable.Empty<IList<string>>())
+            {
+                var normalized = NormalizeValue(value);
+                if (normalized.Any())
+                {
+                    checkedValues.Add(normalized);
+                }
             }
         }
 
@@ -351,6 +537,8 @@ namespace Element
             if (!visible)
             {
                 dropDownOption = null;
+                filterText = null;
+                suggestions.Clear();
             }
 
             if (OnVisibleChange.HasDelegate)
@@ -368,6 +556,14 @@ namespace Element
             builder.OpenElement(seq++, "div");
             builder.AddAttribute(seq++, "class", "el-cascader-panel");
             builder.AddAttribute(seq++, "role", "menu");
+
+            if (Filterable && !string.IsNullOrWhiteSpace(filterText))
+            {
+                BuildSuggestionContent(builder, ref seq);
+                builder.CloseElement();
+                return;
+            }
+
             for (var menuIndex = 0; menuIndex < menus.Count; menuIndex++)
             {
                 var index = menuIndex;
@@ -384,6 +580,7 @@ namespace Element
                         .AddIf(option.Disabled, "is-disabled")
                         .AddIf(IsInPath(option), "in-active-path")
                         .AddIf(IsSelected(option), "is-active")
+                        .AddIf(IsChecked(option), "is-checked")
                         .AddIf(!option.HasChildren || CheckStrictly, "is-selectable");
                     builder.OpenElement(seq++, "li");
                     builder.SetKey(option);
@@ -391,16 +588,39 @@ namespace Element
                     builder.AddAttribute(seq++, "role", "menuitem");
                     builder.AddAttribute(seq++, "aria-disabled", option.Disabled);
                     builder.AddAttribute(seq++, "aria-expanded", option.HasChildren ? IsInPath(option) : null);
+                    builder.AddAttribute(seq++, "aria-checked", Multiple ? IsChecked(option) : null);
                     builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, () => ExpandOptionAsync(option, index)));
                     if (ExpandTriggerHover)
                     {
                         builder.AddAttribute(seq++, "onmouseover", EventCallback.Factory.Create<MouseEventArgs>(this, () => ExpandOptionAsync(option, index)));
                     }
+                    if (Multiple)
+                    {
+                        builder.OpenElement(seq++, "span");
+                        builder.AddAttribute(seq++, "class", "el-checkbox__input" + (IsChecked(option) ? " is-checked" : string.Empty));
+                        builder.OpenElement(seq++, "span");
+                        builder.AddAttribute(seq++, "class", "el-checkbox__inner");
+                        builder.CloseElement();
+                        builder.CloseElement();
+                    }
                     builder.OpenElement(seq++, "span");
                     builder.AddAttribute(seq++, "class", "el-cascader-node__label");
-                    builder.AddContent(seq++, option.DisplayLabel);
+                    if (NodeTemplate != null)
+                    {
+                        builder.AddContent(seq++, NodeTemplate(option));
+                    }
+                    else
+                    {
+                        builder.AddContent(seq++, option.DisplayLabel);
+                    }
                     builder.CloseElement();
-                    if (option.HasChildren)
+                    if (option.Loading)
+                    {
+                        builder.OpenElement(seq++, "i");
+                        builder.AddAttribute(seq++, "class", "el-icon-loading el-cascader-node__postfix");
+                        builder.CloseElement();
+                    }
+                    else if (option.HasChildren || (Lazy && !option.Leaf))
                     {
                         builder.OpenElement(seq++, "i");
                         builder.AddAttribute(seq++, "class", "el-icon-arrow-right el-cascader-node__postfix");
@@ -418,6 +638,48 @@ namespace Element
                 builder.CloseElement();
                 builder.CloseElement();
             }
+            builder.CloseElement();
+        }
+
+        private void BuildSuggestionContent(RenderTreeBuilder builder, ref int seq)
+        {
+            if (!suggestions.Any())
+            {
+                builder.OpenElement(seq++, "p");
+                builder.AddAttribute(seq++, "class", "el-cascader__empty-text");
+                builder.AddContent(seq++, "无匹配数据");
+                builder.CloseElement();
+                return;
+            }
+
+            builder.OpenElement(seq++, "div");
+            builder.AddAttribute(seq++, "class", "el-cascader-menu");
+            builder.OpenElement(seq++, "div");
+            builder.AddAttribute(seq++, "class", "el-cascader-menu__wrap el-scrollbar__wrap");
+            builder.OpenElement(seq++, "ul");
+            builder.AddAttribute(seq++, "class", "el-cascader-menu__list");
+            foreach (var suggestion in suggestions)
+            {
+                builder.OpenElement(seq++, "li");
+                builder.SetKey(suggestion);
+                builder.AddAttribute(seq++, "class", "el-cascader-node is-selectable");
+                builder.AddAttribute(seq++, "role", "menuitem");
+                builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, () => SelectSuggestionAsync(suggestion)));
+                builder.OpenElement(seq++, "span");
+                builder.AddAttribute(seq++, "class", "el-cascader-node__label");
+                if (SuggestionItemTemplate != null)
+                {
+                    builder.AddContent(seq++, SuggestionItemTemplate(suggestion));
+                }
+                else
+                {
+                    builder.AddContent(seq++, suggestion.Text);
+                }
+                builder.CloseElement();
+                builder.CloseElement();
+            }
+            builder.CloseElement();
+            builder.CloseElement();
             builder.CloseElement();
         }
 
@@ -443,6 +705,10 @@ namespace Element
         private string DisplayValue => activePath.Any()
             ? string.Join(Separator, activePath.Select(x => x.DisplayLabel))
             : string.Empty;
+
+        private string InputValue => Filterable && IsDropDownOpen && !string.IsNullOrWhiteSpace(filterText)
+            ? filterText
+            : DisplayValue;
 
         bool ISelectDropDownContext.Loading => false;
 
@@ -473,6 +739,89 @@ namespace Element
         private bool IsSelected(CascaderOption option)
         {
             return activePath.LastOrDefault() == option && Value?.LastOrDefault() == option.Value;
+        }
+
+        private bool IsChecked(CascaderOption option)
+        {
+            return checkedValues.Any(path => path.LastOrDefault() == option.Value);
+        }
+
+        private async Task EnsureLazyLoadedAsync(CascaderOption option)
+        {
+            if (!Lazy || LazyLoad == null || option == null || option.Leaf || option.Loaded || option.HasChildren)
+            {
+                return;
+            }
+
+            option.Loading = true;
+            RefreshDropDown();
+            try
+            {
+                var children = await LazyLoad(option);
+                option.Children = children?.Where(x => x != null).ToList() ?? new List<CascaderOption>();
+                option.Loaded = true;
+            }
+            finally
+            {
+                option.Loading = false;
+            }
+        }
+
+        private void BuildSuggestions()
+        {
+            suggestions.Clear();
+            if (string.IsNullOrWhiteSpace(filterText))
+            {
+                return;
+            }
+
+            foreach (var path in EnumeratePaths(RootOptions, new List<CascaderOption>()))
+            {
+                var option = path.LastOrDefault();
+                if (option == null || option.Disabled || (option.HasChildren && !CheckStrictly))
+                {
+                    continue;
+                }
+
+                var matches = FilterMethod != null
+                    ? FilterMethod(option, filterText)
+                    : path.Any(x => x.DisplayLabel?.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0);
+                if (!matches)
+                {
+                    continue;
+                }
+
+                suggestions.Add(new CascaderSuggestion
+                {
+                    Path = path.ToList(),
+                    Text = string.Join(Separator, path.Select(x => x.DisplayLabel))
+                });
+            }
+        }
+
+        private IEnumerable<IList<CascaderOption>> EnumeratePaths(IEnumerable<CascaderOption> options, IList<CascaderOption> prefix)
+        {
+            foreach (var option in options ?? Enumerable.Empty<CascaderOption>())
+            {
+                var path = prefix.Concat(new[] { option }).ToList();
+                if (option.HasChildren)
+                {
+                    foreach (var childPath in EnumeratePaths(option.Children, path))
+                    {
+                        yield return childPath;
+                    }
+                }
+
+                if (!option.HasChildren || CheckStrictly)
+                {
+                    yield return path;
+                }
+            }
+        }
+
+        private static bool SamePath(IList<string> first, IList<string> second)
+        {
+            return first != null && second != null && first.SequenceEqual(second);
         }
 
         private void TrimMenus(int count)

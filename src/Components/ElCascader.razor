@@ -10,10 +10,11 @@
      aria-controls="@DropDownId"
      @onclick="OnCascaderClickAsync">
     <ElInput TValue="string"
-             Value="@DisplayValue"
+             Value="@InputValue"
+             ValueChanged="OnInputValueChangedAsync"
              Placeholder="@Placeholder"
              Disabled="@IsCascaderDisabled"
-             Readonly="true"
+             Readonly="@(!Filterable)"
              Clearable="@Clearable"
              Size="@EffectiveSize"
              PrefixIcon="@PrefixIcon"
