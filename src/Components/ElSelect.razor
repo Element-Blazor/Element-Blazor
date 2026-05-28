@@ -15,11 +15,11 @@
      @ref="elementSelect"
      role="combobox"
      aria-haspopup="listbox"
-     aria-multiselectable="@Multiple"
-     aria-expanded="@IsDropDownOpen"
-     aria-disabled="@IsSelectDisabled"
+     aria-multiselectable="@AriaMultiple"
+     aria-expanded="@AriaExpanded"
+     aria-disabled="@AriaDisabled"
      aria-controls="@DropDownId"
-     aria-busy="@Loading"
+     aria-busy="@AriaBusy"
      tabindex="@(IsSelectDisabled ? -1 : 0)">
     @if (Multiple && SelectedOptions.Any())
     {

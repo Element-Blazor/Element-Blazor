@@ -15,6 +15,8 @@
      aria-haspopup="listbox"
      aria-expanded="@(dropdownVisible ? "true" : "false")"
      aria-disabled="@(IsSelectV2Disabled ? "true" : "false")"
+     aria-multiselectable="@(Multiple ? "true" : "false")"
+     aria-busy="@(IsLoading ? "true" : "false")"
      aria-controls="@dropdownId"
      aria-activedescendant="@ActiveDescendantId"
      tabindex="@(IsSelectV2Disabled ? -1 : 0)"
@@ -51,7 +53,6 @@
             Value="@DisplayLabel"
             ValueChanged="OnFilterInputAsync"
             ValidateEvent="false"
-            OnInput="OnFilterInputAsync"
             OnKeyDown="OpenDropdownFromKeyboard">
     </ElInput>
     @if (ShowClear)
@@ -79,7 +80,7 @@
                     else
                     {
                         <ul class="el-scrollbar__view el-select-dropdown__list" role="listbox">
-                            <Virtualize TItem="SelectV2Row" Items="@VirtualRows" ItemSize="@EffectiveItemHeight" OverscanCount="@OverscanCount" Context="row">
+                            <Virtualize TItem="SelectV2Row" Items="@VirtualRows" ItemSize="@EffectiveItemHeight" OverscanCount="@EffectiveOverscanCount" Context="row">
                                 @if (row.IsGroup)
                                 {
                                     <li class="el-select-group__wrap" role="presentation" style="height:@(EffectiveItemHeight)px;">

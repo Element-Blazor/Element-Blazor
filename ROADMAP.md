@@ -102,11 +102,11 @@
 | Input Number | `ElInputNumber` | 🟢 已对齐 | 已实现步进、精度、范围、按钮位置、禁用/只读、严格键盘体验、ARIA 细节、表单校验联动和组件测试。 |
 | Input Tag | `ElInputTag` | 🟢 已对齐 | 已实现标签输入、删除、数量限制、触发键、失焦提交、拖拽排序、组合键细节、表单校验联动和组件测试。 |
 | Input OTP | `ElInputOtp` | 🟢 已对齐 | 已实现分格输入、粘贴填充、焦点流转、掩码、禁用/只读、更细键盘行为、表单校验联动和组件测试。 |
-| Mention | 缺少 `ElMention` | 🔴 缺失 | 实现触发字符、候选项和文本区域集成。 |
-| Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟡 部分对齐 | 补齐禁用、尺寸、边框和键盘行为。 |
-| Rate | `ElRate` | 🟡 部分对齐 | 已实现评分、半星、颜色、文本/分值、清除、禁用和表单校验联动；继续补齐自定义图标插槽和测试。 |
-| Select | `ElSelect`、`ElOption` | 🟡 部分对齐 | 补齐多选、远程搜索、过滤、分组和虚拟化边界。 |
-| Virtualized Select | 缺少 `ElSelectV2` | 🔴 缺失 | 设计大数据虚拟列表。 |
+| Mention | `ElMention` | 🟢 已对齐 | 已实现触发字符、候选项、键盘导航、多前缀、文本区域集成、表单校验联动和组件测试。 |
+| Radio | `ElRadio`、`ElRadioGroup`、`ElRadioButton` | 🟢 已对齐 | 已实现禁用、尺寸、边框、按钮样式、表单尺寸继承、ARIA 和键盘行为，并补充组件测试。 |
+| Rate | `ElRate` | 🟢 已对齐 | 已实现评分、半星、颜色、文本/分值、清除、禁用、自定义图标插槽、表单校验联动和组件测试。 |
+| Select | `ElSelect`、`ElOption`、`ElOptionGroup` | 🟢 已对齐 | 已实现多选、远程搜索、过滤、分组、禁用分组、ARIA 细节和组件测试。 |
+| Virtualized Select | `ElSelectV2` | 🟢 已对齐 | 已实现大数据虚拟列表、过滤、远程搜索、多选、分组、键盘导航、边界钳制和组件测试。 |
 | Slider | `ElSlider`、`SliderMark` | 🟡 部分对齐 | 已实现拖拽、范围、步长、停点、marks、输入框联动和表单校验联动；继续补齐 range 双滑块、tooltip 和测试。 |
 | Switch | `ElSwitch` | 🟡 部分对齐 | 补齐 active/inactive text/value、loading、before-change。 |
 | Time Picker | 缺少 `ElTimePicker` | 🔴 缺失 | 实现时间面板、范围和格式。 |

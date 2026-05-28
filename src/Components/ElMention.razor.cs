@@ -22,7 +22,7 @@ namespace Element
         private int activeMentionEnd = -1;
         private int lastSelectionStart = -1;
         private int lastSelectionEnd = -1;
-        private readonly string inputId = $"el-mention-input-{Interlocked.Increment(ref mentionIdSeed)}";
+        private readonly string generatedInputId = $"el-mention-input-{Interlocked.Increment(ref mentionIdSeed)}";
         private readonly string dropdownId = $"el-mention-dropdown-{Interlocked.Increment(ref mentionIdSeed)}";
         private ElementReference textareaElement;
 
@@ -65,7 +65,22 @@ namespace Element
         public string Placeholder { get; set; }
 
         [Parameter]
+        public string Id { get; set; }
+
+        [Parameter]
         public int Rows { get; set; } = 2;
+
+        [Parameter]
+        public string Autocomplete { get; set; } = "off";
+
+        [Parameter]
+        public object Tabindex { get; set; } = 0;
+
+        [Parameter]
+        public string AriaLabel { get; set; }
+
+        [Parameter]
+        public string InputStyle { get; set; }
 
         [Parameter]
         public InputSize Size { get; set; } = InputSize.Normal;
@@ -105,6 +120,11 @@ namespace Element
             effectiveSize = Size == InputSize.Normal
                 ? FormItem?.Size ?? FormItem?.Form?.EffectiveSize ?? ResolveInputSize(InputSize.Normal)
                 : Size;
+            Id = string.IsNullOrWhiteSpace(Id) ? ResolveAttributeId() ?? generatedInputId : Id;
+            if (FormItem?.Form != null)
+            {
+                FormItem.Form.RegisterInput(FormItem.Name, Id, this, FormItem);
+            }
             var sizeCssValue = GetSizeCssValue(effectiveSize);
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-mention", "el-textarea", Cls)
@@ -197,13 +217,18 @@ namespace Element
             }
         }
 
-        private void OnBlur(FocusEventArgs e)
+        private void OnBlurAsync(FocusEventArgs e)
         {
             dropdownVisible = false;
             if (ValidateEvent)
             {
                 SetFieldValue(Value, true);
             }
+        }
+
+        private async Task OnFocusAsync(FocusEventArgs e)
+        {
+            await CaptureSelectionAsync();
         }
 
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
@@ -215,6 +240,7 @@ namespace Element
 
             if (e.Key == "ArrowDown" && !dropdownVisible)
             {
+                await CaptureSelectionAsync();
                 RefreshSearch();
                 return;
             }
@@ -278,6 +304,10 @@ namespace Element
             {
                 await OnSelect.InvokeAsync(option);
             }
+            if (OnChange.HasDelegate)
+            {
+                await OnChange.InvokeAsync(Value);
+            }
 
             await SetSelectionAsync(start + mentionValue.Length);
         }
@@ -323,6 +353,8 @@ namespace Element
 
         private bool ShowClear => Clearable && !effectiveDisabled && !Readonly && !string.IsNullOrEmpty(Value);
 
+        private string AriaInvalid => IsAriaInvalid ? "true" : "false";
+
         private string GetOptionId(int index) => $"{dropdownId}-option-{index}";
 
         private IEnumerable<string> ResolvePrefixes()
@@ -342,6 +374,16 @@ namespace Element
             }
 
             return configured.OrderByDescending(x => x.Length);
+        }
+
+        private string ResolveAttributeId()
+        {
+            if (Attributes == null)
+            {
+                return null;
+            }
+
+            return Attributes.TryGetValue("id", out var id) ? Convert.ToString(id) : null;
         }
 
         private async Task CaptureSelectionAsync()

@@ -586,7 +586,7 @@ namespace Element
 
         internal bool IsOptionVisible(SelectResultModel<TValue> option)
         {
-            if (!Filterable || string.IsNullOrWhiteSpace(filterText))
+            if (!Filterable || Remote || string.IsNullOrWhiteSpace(filterText))
             {
                 return true;
             }
@@ -658,6 +658,14 @@ namespace Element
         internal bool IsDropDownOpen => dropDownOption != null && dropDownOption.IsShow;
 
         protected bool IsSelectDisabled => effectiveDisabled;
+
+        protected string AriaMultiple => Multiple ? "true" : "false";
+
+        protected string AriaExpanded => IsDropDownOpen ? "true" : "false";
+
+        protected string AriaDisabled => IsSelectDisabled ? "true" : "false";
+
+        protected string AriaBusy => Loading ? "true" : "false";
 
         protected InputSize EffectiveSize => effectiveSize;
 

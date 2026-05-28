@@ -80,6 +80,9 @@ namespace Element
         public RenderFragment<RateIconContext> IconTemplate { get; set; }
 
         [Parameter]
+        public RenderFragment<RateIconContext> ItemTemplate { get; set; }
+
+        [Parameter]
         public bool ValidateEvent { get; set; } = true;
 
         [Parameter]
@@ -178,8 +181,13 @@ namespace Element
 
         private string GetIconStyle(int index)
         {
-            var color = IsActive(index) ? ResolveColor(CurrentValue) : (effectiveDisabled ? DisabledVoidColor : VoidColor);
+            var color = ResolveIconColor(index);
             return $"color:{color}";
+        }
+
+        private string ResolveIconColor(int index)
+        {
+            return IsActive(index) ? ResolveColor(CurrentValue) : (effectiveDisabled ? DisabledVoidColor : VoidColor);
         }
 
         private bool IsActive(int index)
@@ -231,6 +239,33 @@ namespace Element
 
         private bool IsRateDisabled => effectiveDisabled;
 
+        private string AriaDisabled => effectiveDisabled ? "true" : "false";
+
+        private RenderFragment<RateIconContext> ResolvedIconTemplate => IconTemplate ?? ItemTemplate;
+
+        private RateIconContext CreateIconContext(int index)
+        {
+            var active = IsActive(index);
+            var half = AllowHalf && CurrentValue > index - 1 && CurrentValue < index;
+            var color = ResolveIconColor(index);
+            return new RateIconContext
+            {
+                Index = index,
+                Max = Max,
+                Value = Value,
+                CurrentValue = CurrentValue,
+                HoverValue = hoverValue,
+                Active = active,
+                Half = half,
+                Disabled = effectiveDisabled,
+                Empty = !active,
+                Color = color,
+                Icon = active ? Icon : VoidIcon,
+                IconClass = GetIconClass(index),
+                IconStyle = $"color:{color}"
+            };
+        }
+
         private static double? ConvertToDouble(object value)
         {
             if (value == null)
@@ -245,9 +280,25 @@ namespace Element
     {
         public int Index { get; set; }
 
+        public int Max { get; set; }
+
+        public double? Value { get; set; }
+
+        public double? CurrentValue { get; set; }
+
+        public double? HoverValue { get; set; }
+
         public bool Active { get; set; }
 
         public bool Half { get; set; }
+
+        public bool Disabled { get; set; }
+
+        public bool Empty { get; set; }
+
+        public string Color { get; set; }
+
+        public string Icon { get; set; }
 
         public string IconClass { get; set; }
 

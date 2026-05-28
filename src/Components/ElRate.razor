@@ -6,28 +6,23 @@
      aria-valuemin="0"
      aria-valuemax="@Max"
      aria-valuenow="@CurrentValue"
-     aria-disabled="@IsRateDisabled">
+     aria-disabled="@AriaDisabled">
     @for (var i = 1; i <= Max; i++)
     {
         var index = i;
+        var context = CreateIconContext(index);
+        var iconTemplate = ResolvedIconTemplate;
         <span class="el-rate__item"
               @onclick="e => SelectRateAsync(index)"
               @onmousemove="e => HoverRate(index, e)"
               @onmouseleave="ClearHover">
-            @if (IconTemplate != null)
+            @if (iconTemplate != null)
             {
-                @IconTemplate(new RateIconContext
-                {
-                    Index = index,
-                    Active = IsActive(index),
-                    Half = AllowHalf && CurrentValue > index - 1 && CurrentValue < index,
-                    IconClass = GetIconClass(index),
-                    IconStyle = GetIconStyle(index)
-                })
+                @iconTemplate(context)
             }
             else
             {
-                <i class="@GetIconClass(index)" style="@GetIconStyle(index)"></i>
+                <i class="@context.IconClass" style="@context.IconStyle"></i>
             }
         </span>
     }

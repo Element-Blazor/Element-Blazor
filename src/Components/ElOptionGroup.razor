@@ -1,11 +1,13 @@
 @typeparam TValue
 
-<li class="el-select-group__wrap" role="presentation">
+<li class="el-select-group__wrap @(EffectiveDisabled ? "is-disabled" : string.Empty)" role="presentation" aria-disabled="@(EffectiveDisabled ? "true" : "false")">
     <ul class="el-select-group__list">
         @if (!string.IsNullOrWhiteSpace(Label))
         {
             <li class="el-select-group__title">@Label</li>
         }
-        @ChildContent
+        <CascadingValue Value="@this">
+            @ChildContent
+        </CascadingValue>
     </ul>
 </li>

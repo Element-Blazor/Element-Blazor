@@ -12,6 +12,14 @@ namespace Element.ControlConfigs
 
         public int Rows { get; set; } = 2;
 
+        public string Autocomplete { get; set; } = "off";
+
+        public int Tabindex { get; set; } = 0;
+
+        public string AriaLabel { get; set; }
+
+        public string InputStyle { get; set; }
+
         public bool IsDisabled { get; set; }
 
         public bool Readonly { get; set; }

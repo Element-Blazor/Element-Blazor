@@ -508,7 +508,7 @@ namespace Element
             get
             {
                 var options = Options ?? Enumerable.Empty<SelectV2Option>();
-                if (!Filterable || string.IsNullOrWhiteSpace(filterText))
+                if (!Filterable || Remote || string.IsNullOrWhiteSpace(filterText))
                 {
                     return options.Where(x => x != null).ToList();
                 }
@@ -574,6 +574,8 @@ namespace Element
         private int EffectiveItemHeight => Math.Max(24, ItemHeight);
 
         private int EffectiveHeight => Math.Max(EffectiveItemHeight * 2, Height);
+
+        private int EffectiveOverscanCount => Math.Max(0, OverscanCount);
 
         private IReadOnlyList<SelectV2Option> SelectedOptions => selectedOptions;
 

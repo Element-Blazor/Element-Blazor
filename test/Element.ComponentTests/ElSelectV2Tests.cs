@@ -105,7 +105,25 @@ namespace Element.ComponentTests
             cut.Find(".el-select-v2").Click();
             cut.Find("input").Input("remote");
 
-            Assert.Equal(new[] { "remote", "remote" }, queries);
+            Assert.Equal(new[] { "remote" }, queries);
+        }
+
+        [Fact]
+        public void RemoteFilterKeepsServerOptionsVisibleUntilResultsArrive()
+        {
+            var cut = Render<ElSelectV2<int>>(parameters => parameters
+                .Add(x => x.Filterable, true)
+                .Add(x => x.Remote, true)
+                .Add(x => x.Options, new[]
+                {
+                    new SelectV2Option { Label = "Existing", Value = 1 }
+                }));
+
+            cut.Find(".el-select-v2").Click();
+            cut.Find("input").Input("missing");
+
+            Assert.Single(cut.FindAll(".el-select-dropdown__item"));
+            Assert.Contains("Existing", cut.Find(".el-select-dropdown__item").TextContent);
         }
 
         [Fact]
@@ -186,6 +204,7 @@ namespace Element.ComponentTests
             var cut = Render<ElSelectV2<int>>(parameters => parameters
                 .Add(x => x.ItemHeight, 0)
                 .Add(x => x.Height, 10)
+                .Add(x => x.OverscanCount, -5)
                 .Add(x => x.Options, new[]
                 {
                     new SelectV2Option { Label = "Option 1", Value = 1 }

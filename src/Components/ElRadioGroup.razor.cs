@@ -16,6 +16,25 @@ namespace Element
         [Parameter]
         public RadioSize Size { get; set; }
 
+        [Parameter]
+        public bool IsBordered { get; set; }
+
+        [Parameter]
+        public bool Border
+        {
+            get => IsBordered;
+            set => IsBordered = value;
+        }
+
+        [Parameter]
+        public bool Bordered
+        {
+            get => IsBordered;
+            set => IsBordered = value;
+        }
+
+        internal bool EffectiveBordered => IsBordered;
+
         internal RadioSize EffectiveSize
         {
             get
@@ -25,7 +44,7 @@ namespace Element
                     return ResolveRadioSize(Size);
                 }
 
-                return FormItem?.Form?.EffectiveSize switch
+                return (FormItem?.Size ?? FormItem?.Form?.EffectiveSize) switch
                 {
                     InputSize.Large => RadioSize.Medium,
                     InputSize.Small => RadioSize.Small,
@@ -180,6 +199,11 @@ namespace Element
 
         internal async Task<bool> TrySetValueAsync(TValue value, bool requireRefresh)
         {
+            if (EffectiveDisabled || TypeHelper.Equal(SelectedValue, value))
+            {
+                return false;
+            }
+
             var arg = new ElementChangeEventArgs<TValue>
             {
                 NewValue = value,

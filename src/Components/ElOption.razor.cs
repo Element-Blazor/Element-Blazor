@@ -18,6 +18,9 @@ namespace Element
         [CascadingParameter]
         public DropDownOption Option { get; set; }
 
+        [CascadingParameter]
+        public ElOptionGroup<TValue> OptionGroup { get; set; }
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
         [Parameter]
@@ -42,7 +45,7 @@ namespace Element
             {
                 Key = Value,
                 Text = Text ?? Convert.ToString(Value),
-                Disabled = Disabled
+                Disabled = EffectiveDisabled
             };
             ((ElSelect<TValue>)Option.Select).RegisterOption(currentResultModel);
         }
@@ -54,13 +57,13 @@ namespace Element
             {
                 currentResultModel.Key = Value;
                 currentResultModel.Text = Text ?? Convert.ToString(Value);
-                currentResultModel.Disabled = Disabled;
+                currentResultModel.Disabled = EffectiveDisabled;
             }
         }
 
         public async Task SelectItemAsync(MouseEventArgs e)
         {
-            if (Disabled)
+            if (EffectiveDisabled)
             {
                 return;
             }
@@ -76,5 +79,11 @@ namespace Element
         private bool IsHover => Option?.Select is ElSelect<TValue> select && select.IsOptionHover(currentResultModel);
 
         private bool IsVisible => Option?.Select is not ElSelect<TValue> select || select.IsOptionVisible(currentResultModel);
+
+        private bool EffectiveDisabled => Disabled || (OptionGroup?.EffectiveDisabled ?? false);
+
+        private string AriaSelected => IsSelected ? "true" : "false";
+
+        private string AriaDisabled => EffectiveDisabled ? "true" : "false";
     }
 }

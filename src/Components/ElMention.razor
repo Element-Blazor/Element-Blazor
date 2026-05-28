@@ -2,11 +2,16 @@
 
 <div class="@wrapperClsBuilder.ToString()" style="@Style">
     <textarea class="el-textarea__inner"
-              id="@inputId"
+              id="@Id"
+              @attributes="Attributes"
               @ref="textareaElement"
+              style="@InputStyle"
               value="@Value"
+              name="@Name"
               placeholder="@Placeholder"
               rows="@Rows"
+              autocomplete="@Autocomplete"
+              tabindex="@Tabindex"
               disabled="@IsMentionDisabled"
               readonly="@Readonly"
               role="combobox"
@@ -15,12 +20,14 @@
               aria-expanded="@(dropdownVisible ? "true" : "false")"
               aria-controls="@dropdownId"
               aria-activedescendant="@ActiveDescendantId"
+              aria-label="@AriaLabel"
               aria-disabled="@(IsMentionDisabled ? "true" : "false")"
-              aria-invalid="@IsAriaInvalid"
+              aria-invalid="@AriaInvalid"
               aria-describedby="@AriaDescribedBy"
+              @onfocus="OnFocusAsync"
               @oninput="OnInputAsync"
               @onchange="OnChangeAsync"
-              @onblur="OnBlur"
+              @onblur="OnBlurAsync"
               @onkeydown="OnKeyDownAsync"></textarea>
     @if (ShowClear)
     {

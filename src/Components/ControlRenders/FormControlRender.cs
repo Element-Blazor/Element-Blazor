@@ -180,11 +180,15 @@ namespace Element.ControlRenders
                     builder.AddAttribute(seq++, nameof(ElMention.Prefixes), attribute.Prefixes);
                 }
                 builder.AddAttribute(seq++, nameof(ElMention.Rows), attribute.Rows);
+                builder.AddAttribute(seq++, nameof(ElMention.Autocomplete), attribute.Autocomplete);
+                builder.AddAttribute(seq++, nameof(ElMention.Tabindex), attribute.Tabindex);
                 builder.AddAttribute(seq++, nameof(ElMention.IsDisabled), attribute.IsDisabled);
                 builder.AddAttribute(seq++, nameof(ElMention.Readonly), attribute.Readonly);
                 builder.AddAttribute(seq++, nameof(ElMention.Size), attribute.Size);
                 builder.AddAttribute(seq++, nameof(ElMention.Clearable), attribute.Clearable);
                 builder.AddAttribute(seq++, nameof(ElMention.Options), CreateMentionOptions(config.DataSource, attribute));
+                AddAttributeIfNotEmpty(builder, ref seq, nameof(ElMention.AriaLabel), attribute.AriaLabel);
+                AddAttributeIfNotEmpty(builder, ref seq, nameof(ElMention.InputStyle), attribute.InputStyle);
             }
             else if (!string.IsNullOrWhiteSpace(config.Placeholder))
             {
@@ -263,6 +267,7 @@ namespace Element.ControlRenders
             {
                 builder.AddAttribute(seq++, nameof(ElRadioGroup<string>.Size), attribute.Size);
                 builder.AddAttribute(seq++, nameof(ElRadioGroup<string>.IsDisabled), attribute.IsDisabled);
+                builder.AddAttribute(seq++, nameof(ElRadioGroup<string>.Bordered), attribute.Bordered);
             }
 
             builder.AddAttribute(seq++, nameof(ElRadioGroup<string>.ChildContent), (RenderFragment)(contentBuilder =>
@@ -276,10 +281,6 @@ namespace Element.ControlRenders
                     contentBuilder.OpenComponent(childSeq++, radioType);
                     contentBuilder.AddAttribute(childSeq++, nameof(ElRadio<string>.Value), option.Value);
                     contentBuilder.AddAttribute(childSeq++, nameof(ElRadio<string>.IsDisabled), option.Disabled);
-                    if (!(attribute?.Button ?? false))
-                    {
-                        contentBuilder.AddAttribute(childSeq++, nameof(ElRadio<string>.IsBordered), attribute?.Bordered ?? false);
-                    }
                     contentBuilder.AddAttribute(childSeq++, nameof(ElRadio<string>.ChildContent), Text(option.Text));
                     contentBuilder.CloseComponent();
                 }

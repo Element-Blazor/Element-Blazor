@@ -9,7 +9,7 @@ namespace Element
 {
     public partial class ElRadio<TValue> : ElementFieldComponentBase<TValue>
     {
-        private ElementReference radioElement;
+        protected ElementReference radioElement;
 
         [Parameter]
         public RenderFragment ChildContent { get; set; }
@@ -49,9 +49,25 @@ namespace Element
         public bool IsBordered { get; set; }
 
         [Parameter]
+        public bool Border
+        {
+            get => IsBordered;
+            set => IsBordered = value;
+        }
+
+        [Parameter]
+        public bool Bordered
+        {
+            get => IsBordered;
+            set => IsBordered = value;
+        }
+
+        [Parameter]
         public bool IsDisabled { get; set; }
 
         internal bool EffectiveDisabled => IsDisabled || (RadioGroup?.EffectiveDisabled ?? false) || (FormItem?.Form?.Disabled ?? false);
+
+        internal bool EffectiveBordered => IsBordered || (RadioGroup?.EffectiveBordered ?? false);
 
         [Parameter]
         public bool Disabled
@@ -77,6 +93,51 @@ namespace Element
                 }
 
                 return SelectedValue;
+            }
+        }
+
+        protected string EffectiveName => !string.IsNullOrWhiteSpace(Name)
+            ? Name
+            : RadioGroup?.Name;
+
+        protected RadioSize EffectiveSize
+        {
+            get
+            {
+                if (RadioGroup != null)
+                {
+                    return RadioGroup.EffectiveSize;
+                }
+
+                if (Size != RadioSize.Default)
+                {
+                    return ResolveRadioSize(Size);
+                }
+
+                return ResolveRadioSize(FormItem?.Size ?? FormItem?.Form?.EffectiveSize);
+            }
+        }
+
+        protected string CheckedClass => IsChecked ? "is-checked" : string.Empty;
+
+        protected string AriaChecked => IsChecked ? "true" : "false";
+
+        protected string AriaDisabled => EffectiveDisabled ? "true" : "false";
+
+        protected string RadioSizeClass => EffectiveSize == RadioSize.Default
+            ? string.Empty
+            : $"el-radio--{EffectiveSize.ToString().ToLowerInvariant()}";
+
+        protected string RadioButtonSizeClass
+        {
+            get
+            {
+                if (EffectiveSize == RadioSize.Default)
+                {
+                    return RadioGroup == null ? string.Empty : "el-radio-button--default";
+                }
+
+                return $"el-radio-button--{EffectiveSize.ToString().ToLowerInvariant()}";
             }
         }
 
@@ -149,7 +210,7 @@ namespace Element
             }
         }
 
-        protected void ChangeRadio(MouseEventArgs e)
+        protected async Task ChangeRadio(MouseEventArgs e)
         {
             if (EffectiveDisabled)
             {
@@ -157,40 +218,41 @@ namespace Element
             }
             if (RadioGroup != null)
             {
-                _ = RadioGroup.TrySetValueAsync(Value, !SelectedValueChanged.HasDelegate);
+                await RadioGroup.TrySetValueAsync(Value, !SelectedValueChanged.HasDelegate);
                 return;
             }
-            var newStatus = Status == RadioStatus.Selected ? RadioStatus.UnSelected : RadioStatus.Selected;
+
+            var oldStatus = IsChecked ? RadioStatus.Selected : Status;
+            var newStatus = RadioStatus.Selected;
             if (StatusChanging.HasDelegate)
             {
                 var arg = new ElementChangeEventArgs<RadioStatus>
                 {
-                    OldValue = Status,
+                    OldValue = oldStatus,
                     NewValue = newStatus
                 };
-                StatusChanging.InvokeAsync(arg).Wait();
+                await StatusChanging.InvokeAsync(arg);
                 if (arg.DisallowChange)
                 {
                     return;
                 }
             }
 
-            if (newStatus == RadioStatus.Selected && !TypeHelper.Equal(SelectedValue, Value))
+            var changed = !TypeHelper.Equal(SelectedValue, Value);
+            if (changed)
             {
                 SelectedValue = Value;
             }
 
-            if (RadioGroup == null)
+            SetFieldValue(SelectedValue, true);
+            Status = newStatus;
+            if (changed && StatusChanged.HasDelegate)
             {
-                SetFieldValue(SelectedValue, true);
-            }
-            if (StatusChanged.HasDelegate)
-            {
-                _ = StatusChanged.InvokeAsync(newStatus);
+                await StatusChanged.InvokeAsync(newStatus);
             }
             if (SelectedValueChanged.HasDelegate)
             {
-                _ = SelectedValueChanged.InvokeAsync(SelectedValue);
+                await SelectedValueChanged.InvokeAsync(SelectedValue);
             }
         }
 
@@ -205,7 +267,7 @@ namespace Element
             {
                 if (e.Key == " " || e.Key == "Spacebar" || e.Key == "Enter")
                 {
-                    ChangeRadio(null);
+                    await ChangeRadio(null);
                 }
                 return;
             }
@@ -213,6 +275,7 @@ namespace Element
             switch (e.Key)
             {
                 case " ":
+                case "Space":
                 case "Spacebar":
                 case "Enter":
                     await RadioGroup.TrySetValueAsync(Value, !SelectedValueChanged.HasDelegate);
@@ -256,6 +319,16 @@ namespace Element
         protected override bool ShouldRender()
         {
             return true;
+        }
+
+        private RadioSize ResolveRadioSize(InputSize? size)
+        {
+            return size switch
+            {
+                InputSize.Large => RadioSize.Medium,
+                InputSize.Small => RadioSize.Small,
+                _ => ResolveRadioSize(Size)
+            };
         }
 
         public override void Dispose()
