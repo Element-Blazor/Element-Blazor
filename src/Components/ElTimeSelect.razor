@@ -5,10 +5,13 @@
      @ref="timeSelectElement"
      role="combobox"
      aria-haspopup="listbox"
-     aria-expanded="@IsDropDownOpen"
-     aria-disabled="@IsTimeSelectDisabled"
+     aria-expanded="@AriaExpanded"
+     aria-disabled="@AriaDisabled"
      aria-controls="@DropDownId"
-     @onclick="OnTimeSelectClickAsync">
+     aria-activedescendant="@ActiveDescendantId"
+     tabindex="@(IsTimeSelectDisabled ? -1 : 0)"
+     @onclick="OnTimeSelectClickAsync"
+     @onkeydown="OnKeyDownAsync">
     <ElInput TValue="string"
              Value="@Value"
              Placeholder="@Placeholder"

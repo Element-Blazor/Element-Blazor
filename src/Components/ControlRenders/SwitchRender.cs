@@ -15,11 +15,15 @@ namespace Element.ControlRenders
         public void Render(RenderTreeBuilder renderTreeBuilder, RenderConfig config)
         {
             var valueType = config.ValueType ?? config.InputControlType.GetGenericArguments()[0];
+            var switchAttribute = config.ControlAttribute as SwitchAttribute;
             renderTreeBuilder.OpenComponent(0, config.InputControlType);
             renderTreeBuilder.AddAttribute(1, nameof(ElFormItemObject.EnableAlwaysRender), true);
-            renderTreeBuilder.AddAttribute(2, nameof(ElSwitch<bool>.ActiveValue), ConvertSwitchValue(true, valueType));
-            renderTreeBuilder.AddAttribute(3, nameof(ElSwitch<bool>.InactiveValue), ConvertSwitchValue(false, valueType));
-            var switchAttribute = config.ControlAttribute as SwitchAttribute;
+            renderTreeBuilder.AddAttribute(2, nameof(ElSwitch<bool>.ActiveValue), ConvertSwitchValue(
+                string.IsNullOrWhiteSpace(switchAttribute?.ActiveValue) ? true : switchAttribute.ActiveValue,
+                valueType));
+            renderTreeBuilder.AddAttribute(3, nameof(ElSwitch<bool>.InactiveValue), ConvertSwitchValue(
+                string.IsNullOrWhiteSpace(switchAttribute?.InactiveValue) ? false : switchAttribute.InactiveValue,
+                valueType));
             if (switchAttribute != null)
             {
                 renderTreeBuilder.AddAttribute(7, nameof(ElSwitch<bool>.IsDisabled), switchAttribute.IsDisabled);
@@ -27,6 +31,8 @@ namespace Element.ControlRenders
                 renderTreeBuilder.AddAttribute(9, nameof(ElSwitch<bool>.InactiveText), switchAttribute.InactiveText);
                 renderTreeBuilder.AddAttribute(10, nameof(ElSwitch<bool>.ActiveColor), switchAttribute.ActiveColor);
                 renderTreeBuilder.AddAttribute(11, nameof(ElSwitch<bool>.InactiveColor), switchAttribute.InactiveColor);
+                renderTreeBuilder.AddAttribute(12, nameof(ElSwitch<bool>.Loading), switchAttribute.Loading);
+                renderTreeBuilder.AddAttribute(13, nameof(ElSwitch<bool>.LoadingIcon), switchAttribute.LoadingIcon);
             }
             var value = config.EditingValue ?? config.RawValue;
             renderTreeBuilder.AddAttribute(4, nameof(ElSwitch<bool>.Value), ConvertSwitchValue(value, valueType));
@@ -42,7 +48,9 @@ namespace Element.ControlRenders
             var finalType = Nullable.GetUnderlyingType(valueType) ?? valueType;
             if (value == null)
             {
-                return valueType == finalType ? Activator.CreateInstance(finalType) : null;
+                return valueType.IsValueType && Nullable.GetUnderlyingType(valueType) == null
+                    ? Activator.CreateInstance(valueType)
+                    : null;
             }
             return TypeHelper.ChangeType(value, finalType);
         }

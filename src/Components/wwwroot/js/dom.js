@@ -139,10 +139,29 @@ window.upload = function (el) {
     if (!el) {
         return;
     }
-    return el.children[1].click();
+    var input = el.querySelector && el.querySelector('input[type="file"]');
+    if (!input || input.disabled) {
+        return;
+    }
+    return input.click();
 };
 
-var uploader, uploadUrl;
+window.uploadDrop = function (event, el) {
+    if (event && event.preventDefault) {
+        event.preventDefault();
+    }
+    if (!el || !event || !event.dataTransfer) {
+        return;
+    }
+    var input = el.querySelector && el.querySelector('input[type="file"]');
+    if (!input || input.disabled) {
+        return;
+    }
+    input.files = event.dataTransfer.files;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+};
+
+var uploader, uploadUrl, uploadOptions;
 window.clear = function (el) {
     if (!el) {
         return;
@@ -170,19 +189,20 @@ async function executePasteUpload(event) {
     });
     for (var j = 0; j < files.length; j++) {
         var result = await new Promise(resolver => {
-            _uploadFile(uploadUrl, files[j], resolver);
+            _uploadFile(uploadUrl, files[j], resolver, uploadOptions);
         });
         await uploader.invokeMethodAsync("fileUploaded", result, ids[j]);
     }
     await uploader.invokeMethodAsync("filesUploaded");
 };
-window.registerPasteUpload = function (upload, url) {
+window.registerPasteUpload = function (upload, url, options) {
     uploader = upload;
     uploadUrl = url;
+    uploadOptions = options || {};
     document.addEventListener('paste', executePasteUpload);
 };
 window.unRegisterPasteUpload = function () {
-    this.document.removeEventListener("paste");
+    this.document.removeEventListener('paste', executePasteUpload);
 };
 function convertFiles(files) {
     let scanFile = function (file) {
@@ -222,26 +242,41 @@ window.scanFiles = function (el) {
     let files = this.convertFiles(el.files);
     return files;
 };
-async function _uploadFile(url, file, callback) {
+async function _uploadFile(url, file, callback, options) {
+    options = options || {};
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
+    xhr.open((options.method || "POST").toUpperCase(), url);
     xhr.onreadystatechange = function () {
         if (this.readyState != 4) {
             return;
         }
         if (this.status < 200 || this.status >= 300) {
+            callback(["1", this.statusText || "Upload failed.", "", ""]);
             return;
         }
         let response = JSON.parse(this.responseText);
         callback([response.code.toString(), response.message || "", response.id, response.url]);
     };
-    xhr.withCredentials = true;
+    xhr.onerror = function () {
+        callback(["1", "Upload failed.", "", ""]);
+    };
+    xhr.withCredentials = options.withCredentials !== false;
     xhr.setRequestHeader("x-requested-with", "XMLHttpRequest");
+    if (options.headers) {
+        Object.keys(options.headers).forEach(function (key) {
+            xhr.setRequestHeader(key, options.headers[key]);
+        });
+    }
     let formData = new this.FormData();
-    formData.append("fileContent", file);
+    if (options.data) {
+        Object.keys(options.data).forEach(function (key) {
+            formData.append(key, options.data[key]);
+        });
+    }
+    formData.append(options.fileFieldName || "fileContent", file);
     xhr.send(formData);
 };
-window.uploadFile = function (el, fileName, url) {
+window.uploadFile = function (el, fileName, url, options) {
     return new Promise((resolver, reject) => {
         let file = null;
         for (var i = 0; i < el.files.length; i++) {
@@ -250,7 +285,7 @@ window.uploadFile = function (el, fileName, url) {
                 break;
             }
         }
-        _uploadFile(url, file, resolver);
+        _uploadFile(url, file, resolver, options);
     });
     //const temporaryFileReader = new FileReader();
     //return new Promise((resolve, reject) => {

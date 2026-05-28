@@ -26,6 +26,18 @@ namespace Element
             return await jSRuntime.InvokeAsync<string[]>("uploadFile", elementReference, fileName, url);
         }
 
+        public async Task<string[]> UploadFileAsync(string fileName, string url, string method, string fileFieldName, bool withCredentials, IDictionary<string, string> headers, IDictionary<string, string> data)
+        {
+            return await jSRuntime.InvokeAsync<string[]>("uploadFile", elementReference, fileName, url, new
+            {
+                method,
+                fileFieldName,
+                withCredentials,
+                headers,
+                data
+            });
+        }
+
         public async Task<string[][]> ScanFilesAsync()
         {
             var files = await jSRuntime.InvokeAsync<dynamic>("scanFiles", elementReference);

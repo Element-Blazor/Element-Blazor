@@ -30,6 +30,8 @@ namespace Element
             fieldsControlMap.Add(property => property.PropertyType == typeof(double), typeof(ElInput<double>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool), typeof(ElSwitch<bool>));
             fieldsControlMap.Add(property => property.PropertyType == typeof(bool?), typeof(ElSwitch<bool?>));
+            fieldsControlMap.Add(property => property.PropertyType == typeof(TimeSpan), typeof(ElTimePicker));
+            fieldsControlMap.Add(property => property.PropertyType == typeof(TimeSpan?), typeof(ElTimePicker));
             fieldsControlMap.Add(property => property.PropertyType == typeof(List<string>)
                 || property.PropertyType == typeof(IList<string>)
                 || property.PropertyType == typeof(string[]), typeof(ElInputTag));
@@ -163,6 +165,14 @@ namespace Element
             {
                 return typeof(ElSlider);
             }
+            if (property.GetCustomAttribute<SwitchAttribute>() != null)
+            {
+                return typeof(ElSwitch<>).MakeGenericType(property.PropertyType);
+            }
+            if (property.GetCustomAttribute<TimePickerAttribute>() != null)
+            {
+                return typeof(ElTimePicker);
+            }
             var selectAttribute = property.GetCustomAttribute<SelectAttribute>();
             if (selectAttribute?.Virtualized == true)
             {
@@ -242,6 +252,10 @@ namespace Element
             {
                 return propertyInfo.GetCustomAttribute<SwitchAttribute>();
             }
+            if (controlType == typeof(ElTimePicker))
+            {
+                return propertyInfo.GetCustomAttribute<TimePickerAttribute>();
+            }
             if (propertyInfo.PropertyType == typeof(IDictionary<string, string>)
                 || propertyInfo.PropertyType == typeof(Dictionary<string, string>))
             {
@@ -274,6 +288,10 @@ namespace Element
             if (controlType == typeof(ElDatePicker))
             {
                 return typeof(DateTime?);
+            }
+            if (controlType == typeof(ElTimePicker))
+            {
+                return typeof(TimeSpan?);
             }
             if (controlType == typeof(ElInputNumber))
             {
@@ -326,7 +344,8 @@ namespace Element
                 || controlType == typeof(ElInputOtp)
                 || controlType == typeof(ElMention)
                 || controlType == typeof(ElRate)
-                || controlType == typeof(ElSlider))
+                || controlType == typeof(ElSlider)
+                || controlType == typeof(ElTimePicker))
             {
                 return new FormControlRender();
             }

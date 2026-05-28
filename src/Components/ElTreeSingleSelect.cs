@@ -1,19 +1,6 @@
-using Element.Model;
-using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Element
 {
-    public class ElTreeSingleSelect : ElSelect<int?>
-
+    public class ElTreeSingleSelect : ElTreeSelect
     {
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            isTree = true;
-            return base.SetParametersAsync(parameters);
-        }
     }
 }

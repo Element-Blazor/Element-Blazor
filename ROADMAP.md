@@ -107,13 +107,13 @@
 | Rate | `ElRate` | 🟢 已对齐 | 已实现评分、半星、颜色、文本/分值、清除、禁用、自定义图标插槽、表单校验联动和组件测试。 |
 | Select | `ElSelect`、`ElOption`、`ElOptionGroup` | 🟢 已对齐 | 已实现多选、远程搜索、过滤、分组、禁用分组、ARIA 细节和组件测试。 |
 | Virtualized Select | `ElSelectV2` | 🟢 已对齐 | 已实现大数据虚拟列表、过滤、远程搜索、多选、分组、键盘导航、边界钳制和组件测试。 |
-| Slider | `ElSlider`、`SliderMark` | 🟡 部分对齐 | 已实现拖拽、范围、步长、停点、marks、输入框联动和表单校验联动；继续补齐 range 双滑块、tooltip 和测试。 |
-| Switch | `ElSwitch` | 🟡 部分对齐 | 补齐 active/inactive text/value、loading、before-change。 |
-| Time Picker | 缺少 `ElTimePicker` | 🔴 缺失 | 实现时间面板、范围和格式。 |
-| Time Select | `ElTimeSelect` | 🟡 部分对齐 | 已实现固定步长时间选择、禁用时间范围、清空、尺寸和表单校验联动；继续补齐键盘导航和测试。 |
-| Transfer | `ElTransfer` | 🟡 部分对齐 | 补齐过滤、插槽、方向文案和全选逻辑。 |
-| TreeSelect | `ElTreeSingleSelect`，缺少官方命名入口 | 🟡 部分对齐 | 新增 `ElTreeSelect` 并对齐 Select + Tree API。 |
-| Upload | `ElUpload` | 🟡 部分对齐 | 补齐列表类型、拖拽、限制、钩子和请求定制。 |
+| Slider | `ElSlider`、`SliderMark` | 🟢 已对齐 | 已实现拖拽、range 双滑块、tooltip/格式化、步长、停点、marks、输入框联动、ARIA、表单校验联动和组件测试。 |
+| Switch | `ElSwitch` | 🟢 已对齐 | 已实现 active/inactive text/value、loading、before-change、键盘/ARIA、表单联动和组件测试。 |
+| Time Picker | `ElTimePicker`、`TimePickerType` | 🟢 已对齐 | 已实现时间面板、单值/范围选择、显示格式、值格式、清空、键盘/ARIA、表单联动和组件测试。 |
+| Time Select | `ElTimeSelect` | 🟢 已对齐 | 已实现固定步长时间选择、禁用时间范围、键盘导航、清空、尺寸、表单校验联动和组件测试。 |
+| Transfer | `ElTransfer` | 🟢 已对齐 | 已实现过滤、自定义过滤、项/面板插槽、方向按钮文案、禁用项、可见项全选逻辑、表单联动和组件测试。 |
+| TreeSelect | `ElTreeSelect`、`ElTreeSingleSelect` | 🟢 已对齐 | 已新增官方入口 `ElTreeSelect`，兼容旧名，并对齐 Select + Tree API。 |
+| Upload | `ElUpload` | 🟢 已对齐 | 已补齐列表类型、拖拽上传、数量/类型/大小/图片尺寸限制、before/remove/preview/change/progress/success/error/exceed 钩子、请求参数和自定义请求，并补充组件测试。 |
 
 ### Data 数据展示
 

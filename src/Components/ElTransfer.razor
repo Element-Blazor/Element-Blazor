@@ -2,80 +2,110 @@
 <div class="el-transfer @Cls" style="@Style">
     <div class="el-transfer-panel" targetorder="original">
         <p class="el-transfer-panel__header">
-            <ElCheckbox @bind-Status="List1Status" TValue="bool">
-                @LeftTitle
-                <span>@List1Checked.Count/@(List1 == null ? 0 : List1.Count)</span>
-            </ElCheckbox>
-        </p>
-        <div class="el-transfer-panel__body">
-            @if (List1 == null || List1.Count <= 0)
+            @if (LeftHeaderContent != null)
             {
-                <p class="el-transfer-panel__empty">无数据</p>
+                @LeftHeaderContent(LeftPanelContext)
             }
             else
             {
-                if (EnableSearch)
-                {
-                    <ElInput Placeholder="@(List1SearchPlaceHolder ?? "请输入搜索内容")" Value="list1KeyWords" ValueChanged="List1SearchChanged" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" TValue="string"></ElInput>
-                }
+                <ElCheckbox @bind-Status="List1Status" TValue="bool">
+                    @LeftTitle
+                    <span>@List1Checked.Count/@(List1 == null ? 0 : List1.Count)</span>
+                </ElCheckbox>
+            }
+        </p>
+        <div class="el-transfer-panel__body">
+            @if (IsFilterable)
+            {
+                <ElInput Placeholder="@LeftFilterPlaceholder" Value="@list1KeyWords" ValueChanged="List1SearchChanged" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" TValue="string"></ElInput>
+            }
+            @if (!VisibleList1.Any())
+            {
+                <p class="el-transfer-panel__empty">@GetEmptyText(List1, list1KeyWords)</p>
+            }
+            else
+            {
                 <ElCheckboxGroup Cls="@CheckBoxGroupCssBuilder.ToString()" TValue="object">
-
-                    @foreach (var item in List1)
+                    @foreach (var item in VisibleList1)
                     {
-                        if (!OnList1Search.HasDelegate)
-                        {
-                            if (!string.IsNullOrWhiteSpace(list1KeyWords) && !item.Label.Contains(list1KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                        var itemContent = ResolveItemContent(left: true);
+                        <ElCheckbox Status="List1Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status1Changed(status,item)" IsDisabled="@item.IsDisabled" Cls="el-transfer-panel__item" TValue="TransferItem">
+                            @if (itemContent != null)
                             {
-                                continue;
+                                @itemContent(item)
                             }
-                        }
-
-                        <ElCheckbox Status="List1Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status1Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
-                            <span>@item.Label</span>
+                            else
+                            {
+                                <span>@item.Label</span>
+                            }
                         </ElCheckbox>
                     }
                 </ElCheckboxGroup>
             }
         </div>
+        @if (LeftFooterContent != null)
+        {
+            <p class="el-transfer-panel__footer">
+                @LeftFooterContent(LeftPanelContext)
+            </p>
+        }
     </div>
     <div class="el-transfer__buttons">
-        <ElButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToLeft" Icon="el-icon-arrow-left"></ElButton>
-        <ElButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToRight" Icon="el-icon-arrow-right"></ElButton>
+        <ElButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToLeft" Icon="el-icon-arrow-left" Disabled="@(!List2Checked.Any())">
+            @ToLeftButtonText
+        </ElButton>
+        <ElButton Cls="el-transfer__button" Type="@ButtonType.Primary" OnClick="ToRight" Icon="el-icon-arrow-right" Disabled="@(!List1Checked.Any())">
+            @ToRightButtonText
+        </ElButton>
     </div>
     <div class="el-transfer-panel">
         <p class="el-transfer-panel__header">
-            <ElCheckbox TValue="bool" @bind-Status="List2Status">
-                @RightTitle
-                <span>@List2Checked.Count/@(List2 == null ? 0 : List2.Count)</span>
-            </ElCheckbox>
-        </p>
-        <div class="el-transfer-panel__body">
-            @if (List2 == null || List2.Count <= 0)
+            @if (RightHeaderContent != null)
             {
-                <p class="el-transfer-panel__empty">无数据</p>
+                @RightHeaderContent(RightPanelContext)
             }
             else
             {
-                if (EnableSearch)
-                {
-                    <ElInput Placeholder="@(List2SearchPlaceHolder ?? "请输入搜索内容")" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" Value="list2KeyWords" ValueChanged="List2SearchChanged" TValue="string"></ElInput>
-                }
+                <ElCheckbox TValue="bool" @bind-Status="List2Status">
+                    @RightTitle
+                    <span>@List2Checked.Count/@(List2 == null ? 0 : List2.Count)</span>
+                </ElCheckbox>
+            }
+        </p>
+        <div class="el-transfer-panel__body">
+            @if (IsFilterable)
+            {
+                <ElInput Placeholder="@RightFilterPlaceholder" PrefixIcon="el-icon-search" Cls="el-transfer-panel__filter" Value="@list2KeyWords" ValueChanged="List2SearchChanged" TValue="string"></ElInput>
+            }
+            @if (!VisibleList2.Any())
+            {
+                <p class="el-transfer-panel__empty">@GetEmptyText(List2, list2KeyWords)</p>
+            }
+            else
+            {
                 <ElCheckboxGroup Cls="@CheckBoxGroupCssBuilder.ToString()" TValue="object">
-                    @foreach (var item in List2)
+                    @foreach (var item in VisibleList2)
                     {
-                        if (!OnList2Search.HasDelegate)
-                        {
-                            if (!string.IsNullOrWhiteSpace(list2KeyWords) && !item.Label.Contains(list2KeyWords, StringComparison.CurrentCultureIgnoreCase))
+                        var itemContent = ResolveItemContent(left: false);
+                        <ElCheckbox Status="List2Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status2Changed(status,item)" IsDisabled="@item.IsDisabled" Cls="el-transfer-panel__item" TValue="TransferItem">
+                            @if (itemContent != null)
                             {
-                                continue;
+                                @itemContent(item)
                             }
-                        }
-                        <ElCheckbox Status="List2Checked.Contains(item) ? Status.Checked:Status.UnChecked" StatusChanged="status=>Status2Changed(status,item)" Cls="el-transfer-panel__item" TValue="TransferItem">
-                            <span>@item.Label</span>
+                            else
+                            {
+                                <span>@item.Label</span>
+                            }
                         </ElCheckbox>
                     }
                 </ElCheckboxGroup>
             }
-        </div><!---->
+        </div>
+        @if (RightFooterContent != null)
+        {
+            <p class="el-transfer-panel__footer">
+                @RightFooterContent(RightPanelContext)
+            </p>
+        }
     </div>
 </div>

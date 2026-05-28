@@ -446,7 +446,7 @@
                         <ul class="@listClsBuilder.ToString()" role="listbox">
                             @if (option.IsTree)
                             {
-                                <CascadingValue Value="(ElTreeSingleSelect)option.Select">
+                                <CascadingValue Value="(ElTreeSelect)option.Select">
                                     @option.OptionContent
                                 </CascadingValue>
                             }

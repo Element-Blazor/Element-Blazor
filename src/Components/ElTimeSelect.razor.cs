@@ -19,6 +19,7 @@ namespace Element
         private HtmlPropertyBuilder wrapperClsBuilder;
         private InputSize effectiveSize = InputSize.Normal;
         private bool effectiveDisabled;
+        private int hoveredIndex = -1;
 
         [Inject]
         internal PopupService PopupService { get; set; }
@@ -224,14 +225,78 @@ namespace Element
             await CloseDropDownAsync();
         }
 
+        private async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (effectiveDisabled)
+            {
+                return;
+            }
+
+            switch (e.Key)
+            {
+                case "ArrowDown":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    MoveHover(1);
+                    break;
+                case "ArrowUp":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    MoveHover(-1);
+                    break;
+                case "Home":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                    }
+                    SetHoverToEdge(first: true);
+                    break;
+                case "End":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                    }
+                    SetHoverToEdge(first: false);
+                    break;
+                case "Enter":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                        return;
+                    }
+                    await SelectHoveredOptionAsync();
+                    break;
+                case " ":
+                    if (!IsDropDownOpen)
+                    {
+                        await OpenDropDownAsync();
+                    }
+                    break;
+                case "Escape":
+                    await CloseDropDownAsync();
+                    break;
+            }
+        }
+
         private async Task OpenDropDownAsync()
         {
+            if (effectiveDisabled)
+            {
+                return;
+            }
             if (dropDownOption != null)
             {
                 RefreshDropDown();
                 return;
             }
 
+            hoveredIndex = FindInitialHoverIndex();
             dropDownOption = new DropDownOption
             {
                 Select = this,
@@ -271,6 +336,7 @@ namespace Element
             if (!visible)
             {
                 dropDownOption = null;
+                hoveredIndex = -1;
             }
 
             if (OnVisibleChange.HasDelegate)
@@ -285,18 +351,24 @@ namespace Element
         private void BuildTimeOptions(RenderTreeBuilder builder)
         {
             var seq = 0;
-            foreach (var option in Options)
+            var options = Options;
+            for (var i = 0; i < options.Count; i++)
             {
+                var option = options[i];
+                var index = i;
                 var itemClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                     .Add("el-select-dropdown__item")
                     .AddIf(option.Disabled, "is-disabled")
-                    .AddIf(option.Value == Value, "selected");
+                    .AddIf(option.Value == Value, "selected")
+                    .AddIf(index == hoveredIndex, "hover");
                 builder.OpenElement(seq++, "li");
                 builder.SetKey(option.Value);
+                builder.AddAttribute(seq++, "id", GetOptionId(index));
                 builder.AddAttribute(seq++, "class", itemClsBuilder.ToString());
                 builder.AddAttribute(seq++, "role", "option");
                 builder.AddAttribute(seq++, "aria-selected", option.Value == Value);
                 builder.AddAttribute(seq++, "aria-disabled", option.Disabled);
+                builder.AddAttribute(seq++, "tabindex", option.Disabled ? -1 : 0);
                 builder.AddAttribute(seq++, "onclick", EventCallback.Factory.Create<MouseEventArgs>(this, () => option.Disabled ? Task.CompletedTask : SelectTimeAsync(option.Value)));
                 builder.AddContent(seq++, option.Value);
                 builder.CloseElement();
@@ -357,6 +429,88 @@ namespace Element
             StateHasChanged();
         }
 
+        private void MoveHover(int step)
+        {
+            var options = Options;
+            if (!options.Any(x => !x.Disabled))
+            {
+                hoveredIndex = -1;
+                StateHasChanged();
+                return;
+            }
+
+            var start = hoveredIndex < 0
+                ? step > 0 ? 0 : options.Count - 1
+                : hoveredIndex + step;
+            hoveredIndex = FindNextEnabledIndex(options, start, step);
+            RefreshDropDown();
+        }
+
+        private void SetHoverToEdge(bool first)
+        {
+            var options = Options;
+            hoveredIndex = first
+                ? FindNextEnabledIndex(options, 0, 1)
+                : FindNextEnabledIndex(options, options.Count - 1, -1);
+            RefreshDropDown();
+        }
+
+        private async Task SelectHoveredOptionAsync()
+        {
+            var options = Options;
+            if (hoveredIndex < 0 || hoveredIndex >= options.Count)
+            {
+                return;
+            }
+
+            var option = options[hoveredIndex];
+            if (option.Disabled)
+            {
+                return;
+            }
+
+            await SelectTimeAsync(option.Value);
+        }
+
+        private int FindInitialHoverIndex()
+        {
+            var options = Options;
+            for (var i = 0; i < options.Count; i++)
+            {
+                if (!options[i].Disabled && string.Equals(options[i].Value, Value, StringComparison.Ordinal))
+                {
+                    return i;
+                }
+            }
+
+            return FindNextEnabledIndex(options, 0, 1);
+        }
+
+        private static int FindNextEnabledIndex(IReadOnlyList<TimeSelectOption> options, int start, int step)
+        {
+            if (options == null || options.Count == 0 || step == 0)
+            {
+                return -1;
+            }
+
+            var count = options.Count;
+            for (var offset = 0; offset < count; offset++)
+            {
+                var index = ((start + offset * step) % count + count) % count;
+                if (!options[index].Disabled)
+                {
+                    return index;
+                }
+            }
+
+            return -1;
+        }
+
+        private string GetOptionId(int index)
+        {
+            return $"{DropDownId}-option-{index}";
+        }
+
         private bool IsDropDownOpen => dropDownOption != null && dropDownOption.IsShow;
 
         private bool IsTimeSelectDisabled => effectiveDisabled;
@@ -364,6 +518,12 @@ namespace Element
         private InputSize EffectiveSize => effectiveSize;
 
         private string SuffixIconClass => $"el-icon-arrow-up el-select__caret{(IsDropDownOpen ? " is-reverse" : string.Empty)}";
+
+        private string ActiveDescendantId => IsDropDownOpen && hoveredIndex >= 0 ? GetOptionId(hoveredIndex) : null;
+
+        private string AriaExpanded => IsDropDownOpen ? "true" : "false";
+
+        private string AriaDisabled => IsTimeSelectDisabled ? "true" : "false";
 
         bool ISelectDropDownContext.Loading => false;
 

@@ -60,6 +60,11 @@ namespace Element
             return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url);
         }
 
+        internal ValueTask RegisterPasteUploadAsync(ElUpload upload, string url, object options)
+        {
+            return jSRuntime.InvokeVoidAsync("registerPasteUpload", DotNetObjectReference.Create(upload), url, options);
+        }
+
         internal ValueTask UnRegisterPasteUploadAsync()
         {
             return jSRuntime.InvokeVoidAsync("unRegisterPasteUpload");

@@ -31,6 +31,21 @@ namespace Element
         /// </summary>
         public string Message { get; set; }
 
+        /// <summary>
+        /// 文件大小，单位为 byte
+        /// </summary>
+        public long Size { get; set; }
+
+        /// <summary>
+        /// 图片宽度
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// 图片高度
+        /// </summary>
+        public int Height { get; set; }
+
         public override int GetHashCode()
         {
             return FileName?.GetHashCode() ?? 0;

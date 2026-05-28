@@ -8,6 +8,7 @@ namespace Element
     public enum ShadowShowType
     {
         Always = 0,
-        Never = 1
+        Never = 1,
+        Hover = 2
     }
 }

@@ -1,6 +1,6 @@
 @inherits ElementFieldComponentBase<double>
 
-<div class="@wrapperClsBuilder.ToString()" style="@Style">
+<div class="@wrapperClsBuilder.ToString()" style="@Style" aria-disabled="@AriaDisabled">
     <div class="el-slider__runway" @onclick="OnRunwayClickAsync">
         <div class="el-slider__bar" style="@(Range ? RangeBarStyle : BarStyle)"></div>
         @if (Range)
@@ -9,12 +9,25 @@
             {
                 var index = i;
                 <input class="el-slider__input el-slider__input--range"
+                       id="@GetInputId(index)"
+                       @attributes="(index == 0 ? Attributes : null)"
                        type="range"
+                       role="slider"
+                       name="@Name"
                        min="@Min"
                        max="@Max"
                        step="@Step"
                        value="@CurrentRange[index]"
                        disabled="@IsSliderDisabled"
+                       aria-valuemin="@FormatInvariant(Min)"
+                       aria-valuemax="@FormatInvariant(Max)"
+                       aria-valuenow="@FormatInvariant(CurrentRange[index])"
+                       aria-valuetext="@GetTooltipText(CurrentRange[index])"
+                       aria-disabled="@AriaDisabled"
+                       aria-invalid="@AriaInvalid"
+                       aria-describedby="@AriaDescribedBy"
+                       @onfocus="e => activeThumbIndex = index"
+                       @onblur="e => activeThumbIndex = -1"
                        @oninput="e => OnRangeInputAsync(index, e)"
                        @onchange="e => OnRangeChangeAsync(index, e)" />
                 <div class="el-slider__button-wrapper @(activeThumbIndex == index ? "is-hover" : string.Empty)"
@@ -32,12 +45,25 @@
         else
         {
             <input class="el-slider__input"
+                   id="@InputId"
+                   @attributes="Attributes"
                    type="range"
+                   role="slider"
+                   name="@Name"
                    min="@Min"
                    max="@Max"
                    step="@Step"
                    value="@Value"
                    disabled="@IsSliderDisabled"
+                   aria-valuemin="@FormatInvariant(Min)"
+                   aria-valuemax="@FormatInvariant(Max)"
+                   aria-valuenow="@FormatInvariant(Value)"
+                   aria-valuetext="@GetTooltipText(Value)"
+                   aria-disabled="@AriaDisabled"
+                   aria-invalid="@AriaInvalid"
+                   aria-describedby="@AriaDescribedBy"
+                   @onfocus="e => activeThumbIndex = 0"
+                   @onblur="e => activeThumbIndex = -1"
                    @oninput="OnInputAsync"
                    @onchange="OnChangeAsync" />
             <div class="el-slider__button-wrapper @(activeThumbIndex == 0 ? "is-hover" : string.Empty)"

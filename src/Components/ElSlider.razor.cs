@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Element
 {
     public partial class ElSlider : ElementFieldComponentBase<double>
     {
+        private static long inputIdSeed;
+        private readonly string generatedInputId = $"el-slider-{Interlocked.Increment(ref inputIdSeed)}";
         private HtmlPropertyBuilder wrapperClsBuilder;
         private bool effectiveDisabled;
         private int activeThumbIndex = -1;
@@ -62,6 +65,9 @@ namespace Element
         public bool ShowTooltip { get; set; } = true;
 
         [Parameter]
+        public string Id { get; set; }
+
+        [Parameter]
         public bool Range { get; set; }
 
         [Parameter]
@@ -99,6 +105,11 @@ namespace Element
             {
                 Value = Normalize(Value);
             }
+            Id = string.IsNullOrWhiteSpace(Id) ? ResolveAttributeId() ?? generatedInputId : Id;
+            if (FormItem?.Form != null)
+            {
+                FormItem.Form.RegisterInput(FormItem.Name, InputId, this, FormItem);
+            }
             wrapperClsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add("el-slider", Cls)
                 .AddIf(effectiveDisabled, "is-disabled")
@@ -125,6 +136,29 @@ namespace Element
 
         protected override void FormItem_OnReset(object value, bool requireRerender)
         {
+            if (Range)
+            {
+                RangeValue = NormalizeRangeValue(value);
+                Value = RangeValue.LastOrDefault();
+                if (RangeValueChanged.HasDelegate)
+                {
+                    _ = RangeValueChanged.InvokeAsync(RangeValue);
+                }
+                if (ValueChanged.HasDelegate)
+                {
+                    _ = ValueChanged.InvokeAsync(Value);
+                }
+                if (ModelValueChanged.HasDelegate)
+                {
+                    _ = ModelValueChanged.InvokeAsync(Value);
+                }
+                else
+                {
+                    StateHasChanged();
+                }
+                return;
+            }
+
             Value = value == null ? Min : Convert.ToDouble(value, CultureInfo.CurrentCulture);
             if (ValueChanged.HasDelegate)
             {
@@ -142,6 +176,11 @@ namespace Element
 
         private async Task OnInputAsync(ChangeEventArgs e)
         {
+            if (IsSliderDisabled)
+            {
+                return;
+            }
+
             var next = ParseValue(e.Value);
             await CommitValueAsync(next, validate: false, notifyChange: false);
             if (OnInput.HasDelegate)
@@ -152,25 +191,47 @@ namespace Element
 
         private async Task OnChangeAsync(ChangeEventArgs e)
         {
+            if (IsSliderDisabled)
+            {
+                return;
+            }
+
             await CommitValueAsync(ParseValue(e.Value), ValidateEvent, notifyChange: true);
         }
 
         private async Task OnRangeInputAsync(int index, ChangeEventArgs e)
         {
+            if (IsSliderDisabled)
+            {
+                return;
+            }
+
+            activeThumbIndex = index;
             await CommitRangeValueAsync(index, ParseValue(e.Value), validate: false, notifyChange: false);
             if (OnInput.HasDelegate)
             {
-                await OnInput.InvokeAsync(RangeValue[index]);
+                await OnInput.InvokeAsync(Value);
             }
         }
 
         private async Task OnRangeChangeAsync(int index, ChangeEventArgs e)
         {
+            if (IsSliderDisabled)
+            {
+                return;
+            }
+
+            activeThumbIndex = index;
             await CommitRangeValueAsync(index, ParseValue(e.Value), ValidateEvent, notifyChange: true);
         }
 
         private async Task OnInputNumberChangedAsync(decimal? value)
         {
+            if (IsSliderDisabled)
+            {
+                return;
+            }
+
             await CommitValueAsync(value.HasValue ? (double)value.Value : Min, ValidateEvent, notifyChange: true);
         }
 
@@ -199,12 +260,7 @@ namespace Element
 
         private async Task CommitRangeValueAsync(int index, double next, bool validate, bool notifyChange)
         {
-            var range = CurrentRange.ToList();
-            range[index] = Normalize(next);
-            if (range[0] > range[1])
-            {
-                range.Sort();
-            }
+            var range = SetRangeThumbValue(index, next);
             RangeValue = range;
             Value = range.LastOrDefault();
             SetFieldValue(Value, validate);
@@ -238,6 +294,26 @@ namespace Element
             return double.TryParse(Convert.ToString(value), NumberStyles.Float, CultureInfo.InvariantCulture, out var result)
                 ? result
                 : Value;
+        }
+
+        private IList<double> SetRangeThumbValue(int index, double next)
+        {
+            var range = CurrentRange.ToList();
+            if (index < 0 || index >= range.Count)
+            {
+                index = 0;
+            }
+            range[index] = Normalize(next);
+            if (range[0] > range[1])
+            {
+                range.Sort();
+                activeThumbIndex = index == 0 ? 1 : 0;
+            }
+            else
+            {
+                activeThumbIndex = index;
+            }
+            return range;
         }
 
         private double GetPercent(double value)
@@ -282,6 +358,26 @@ namespace Element
                 ? FormatTooltip(value)
                 : value.ToString(CultureInfo.CurrentCulture);
         }
+
+        private string ResolveAttributeId()
+        {
+            if (Attributes == null)
+            {
+                return null;
+            }
+
+            return Attributes.TryGetValue("id", out var id) ? Convert.ToString(id, CultureInfo.InvariantCulture) : null;
+        }
+
+        private string GetInputId(int index) => index == 0 ? InputId : $"{InputId}-{index + 1}";
+
+        private string InputId => Id;
+
+        private string AriaDisabled => IsSliderDisabled ? "true" : "false";
+
+        private string AriaInvalid => IsAriaInvalid ? "true" : "false";
+
+        private static string FormatInvariant(double value) => value.ToString(CultureInfo.InvariantCulture);
 
         private decimal? DecimalValue => (decimal)Value;
 

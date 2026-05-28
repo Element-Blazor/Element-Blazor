@@ -41,7 +41,7 @@ namespace Element
         public Type ItemType { get; set; } = typeof(TreeItemBase);
 
         [CascadingParameter]
-        public ElTreeSingleSelect Select { get; set; }
+        public ElTreeSelect Select { get; set; }
 
         /// <summary>
         /// 数据格式
@@ -237,6 +237,15 @@ namespace Element
         internal void AddChild(TreeItemModel treeItemModel)
         {
             items = items ?? new List<TreeItemBase>();
+            var parent = items.FirstOrDefault(x => x.Id == treeItemModel.ParentId);
+            treeItemModel.Level = (parent?.Level ?? -1) + 1;
+            treeItemModel.TextPaths = parent?.TextPaths == null
+                ? new Dictionary<int, string>()
+                : new Dictionary<int, string>(parent.TextPaths);
+            if (!treeItemModel.TextPaths.ContainsKey(treeItemModel.Id))
+            {
+                treeItemModel.TextPaths.Add(treeItemModel.Id, treeItemModel.Text);
+            }
             treeItemModel.Expanded = AutoExpandAll;
             items.Add(treeItemModel);
         }

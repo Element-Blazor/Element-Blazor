@@ -8,8 +8,16 @@ namespace Element.ControlConfigs
 
         public string InactiveText { get; set; }
 
+        public string ActiveValue { get; set; }
+
+        public string InactiveValue { get; set; }
+
         public string ActiveColor { get; set; } = "#409EFF";
 
         public string InactiveColor { get; set; } = "#C0CCDA";
+
+        public bool Loading { get; set; }
+
+        public string LoadingIcon { get; set; } = "el-icon-loading";
     }
 }

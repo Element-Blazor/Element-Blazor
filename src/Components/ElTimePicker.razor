@@ -1,0 +1,80 @@
+@inherits ElementFieldComponentBase<TimeSpan?>
+
+@if (IsRangeMode)
+{
+    <div class="@RangeWrapperClass"
+         style="@Style"
+         @ref="pickerElement"
+         role="combobox"
+         aria-haspopup="dialog"
+         aria-expanded="@IsDropDownOpen"
+         aria-disabled="@effectiveDisabled"
+         aria-controls="@DropDownId"
+         @onclick="OnPickerClickAsync"
+         @onfocus="OnInputFocusAsync"
+         @onblur="OnInputBlurAsync"
+         @onkeydown="OnKeyDownAsync"
+         @onmouseover="e => isHovering = true"
+         @onmouseout="e => isHovering = false"
+         @attributes="Attributes">
+        <i class="el-input__icon el-range__icon @PrefixIcon"></i>
+        <input class="el-range-input"
+               placeholder="@StartPlaceholder"
+               value="@StartDisplayValue"
+               disabled="@effectiveDisabled"
+               readonly="@IsInputReadonly"
+               name="@Name"
+               @ref="inputElement"
+               @onchange="OnRangeStartChangedAsync"
+               aria-invalid="@IsAriaInvalid"
+               aria-describedby="@AriaDescribedBy" />
+        <span class="el-range-separator">@RangeSeparator</span>
+        <input class="el-range-input"
+               placeholder="@EndPlaceholder"
+               value="@EndDisplayValue"
+               disabled="@effectiveDisabled"
+               readonly="@IsInputReadonly"
+               @onchange="OnRangeEndChangedAsync" />
+        <i class="@RangeCloseIconClass" @onclick="OnClearClickAsync" @onclick:stopPropagation></i>
+    </div>
+}
+else
+{
+    <div class="@SingleWrapperClass"
+         style="@Style"
+         @ref="pickerElement"
+         role="combobox"
+         aria-haspopup="dialog"
+         aria-expanded="@IsDropDownOpen"
+         aria-disabled="@effectiveDisabled"
+         aria-controls="@DropDownId"
+         @onclick="OnPickerClickAsync"
+         @onmouseover="e => isHovering = true"
+         @onmouseout="e => isHovering = false"
+         @attributes="Attributes">
+        <span class="el-input__prefix">
+            <span class="el-input__prefix-inner">
+                <i class="el-input__icon @PrefixIcon"></i>
+            </span>
+        </span>
+        <input class="el-input__inner"
+               type="text"
+               placeholder="@Placeholder"
+               value="@SingleDisplayValue"
+               disabled="@effectiveDisabled"
+               readonly="@IsInputReadonly"
+               name="@Name"
+               @ref="inputElement"
+               @onfocus="OnInputFocusAsync"
+               @onblur="OnInputBlurAsync"
+               @onkeydown="OnKeyDownAsync"
+               @onchange="OnSingleInputChangedAsync"
+               aria-invalid="@IsAriaInvalid"
+               aria-describedby="@AriaDescribedBy" />
+        <span class="el-input__suffix">
+            <span class="el-input__suffix-inner">
+                <i class="@SuffixIconClass" @onclick="OnClearClickAsync" @onclick:stopPropagation></i>
+            </span>
+        </span>
+    </div>
+}

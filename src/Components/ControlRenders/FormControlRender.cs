@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -45,6 +46,10 @@ namespace Element.ControlRenders
             else if (controlType == typeof(ElSlider))
             {
                 RenderSlider(builder, config, ref seq);
+            }
+            else if (controlType == typeof(ElTimePicker))
+            {
+                RenderTimePicker(builder, config, ref seq);
             }
             else if (genericDefinition == typeof(ElRadioGroup<>))
             {
@@ -259,6 +264,51 @@ namespace Element.ControlRenders
             seq += 2;
         }
 
+        private void RenderTimePicker(RenderTreeBuilder builder, RenderConfig config, ref int seq)
+        {
+            var attribute = (TimePickerAttribute)config.ControlAttribute;
+            if (attribute != null)
+            {
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Type), attribute.IsRange ? TimePickerType.TimeRange : attribute.Type);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.IsRange), attribute.IsRange);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Format), attribute.Format);
+                if (!string.IsNullOrWhiteSpace(attribute.ValueFormat))
+                {
+                    builder.AddAttribute(seq++, nameof(ElTimePicker.ValueFormat), attribute.ValueFormat);
+                }
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Placeholder), attribute.Placeholder ?? config.Placeholder);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.StartPlaceholder), attribute.StartPlaceholder);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.EndPlaceholder), attribute.EndPlaceholder);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.RangeSeparator), attribute.RangeSeparator);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.IsDisabled), attribute.IsDisabled);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Readonly), attribute.Readonly);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Editable), attribute.Editable);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Clearable), attribute.Clearable);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Size), attribute.Size);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.PrefixIcon), attribute.PrefixIcon);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.ClearIcon), attribute.ClearIcon);
+                builder.AddAttribute(seq++, nameof(ElTimePicker.ValidateEvent), attribute.ValidateEvent);
+            }
+            else if (!string.IsNullOrWhiteSpace(config.Placeholder))
+            {
+                builder.AddAttribute(seq++, nameof(ElTimePicker.Placeholder), config.Placeholder);
+            }
+            CreateTimePickerBind(config, builder, seq);
+            seq += 2;
+        }
+
+        private void CreateTimePickerBind(RenderConfig config, RenderTreeBuilder builder, int startIndex)
+        {
+            CreateTwoWayBinding(config, builder, startIndex, nameof(ElTimePicker.ValueChanged), typeof(TimeSpan?));
+            var value = config.EditingValue ?? config.RawValue;
+            if (value == null)
+            {
+                return;
+            }
+
+            builder.AddAttribute(startIndex + 1, nameof(ElTimePicker.Value), ConvertToTimeSpan(value));
+        }
+
         private void RenderRadioGroup(RenderTreeBuilder builder, RenderConfig config, ref int seq)
         {
             var attribute = (RadioAttribute)config.ControlAttribute;
@@ -446,6 +496,31 @@ namespace Element.ControlRenders
                     : Enum.ToObject(finalType, value);
             }
             return TypeHelper.ChangeType(value, valueType);
+        }
+
+        private static TimeSpan? ConvertToTimeSpan(object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+            if (value is TimeSpan time)
+            {
+                return time;
+            }
+            if (value is DateTime dateTime)
+            {
+                return dateTime.TimeOfDay;
+            }
+            if (TimeSpan.TryParse(Convert.ToString(value, CultureInfo.CurrentCulture), CultureInfo.CurrentCulture, out var current))
+            {
+                return current;
+            }
+            if (TimeSpan.TryParse(Convert.ToString(value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture, out var invariant))
+            {
+                return invariant;
+            }
+            return null;
         }
 
         private static RenderFragment Text(string text)

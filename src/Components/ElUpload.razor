@@ -1,43 +1,122 @@
 @inherits ElementFieldComponentBase<IFileModel[]>
-@{
-    var listType = "text";
-    if (UploadType == UploadType.Image)
+
+<input type="hidden" @ref="hdnField" value="@HiddenValue" />
+
+@if (EffectiveListType == UploadListType.PictureCard)
+{
+    @if (ShowFileList)
     {
-        listType = "picture";
+        @UploadList
+    }
+    <div class="@UploadTriggerClass"
+         onclick="window.upload(this)"
+         ondragover="event.preventDefault()"
+         ondrop="window.uploadDrop(event, this)"
+         aria-disabled="@UploadDisabledText">
+        @if (ChildContent == null)
+        {
+            <i class="el-icon-plus"></i>
+        }
+        else
+        {
+            @ChildContent
+        }
+        @UploadInput
+    </div>
+}
+else
+{
+    <div class="@UploadTriggerClass"
+         onclick="window.upload(this)"
+         ondragover="event.preventDefault()"
+         ondrop="window.uploadDrop(event, this)"
+         aria-disabled="@UploadDisabledText">
+        @if (Drag)
+        {
+            <div class="el-upload-dragger">
+                @if (ChildContent == null)
+                {
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+                }
+                else
+                {
+                    @ChildContent
+                }
+            </div>
+        }
+        else if (ChildContent == null)
+        {
+            <ElButton Size="@ButtonSize.Small" Type="ButtonType.Primary" Disabled="@UploadDisabled">
+                Upload
+            </ElButton>
+        }
+        else
+        {
+            @ChildContent
+        }
+        @UploadInput
+    </div>
+    @UploadTip
+    @if (ShowFileList)
+    {
+        @UploadList
     }
 }
-<input type="hidden" @ref="hdnField" />
-<div class="el-upload el-upload--text" onclick="window.upload(this)">
-    <ElButton Size="@ButtonSize.Small" Type="ButtonType.Primary">
-        µã»÷ÉÏ´«
-    </ElButton>
-    <input type="file" name="file" @ref="Input" multiple="multiple" @onchange="ScanFileAsync" class="el-upload__input" />
-</div>
-<div class="el-upload__tip">
-    @if (Tip != null)
+
+@code {
+    private RenderFragment UploadInput => builder =>
     {
-        @Tip
-    }
-</div>
-<ul class="el-upload-list el-upload-list--@listType">
-    @foreach (var file in Files.Cast<UploadModel>())
+        var seq = 0;
+        builder.OpenElement(seq++, "input");
+        builder.AddAttribute(seq++, "type", "file");
+        builder.AddAttribute(seq++, "name", FileFieldName);
+        builder.AddAttribute(seq++, "multiple", Multiple);
+        builder.AddAttribute(seq++, "disabled", UploadDisabled);
+        builder.AddAttribute(seq++, "accept", Accept);
+        builder.AddAttribute(seq++, "class", "el-upload__input");
+        builder.AddAttribute(seq++, "onchange", EventCallback.Factory.Create(this, ScanFileAsync));
+        builder.AddElementReferenceCapture(seq++, reference => Input = reference);
+        builder.CloseElement();
+    };
+
+    private RenderFragment UploadTip => builder =>
     {
-        <li tabindex="0" class="el-upload-list__item is-success">
-            @if (UploadType == UploadType.Image)
+        if (Tip == null)
+        {
+            return;
+        }
+
+        builder.OpenElement(0, "div");
+        builder.AddAttribute(1, "class", "el-upload__tip");
+        builder.AddContent(2, Tip);
+        builder.CloseElement();
+    };
+
+    private RenderFragment UploadList => builder =>
+    {
+        var seq = 0;
+        builder.OpenElement(seq++, "ul");
+        builder.AddAttribute(seq++, "class", $"el-upload-list el-upload-list--{ListTypeName}");
+        foreach (var file in Files.Cast<UploadModel>())
+        {
+            builder.OpenElement(seq++, "li");
+            builder.AddAttribute(seq++, "tabindex", "0");
+            builder.AddAttribute(seq++, "class", GetFileItemClass(file));
+            if (FileTemplate != null)
             {
-                <img src="@(file.Url)" alt="" class="el-upload-list__item-thumbnail">
+                builder.AddContent(seq++, FileTemplate(file));
             }
-            <a class="el-upload-list__item-name">
-                <i class="el-icon-document"></i>@file.FileName
-            </a>
-            @if (file.Status == UploadStatus.Success)
+            else if (EffectiveListType == UploadListType.PictureCard)
             {
-                <label class="el-upload-list__item-status-label">
-                    <i class="el-icon-upload-success el-icon-circle-check"></i>
-                </label>
+                BuildPictureCardItem(builder, file, ref seq);
             }
-            <i class="el-icon-close" @onclick="e=>DeleteFile(file)"></i>
-            <i class="el-icon-close-tip"></i>
-        </li>
-    }
-</ul>
+            else
+            {
+                BuildTextOrPictureItem(builder, file, ref seq);
+            }
+            builder.CloseElement();
+        }
+        builder.CloseElement();
+    };
+}

@@ -1,43 +1,47 @@
 @inherits ElementFieldComponentBase<TValue>
 @typeparam TValue
 @{
-    var isChecked = string.Empty;
-    var ariaChecked = false;
-    var isActive = TypeHelper.Equal(ActiveValue, Value);
-    var backgroundColor = string.Empty;
-    if (isActive)
-    {
-        isChecked = "is-checked";
-        ariaChecked = true;
-        backgroundColor = ActiveColor;
-    }
-    else
-    {
-        backgroundColor = InactiveColor;
-    }
-    var showText = !string.IsNullOrWhiteSpace(ActiveText) && !string.IsNullOrWhiteSpace(InactiveText);
+    var backgroundColor = IsActive ? ActiveColor : InactiveColor;
+    var showInactiveText = !string.IsNullOrWhiteSpace(InactiveText);
+    var showActiveText = !string.IsNullOrWhiteSpace(ActiveText);
     var leftIsActive = string.Empty;
-    var rightIsAcitve = string.Empty;
-    if (!ariaChecked)
+    var rightIsActive = string.Empty;
+    if (!IsActive)
     {
         leftIsActive = "is-active";
     }
     else
     {
-        rightIsAcitve = "is-active";
+        rightIsActive = "is-active";
     }
 
-    var isDisabled = string.Empty;
-    var styleText = $"border-color: rgb(19, 206, 102); background-color: {backgroundColor};";
+    var styleText = $"border-color: {backgroundColor}; background-color: {backgroundColor};";
     if (EffectiveDisabled)
     {
-        isDisabled = "is-disabled";
         styleText = string.Empty;
     }
 }
-<div role="switch" class="el-switch @isChecked @isDisabled @(Loading ? "is-loading" : string.Empty)" aria-checked="@ariaChecked" aria-disabled="@EffectiveDisabled" aria-busy="@Loading">
-    <input type="checkbox" name="" disabled="@EffectiveDisabled" true-value="@ActiveValue" class="el-switch__input">
-    @if (showText)
+<div role="switch"
+     class="@wrapperClsBuilder"
+     tabindex="@(EffectiveDisabled ? -1 : 0)"
+     aria-checked="@AriaChecked"
+     aria-disabled="@AriaDisabled"
+     aria-busy="@AriaBusy"
+     aria-invalid="@AriaInvalid"
+     aria-describedby="@AriaDescribedBy"
+     aria-valuetext="@CurrentValueText"
+     @onkeydown="OnKeyDownAsync">
+    <input id="@InputId"
+           @attributes="Attributes"
+           type="checkbox"
+           name="@Name"
+           checked="@IsActive"
+           disabled="@EffectiveDisabled"
+           true-value="@EffectiveActiveValue"
+           false-value="@EffectiveInactiveValue"
+           value="@CurrentValueText"
+           class="el-switch__input">
+    @if (showInactiveText)
     {
         <span class="el-switch__label el-switch__label--left @leftIsActive">
             <span aria-hidden="true">@InactiveText</span>
@@ -49,9 +53,9 @@
             <i class="el-switch__loading @LoadingIcon"></i>
         }
     </span>
-    @if (showText)
+    @if (showActiveText)
     {
-        <span class="el-switch__label el-switch__label--right @rightIsAcitve">
+        <span class="el-switch__label el-switch__label--right @rightIsActive">
             <span aria-hidden="true">@ActiveText</span>
         </span>
     }
