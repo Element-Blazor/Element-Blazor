@@ -4,9 +4,16 @@
     @onmouseover="OnOver"
     @onmouseout="OnOut"
     @onkeydown="OnKeyDownAsync"
-    class="el-menu-item @(IsActive?"is-active":"") @(Disabled ? "is-disabled" : "")"
+    class="@ItemClass"
     aria-disabled="@(Disabled || Options.Disabled)"
+    title="@EffectiveTitle"
     style="background-color:@BackgroundColor;color:@TextColor; border-bottom-color:@BorderColor;">
-    <i class="@(Icon ?? "el-icon-menu")"></i>
-    @ChildContent
+    @if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <i class="@NormalizeIcon(Icon)"></i>
+    }
+    @if (!EffectiveCollapse)
+    {
+        <span>@ChildContent</span>
+    }
 </li>

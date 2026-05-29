@@ -19,6 +19,8 @@ namespace Element
         [Parameter]
         public string Index { get; set; }
 
+        internal string EffectiveIndex => string.IsNullOrWhiteSpace(Index) ? Label : Index;
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -33,6 +35,10 @@ namespace Element
 
         [Parameter]
         public string Icon { get; set; }
+
+        [CascadingParameter]
+        public ElSubMenu ParentMenu { get; set; }
+
         [CascadingParameter]
         public ElMenuContainer Menu { get; set; }
 
@@ -50,11 +56,24 @@ namespace Element
         {
             get
             {
-                return Options != null && Options.Mode == MenuMode.Vertical;
+                return Options != null && Options.Mode == MenuMode.Vertical && !Options.Collapse;
             }
         }
 
         protected bool IsOpened { get; set; } = false;
+
+        private bool UsesPopup => TopMenu?.Mode == MenuMode.Horizontal || Options?.Collapse == true;
+
+        protected string SubMenuClass => HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-submenu", Cls)
+            .AddIf(isActive, "is-active")
+            .AddIf(IsOpened, "is-opened")
+            .AddIf(Disabled || Options.Disabled, "is-disabled")
+            .ToString();
+
+        protected string EffectiveTitle => EffectiveCollapse ? Label : null;
+
+        protected bool EffectiveCollapse => Options?.Collapse == true;
 
         public void Activate()
         {
@@ -68,7 +87,7 @@ namespace Element
         public void DeActivate()
         {
             isActive = false;
-            if (TopMenu.Mode == MenuMode.Horizontal)
+            if (UsesPopup)
             {
                 IsOpened = false;
             }
@@ -97,7 +116,7 @@ namespace Element
             {
                 return;
             }
-            if (TopMenu.Mode == MenuMode.Horizontal)
+            if (UsesPopup)
             {
                 await SemaphoreSlim.WaitAsync();
                 try
@@ -125,7 +144,9 @@ namespace Element
                         SubMenu = this,
                         Content = ChildContent,
                         Options = Options,
-                        Target = Element
+                        Target = Element,
+                        PopperClass = Options.PopperClass,
+                        PopperStyle = Options.PopperStyle
                     };
                     var taskCompletionSource = new TaskCompletionSource<int>();
                     subMenuOption.TaskCompletionSource = taskCompletionSource;
@@ -135,6 +156,7 @@ namespace Element
                     }
                     PopupService.SubMenuOptions.Add(subMenuOption);
                     IsOpened = true;
+                    await TopMenu.NotifyOpenAsync(this);
                 }
                 finally
                 {
@@ -151,6 +173,11 @@ namespace Element
                 backgroundColor = Options.HoverColor;
                 textColor = Options.ActiveTextColor;
                 isActive = true;
+                if (!IsOpened)
+                {
+                    IsOpened = true;
+                    await TopMenu.NotifyOpenAsync(this);
+                }
             }
         }
 
@@ -166,14 +193,18 @@ namespace Element
 
         internal void KeepSubMenuOpen()
         {
-            subMenuOption.Instance.KeepShowSubMenu(subMenuOption);
+            subMenuOption?.Instance?.KeepShowSubMenu(subMenuOption);
         }
 
         internal async Task CloseAsync()
         {
-            await subMenuOption.Close(subMenuOption);
+            if (subMenuOption?.Close != null)
+            {
+                await subMenuOption.Close(subMenuOption);
+            }
             IsOpened = false;
             isActive = false;
+            await TopMenu.NotifyCloseAsync(this);
         }
 
         void DisposeTokenSource(CancellationTokenSource cancellationTokenSource)
@@ -202,11 +233,15 @@ namespace Element
             {
                 return;
             }
+            if (UsesPopup && Options.MenuTrigger == MenuTrigger.Click)
+            {
+                return;
+            }
             if (isActive || IsOpened)
             {
                 backgroundColor = Options.BackgroundColor;
                 textColor = Options.TextColor;
-                if (TopMenu.Mode == MenuMode.Horizontal && subMenuOption.IsShow)
+                if (UsesPopup && subMenuOption?.IsShow == true)
                 {
                     subMenuOption.ClosingTaskCancellationTokenSource = new System.Threading.CancellationTokenSource();
                     var option = subMenuOption;
@@ -231,14 +266,19 @@ namespace Element
                          });
                     subMenuOption.ClosingTask = await closingTask;
                 }
-                else
+            else
+            {
+                if (IsOpened)
                 {
-                    isActive = false;
+                    await TopMenu.NotifyCloseAsync(this);
                 }
+                isActive = false;
+                IsOpened = false;
             }
         }
+        }
 
-        protected void OnClick()
+        protected async Task OnClickAsync()
         {
             if (Disabled || Options.Disabled)
             {
@@ -247,17 +287,35 @@ namespace Element
             if (IsVertical && TopMenu.CanCollapse)
             {
                 IsOpened = !IsOpened;
+                if (IsOpened)
+                {
+                    await TopMenu.NotifyOpenAsync(this);
+                }
+                else
+                {
+                    await TopMenu.NotifyCloseAsync(this);
+                }
+            }
+            else if (UsesPopup && Options.MenuTrigger == MenuTrigger.Click)
+            {
+                if (IsOpened)
+                {
+                    await CloseAsync();
+                }
+                else
+                {
+                    await OnOverAsync();
+                }
             }
         }
 
-        protected Task OnKeyDownAsync(KeyboardEventArgs e)
+        protected async Task OnKeyDownAsync(KeyboardEventArgs e)
         {
             if (e.Key != "Enter" && e.Key != " ")
             {
-                return Task.CompletedTask;
+                return;
             }
-            OnClick();
-            return Task.CompletedTask;
+            await OnClickAsync();
         }
 
         internal Task ToggleByKeyboardAsync()
@@ -266,12 +324,41 @@ namespace Element
             {
                 return Task.CompletedTask;
             }
-            if (TopMenu.Mode == MenuMode.Horizontal)
+            if (UsesPopup)
             {
                 return OnOverAsync();
             }
-            OnClick();
-            return Task.CompletedTask;
+            if (IsVertical)
+            {
+                return OnClickAsync();
+            }
+
+            return OnOverAsync();
+        }
+
+        internal async Task CloseFromMenuAsync(bool notify)
+        {
+            if (!IsOpened)
+            {
+                return;
+            }
+
+            IsOpened = false;
+            isActive = false;
+            if (notify)
+            {
+                await TopMenu.NotifyCloseAsync(this);
+            }
+        }
+
+        private static string NormalizeIcon(string icon)
+        {
+            if (string.IsNullOrWhiteSpace(icon))
+            {
+                return null;
+            }
+
+            return icon.StartsWith("el-icon-") ? icon : $"el-icon-{icon}";
         }
 
         public override void Dispose()

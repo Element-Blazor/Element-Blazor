@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
 namespace Element
@@ -10,6 +6,12 @@ namespace Element
     {
         [Parameter]
         public RenderFragment ChildContent { get; set; }
+
+        [Parameter]
+        public string Separator { get; set; } = "/";
+
+        [Parameter]
+        public string SeparatorIcon { get; set; }
 
         protected override bool ShouldRender()
         {

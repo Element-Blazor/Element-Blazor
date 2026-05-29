@@ -13,6 +13,8 @@ namespace Element
         [Parameter]
         public string Index { get; set; }
 
+        internal string EffectiveIndex => string.IsNullOrWhiteSpace(Index) ? Route : Index;
+
         [Parameter]
         public RenderFragment ChildContent { get; set; }
 
@@ -27,6 +29,11 @@ namespace Element
 
         [Parameter]
         public string Icon { get; set; } = "el-icon-menu";
+
+        [Parameter]
+        public string Title { get; set; }
+
+        protected string EffectiveTitle => EffectiveCollapse ? Title : null;
 
         [CascadingParameter]
         public ElMenu TopMenu { get; set; }
@@ -45,6 +52,14 @@ namespace Element
         public virtual string BackgroundColor { get; set; }
 
         private string currentRoute = string.Empty;
+        protected string ItemClass => HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-menu-item", Cls)
+            .AddIf(IsActive, "is-active")
+            .AddIf(Disabled || Options.Disabled, "is-disabled")
+            .ToString();
+
+        protected bool EffectiveCollapse => Options?.Collapse == true;
+
         public void Activate()
         {
             if (Options.Disabled)
@@ -77,7 +92,7 @@ namespace Element
             {
                 matchFunc = DefaultMenuMatcher;
             }
-            if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == Index) || matchFunc(Route))
+            if ((!string.IsNullOrWhiteSpace(Options.DefaultActiveIndex) && Options.DefaultActiveIndex == EffectiveIndex) || matchFunc(Route))
             {
                 TopMenu.ActivateItem(this);
             }
@@ -112,7 +127,7 @@ namespace Element
             {
                 return;
             }
-            if (Options.Mode == MenuMode.Horizontal && ParentMenu != null)
+            if ((Options.Mode == MenuMode.Horizontal || Options.Collapse) && ParentMenu != null)
             {
                 ParentMenu.KeepSubMenuOpen();
             }
@@ -130,7 +145,7 @@ namespace Element
             {
                 return;
             }
-            if (Options.Mode == MenuMode.Horizontal)
+            if (Options.Mode == MenuMode.Horizontal || Options.Collapse)
             {
                 BackgroundColor = Options.BackgroundColor;
                 return;
@@ -165,11 +180,12 @@ namespace Element
             {
                 return;
             }
-            if (ParentMenu != null && TopMenu.Mode == MenuMode.Horizontal)
+            if (ParentMenu != null && (TopMenu.Mode == MenuMode.Horizontal || Options.Collapse))
             {
                 await ParentMenu.CloseAsync();
             }
             TopMenu.ActivateItem(this);
+            await TopMenu.NotifySelectAsync(this);
             if (!string.IsNullOrEmpty(Route))
             {
                 if (OnRouteChanging.HasDelegate)
@@ -183,8 +199,11 @@ namespace Element
                         return;
                     }
                 }
-                NavigationManager.NavigateTo(Route);
-                NavigationManager.LocationChanged += NavigationManager_LocationChanged;
+                if (Options.Router)
+                {
+                    NavigationManager.NavigateTo(Route);
+                    NavigationManager.LocationChanged += NavigationManager_LocationChanged;
+                }
             }
         }
 
@@ -208,6 +227,29 @@ namespace Element
                 return;
             }
             await OnClickAsync();
+        }
+
+        internal IReadOnlyList<string> GetIndexPath()
+        {
+            var path = new List<string>();
+            var parent = ParentMenu;
+            while (parent != null)
+            {
+                path.Insert(0, parent.EffectiveIndex);
+                parent = parent.ParentMenu;
+            }
+            path.Add(EffectiveIndex);
+            return path;
+        }
+
+        private static string NormalizeIcon(string icon)
+        {
+            if (string.IsNullOrWhiteSpace(icon))
+            {
+                return null;
+            }
+
+            return icon.StartsWith("el-icon-") ? icon : $"el-icon-{icon}";
         }
 
         public override void Dispose()

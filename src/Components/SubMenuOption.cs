@@ -22,6 +22,10 @@ namespace Element
 
         internal string Placement { get; set; } = "bottom-start";
 
+        internal string PopperClass { get; set; }
+
+        internal string PopperStyle { get; set; }
+
         public CancellationTokenSource ClosingTaskCancellationTokenSource { get; set; }
         public Task ClosingTask { get; internal set; }
     }

@@ -1,17 +1,24 @@
 @inherits ElMenuContainer
 <li role="menuitem" tabindex="@(Disabled || Options.Disabled ? -1 : 0)" aria-haspopup="true"
-    class="el-submenu @(isActive?"is-active":"") @(IsOpened?"is-opened":"") @(Disabled ? "is-disabled" : "")"
+    class="@SubMenuClass"
     aria-disabled="@(Disabled || Options.Disabled)"
     aria-expanded="@(IsOpened?"true":"")"
     @onkeydown="OnKeyDownAsync">
     <div @onmouseover="OnOverAsync"
          @onmouseout="OnOutAsync"
-         @onclick="OnClick"
+         @onclick="OnClickAsync"
          @ref="Element"
          class="el-submenu__title"
+         title="@EffectiveTitle"
          style="background-color:@backgroundColor;color:@textColor; border-bottom-color:@borderColor;">
-        <i class="@(Icon ?? "el-icon-menu")" @onmouseover:stopPropagation  @onmouseout:stopPropagation></i>
-        @Label
+        @if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <i class="@NormalizeIcon(Icon)" @onmouseover:stopPropagation @onmouseout:stopPropagation></i>
+        }
+        @if (!EffectiveCollapse)
+        {
+            <span>@Label</span>
+        }
         <i class="el-submenu__icon-arrow el-icon-arrow-down" @onmouseover:stopPropagation @onmouseout:stopPropagation></i>
     </div>
     @if (IsVertical)

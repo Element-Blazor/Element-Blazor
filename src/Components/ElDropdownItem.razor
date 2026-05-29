@@ -1,2 +1,18 @@
 @inherits ElementComponentBase
-<li tabindex="-1" class="el-dropdown-menu__item" @onclick="InternalOnClick">@ChildContent</li>
+@if (Divided)
+{
+    <li role="separator" class="el-dropdown-menu__divider"></li>
+}
+<li role="menuitem"
+    tabindex="@(Disabled ? -1 : 0)"
+    class="@ItemClass"
+    aria-disabled="@Disabled"
+    @onclick="InternalOnClickAsync"
+    @onkeydown="OnKeyDownAsync"
+    @attributes="Attributes">
+    @if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <i class="@NormalizeIcon(Icon)"></i>
+    }
+    @ChildContent
+</li>

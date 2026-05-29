@@ -16,13 +16,13 @@ namespace Element
     {
         internal bool headerSizeUpdated = false;
         /// <summary>
-        /// Êı¾İÔ´
+        /// æ•°æ®æº
         /// </summary>
         [Parameter]
         public ObservableCollection<TabOption> DataSource { get; set; }
 
         /// <summary>
-        /// ÊÇ·ñÏÔÊ¾Ôö¼ÓÍ¼±ê
+        /// æ˜¯å¦æ˜¾ç¤ºå¢åŠ å›¾æ ‡
         /// </summary>
         [Parameter]
         public bool IsAddable { get; set; }
@@ -35,7 +35,7 @@ namespace Element
         }
 
         /// <summary>
-        /// ÊÇ·ñ¿É¹Ø±Õ
+        /// æ˜¯å¦å¯å…³é—­
         /// </summary>
         public bool IsRemovable { get; set; }
 
@@ -46,19 +46,42 @@ namespace Element
             set => IsRemovable = value;
         }
         /// <summary>
-        /// äÖÈ¾ºóµÄÄÚÈİÇøÓò
+        /// æ¸²æŸ“åçš„å†…å®¹åŒºåŸŸ
         /// </summary>
         public ElementReference Content { get; set; }
         protected ElementReference navScrollElement;
 
         /// <summary>
-        /// Tab ÀàĞÍ
+        /// Tab ç±»å‹
         /// </summary>
         [Parameter]
         public TabType Type { get; set; }
 
         [Parameter]
         public bool IsEditable { get; set; }
+
+        [Parameter]
+        public bool Editable
+        {
+            get => IsEditable;
+            set => IsEditable = value;
+        }
+
+        [Parameter]
+        public bool IsStretch
+        {
+            get => Stretch;
+            set => Stretch = value;
+        }
+
+        [Parameter]
+        public bool Stretch { get; set; }
+
+        [Parameter]
+        public Func<string, string, Task<bool>> BeforeLeave { get; set; }
+
+        [Parameter]
+        public Func<string, string, bool> BeforeLeaveSync { get; set; }
 
         [Parameter]
         public string ModelValue { get; set; }
@@ -88,25 +111,25 @@ namespace Element
         public RenderFragment ChildContent { get; set; }
 
         /// <summary>
-        /// Tab Ò³±»ÇĞ»»ºó´¥·¢
+        /// Tab é¡µè¢«åˆ‡æ¢åè§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<ElementChangeEventArgs<ElTabPane>> OnActiveTabChanged { get; set; }
 
         /// <summary>
-        /// Tab Ò³±»ÇĞ»»Ç°´¥·¢
+        /// Tab é¡µè¢«åˆ‡æ¢å‰è§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<ElementChangeEventArgs<ElTabPane>> OnActiveTabChanging { get; set; }
 
         /// <summary>
-        /// Tab Ò³±»¹Ø±Õºó´¥·¢
+        /// Tab é¡µè¢«å…³é—­åè§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<ElTabPane> OnTabClose { get; set; }
 
         /// <summary>
-        /// Tab Ò³±»¹Ø±ÕÊ±´¥·¢
+        /// Tab é¡µè¢«å…³é—­æ—¶è§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<ElementClosingEventArgs<ElTabPane>> OnTabClosing { get; set; }
@@ -177,9 +200,9 @@ namespace Element
             base.OnInitialized();
             if (DataSource == null)
             {
-                if (IsAddable)
+                if (IsAddable || IsEditable)
                 {
-                    throw new ElementException("±êÇ©Ò³×é¼şÆôÓÃ¿É±à¼­Ä£Ê½Ê±±ØĞëÖ¸¶¨ DataSource ÊôĞÔ£¬Ó²±àÂëÎŞĞ§");
+                    throw new ElementException("æ ‡ç­¾é¡µç»„ä»¶å¯ç”¨å¯ç¼–è¾‘æ¨¡å¼æ—¶å¿…é¡»æŒ‡å®š DataSource å±æ€§ï¼Œç¡¬ç¼–ç æ— æ•ˆ");
                 }
             }
             else
@@ -211,12 +234,12 @@ namespace Element
             var repeatKeys = DataSource.GroupBy(x => x.Name).Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
             if (repeatKeys.Any())
             {
-                throw new ElementException($"Tab Ò³ÒÔÏÂ Name ÖØ¸´ {string.Join(",", repeatKeys)}");
+                throw new ElementException($"Tab é¡µä»¥ä¸‹ Name é‡å¤ {string.Join(",", repeatKeys)}");
             }
         }
 
         /// <summary>
-        /// µã»÷¼ÓºÅ°´Å¥Ôö¼Ó Tab Ò³Ê±´¥·¢
+        /// ç‚¹å‡»åŠ å·æŒ‰é’®å¢åŠ  Tab é¡µæ—¶è§¦å‘
         /// </summary>
         [Parameter]
         public EventCallback<MouseEventArgs> OnAddingTab { get; set; }
@@ -344,7 +367,7 @@ namespace Element
             var tab = tabPanels.FirstOrDefault(x => x.Name == name);
             if (tab == null)
             {
-                ExceptionHelper.Throw(ExceptionHelper.TabNameNotFound, $"Name Îª {name} µÄ Tab ²»´æÔÚ");
+                ExceptionHelper.Throw(ExceptionHelper.TabNameNotFound, $"Name ä¸º {name} çš„ Tab ä¸å­˜åœ¨");
             }
             await SetActivateTabAsync(tab);
         }
@@ -361,6 +384,23 @@ namespace Element
                 arg.OldValue = ActiveTab;
                 await OnActiveTabChanging.InvokeAsync(arg);
                 if (arg.DisallowChange)
+                {
+                    return false;
+                }
+            }
+            if (BeforeLeave != null)
+            {
+                var oldName = ActiveTab?.Name;
+                var allowLeave = await BeforeLeave(tab.Name, oldName);
+                if (!allowLeave)
+                {
+                    return false;
+                }
+            }
+            if (BeforeLeaveSync != null)
+            {
+                var oldName = ActiveTab?.Name;
+                if (!BeforeLeaveSync(tab.Name, oldName))
                 {
                     return false;
                 }
@@ -444,9 +484,9 @@ namespace Element
 
         protected override void OnParametersSet()
         {
-            if (Type == TabType.Normal && IsRemovable)
+            if (Type == TabType.Normal && IsRemovable && DataSource != null)
             {
-                throw new NotSupportedException("TabTypeÎªCardµÄÇé¿öÏÂ²ÅÄÜ½øĞĞÒÆ³ı");
+                throw new NotSupportedException("TabTypeä¸ºCardçš„æƒ…å†µä¸‹æ‰èƒ½è¿›è¡Œç§»é™¤");
             }
             base.OnParametersSet();
             if (!string.IsNullOrWhiteSpace(ModelValue))

@@ -2009,6 +2009,16 @@ textarea.el-input__inner,
     white-space: nowrap;
 }
 
+.el-tabs.is-stretch .el-tabs__nav {
+    display: flex;
+    min-width: 100%;
+}
+
+.el-tabs.is-stretch .el-tabs__item {
+    flex: 1 1 0;
+    justify-content: center;
+}
+
 .el-tabs__active-bar {
     background-color: var(--el-tabs-active-color);
     bottom: 0;
@@ -2174,6 +2184,96 @@ textarea.el-input__inner,
 .el-menu.is-disabled {
     cursor: not-allowed;
     opacity: 0.6;
+}
+
+.el-menu--dark {
+    --el-menu-bg-color: #20222a;
+    --el-menu-text-color: rgba(255, 255, 255, .72);
+    --el-menu-hover-text-color: #fff;
+    --el-menu-hover-bg-color: #343842;
+    --el-menu-active-color: #fff;
+}
+
+.el-menu--collapse {
+    width: 64px;
+}
+
+.el-menu--collapse > .el-menu-item,
+.el-menu--collapse > .el-submenu > .el-submenu__title {
+    justify-content: center;
+    padding: 0;
+}
+
+.el-menu--collapse > .el-submenu > .el-submenu__title .el-submenu__icon-arrow {
+    display: none;
+}
+
+.el-dropdown.is-disabled {
+    cursor: not-allowed;
+    opacity: .6;
+}
+
+.el-dropdown .el-dropdown__caret-button {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.el-dropdown-menu__item.is-disabled {
+    color: var(--el-disabled-text-color);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.el-dropdown-menu__divider {
+    background-color: var(--el-border-color-lighter);
+    height: 1px;
+    list-style: none;
+    margin: 6px 0;
+}
+
+.el-breadcrumb {
+    color: var(--el-text-color-regular);
+    font-size: var(--el-font-size-base);
+    line-height: 1;
+}
+
+.el-breadcrumb::after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.el-breadcrumb__item {
+    align-items: center;
+    display: inline-flex;
+    float: left;
+}
+
+.el-breadcrumb__inner {
+    color: var(--el-text-color-regular);
+}
+
+.el-breadcrumb__inner.is-link,
+a.el-breadcrumb__inner {
+    color: var(--el-text-color-primary);
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.el-breadcrumb__inner.is-link:hover,
+a.el-breadcrumb__inner:hover {
+    color: var(--el-color-primary);
+}
+
+.el-breadcrumb__separator {
+    color: var(--el-text-color-placeholder);
+    font-weight: 700;
+    margin: 0 9px;
+}
+
+.el-breadcrumb__item:last-child .el-breadcrumb__separator {
+    display: none;
 }
 
 .el-menu--horizontal {

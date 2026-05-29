@@ -1,4 +1,26 @@
 @inherits ElementComponentBase
-<div class="el-dropdown" style="@Style" @onclick="ShowDropDown" @ref="Target">
-    @Trigger
+<div class="@DropdownClass"
+     style="@Style"
+     @onclick="OnTriggerClickAsync"
+     @onmouseover="OnTriggerMouseOverAsync"
+     @onmouseout="OnTriggerMouseOutAsync"
+     @oncontextmenu="OnTriggerContextMenuAsync"
+     @oncontextmenu:preventDefault="@(TriggerMode == DropdownTrigger.ContextMenu)"
+     @onkeydown="OnKeyDownAsync"
+     @ref="Target"
+     tabindex="@(Disabled ? -1 : 0)"
+     aria-disabled="@Disabled"
+     aria-haspopup="menu"
+     @attributes="Attributes">
+    @if (SplitButton)
+    {
+        <ElButton Type="@Type" Size="@Size" Disabled="@Disabled" OnClick="OnSplitButtonClickAsync">@ButtonContent</ElButton>
+        <ElButton Type="@Type" Size="@Size" Disabled="@Disabled" Cls="el-dropdown__caret-button" OnClick="OnCaretButtonClickAsync" aria-label="dropdown trigger">
+            <i class="@Icon"></i>
+        </ElButton>
+    }
+    else
+    {
+        @Trigger
+    }
 </div>

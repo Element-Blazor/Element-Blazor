@@ -17,7 +17,8 @@
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
     var classBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-        .Add("el-tabs", tabType, tabPosition);
+        .Add("el-tabs", tabType, tabPosition, Cls)
+        .AddIf(Stretch, "is-stretch");
     object activeContent = ActiveTab?.ChildContent;
     var bodyStyle = ActiveTab?.Style;
     if (DataSource != null)
@@ -27,7 +28,7 @@
         bodyStyle = activeOption?.BodyStyle;
     }
 }
-<div class="@classBuilder.ToString()" style="@Style" @onkeydown="OnKeyDownAsync">
+<div class="@classBuilder.ToString()" style="@Style" @onkeydown="OnKeyDownAsync" @attributes="Attributes">
     @if (TabPosition == TabPosition.Bottom)
     {
         <div class="el-tabs__content" style="@bodyStyle" @ref="Content" role="tabpanel" aria-labelledby="tab-@(ActiveTab?.Name)" id="pane-@(ActiveTab?.Name)">
@@ -35,7 +36,7 @@
         </div>
     }
     <div class="el-tabs__header @headerPosition">
-        @if (IsAddable)
+        @if (IsAddable || IsEditable)
         {
             <span tabindex="0" class="el-tabs__new-tab" @onclick="OnAddingTab"><i class="el-icon-plus"></i></span>
         }
@@ -51,7 +52,7 @@
                         {
                             @foreach (var item in DataSource)
                             {
-                                <ElTabPane @key="item.Name" IsClosable="@item.IsClosable" Disabled="@item.IsDisabled" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
+                                <ElTabPane @key="item.Name" IsClosable="@(item.IsClosable || IsRemovable || IsEditable)" Disabled="@item.IsDisabled" Name="@item.Name" Title="@item.Title" IsActive="@item.IsActive" OnRenderCompleted="item.OnRenderCompletedAsync" OnTabPanelChanging="item.OnTabPanelChanging">
                                     <ElDynamicComponent Component="@item.Content"></ElDynamicComponent>
                                 </ElTabPane>
                             }

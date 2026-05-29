@@ -89,6 +89,8 @@ namespace Element
             set => IsClosable = value;
         }
 
+        protected bool EffectiveClosable => IsClosable || TabContainer?.IsRemovable == true || TabContainer?.IsEditable == true;
+
         protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrWhiteSpace(Name))

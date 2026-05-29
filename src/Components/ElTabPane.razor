@@ -11,14 +11,14 @@
     var headerPosition = position.headerPosition;
     var tabPosition = position.tabPosition;
     var classBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-        .Add("el-tabs__item", headerPosition)
-        .AddIf(IsClosable, "is-closable")
+        .Add("el-tabs__item", headerPosition, Cls)
+        .AddIf(EffectiveClosable, "is-closable")
         .AddIf(isActiveTab, "is-active")
         .AddIf(Disabled, "is-disabled");
 }
-<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(isActiveTab && !Disabled ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="@classBuilder.ToString()" aria-selected="@(isActiveTab ? "true" : "false")" aria-disabled="@Disabled">
+<div @ref="Element" id="tab-@name" style="@Style" aria-controls="pane-@name" role="tab" tabindex="@(isActiveTab && !Disabled ? 0 :-1)" @onclick="Activate" @onclick:stopPropagation class="@classBuilder.ToString()" aria-selected="@(isActiveTab ? "true" : "false")" aria-disabled="@Disabled" @attributes="Attributes">
     @Title
-    @if (IsClosable && !Disabled)
+    @if (EffectiveClosable && !Disabled)
     {
         <span class="el-icon-close" @onclick="OnInternalTabCloseAsync" @onclick:stopPropagation></span>
     }

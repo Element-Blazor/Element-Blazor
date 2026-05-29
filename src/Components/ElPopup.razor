@@ -500,7 +500,12 @@
         dropDownStyles.Add("transform-origin: center top 0px");
         dropDownStyles.Add($"z-index:{index}");
         <div class="v-modal" style="position:fixed;opacity:0;@style;z-index:@shadowIndex" @ref="option.ShadowElement" @onclick="async e=> await CloseDropDownAsync(option)"></div>
-        <ul class="el-dropdown-menu el-popper" @ref="option.Element" style="@string.Join(";",dropDownStyles)" x-placement="@option.Placement">
+        <ul class="@HtmlPropertyBuilder.CreateCssClassBuilder().Add("el-dropdown-menu", "el-popper", option.PopperClass).ToString()"
+            @ref="option.Element"
+            style="@HtmlPropertyBuilder.CreateCssStyleBuilder().Add(string.Join(";", dropDownStyles), option.PopperStyle).ToString()"
+            x-placement="@option.Placement"
+            @onmouseover="@(() => { (option.Select as ElDropdown)?.KeepOpen(); })"
+            @onmouseout="@(() => (option.Select as ElDropdown)?.CloseAfterHoverDelayAsync() ?? Task.CompletedTask)">
             <CascadingValue Value="option">
                 @option.OptionContent
             </CascadingValue>
@@ -532,8 +537,8 @@
             transform = "transform:scaleY(0);";
             opacity = "0";
         }
-        <div class="el-menu--horizontal el-popper" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;" x-placement="@option.Placement">
-            <ul role="menu" class="el-menu el-menu--popup el-menu--popup-bottom-start">
+        <div class="@HtmlPropertyBuilder.CreateCssClassBuilder().Add("el-menu--horizontal", "el-popper", option.PopperClass).ToString()" @onmouseover="e=>KeepShowSubMenu(option)" @onmouseout="async e=>await ReadyCloseSubMenuAsync(option)" style="position: absolute; top: @(option.Top)px; left: @(option.Left)px; z-index:@index;@transform transition:transform 0.2s,opacity 0.2s;opacity:@opacity; transform-origin:top left;@option.PopperStyle" x-placement="@option.Placement">
+            <ul role="menu" class="@HtmlPropertyBuilder.CreateCssClassBuilder().Add("el-menu", "el-menu--popup", $"el-menu--popup-{option.Placement}").ToString()">
                 <CascadingValue Value="option.SubMenu">
                     <CascadingValue Value="option.Options">
                         <CascadingValue Value="option.SubMenu.TopMenu">

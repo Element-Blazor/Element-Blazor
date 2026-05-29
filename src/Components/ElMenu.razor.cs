@@ -24,13 +24,62 @@ namespace Element
         public bool CanCollapse { get; set; } = true;
 
         [Parameter]
+        public bool Collapse { get; set; }
+
+        [Parameter]
+        public bool IsCollapse
+        {
+            get => Collapse;
+            set => Collapse = value;
+        }
+
+        [Parameter]
+        public bool Router { get; set; } = true;
+
+        [Parameter]
+        public bool UniqueOpened { get; set; }
+
+        [Parameter]
+        public MenuTrigger MenuTrigger { get; set; } = MenuTrigger.Hover;
+
+        [Parameter]
+        public string Trigger
+        {
+            get => MenuTrigger.ToString().ToLowerInvariant();
+            set => MenuTrigger = string.Equals(value, "click", StringComparison.OrdinalIgnoreCase)
+                ? MenuTrigger.Click
+                : MenuTrigger.Hover;
+        }
+
+        [Parameter]
+        public string PopperClass { get; set; }
+
+        [Parameter]
+        public string PopperStyle { get; set; }
+
+        [Parameter]
+        public string PopperEffect { get; set; } = "dark";
+
+        [Parameter]
+        public MenuTheme Theme { get; set; } = MenuTheme.Light;
+
+        [Parameter]
+        public EventCallback<MenuSelectEventArgs> OnSelect { get; set; }
+
+        [Parameter]
+        public EventCallback<string> OnOpen { get; set; }
+
+        [Parameter]
+        public EventCallback<string> OnClose { get; set; }
+
+        [Parameter]
         public bool Disabled { get; set; }
 
         [Parameter]
         public string BackgroundColor { get; set; }
 
         /// <summary>
-        /// ≤Àµ•∆•≈‰∑Ω∑®£¨≤Œ ˝Œ™µ±«∞≤Àµ•µƒ¬∑”…
+        /// ËèúÂçïÂåπÈÖçÊñπÊ≥ïÔºåÂèÇÊï∞‰∏∫ÂΩìÂâçËèúÂçïÁöÑË∑ØÁî±
         /// </summary>
         [Parameter]
         public Func<string, bool> Match { get; set; }
@@ -59,6 +108,51 @@ namespace Element
         public IMenuItem ActiveItem { get => activeItem; set => activeItem = value; }
         [Parameter]
         public EventCallback<IMenuItem> ActiveItemChanged { get; set; }
+        internal async Task NotifySelectAsync(ElMenuItem item)
+        {
+            if (!OnSelect.HasDelegate || item == null)
+            {
+                return;
+            }
+
+            await OnSelect.InvokeAsync(new MenuSelectEventArgs
+            {
+                Index = item.EffectiveIndex,
+                IndexPath = item.GetIndexPath(),
+                Route = item.Route,
+                Item = item
+            });
+        }
+
+        internal async Task NotifyOpenAsync(ElSubMenu item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            if (UniqueOpened)
+            {
+                foreach (var child in Children.OfType<ElSubMenu>().Where(x => x != item))
+                {
+                    await child.CloseFromMenuAsync(false);
+                }
+            }
+
+            if (OnOpen.HasDelegate)
+            {
+                await OnOpen.InvokeAsync(item.EffectiveIndex);
+            }
+        }
+
+        internal async Task NotifyCloseAsync(ElSubMenu item)
+        {
+            if (OnClose.HasDelegate && item != null)
+            {
+                await OnClose.InvokeAsync(item.EffectiveIndex);
+            }
+        }
+
         public virtual void ActivateItem(IMenuItem item)
         {
             if (Disabled)
@@ -108,7 +202,14 @@ namespace Element
                 DefaultActiveIndex = DefaultActive,
                 HoverColor = HoverColor,
                 Mode = Mode,
-                Disabled = Disabled
+                Disabled = Disabled,
+                Collapse = Collapse,
+                Router = Router,
+                MenuTrigger = MenuTrigger,
+                PopperClass = PopperClass,
+                PopperStyle = PopperStyle,
+                PopperEffect = PopperEffect,
+                Theme = Theme
             };
 
             base.OnInitialized();
@@ -121,9 +222,12 @@ namespace Element
             menuClass = HtmlPropertyBuilder.CreateCssClassBuilder()
                 .Add(modeClass, "el-menu", Cls)
                 .AddIf(Disabled, "is-disabled")
+                .AddIf(Collapse, "el-menu--collapse")
+                .AddIf(Theme == MenuTheme.Dark, "el-menu--dark")
                 .ToString();
             menuStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
                 .Add("overflow:auto")
+                .AddIf(Collapse, "width:64px")
                 .AddIf(!string.IsNullOrWhiteSpace(BackgroundColor), $"--el-menu-bg-color:{BackgroundColor}")
                 .AddIf(!string.IsNullOrWhiteSpace(TextColor), $"--el-menu-text-color:{TextColor}")
                 .AddIf(!string.IsNullOrWhiteSpace(ActiveTextColor), $"--el-menu-active-color:{ActiveTextColor}")
@@ -139,6 +243,13 @@ namespace Element
                 Options.HoverColor = HoverColor;
                 Options.Mode = Mode;
                 Options.Disabled = Disabled;
+                Options.Collapse = Collapse;
+                Options.Router = Router;
+                Options.MenuTrigger = MenuTrigger;
+                Options.PopperClass = PopperClass;
+                Options.PopperStyle = PopperStyle;
+                Options.PopperEffect = PopperEffect;
+                Options.Theme = Theme;
             }
         }
         protected override bool ShouldRender()
