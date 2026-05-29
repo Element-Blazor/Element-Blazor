@@ -1,0 +1,86 @@
+@inherits ElementComponentBase
+
+<article class="@BubbleClass" style="@Style" @attributes="Attributes">
+    @if (ShowAvatar)
+    {
+        <div class="el-x-bubble__avatar">
+            @if (AvatarContent != null)
+            {
+                @AvatarContent
+            }
+            else if (!string.IsNullOrWhiteSpace(Avatar))
+            {
+                <ElAvatar Src="@Avatar" Alt="@Header" />
+            }
+            else if (!string.IsNullOrWhiteSpace(AvatarIcon))
+            {
+                <ElAvatar Icon="@AvatarIcon" />
+            }
+            else
+            {
+                <ElAvatar>@AvatarTextValue</ElAvatar>
+            }
+        </div>
+    }
+    <div class="el-x-bubble__main">
+        @if (!string.IsNullOrWhiteSpace(Header) || HeaderContent != null)
+        {
+            <div class="el-x-bubble__header">
+                @if (HeaderContent != null)
+                {
+                    @HeaderContent
+                }
+                else
+                {
+                    @Header
+                }
+            </div>
+        }
+        <div class="el-x-bubble__content">
+            @if (Loading)
+            {
+                <ElSkeleton Loading="true" Animated="true" Count="1" />
+            }
+            else if (ChildContent != null)
+            {
+                @ChildContent
+            }
+            else if (Typing)
+            {
+                <ElXTypewriter Content="@Content" Speed="@TypingSpeed" />
+            }
+            else
+            {
+                @Content
+            }
+        </div>
+        @if (Attachments != null && Attachments.Any())
+        {
+            <div class="el-x-bubble__attachments">
+                @foreach (var attachment in Attachments)
+                {
+                    <ElXFilesCard File="@attachment" Compact="true" />
+                }
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Footer) || FooterContent != null || Actions != null)
+        {
+            <div class="el-x-bubble__footer">
+                <span>
+                    @if (FooterContent != null)
+                    {
+                        @FooterContent
+                    }
+                    else
+                    {
+                        @Footer
+                    }
+                </span>
+                @if (Actions != null)
+                {
+                    <div class="el-x-bubble__actions">@Actions</div>
+                }
+            </div>
+        }
+    </div>
+</article>

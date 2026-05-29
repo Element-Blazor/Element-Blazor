@@ -1,0 +1,45 @@
+@inherits ElementComponentBase
+
+@if (File != null)
+{
+    <article class="@CardClass" style="@Style" @attributes="Attributes">
+        <div class="el-x-files-card__icon">
+            <ElIcon Name="@IconName" />
+        </div>
+        <div class="el-x-files-card__body">
+            <div class="el-x-files-card__name">@File.FileName</div>
+            <div class="el-x-files-card__meta">
+                @if (!string.IsNullOrWhiteSpace(File.Size))
+                {
+                    <span>@File.Size</span>
+                }
+                @if (!string.IsNullOrWhiteSpace(File.Type))
+                {
+                    <span>@File.Type</span>
+                }
+                <span>@StatusText</span>
+            </div>
+            @if (File.Status == XAttachmentStatus.Uploading)
+            {
+                <ElProgress Percentage="@File.Progress" ShowText="false" StrokeWidth="4" />
+            }
+            @if (!string.IsNullOrWhiteSpace(File.Error))
+            {
+                <div class="el-x-files-card__error">@File.Error</div>
+            }
+        </div>
+        @if (!Readonly)
+        {
+            <div class="el-x-files-card__actions">
+                @if (OnPreview.HasDelegate)
+                {
+                    <ElButton Text="true" Type="@ButtonType.Primary" OnClick="PreviewAsync">Preview</ElButton>
+                }
+                @if (OnRemove.HasDelegate)
+                {
+                    <ElButton Text="true" Type="@ButtonType.Danger" OnClick="RemoveAsync">Remove</ElButton>
+                }
+            </div>
+        }
+    </article>
+}

@@ -1,0 +1,60 @@
+@inherits ElementComponentBase
+
+<section class="@ListClass" style="@Style" @attributes="Attributes">
+    @if (Items == null || !Items.Any())
+    {
+        @if (EmptyContent != null)
+        {
+            @EmptyContent
+        }
+        else
+        {
+            <ElEmpty Description="@EmptyText" />
+        }
+    }
+    else
+    {
+        @foreach (var item in Items)
+        {
+            @if (ItemTemplate != null)
+            {
+                @ItemTemplate(item)
+            }
+            else
+            {
+                @if (item.ContentTemplate != null)
+                {
+                    <ElXBubble Role="@item.Role"
+                               Placement="@item.Placement"
+                               Header="@item.Header"
+                               Content="@item.Content"
+                               Footer="@item.Footer"
+                               Avatar="@item.Avatar"
+                               AvatarText="@item.AvatarText"
+                               AvatarIcon="@item.AvatarIcon"
+                               Loading="@item.Loading"
+                               Typing="@item.Typing"
+                               Attachments="@item.Attachments"
+                               Actions="@item.Actions">
+                        @item.ContentTemplate
+                    </ElXBubble>
+                }
+                else
+                {
+                    <ElXBubble Role="@item.Role"
+                               Placement="@item.Placement"
+                               Header="@item.Header"
+                               Content="@item.Content"
+                               Footer="@item.Footer"
+                               Avatar="@item.Avatar"
+                               AvatarText="@item.AvatarText"
+                               AvatarIcon="@item.AvatarIcon"
+                               Loading="@item.Loading"
+                               Typing="@item.Typing"
+                               Attachments="@item.Attachments"
+                               Actions="@item.Actions" />
+                }
+            }
+        }
+    }
+</section>

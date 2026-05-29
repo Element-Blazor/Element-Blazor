@@ -1,0 +1,9 @@
+@inherits ElementComponentBase
+
+<span class="@TypewriterClass" style="@Style" @attributes="Attributes">
+    @DisplayText
+    @if (ShowCursor && !IsComplete)
+    {
+        <span class="el-x-typewriter__cursor" aria-hidden="true"></span>
+    }
+</span>

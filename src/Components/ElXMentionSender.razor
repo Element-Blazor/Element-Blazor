@@ -1,0 +1,18 @@
+@inherits ElementComponentBase
+
+<section class="@MentionSenderClass" style="@Style" @attributes="Attributes">
+    <ElMention Value="@Value"
+               ValueChanged="OnValueChangedAsync"
+               Options="@Options"
+               Prefixes="@Prefixes"
+               Prefix="@Prefix"
+               Placeholder="@Placeholder"
+               Rows="@Rows"
+               Disabled="@Disabled"
+               Readonly="@Readonly"
+               OnSelect="@OnMentionSelect">
+    </ElMention>
+    <div class="el-x-mention-sender__actions">
+        <ElButton Type="@ButtonType.Primary" Loading="@Loading" Disabled="@IsSendDisabled" OnClick="SendAsync">@SendButtonText</ElButton>
+    </div>
+</section>

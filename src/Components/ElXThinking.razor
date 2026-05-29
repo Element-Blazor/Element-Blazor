@@ -1,0 +1,26 @@
+@inherits ElementComponentBase
+
+<section class="@ThinkingClass" style="@Style" @attributes="Attributes">
+    <button type="button" class="el-x-thinking__header" @onclick="Toggle">
+        <span class="el-x-thinking__dot"></span>
+        <span>@Title</span>
+        @if (!string.IsNullOrWhiteSpace(Duration))
+        {
+            <small>@Duration</small>
+        }
+        <ElIcon Name="@(expanded ? "arrow-up" : "arrow-down")" />
+    </button>
+    @if (expanded)
+    {
+        <div class="el-x-thinking__content">
+            @if (ChildContent != null)
+            {
+                @ChildContent
+            }
+            else
+            {
+                @Content
+            }
+        </div>
+    }
+</section>

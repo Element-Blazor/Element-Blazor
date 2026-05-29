@@ -1,0 +1,45 @@
+@inherits ElementComponentBase
+
+<section class="@SenderClass" style="@Style" @attributes="Attributes">
+    @if (Header != null)
+    {
+        <div class="el-x-sender__header">@Header</div>
+    }
+    @if (Attachments != null)
+    {
+        <div class="el-x-sender__attachments">@Attachments</div>
+    }
+    <div class="el-x-sender__main">
+        @if (Prefix != null)
+        {
+            <div class="el-x-sender__prefix">@Prefix</div>
+        }
+        <textarea class="el-x-sender__input"
+                  value="@Value"
+                  placeholder="@Placeholder"
+                  rows="@Rows"
+                  disabled="@Disabled"
+                  readonly="@Readonly"
+                  @oninput="OnInputAsync"
+                  @onkeydown="OnKeyDownAsync"></textarea>
+        @if (Suffix != null)
+        {
+            <div class="el-x-sender__suffix">@Suffix</div>
+        }
+    </div>
+    <div class="el-x-sender__footer">
+        @if (Footer != null)
+        {
+            <div class="el-x-sender__tools">@Footer</div>
+        }
+        <div class="el-x-sender__actions">
+            @if (Loading)
+            {
+                <ElButton Type="@ButtonType.Danger" Plain="true" OnClick="StopAsync">Stop</ElButton>
+            }
+            <ElButton Type="@ButtonType.Primary" Loading="@Loading" Disabled="@IsSendDisabled" OnClick="SendAsync">
+                @SendButtonText
+            </ElButton>
+        </div>
+    </div>
+</section>

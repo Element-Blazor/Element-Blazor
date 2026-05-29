@@ -1,0 +1,55 @@
+@inherits ElementComponentBase
+
+<div class="@PromptsClass" style="@Style" @attributes="Attributes">
+    @foreach (var item in Items ?? Enumerable.Empty<XPromptItem>())
+    {
+        <button type="button"
+                class="@GetItemClass(item)"
+                disabled="@item.Disabled"
+                @onclick="() => SelectAsync(item)">
+            @if (!string.IsNullOrWhiteSpace(item.Icon))
+            {
+                <span class="el-x-prompts__icon"><ElIcon Name="@item.Icon" /></span>
+            }
+            <span class="el-x-prompts__body">
+                <span class="el-x-prompts__title">@item.Title</span>
+                @if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    <span class="el-x-prompts__description">@item.Description</span>
+                }
+            </span>
+            @if (!string.IsNullOrWhiteSpace(item.Tag))
+            {
+                <ElTag Size="@TagSize.Small">@item.Tag</ElTag>
+            }
+            @if (item.Extra != null)
+            {
+                <span class="el-x-prompts__extra">@item.Extra</span>
+            }
+        </button>
+        @if (item.Children != null && item.Children.Any())
+        {
+            <div class="el-x-prompts__children">
+                @foreach (var child in item.Children)
+                {
+                    <button type="button"
+                            class="@GetItemClass(child)"
+                            disabled="@child.Disabled"
+                            @onclick="() => SelectAsync(child)">
+                        @if (!string.IsNullOrWhiteSpace(child.Icon))
+                        {
+                            <span class="el-x-prompts__icon"><ElIcon Name="@child.Icon" /></span>
+                        }
+                        <span class="el-x-prompts__body">
+                            <span class="el-x-prompts__title">@child.Title</span>
+                            @if (!string.IsNullOrWhiteSpace(child.Description))
+                            {
+                                <span class="el-x-prompts__description">@child.Description</span>
+                            }
+                        </span>
+                    </button>
+                }
+            </div>
+        }
+    }
+</div>

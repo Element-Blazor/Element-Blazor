@@ -48,6 +48,7 @@
 | P4 文档站与组件总览 | 待开始 | 建设组件总览、示例卡片和 API 表格。 |
 | P5 组件矩阵补齐 | 进行中 | 按 Element Plus 矩阵继续补齐缺口组件，完成一个就在下方矩阵标记一个。 |
 | P6 社区展示站 | 进行中 | 旧社区项目作为业务素材来源，主线使用 `El*` 控件和 Element Plus 主题。 |
+| X0 Element Plus X / AI 组件线 | 进行中 | 已新增首批 `ElX*` AI 场景组件、X 路线图和 demo `/x` 入口；继续复刻 `Element-Plus-X` API 细节、`ruoyi-element-ai` 完整模板与 v2 文档站风格。详见 `docs/x-component-roadmap.md`。 |
 | P7 稳定化与发布 | 待开始 | 安全依赖、测试矩阵、NuGet 门面和发布节奏。 |
 
 ## Element Plus 2.14 组件矩阵
@@ -186,3 +187,15 @@
 - `demo`、`template`、`community` 的活跃 Razor 标签不使用旧组件标签。
 - 不新增兼容包装、继承别名或旧包入口。
 - 扫描旧组件 API 名称时，活跃代码应无命中；业务实体命名不属于组件清理范围。
+
+## Element Plus X / AI 组件线
+
+路线入口：[`docs/x-component-roadmap.md`](docs/x-component-roadmap.md)。
+
+本路线用于承接 `element-plus-x/Element-Plus-X` 与 `element-plus-x/ruoyi-element-ai` 的 Blazor 复刻工作：
+
+- 组件入口统一为 `ElX*`，支撑模型/服务统一为 `X*` / `ElementX*`。
+- 首批组件矩阵包含 `ElXTypewriter`、`ElXBubble`、`ElXBubbleList`、`ElXConversations`、`ElXWelcome`、`ElXPrompts`、`ElXFilesCard`、`ElXAttachments`、`ElXSender`、`ElXMentionSender`、`ElXThinking`、`ElXThoughtChain`。
+- `demo` 必须使用这些复刻组件搭建 AI 模板演示，默认离线可运行，再可选接真实后端。
+- 演示站首页和整体文档风格对齐 `https://v2.element-plus-x.com/zh/`，但只用本项目 Blazor/CSS 实现。
+- 禁止新增 Vue、Element Plus、Element Plus X npm 包、第三方 UI 组件库或外部前端运行时依赖。

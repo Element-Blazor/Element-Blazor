@@ -1,0 +1,47 @@
+@inherits ElementComponentBase
+
+<nav class="@ConversationsClass" style="@Style" @attributes="Attributes">
+    @if (Header != null)
+    {
+        <div class="el-x-conversations__header">@Header</div>
+    }
+    @foreach (var group in GroupedItems)
+    {
+        @if (!string.IsNullOrWhiteSpace(group.Key))
+        {
+            <div class="el-x-conversations__group">@group.Key</div>
+        }
+        @foreach (var item in group)
+        {
+            var active = IsActive(item);
+            <button type="button"
+                    class="@GetItemClass(item, active)"
+                    disabled="@item.Disabled"
+                    aria-current="@(active ? "page" : null)"
+                    @onclick="() => SelectAsync(item)">
+                <span class="el-x-conversations__icon">
+                    <ElIcon Name="@(item.Icon ?? "chat-dot-round")" />
+                </span>
+                <span class="el-x-conversations__body">
+                    <span class="el-x-conversations__title">@item.Title</span>
+                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        <span class="el-x-conversations__description">@item.Description</span>
+                    }
+                </span>
+                @if (item.Pinned)
+                {
+                    <span class="el-x-conversations__pin">Pin</span>
+                }
+                @if (item.Extra != null)
+                {
+                    <span class="el-x-conversations__extra">@item.Extra</span>
+                }
+            </button>
+        }
+    }
+    @if (Footer != null)
+    {
+        <div class="el-x-conversations__footer">@Footer</div>
+    }
+</nav>

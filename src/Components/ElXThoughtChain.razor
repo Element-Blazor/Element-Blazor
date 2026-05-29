@@ -1,0 +1,28 @@
+@inherits ElementComponentBase
+
+<div class="@ThoughtChainClass" style="@Style" @attributes="Attributes">
+    <ElTimeline>
+        @foreach (var item in Items ?? Enumerable.Empty<XThoughtItem>())
+        {
+            <ElTimelineItem Timestamp="@item.Duration" Icon="@item.Icon" Type="@item.Type">
+                <div class="el-x-thought-chain__item">
+                    <div class="el-x-thought-chain__title">
+                        <span>@item.Title</span>
+                        @if (!string.IsNullOrWhiteSpace(item.Status))
+                        {
+                            <ElTag Size="@TagSize.Small">@item.Status</ElTag>
+                        }
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                    {
+                        <p>@item.Description</p>
+                    }
+                    @if (item.Content != null && item.Expanded)
+                    {
+                        <div class="el-x-thought-chain__content">@item.Content</div>
+                    }
+                </div>
+            </ElTimelineItem>
+        }
+    </ElTimeline>
+</div>

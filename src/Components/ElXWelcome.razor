@@ -1,0 +1,36 @@
+@inherits ElementComponentBase
+
+<section class="@WelcomeClass" style="@Style" @attributes="Attributes">
+    @if (IconContent != null || !string.IsNullOrWhiteSpace(Icon) || !string.IsNullOrWhiteSpace(Avatar))
+    {
+        <div class="el-x-welcome__icon">
+            @if (IconContent != null)
+            {
+                @IconContent
+            }
+            else if (!string.IsNullOrWhiteSpace(Avatar))
+            {
+                <ElAvatar Src="@Avatar" Alt="@Title" CustomSize="56" />
+            }
+            else
+            {
+                <ElIcon Name="@Icon" Size="28" />
+            }
+        </div>
+    }
+    <div class="el-x-welcome__body">
+        <h2>@Title</h2>
+        @if (!string.IsNullOrWhiteSpace(Description))
+        {
+            <p>@Description</p>
+        }
+        @if (ChildContent != null)
+        {
+            <div class="el-x-welcome__content">@ChildContent</div>
+        }
+        @if (Actions != null)
+        {
+            <div class="el-x-welcome__actions">@Actions</div>
+        }
+    </div>
+</section>

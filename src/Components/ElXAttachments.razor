@@ -1,0 +1,35 @@
+@inherits ElementComponentBase
+
+<div class="@AttachmentsClass" style="@Style" @attributes="Attributes">
+    @if (!Readonly)
+    {
+        <ElUpload Url="@UploadUrl"
+                  AutoUpload="@AutoUpload"
+                  Multiple="@Multiple"
+                  Limit="@Limit"
+                  Accept="@Accept"
+                  Drag="@Drag"
+                  ShowFileList="false"
+                  OnChange="HandleUploadChangeAsync">
+            <ChildContent>
+                @if (UploadContent != null)
+                {
+                    @UploadContent
+                }
+                else
+                {
+                    <ElButton Type="@ButtonType.Primary" Plain="true" Icon="el-icon-paperclip">Attach</ElButton>
+                }
+            </ChildContent>
+        </ElUpload>
+    }
+    @if (Items != null && Items.Any())
+    {
+        <div class="el-x-attachments__list">
+            @foreach (var item in Items)
+            {
+                <ElXFilesCard File="@item" OnRemove="RemoveAsync" OnPreview="PreviewAsync" />
+            }
+        </div>
+    }
+</div>
