@@ -943,3 +943,32 @@ div.el-form-item div.el-select {
   align-items: center;
   margin-top: 16px;
 }
+
+.el-watermark {
+  position: relative;
+  overflow: hidden;
+}
+
+.el-watermark__mask {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+.demo-watermark__panel {
+  min-height: 220px;
+  padding: 24px;
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
+  background: var(--el-bg-color, #fff);
+}
+
+.demo-watermark__image {
+  min-height: 180px;
+  margin-top: 16px;
+  padding: 24px;
+  border: 1px dashed var(--el-border-color, #dcdfe6);
+  border-radius: 4px;
+  background: var(--el-fill-color-lighter, #fafafa);
+}

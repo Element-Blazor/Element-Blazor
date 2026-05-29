@@ -177,7 +177,7 @@
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
 | Divider | `ElDivider` | 🟢 已对齐 | 已实现 direction、content-position、border-style。 |
-| Watermark | 缺少 `ElWatermark` | 🔴 缺失 | 实现水印文本、图片、层级和容器。 |
+| Watermark | `ElWatermark` | 🟢 已对齐 | 已实现文本/多行文本、图片水印、宽高、旋转、层级、间距、偏移、字体配置和容器插槽，并补充组件测试与示例。 |
 
 ## P2 验收口径
 
