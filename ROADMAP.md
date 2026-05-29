@@ -121,27 +121,27 @@
 | --- | --- | --- | --- |
 | Avatar | `ElAvatar` | 🟢 已对齐 | 已实现图片、图标、文字、尺寸、形状、fit 和组件测试。 |
 | Badge | `ElBadge` | 🟢 已对齐 | 已补 max、dot、hidden、offset、slot 和组件测试。 |
-| Calendar | 缺少 `ElCalendar` | 🔴 缺失 | 实现日期单元格模板和月份切换。 |
+| Calendar | `ElCalendar`、`CalendarDateContext` | 🟢 已对齐 | 已实现日期单元格模板、月份切换、选择事件和组件测试。 |
 | Card | `ElCard` | 🟢 已对齐 | 已补 body-style、hover shadow、header/body/footer 插槽和组件测试。 |
-| Carousel | 缺少 `ElCarousel` | 🔴 缺失 | 实现轮播、指示器、箭头和 autoplay。 |
-| Collapse | 缺少 `ElCollapse` | 🔴 缺失 | 实现折叠面板和手风琴模式。 |
+| Carousel | `ElCarousel`、`ElCarouselItem` | 🟢 已对齐 | 已实现轮播项、指示器、箭头、autoplay 和组件测试。 |
+| Collapse | `ElCollapse`、`ElCollapseItem` | 🟢 已对齐 | 已实现折叠面板、手风琴模式、禁用和键盘触发。 |
 | Descriptions | `ElDescriptions`、`ElDescriptionsItem` | 🟢 已对齐 | 已实现描述列表、边框、列数、方向、插槽和组件测试。 |
 | Empty | `ElEmpty` | 🟢 已对齐 | 已提供公开空状态组件，支持图片、描述和底部插槽。 |
-| Image | 缺少 `ElImage` | 🔴 缺失 | 实现 fit、lazy、preview 和错误占位。 |
+| Image | `ElImage` | 🟢 已对齐 | 已实现 fit、lazy、preview、错误占位和组件测试。 |
 | Infinite Scroll | 缺少公开能力 | 🔴 缺失 | 设计 Blazor 事件指令或组件包装。 |
-| Pagination | `ElPagination` | 🟡 部分对齐 | 补齐布局、尺寸、背景、跳转和页大小。 |
+| Pagination | `ElPagination` | 🟢 已对齐 | 已补齐 layout、sizes、jumper、total、尺寸、背景和组件测试。 |
 | Progress | `ElProgress`、`ProgressType`、`ProgressStatus` | 🟢 已对齐 | 已实现 line、circle、dashboard、状态、颜色和组件测试。 |
 | Result | `ElResult`、`ResultIcon` | 🟢 已对齐 | 已实现图标、标题、描述、extra 和组件测试。 |
 | Skeleton | `ElSkeleton`、`ElSkeletonItem` | 🟢 已对齐 | 已实现骨架屏、模板、loading、animated 和组件测试。 |
 | Table | `ElTable` 与列组件 | 🟡 部分对齐 | 补齐排序、过滤、固定列、展开、树形、汇总和虚拟化边界。 |
 | Virtualized Table | 缺少 `ElTableV2` | 🔴 缺失 | 设计虚拟表格架构。 |
-| Tag | `ElTag` | 🟡 部分对齐 | 补 effect、round、hit、disable-transitions 和事件命名。 |
+| Tag | `ElTag` | 🟢 已对齐 | 已补 effect、round、hit、disable-transitions、close 事件别名和组件测试。 |
 | Timeline | `ElTimeline`、`ElTimelineItem` | 🟢 已对齐 | 已实现时间线、时间戳、图标、自定义节点和组件测试。 |
 | Tour | 缺少 `ElTour` | 🔴 缺失 | 实现引导步骤、遮罩和定位。 |
 | Tree | `ElTree`、`ElTreeItem` | 🟡 部分对齐 | 补懒加载、过滤、勾选、拖拽和节点模板。 |
 | Virtualized Tree | 缺少 `ElTreeV2` | 🔴 缺失 | 设计虚拟树。 |
 | Statistic | `ElStatistic`、`ElCountdown` | 🟢 已对齐 | 已实现数字格式、前后缀、倒计时扩展和组件测试。 |
-| Segmented | 缺少 `ElSegmented` | 🔴 缺失 | 实现分段控制器。 |
+| Segmented | `ElSegmented<TValue>`、`SegmentedOption` | 🟢 已对齐 | 已实现分段控制器、禁用、block、尺寸和组件测试。 |
 
 ### Navigation 导航
 

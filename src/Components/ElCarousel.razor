@@ -1,0 +1,31 @@
+@inherits ElementComponentBase
+@implements IDisposable
+
+<div class="@CarouselClass" style="@CarouselStyle" @onmouseenter="PauseTimer" @onmouseleave="ResumeTimer" @attributes="Attributes">
+    <div class="el-carousel__container" style="@ContainerStyle">
+        <CascadingValue Value="@this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+        @if (ShowArrows)
+        {
+            <button type="button" class="el-carousel__arrow el-carousel__arrow--left" @onclick="ShowPreviousAsync">
+                <i class="el-icon-arrow-left"></i>
+            </button>
+            <button type="button" class="el-carousel__arrow el-carousel__arrow--right" @onclick="ShowNextAsync">
+                <i class="el-icon-arrow-right"></i>
+            </button>
+        }
+    </div>
+    @if (IndicatorPosition != CarouselIndicatorPosition.None && Items.Count > 1)
+    {
+        <ul class="@IndicatorsClass">
+            @for (var i = 0; i < Items.Count; i++)
+            {
+                var index = i;
+                <li class="@GetIndicatorClass(index)">
+                    <button type="button" class="el-carousel__button" @onclick="() => SetActiveIndexAsync(index)"></button>
+                </li>
+            }
+        </ul>
+    }
+</div>

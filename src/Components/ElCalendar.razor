@@ -1,0 +1,55 @@
+@inherits ElementComponentBase
+
+<div class="@CalendarClass" style="@Style" @attributes="Attributes">
+    <div class="el-calendar__header">
+        <div class="el-calendar__title">
+            @if (Header != null)
+            {
+                @Header(ViewDate)
+            }
+            else
+            {
+                @Title
+            }
+        </div>
+        <div class="el-calendar__button-group">
+            <button type="button" class="el-button el-button--mini" @onclick="SelectPreviousMonthAsync">上个月</button>
+            <button type="button" class="el-button el-button--mini" @onclick="SelectTodayAsync">今天</button>
+            <button type="button" class="el-button el-button--mini" @onclick="SelectNextMonthAsync">下个月</button>
+        </div>
+    </div>
+    <div class="el-calendar__body">
+        <table cellspacing="0" cellpadding="0" class="el-calendar-table">
+            <thead>
+                <tr>
+                    @foreach (var day in WeekDays)
+                    {
+                        <th>@day</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var week in Weeks)
+                {
+                    <tr class="el-calendar-table__row">
+                        @foreach (var context in week)
+                        {
+                            <td class="@GetCellClass(context)" @onclick="() => SelectDateAsync(context.Date)">
+                                <div class="el-calendar-day">
+                                    @if (DateCell != null)
+                                    {
+                                        @DateCell(context)
+                                    }
+                                    else
+                                    {
+                                        @context.Date.Day
+                                    }
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+@inherits ElementComponentBase
+
+<div class="@ItemClass" style="@Style" @attributes="Attributes">
+    <div class="@HeaderClass" role="tab" aria-expanded="@IsActiveText" aria-disabled="@Disabled.ToString().ToLower()" tabindex="@(Disabled ? -1 : 0)" @onclick="ToggleAsync" @onkeydown="OnKeyDownAsync">
+        @if (TitleContent != null)
+        {
+            @TitleContent
+        }
+        else
+        {
+            @Title
+        }
+        <i class="el-collapse-item__arrow el-icon-arrow-right"></i>
+    </div>
+    <div class="el-collapse-item__wrap" style="@WrapStyle" role="tabpanel">
+        <div class="el-collapse-item__content">
+            @ChildContent
+        </div>
+    </div>
+</div>

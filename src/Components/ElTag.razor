@@ -4,7 +4,10 @@
 {
     return;
 }
-<span class="@tagCssBuilder.ToString()" @onclick="OnTagClick" style="@tagStyleBuilder.ToString()">
+<span class="@tagCssBuilder.ToString() @FeatureClass" @onclick="OnTagClick" style="@tagStyleBuilder.ToString()" @attributes="Attributes">
     @ChildContent
-    <i class="@iconCssBuilder.ToString()" @onclick:stopPropagation="true" @onclick="OnCloseClick"></i>
+    @if (Closable)
+    {
+        <i class="@iconCssBuilder.ToString()" @onclick:stopPropagation="true" @onclick="OnCloseClick"></i>
+    }
 </span>

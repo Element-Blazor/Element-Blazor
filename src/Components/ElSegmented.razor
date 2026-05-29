@@ -1,0 +1,22 @@
+@typeparam TValue
+@inherits ElementComponentBase
+
+<div class="@SegmentedClass" style="@Style" role="radiogroup" @attributes="Attributes">
+    @foreach (var option in ResolvedOptions)
+    {
+        var selected = IsSelected(option);
+        <label class="@GetItemClass(option, selected)">
+            <input class="el-segmented__input" type="radio" value="@option.Value" checked="@selected" disabled="@option.Disabled" @onchange="() => SelectAsync(option)" />
+            <span class="el-segmented__item-label">
+                @if (option.Content != null)
+                {
+                    @option.Content
+                }
+                else
+                {
+                    @option.Label
+                }
+            </span>
+        </label>
+    }
+</div>

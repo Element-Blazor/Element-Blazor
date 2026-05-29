@@ -1,0 +1,7 @@
+@inherits ElementComponentBase
+
+<div class="@CollapseClass" style="@Style" role="tablist" @attributes="Attributes">
+    <CascadingValue Value="@this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>
