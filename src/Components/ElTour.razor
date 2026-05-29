@@ -1,0 +1,50 @@
+@inherits ElementComponentBase
+
+@if (ModelValue && ActiveStep != null)
+{
+    <div class="@TourClass" style="@Style" @attributes="Attributes">
+        @if (Mask)
+        {
+            <div class="el-tour__mask" @onclick="CloseAsync"></div>
+        }
+        <div class="@PanelClass">
+            <button type="button" class="el-tour__close" @onclick="CloseAsync">
+                <i class="el-icon-close"></i>
+            </button>
+            <div class="el-tour__header">
+                @if (Header != null)
+                {
+                    @Header(ActiveStep)
+                }
+                else
+                {
+                    <div class="el-tour__title">@ActiveStep.Title</div>
+                }
+            </div>
+            <div class="el-tour__body">
+                @if (ActiveStep.Content != null)
+                {
+                    @ActiveStep.Content
+                }
+                else
+                {
+                    @ActiveStep.Description
+                }
+            </div>
+            <div class="el-tour__footer">
+                <span class="el-tour__counter">@(Current + 1) / @StepList.Count</span>
+                <div class="el-tour__actions">
+                    <button type="button" class="el-button el-button--mini" disabled="@(Current == 0)" @onclick="PreviousAsync">上一步</button>
+                    @if (Current >= StepList.Count - 1)
+                    {
+                        <button type="button" class="el-button el-button--mini el-button--primary" @onclick="CloseAsync">完成</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="el-button el-button--mini el-button--primary" @onclick="NextAsync">下一步</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

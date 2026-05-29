@@ -22,6 +22,10 @@ namespace Element
         [TableIgnore]
         public virtual bool Expanded { get; set; }
         [TableIgnore]
+        public virtual bool Checked { get; set; }
+        [TableIgnore]
+        public virtual bool Disabled { get; set; }
+        [TableIgnore]
         public virtual string Text { get; set; }
         [TableIgnore]
         public virtual List<TreeItemBase> Children { get; set; }

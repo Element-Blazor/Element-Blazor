@@ -1,0 +1,68 @@
+@inherits ElementComponentBase
+
+<div class="@TableClass" style="@TableStyle" role="table" @attributes="Attributes">
+    <div class="el-table-v2__header" role="rowgroup">
+        <div class="el-table-v2__row el-table-v2__header-row" role="row">
+            @if (ExpandContent != null)
+            {
+                <div class="el-table-v2__cell el-table-v2__expand-column" role="columnheader"></div>
+            }
+            @foreach (var column in Columns)
+            {
+                <div class="el-table-v2__cell el-table-v2__header-cell" role="columnheader" style="@GetColumnStyle(column)">
+                    @column.Title
+                </div>
+            }
+        </div>
+    </div>
+    <div class="el-table-v2__body" role="rowgroup">
+        @foreach (var row in VisibleRows)
+        {
+            <div class="el-table-v2__row" role="row">
+                @if (ExpandContent != null)
+                {
+                    <div class="el-table-v2__cell el-table-v2__expand-column">
+                        <span class="el-table__expand-icon @(ExpandedRows.Contains(row) ? "el-table__expand-icon--expanded" : string.Empty)" @onclick="() => ToggleExpand(row)">
+                            <i class="el-icon-arrow-right"></i>
+                        </span>
+                    </div>
+                }
+                @foreach (var column in Columns)
+                {
+                    <div class="el-table-v2__cell" role="cell" style="@GetColumnStyle(column)">
+                        @if (column.Template != null)
+                        {
+                            @column.Template(row)
+                        }
+                        else
+                        {
+                            @column.GetValue(row)
+                        }
+                    </div>
+                }
+            </div>
+            @if (ExpandContent != null && ExpandedRows.Contains(row))
+            {
+                <div class="el-table-v2__expanded-row">
+                    @ExpandContent(row)
+                </div>
+            }
+        }
+        @if (ShowSummary)
+        {
+            <div class="el-table-v2__row el-table-v2__summary-row" role="row">
+                @if (ExpandContent != null)
+                {
+                    <div class="el-table-v2__cell"></div>
+                }
+                @for (var i = 0; i < Columns.Count; i++)
+                {
+                    var column = Columns[i];
+                    <div class="el-table-v2__cell" role="cell" style="@GetColumnStyle(column)">
+                        @GetSummaryCell(column, i)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

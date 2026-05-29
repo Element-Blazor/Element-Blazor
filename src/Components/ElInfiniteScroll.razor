@@ -1,0 +1,31 @@
+@inherits ElementComponentBase
+
+<div class="@ScrollClass" style="@ScrollStyle" @onscroll="OnScrollAsync" @attributes="Attributes">
+    @ChildContent
+    @if (Loading)
+    {
+        <div class="el-infinite-scroll__loading">
+            @if (LoadingContent != null)
+            {
+                @LoadingContent
+            }
+            else
+            {
+                @LoadingText
+            }
+        </div>
+    }
+    @if (Disabled)
+    {
+        <div class="el-infinite-scroll__disabled">
+            @if (DisabledContent != null)
+            {
+                @DisabledContent
+            }
+            else
+            {
+                @DisabledText
+            }
+        </div>
+    }
+</div>
