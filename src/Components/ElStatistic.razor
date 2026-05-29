@@ -1,0 +1,48 @@
+@inherits ElementComponentBase
+
+<div class="@StatisticClass" style="@Style" @attributes="Attributes">
+    @if (TitleContent != null || !string.IsNullOrWhiteSpace(Title))
+    {
+        <div class="el-statistic__head">
+            @if (TitleContent != null)
+            {
+                @TitleContent
+            }
+            else
+            {
+                @Title
+            }
+        </div>
+    }
+    <div class="el-statistic__content">
+        @if (Prefix != null || !string.IsNullOrWhiteSpace(PrefixText))
+        {
+            <span class="el-statistic__prefix">
+                @if (Prefix != null)
+                {
+                    @Prefix
+                }
+                else
+                {
+                    @PrefixText
+                }
+            </span>
+        }
+        <span class="el-statistic__number" style="@ValueStyle">
+            @DisplayValue
+        </span>
+        @if (Suffix != null || !string.IsNullOrWhiteSpace(SuffixText))
+        {
+            <span class="el-statistic__suffix">
+                @if (Suffix != null)
+                {
+                    @Suffix
+                }
+                else
+                {
+                    @SuffixText
+                }
+            </span>
+        }
+    </div>
+</div>

@@ -1,0 +1,102 @@
+@inherits ElementComponentBase
+
+<CascadingValue Value="@this" IsFixed="true">
+    @ChildContent
+</CascadingValue>
+
+<div class="@DescriptionsClass" style="@Style" @attributes="Attributes">
+    @if (TitleContent != null || Extra != null || !string.IsNullOrWhiteSpace(Title))
+    {
+        <div class="el-descriptions__header">
+            <div class="el-descriptions__title">
+                @if (TitleContent != null)
+                {
+                    @TitleContent
+                }
+                else
+                {
+                    @Title
+                }
+            </div>
+            @if (Extra != null)
+            {
+                <div class="el-descriptions__extra">
+                    @Extra
+                </div>
+            }
+        </div>
+    }
+    <div class="el-descriptions__body">
+        @if (Border)
+        {
+            <table class="el-descriptions__table">
+                <tbody>
+                    @foreach (var row in Rows)
+                    {
+                        if (Direction == DescriptionsDirection.Vertical)
+                        {
+                            <tr class="el-descriptions__row">
+                                @foreach (var item in row)
+                                {
+                                    <th class="@item.LabelClassValue" colspan="@item.NormalizedSpan">
+                                        @item.RenderLabel()
+                                    </th>
+                                }
+                            </tr>
+                            <tr class="el-descriptions__row">
+                                @foreach (var item in row)
+                                {
+                                    <td class="@item.ContentClassValue" colspan="@item.NormalizedSpan">
+                                        @item.ChildContent
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="el-descriptions__row">
+                                @foreach (var item in row)
+                                {
+                                    <th class="@item.LabelClassValue">
+                                        @item.RenderLabel()
+                                    </th>
+                                    <td class="@item.ContentClassValue" colspan="@(item.NormalizedSpan * 2 - 1)">
+                                        @item.ChildContent
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="el-descriptions__content" style="@ContentStyle">
+                @foreach (var item in Items)
+                {
+                    <div class="@item.CellClassValue" style="@item.CellStyleValue">
+                        @if (Direction == DescriptionsDirection.Vertical)
+                        {
+                            <div class="@item.LabelClassValue">
+                                @item.RenderLabel()
+                            </div>
+                            <div class="@item.ContentClassValue">
+                                @item.ChildContent
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="@item.LabelClassValue">
+                                @item.RenderLabel()
+                            </span>
+                            <span class="@item.ContentClassValue">
+                                @item.ChildContent
+                            </span>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

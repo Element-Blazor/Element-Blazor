@@ -1,0 +1,40 @@
+@inherits ElementComponentBase
+
+<div class="@ProgressClass" style="@Style" role="progressbar" aria-valuenow="@Percentage" aria-valuemin="0" aria-valuemax="100" @attributes="Attributes">
+    @if (Type == ProgressType.Line)
+    {
+        <div class="el-progress-bar">
+            <div class="el-progress-bar__outer" style="@OuterStyle">
+                <div class="el-progress-bar__inner" style="@InnerStyle">
+                    @if (ShowText && TextInside)
+                    {
+                        <div class="el-progress-bar__innerText">
+                            @TextContent
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @if (ShowText && !TextInside)
+        {
+            <div class="el-progress__text" style="@TextStyle">
+                @TextContent
+            </div>
+        }
+    }
+    else
+    {
+        <div class="el-progress-circle" style="@CircleStyle">
+            <svg viewBox="0 0 100 100">
+                <path class="el-progress-circle__track" d="@TrackPath" stroke="@TrackColor" stroke-width="@StrokeWidth" fill="none" />
+                <path class="el-progress-circle__path" d="@TrackPath" stroke="@StrokeColorValue" stroke-width="@StrokeWidth" fill="none" stroke-linecap="@StrokeLinecap" style="@CirclePathStyle" />
+            </svg>
+        </div>
+        @if (ShowText)
+        {
+            <div class="el-progress__text" style="@TextStyle">
+                @TextContent
+            </div>
+        }
+    }
+</div>

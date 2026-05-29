@@ -1,0 +1,33 @@
+@inherits ElementComponentBase
+
+<li class="@ItemClass" style="@Style" @attributes="Attributes">
+    <div class="@TailClass"></div>
+    <div class="@NodeClass" style="@NodeStyle">
+        @if (Dot != null)
+        {
+            @Dot
+        }
+        else if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <i class="@IconClass"></i>
+        }
+    </div>
+    <div class="el-timeline-item__wrapper">
+        @if (!string.IsNullOrWhiteSpace(Timestamp) || TimestampContent != null)
+        {
+            <div class="@TimestampClass">
+                @if (TimestampContent != null)
+                {
+                    @TimestampContent
+                }
+                else
+                {
+                    @Timestamp
+                }
+            </div>
+        }
+        <div class="el-timeline-item__content">
+            @ChildContent
+        </div>
+    </div>
+</li>

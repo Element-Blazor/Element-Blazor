@@ -9,7 +9,13 @@
         }
     }
 
-    <div class="@bodyClassBuilder">
+    <div class="@bodyClassBuilder" style="@BodyStyle">
         @Body
     </div>
+    @if (Footer != null)
+    {
+        <div class="el-card__footer">
+            @Footer
+        </div>
+    }
 </div>

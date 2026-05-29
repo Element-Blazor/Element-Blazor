@@ -1,9 +1,15 @@
 @inherits ElementComponentBase
-<div class="el-badge">
+<div class="@BadgeClass" style="@Style" @attributes="Attributes">
     <CascadingValue Value="this">
         @ChildContent
-        <sup class="el-badge__content el-badge__content--@(Type.ToString().ToLower()) is-fixed">
-            @Value
-        </sup>
+        @if (!Hidden)
+        {
+            <sup class="@ContentClass" style="@ContentStyle">
+                @if (!IsDot)
+                {
+                    @DisplayValue
+                }
+            </sup>
+        }
     </CascadingValue>
 </div>

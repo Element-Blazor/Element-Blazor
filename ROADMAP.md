@@ -119,28 +119,28 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Avatar | 缺少 `ElAvatar` | 🔴 缺失 | 实现图片、图标、文字、尺寸和形状。 |
-| Badge | `ElBadge` | 🟡 部分对齐 | 补 max、dot、hidden、offset、slot。 |
+| Avatar | `ElAvatar` | 🟢 已对齐 | 已实现图片、图标、文字、尺寸、形状、fit 和组件测试。 |
+| Badge | `ElBadge` | 🟢 已对齐 | 已补 max、dot、hidden、offset、slot 和组件测试。 |
 | Calendar | 缺少 `ElCalendar` | 🔴 缺失 | 实现日期单元格模板和月份切换。 |
-| Card | `ElCard` | 🟡 部分对齐 | 补 body-style、shadow、header/footer 插槽。 |
+| Card | `ElCard` | 🟢 已对齐 | 已补 body-style、hover shadow、header/body/footer 插槽和组件测试。 |
 | Carousel | 缺少 `ElCarousel` | 🔴 缺失 | 实现轮播、指示器、箭头和 autoplay。 |
 | Collapse | 缺少 `ElCollapse` | 🔴 缺失 | 实现折叠面板和手风琴模式。 |
-| Descriptions | 缺少 `ElDescriptions` | 🔴 缺失 | 实现描述列表、边框、列数和响应式。 |
-| Empty | 仅有内部 `EmptyRender` | 🔴 缺失 | 提供公开 `ElEmpty`。 |
+| Descriptions | `ElDescriptions`、`ElDescriptionsItem` | 🟢 已对齐 | 已实现描述列表、边框、列数、方向、插槽和组件测试。 |
+| Empty | `ElEmpty` | 🟢 已对齐 | 已提供公开空状态组件，支持图片、描述和底部插槽。 |
 | Image | 缺少 `ElImage` | 🔴 缺失 | 实现 fit、lazy、preview 和错误占位。 |
 | Infinite Scroll | 缺少公开能力 | 🔴 缺失 | 设计 Blazor 事件指令或组件包装。 |
 | Pagination | `ElPagination` | 🟡 部分对齐 | 补齐布局、尺寸、背景、跳转和页大小。 |
-| Progress | 缺少 `ElProgress` | 🔴 缺失 | 实现 line、circle、dashboard 和状态。 |
-| Result | 缺少 `ElResult` | 🔴 缺失 | 实现图标、标题、描述和 extra。 |
-| Skeleton | 缺少 `ElSkeleton` | 🔴 缺失 | 实现骨架屏、模板和 loading。 |
+| Progress | `ElProgress`、`ProgressType`、`ProgressStatus` | 🟢 已对齐 | 已实现 line、circle、dashboard、状态、颜色和组件测试。 |
+| Result | `ElResult`、`ResultIcon` | 🟢 已对齐 | 已实现图标、标题、描述、extra 和组件测试。 |
+| Skeleton | `ElSkeleton`、`ElSkeletonItem` | 🟢 已对齐 | 已实现骨架屏、模板、loading、animated 和组件测试。 |
 | Table | `ElTable` 与列组件 | 🟡 部分对齐 | 补齐排序、过滤、固定列、展开、树形、汇总和虚拟化边界。 |
 | Virtualized Table | 缺少 `ElTableV2` | 🔴 缺失 | 设计虚拟表格架构。 |
 | Tag | `ElTag` | 🟡 部分对齐 | 补 effect、round、hit、disable-transitions 和事件命名。 |
-| Timeline | 缺少 `ElTimeline` | 🔴 缺失 | 实现时间线和节点插槽。 |
+| Timeline | `ElTimeline`、`ElTimelineItem` | 🟢 已对齐 | 已实现时间线、时间戳、图标、自定义节点和组件测试。 |
 | Tour | 缺少 `ElTour` | 🔴 缺失 | 实现引导步骤、遮罩和定位。 |
 | Tree | `ElTree`、`ElTreeItem` | 🟡 部分对齐 | 补懒加载、过滤、勾选、拖拽和节点模板。 |
 | Virtualized Tree | 缺少 `ElTreeV2` | 🔴 缺失 | 设计虚拟树。 |
-| Statistic | 缺少 `ElStatistic` | 🔴 缺失 | 实现数字格式、前后缀和倒计时扩展。 |
+| Statistic | `ElStatistic`、`ElCountdown` | 🟢 已对齐 | 已实现数字格式、前后缀、倒计时扩展和组件测试。 |
 | Segmented | 缺少 `ElSegmented` | 🔴 缺失 | 实现分段控制器。 |
 
 ### Navigation 导航

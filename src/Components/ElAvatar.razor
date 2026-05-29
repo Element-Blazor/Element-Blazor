@@ -1,0 +1,20 @@
+@inherits ElementComponentBase
+
+<span class="@AvatarClass" style="@AvatarStyle" @attributes="Attributes">
+    @if (!string.IsNullOrWhiteSpace(Src))
+    {
+        <img src="@Src" alt="@Alt" style="@ImageStyle" />
+    }
+    else if (IconContent != null)
+    {
+        @IconContent
+    }
+    else if (!string.IsNullOrWhiteSpace(Icon))
+    {
+        <i class="@IconClass"></i>
+    }
+    else
+    {
+        @ChildContent
+    }
+</span>

@@ -1,0 +1,47 @@
+@inherits ElementComponentBase
+
+<div class="@EmptyClass" style="@Style" @attributes="Attributes">
+    <div class="el-empty__image" style="@ImageStyle">
+        @if (ImageContent != null)
+        {
+            @ImageContent
+        }
+        else if (!string.IsNullOrWhiteSpace(Image))
+        {
+            <img src="@Image" alt="@Description" />
+        }
+        else
+        {
+            <svg viewBox="0 0 79 86" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="@GradientId" x1="38.85%" y1="0%" x2="61.15%" y2="100%">
+                        <stop stop-color="#FCFCFD" offset="0%" />
+                        <stop stop-color="#EEEFF3" offset="100%" />
+                    </linearGradient>
+                </defs>
+                <g fill="none" fill-rule="evenodd">
+                    <path d="M78.19 45.85c0 14.94-17.5 27.06-39.1 27.06S0 60.79 0 45.85c0-14.95 17.5-27.07 39.1-27.07s39.09 12.12 39.09 27.07z" fill="#F5F7FA" />
+                    <path d="M13 25h53v37H13z" fill="url(#@GradientId)" />
+                    <path d="M22 18h35l9 7H13z" fill="#EBEEF5" />
+                    <path d="M23 38h33M23 49h24" stroke="#DCDFE6" stroke-width="2" stroke-linecap="round" />
+                </g>
+            </svg>
+        }
+    </div>
+    <div class="el-empty__description">
+        @if (DescriptionContent != null)
+        {
+            @DescriptionContent
+        }
+        else
+        {
+            <p>@Description</p>
+        }
+    </div>
+    @if (ChildContent != null)
+    {
+        <div class="el-empty__bottom">
+            @ChildContent
+        </div>
+    }
+</div>

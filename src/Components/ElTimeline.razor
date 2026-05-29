@@ -1,0 +1,7 @@
+@inherits ElementComponentBase
+
+<ul class="@TimelineClass" style="@Style" @attributes="Attributes">
+    <CascadingValue Value="@this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</ul>

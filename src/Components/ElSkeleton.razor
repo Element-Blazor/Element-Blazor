@@ -1,0 +1,25 @@
+@inherits ElementComponentBase
+
+@if (!Loading)
+{
+    @ChildContent
+}
+else
+{
+    <div class="@SkeletonClass" style="@Style" @attributes="Attributes">
+        @for (var i = 0; i < SafeCount; i++)
+        {
+            @if (Template != null)
+            {
+                @Template
+            }
+            else
+            {
+                <div class="el-skeleton__item el-skeleton__p"></div>
+                <div class="el-skeleton__item el-skeleton__p is-first"></div>
+                <div class="el-skeleton__item el-skeleton__p"></div>
+                <div class="el-skeleton__item el-skeleton__p is-last"></div>
+            }
+        }
+    </div>
+}

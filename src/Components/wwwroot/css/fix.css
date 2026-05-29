@@ -6,6 +6,255 @@
     position: relative;
 }
 
+.el-card__footer {
+    padding: 18px 20px;
+    border-top: 1px solid #EBEEF5;
+    box-sizing: border-box;
+}
+
+.el-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.el-empty__image {
+    width: 160px;
+}
+
+.el-empty__image img,
+.el-empty__image svg {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.el-empty__description {
+    margin-top: 20px;
+    color: #909399;
+}
+
+.el-empty__description p {
+    margin: 0;
+}
+
+.el-empty__bottom {
+    margin-top: 20px;
+}
+
+.el-descriptions {
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #303133;
+}
+
+.el-descriptions__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.el-descriptions__title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.el-descriptions__body {
+    color: #606266;
+}
+
+.el-descriptions__content {
+    display: grid;
+    gap: 16px 24px;
+}
+
+.el-descriptions__cell {
+    box-sizing: border-box;
+}
+
+.el-descriptions__label {
+    color: #909399;
+    font-weight: 400;
+}
+
+.el-descriptions__content .el-descriptions__label {
+    margin-right: 8px;
+}
+
+.el-descriptions__content .el-descriptions__cell > .el-descriptions__label {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 8px;
+}
+
+.el-descriptions__table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.el-descriptions__table .el-descriptions__cell,
+.el-descriptions__table .el-descriptions__label,
+.el-descriptions__table .el-descriptions__content {
+    padding: 12px 16px;
+    border: 1px solid #EBEEF5;
+}
+
+.el-descriptions__table .el-descriptions__label {
+    background: #FAFAFA;
+    color: #909399;
+}
+
+.el-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.el-result__icon {
+    font-size: 64px;
+    line-height: 1;
+}
+
+.el-result-icon--success {
+    color: #67C23A;
+}
+
+.el-result-icon--warning {
+    color: #E6A23C;
+}
+
+.el-result-icon--error {
+    color: #F56C6C;
+}
+
+.el-result-icon--info {
+    color: #909399;
+}
+
+.el-result__title {
+    margin-top: 20px;
+    color: #303133;
+    font-size: 20px;
+}
+
+.el-result__title p,
+.el-result__subtitle p {
+    margin: 0;
+}
+
+.el-result__subtitle {
+    margin-top: 10px;
+    color: #606266;
+    font-size: 14px;
+}
+
+.el-result__extra {
+    margin-top: 30px;
+}
+
+.el-skeleton {
+    width: 100%;
+}
+
+.el-skeleton__item {
+    display: block;
+    width: 100%;
+    height: 16px;
+    margin-top: 16px;
+    border-radius: 4px;
+    background: #F2F2F2;
+}
+
+.el-skeleton__item:first-child {
+    margin-top: 0;
+}
+
+.el-skeleton__p.is-first {
+    width: 33%;
+}
+
+.el-skeleton__p.is-last {
+    width: 61%;
+}
+
+.el-skeleton__h1 {
+    height: 20px;
+}
+
+.el-skeleton__h3 {
+    height: 18px;
+}
+
+.el-skeleton__caption {
+    height: 12px;
+}
+
+.el-skeleton__button {
+    width: 64px;
+    height: 40px;
+}
+
+.el-skeleton__image {
+    height: 160px;
+}
+
+.el-skeleton__circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.el-skeleton.is-animated .el-skeleton__item {
+    background: linear-gradient(90deg, #F2F2F2 25%, #E6E8EB 37%, #F2F2F2 63%);
+    background-size: 400% 100%;
+    animation: el-skeleton-loading 1.4s ease infinite;
+}
+
+@keyframes el-skeleton-loading {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.el-statistic {
+    box-sizing: border-box;
+    color: #303133;
+}
+
+.el-statistic__head {
+    margin-bottom: 4px;
+    color: #909399;
+    font-size: 13px;
+}
+
+.el-statistic__content {
+    display: flex;
+    align-items: baseline;
+    color: #303133;
+    font-size: 20px;
+}
+
+.el-statistic__prefix {
+    margin-right: 4px;
+}
+
+.el-statistic__suffix {
+    margin-left: 4px;
+}
+
 .el-transfer {
     line-height: 0 !important;
 }

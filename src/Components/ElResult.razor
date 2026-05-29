@@ -1,0 +1,40 @@
+@inherits ElementComponentBase
+
+<div class="@ResultClass" style="@Style" @attributes="Attributes">
+    <div class="el-result__icon">
+        @if (IconContent != null)
+        {
+            @IconContent
+        }
+        else
+        {
+            <i class="@IconClass"></i>
+        }
+    </div>
+    <div class="el-result__title">
+        @if (TitleContent != null)
+        {
+            @TitleContent
+        }
+        else if (!string.IsNullOrWhiteSpace(Title))
+        {
+            <p>@Title</p>
+        }
+    </div>
+    <div class="el-result__subtitle">
+        @if (SubTitleContent != null)
+        {
+            @SubTitleContent
+        }
+        else if (!string.IsNullOrWhiteSpace(SubTitle))
+        {
+            <p>@SubTitle</p>
+        }
+    </div>
+    @if (Extra != null)
+    {
+        <div class="el-result__extra">
+            @Extra
+        </div>
+    }
+</div>
