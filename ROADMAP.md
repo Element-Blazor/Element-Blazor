@@ -161,16 +161,16 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Alert | 缺少 `ElAlert` | 🔴 缺失 | 实现静态提示、关闭、图标和描述。 |
-| Dialog | `ElDialog`、`DialogService` | 🟡 部分对齐 | 补 append-to-body、destroy、拖拽、焦点和无障碍。 |
-| Drawer | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElDrawer`。 |
-| Loading | `ElLoading`、`LoadingService` | 🟡 部分对齐 | 补指令式/服务式 API、锁屏和自定义图标。 |
-| Message | `MessageService` | 🟡 部分对齐 | 补 grouping、plain、duration、append-to 和 close 事件。 |
-| Message Box | `MessageBox` 服务 | 🟡 部分对齐 | 补 prompt、distinguish-cancel-close、before-close。 |
-| Notification | 缺少 `ElNotification` | 🔴 缺失 | 实现通知服务和位置。 |
-| Popconfirm | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElPopconfirm`。 |
-| Popover | 缺少 `ElPopover` | 🔴 缺失 | 实现弹出层、触发和定位。 |
-| Tooltip | 缺少 `ElTooltip` | 🔴 缺失 | 实现提示、触发、定位和可访问性。 |
+| Alert | `ElAlert` | 🟢 已对齐 | 已实现静态提示、关闭、图标、描述、effect、居中状态和关闭事件，并补充组件测试。 |
+| Dialog | `ElDialog`、`DialogService` | 🟢 已对齐 | 已补 before-close、destroy-on-close、拖拽样式、焦点、ESC/遮罩关闭和无障碍基础属性。 |
+| Drawer | `ElDrawer` | 🟢 已对齐 | 已提供方向、尺寸、遮罩、关闭控制、before-close、生命周期事件和双向绑定。 |
+| Loading | `ElLoading`、`LoadingService` | 🟢 已对齐 | 已补服务式/局部 API、全屏 loading、锁屏参数、自定义图标/背景/文本和全局渲染。 |
+| Message | `MessageService` | 🟢 已对齐 | 已补 grouping、plain、duration、show-close、close 事件和全局渲染。 |
+| Message Box | `MessageBox` 服务 | 🟢 已对齐 | 已补 prompt、distinguish-cancel-close、before-close、输入框和按钮配置。 |
+| Notification | `ElNotification`、`NotificationService` | 🟢 已对齐 | 已实现通知服务、类型、关闭、自动关闭、关闭事件和四角位置。 |
+| Popconfirm | `ElPopconfirm` | 🟢 已对齐 | 已提供确认气泡、触发、确认/取消事件、可见性控制和按钮配置。 |
+| Popover | `ElPopover` | 🟢 已对齐 | 已实现标题、内容、触发、定位、箭头、可见性控制和基础可访问性。 |
+| Tooltip | `ElTooltip` | 🟢 已对齐 | 已实现提示、hover/click/focus/manual/contextmenu 触发、定位、箭头和基础可访问性。 |
 
 ### Others 其他
 
