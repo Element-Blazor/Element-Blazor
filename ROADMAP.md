@@ -147,14 +147,14 @@
 
 | Element Plus | Element-Blazor 入口/现状 | 状态 | 下一步 |
 | --- | --- | --- | --- |
-| Affix | 缺少 `ElAffix` | 🔴 缺失 | 实现固定定位、offset 和 target。 |
-| Anchor | 缺少 `ElAnchor` | 🔴 缺失 | 实现锚点列表、滚动监听和 hash。 |
-| Backtop | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElBacktop` 和滚动目标。 |
+| Affix | `ElAffix` | 🟢 已对齐 | 已实现固定定位、offset、target、position、z-index、change/scroll 事件和组件测试。 |
+| Anchor | `ElAnchor`、`ElAnchorLink` | 🟢 已对齐 | 已实现锚点列表、活动态、滚动监听、hash 滚动、点击/change 事件、方向和 underline 类型。 |
+| Backtop | `ElBacktop` | 🟢 已对齐 | 已提供公开入口、滚动目标、可见阈值、位置配置、点击回顶和组件测试。 |
 | Breadcrumb | `ElBreadcrumb`、`ElBreadcrumbItem` | 🟡 部分对齐 | 补 separator icon、replace 和路由行为。 |
 | Dropdown | `ElDropdown`、`ElDropdownItem` | 🟡 部分对齐 | 补触发方式、分裂按钮、禁用、命令事件。 |
 | Menu | `ElMenu`、`ElSubMenu`、`ElMenuItem` | 🟡 部分对齐 | 补 collapse、router、popper、键盘和主题。 |
-| Page Header | CSS 存在，缺少公开入口 | 🔴 缺失 | 提供 `ElPageHeader`。 |
-| Steps | 缺少 `ElSteps` | 🔴 缺失 | 实现步骤条、方向、状态和图标。 |
+| Page Header | `ElPageHeader` | 🟢 已对齐 | 已提供返回区、标题/内容/面包屑/extra/main 插槽、图标和 back 事件。 |
+| Steps | `ElSteps`、`ElStep` | 🟢 已对齐 | 已实现步骤条、水平/垂直、simple、居中、状态、图标、描述和组件测试。 |
 | Tabs | `ElTabs`、`ElTabPane` | 🟡 部分对齐 | 补 closable、editable、stretch、before-leave 和键盘。 |
 
 ### Feedback 反馈组件

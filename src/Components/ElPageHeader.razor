@@ -1,0 +1,56 @@
+@inherits ElementComponentBase
+
+<div class="@PageHeaderClass" style="@Style" @attributes="Attributes">
+    @if (BreadcrumbContent != null)
+    {
+        <div class="el-page-header__breadcrumb">
+            @BreadcrumbContent
+        </div>
+    }
+    <div class="el-page-header__left"
+         role="button"
+         tabindex="0"
+         @onclick="OnBackAsync"
+         @onkeydown="OnKeyDownAsync">
+        @if (IconContent != null)
+        {
+            @IconContent
+        }
+        else if (!string.IsNullOrWhiteSpace(Icon))
+        {
+            <i class="@IconClass"></i>
+        }
+        <div class="el-page-header__title">
+            @if (TitleContent != null)
+            {
+                @TitleContent
+            }
+            else
+            {
+                @Title
+            }
+        </div>
+    </div>
+    <div class="el-page-header__content">
+        @if (ContentContent != null)
+        {
+            @ContentContent
+        }
+        else
+        {
+            @Content
+        }
+    </div>
+    @if (ExtraContent != null)
+    {
+        <div class="el-page-header__extra">
+            @ExtraContent
+        </div>
+    }
+    @if (ChildContent != null)
+    {
+        <div class="el-page-header__main">
+            @ChildContent
+        </div>
+    }
+</div>

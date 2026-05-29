@@ -1,0 +1,13 @@
+@inherits ElementComponentBase
+
+<div class="@AnchorClass" style="@Style" @ref="RootElement" @attributes="Attributes">
+    @if (Marker)
+    {
+        <span class="el-anchor__marker"></span>
+    }
+    <div class="el-anchor__list">
+        <CascadingValue Value="this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </div>
+</div>

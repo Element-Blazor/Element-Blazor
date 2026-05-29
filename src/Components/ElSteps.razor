@@ -1,0 +1,7 @@
+@inherits ElementComponentBase
+
+<div class="@StepsClass" style="@StepsStyle" @attributes="Attributes">
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>

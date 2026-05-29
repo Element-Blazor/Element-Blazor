@@ -799,3 +799,87 @@ div.el-form-item div.el-select {
 .el-input-group__append, .el-input-group__prepend {
     padding: 0 !important;
 }
+
+.el-affix {
+    position: relative;
+}
+
+.el-affix__content {
+    box-sizing: border-box;
+}
+
+.el-anchor {
+    position: relative;
+    color: var(--el-text-color-regular, #606266);
+}
+
+.el-anchor--horizontal > .el-anchor__list {
+    display: flex;
+    gap: 18px;
+}
+
+.el-anchor__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.el-anchor__item {
+    position: relative;
+    line-height: 22px;
+}
+
+.el-anchor__item .el-anchor__list {
+    padding-left: 16px;
+}
+
+.el-anchor--horizontal .el-anchor__item .el-anchor__list {
+    display: none;
+}
+
+.el-anchor__link {
+    display: inline-block;
+    padding: 4px 0;
+    color: inherit;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color .2s;
+}
+
+.el-anchor__link:hover,
+.el-anchor__item.is-active > .el-anchor__link {
+    color: var(--el-color-primary, #409EFF);
+}
+
+.el-anchor--underline .el-anchor__item.is-active > .el-anchor__link {
+    border-bottom: 2px solid var(--el-color-primary, #409EFF);
+}
+
+.el-anchor__marker {
+    position: absolute;
+    left: -12px;
+    top: 4px;
+    width: 2px;
+    height: 18px;
+    border-radius: 2px;
+    background: var(--el-color-primary, #409EFF);
+}
+
+.el-page-header {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 0;
+}
+
+.el-page-header__breadcrumb,
+.el-page-header__main {
+    flex-basis: 100%;
+}
+
+.el-page-header__extra {
+    margin-left: auto;
+}
+
+.el-page-header__main {
+    color: var(--el-text-color-regular, #606266);
+}

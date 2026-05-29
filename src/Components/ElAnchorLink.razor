@@ -1,0 +1,25 @@
+@inherits ElementComponentBase
+
+<div class="@ItemClass" @attributes="Attributes">
+    <a class="el-anchor__link"
+       href="@Href"
+       title="@EffectiveTitle"
+       data-anchor-href="@Href"
+       @onclick="OnClickAsync"
+       @onclick:preventDefault="true">
+        @if (TitleContent != null)
+        {
+            @TitleContent
+        }
+        else
+        {
+            @EffectiveTitle
+        }
+    </a>
+    @if (ChildContent != null)
+    {
+        <div class="el-anchor__list">
+            @ChildContent
+        </div>
+    }
+</div>

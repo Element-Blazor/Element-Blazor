@@ -1,0 +1,58 @@
+@inherits ElementComponentBase
+
+<div class="@StepClass" style="@StepStyle" @attributes="Attributes">
+    <div class="@HeadClass">
+        <div class="el-step__line">
+            <i class="el-step__line-inner"></i>
+        </div>
+        <div class="@IconBoxClass">
+            @if (IconContent != null)
+            {
+                @IconContent
+            }
+            else if (!string.IsNullOrWhiteSpace(IconInnerClass))
+            {
+                <i class="@IconInnerClass"></i>
+            }
+            else
+            {
+                <div class="el-step__icon-inner">@DisplayIndex</div>
+            }
+        </div>
+    </div>
+    <div class="el-step__main">
+        <div class="@TitleClass">
+            @if (TitleContent != null)
+            {
+                @TitleContent
+            }
+            else
+            {
+                @Title
+            }
+        </div>
+        @if (!IsSimple && HasDescription)
+        {
+            <div class="@DescriptionClass">
+                @if (DescriptionContent != null)
+                {
+                    @DescriptionContent
+                }
+                else
+                {
+                    @Description
+                }
+            </div>
+        }
+        @if (ChildContent != null)
+        {
+            <div class="el-step__content">
+                @ChildContent
+            </div>
+        }
+        @if (IsSimple)
+        {
+            <div class="el-step__arrow"></div>
+        }
+    </div>
+</div>

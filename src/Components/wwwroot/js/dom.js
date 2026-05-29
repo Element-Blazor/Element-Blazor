@@ -547,6 +547,202 @@ window.elementScrollbarGetState = function (el) {
         clientWidth: el.clientWidth || 0
     };
 };
+window.elementResolveScrollContainer = function (target) {
+    if (!target) {
+        return window;
+    }
+    if (typeof target === "string") {
+        return document.querySelector(target) || window;
+    }
+    return target;
+};
+window.elementGetScrollTop = function (container) {
+    if (!container || container === window || container === document || container === document.body || container === document.documentElement) {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    }
+    return container.scrollTop || 0;
+};
+window.elementSetScrollTop = function (container, top, behavior) {
+    top = top || 0;
+    behavior = behavior || "smooth";
+    if (!container || container === window || container === document || container === document.body || container === document.documentElement) {
+        window.scrollTo({ top: top, behavior: behavior });
+        return;
+    }
+    if (container.scrollTo) {
+        container.scrollTo({ top: top, behavior: behavior });
+        return;
+    }
+    container.scrollTop = top;
+};
+window.elementGetContainerRect = function (container) {
+    if (!container || container === window || container === document || container === document.body || container === document.documentElement) {
+        return {
+            top: 0,
+            bottom: window.innerHeight || document.documentElement.clientHeight || 0,
+            height: window.innerHeight || document.documentElement.clientHeight || 0
+        };
+    }
+    return container.getBoundingClientRect();
+};
+window.elementAffixInit = function (root, dotnet, options) {
+    if (!root) {
+        return;
+    }
+
+    options = options || {};
+    if (root.__elementAffixCleanup) {
+        root.__elementAffixCleanup();
+    }
+
+    var content = root.firstElementChild || root;
+    var container = elementResolveScrollContainer(options.target);
+    var offset = parseInt(options.offset || 0);
+    var position = options.position || "top";
+    var zIndex = parseInt(options.zIndex || 100);
+    var placeholderHeight = 0;
+
+    var update = function () {
+        var scrollTop = elementGetScrollTop(container);
+        var rootRect = root.getBoundingClientRect();
+        var containerRect = elementGetContainerRect(container);
+        var fixed = position === "bottom"
+            ? rootRect.bottom >= containerRect.bottom - offset
+            : rootRect.top <= containerRect.top + offset;
+
+        if (fixed) {
+            placeholderHeight = placeholderHeight || root.offsetHeight || content.offsetHeight || 0;
+            root.style.height = placeholderHeight + "px";
+            content.style.position = "fixed";
+            content.style.zIndex = zIndex;
+            content.style.width = rootRect.width + "px";
+            content.style.left = rootRect.left + "px";
+            if (position === "bottom") {
+                content.style.bottom = offset + "px";
+                content.style.top = "";
+            } else {
+                content.style.top = offset + "px";
+                content.style.bottom = "";
+            }
+        } else {
+            root.style.height = "";
+            content.style.position = "";
+            content.style.zIndex = "";
+            content.style.width = "";
+            content.style.left = "";
+            content.style.top = "";
+            content.style.bottom = "";
+        }
+
+        if (dotnet) {
+            dotnet.invokeMethodAsync("SetFixed", fixed, Math.round(scrollTop));
+        }
+    };
+
+    var listenerTarget = container === window ? window : container;
+    listenerTarget.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    root.__elementAffixCleanup = function () {
+        listenerTarget.removeEventListener("scroll", update);
+        window.removeEventListener("resize", update);
+    };
+    update();
+};
+window.elementBacktopInit = function (root, dotnet, options) {
+    options = options || {};
+    var container = elementResolveScrollContainer(options.target);
+    var visibilityHeight = parseInt(options.visibilityHeight || 200);
+    if (root && root.__elementBacktopCleanup) {
+        root.__elementBacktopCleanup();
+    }
+
+    var update = function () {
+        var visible = elementGetScrollTop(container) >= visibilityHeight;
+        if (dotnet) {
+            dotnet.invokeMethodAsync("SetVisible", visible);
+        }
+    };
+
+    var listenerTarget = container === window ? window : container;
+    listenerTarget.addEventListener("scroll", update, { passive: true });
+    if (root) {
+        root.__elementBacktopCleanup = function () {
+            listenerTarget.removeEventListener("scroll", update);
+        };
+    }
+    update();
+};
+window.elementBacktopScrollTo = function (target) {
+    elementSetScrollTop(elementResolveScrollContainer(target), 0, "smooth");
+};
+window.elementAnchorScrollTo = function (href, containerSelector, offset, duration) {
+    if (!href || href.charAt(0) !== "#") {
+        if (href) {
+            location.href = href;
+        }
+        return;
+    }
+
+    var target = document.querySelector(href);
+    if (!target) {
+        return;
+    }
+
+    var container = elementResolveScrollContainer(containerSelector);
+    var scrollTop = elementGetScrollTop(container);
+    var containerRect = elementGetContainerRect(container);
+    var targetRect = target.getBoundingClientRect();
+    var nextTop = scrollTop + targetRect.top - containerRect.top - (parseInt(offset || 0));
+    elementSetScrollTop(container, nextTop, parseInt(duration || 0) <= 0 ? "auto" : "smooth");
+    if (history && history.replaceState) {
+        history.replaceState(null, "", href);
+    }
+};
+window.elementAnchorInit = function (root, dotnet, options) {
+    if (!root) {
+        return;
+    }
+
+    options = options || {};
+    if (root.__elementAnchorCleanup) {
+        root.__elementAnchorCleanup();
+    }
+
+    var container = elementResolveScrollContainer(options.container);
+    var offset = parseInt(options.offset || 0);
+    var bound = parseInt(options.bound || 15);
+    var update = function () {
+        var links = Array.prototype.slice.call(root.querySelectorAll("[data-anchor-href]"));
+        var activeHref = "";
+        var containerRect = elementGetContainerRect(container);
+        links.forEach(function (link) {
+            var href = link.getAttribute("data-anchor-href");
+            if (!href || href.charAt(0) !== "#") {
+                return;
+            }
+            var target = document.querySelector(href);
+            if (!target) {
+                return;
+            }
+            var top = target.getBoundingClientRect().top - containerRect.top;
+            if (top <= offset + bound) {
+                activeHref = href;
+            }
+        });
+        if (dotnet && activeHref) {
+            dotnet.invokeMethodAsync("SetActiveHref", activeHref);
+        }
+    };
+
+    var listenerTarget = container === window ? window : container;
+    listenerTarget.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    root.__elementAnchorCleanup = function () {
+        listenerTarget.removeEventListener("scroll", update);
+        window.removeEventListener("resize", update);
+    };
+    update();
+};
 window.elementSplitterInit = function (root) {
     if (!root || root.dataset.elementSplitterReady === "true") {
         return;

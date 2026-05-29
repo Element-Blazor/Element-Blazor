@@ -1,0 +1,19 @@
+@inherits ElementComponentBase
+
+<div class="@BacktopClass"
+     style="@BacktopStyle"
+     role="button"
+     tabindex="0"
+     @ref="RootElement"
+     @onclick="OnInternalClickAsync"
+     @onkeydown="OnKeyDownAsync"
+     @attributes="Attributes">
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+    else
+    {
+        <i class="el-icon-caret-top"></i>
+    }
+</div>
