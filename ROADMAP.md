@@ -150,12 +150,12 @@
 | Affix | `ElAffix` | 🟢 已对齐 | 已实现固定定位、offset、target、position、z-index、change/scroll 事件和组件测试。 |
 | Anchor | `ElAnchor`、`ElAnchorLink` | 🟢 已对齐 | 已实现锚点列表、活动态、滚动监听、hash 滚动、点击/change 事件、方向和 underline 类型。 |
 | Backtop | `ElBacktop` | 🟢 已对齐 | 已提供公开入口、滚动目标、可见阈值、位置配置、点击回顶和组件测试。 |
-| Breadcrumb | `ElBreadcrumb`、`ElBreadcrumbItem` | 🟡 部分对齐 | 补 separator icon、replace 和路由行为。 |
-| Dropdown | `ElDropdown`、`ElDropdownItem` | 🟡 部分对齐 | 补触发方式、分裂按钮、禁用、命令事件。 |
-| Menu | `ElMenu`、`ElSubMenu`、`ElMenuItem` | 🟡 部分对齐 | 补 collapse、router、popper、键盘和主题。 |
+| Breadcrumb | `ElBreadcrumb`、`ElBreadcrumbItem` | 🟢 已对齐 | 已补 separator icon、replace、`To/Href` 和路由导航行为，并补充组件测试。 |
+| Dropdown | `ElDropdown`、`ElDropdownItem` | 🟢 已对齐 | 已补触发方式、分裂按钮、禁用项、命令事件和组件测试。 |
+| Menu | `ElMenu`、`ElSubMenu`、`ElMenuItem` | 🟢 已对齐 | 已补 collapse、router、popper、键盘导航、主题和组件测试。 |
 | Page Header | `ElPageHeader` | 🟢 已对齐 | 已提供返回区、标题/内容/面包屑/extra/main 插槽、图标和 back 事件。 |
 | Steps | `ElSteps`、`ElStep` | 🟢 已对齐 | 已实现步骤条、水平/垂直、simple、居中、状态、图标、描述和组件测试。 |
-| Tabs | `ElTabs`、`ElTabPane` | 🟡 部分对齐 | 补 closable、editable、stretch、before-leave 和键盘。 |
+| Tabs | `ElTabs`、`ElTabPane` | 🟢 已对齐 | 已补 closable、editable、stretch、before-leave、键盘导航和组件测试。 |
 
 ### Feedback 反馈组件
 
