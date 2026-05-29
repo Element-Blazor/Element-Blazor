@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,10 +56,22 @@ namespace Element
         public bool Draggable { get; set; }
 
         [Parameter]
+        public bool AppendToBody { get; set; }
+
+        [Parameter]
+        public bool LockScroll { get; set; } = true;
+
+        [Parameter]
         public bool DestroyOnClose { get; set; }
 
         [Parameter]
         public int? ZIndex { get; set; }
+
+        [Parameter]
+        public Func<Task<bool>> BeforeClose { get; set; }
+
+        [Parameter]
+        public EventCallback<ElementClosingEventArgs<ElDialog>> OnBeforeClose { get; set; }
 
         [Parameter]
         public RenderFragment Header { get; set; }
@@ -133,6 +146,10 @@ namespace Element
             {
                 return;
             }
+            if (!await CanCloseAsync())
+            {
+                return;
+            }
             ModelValue = false;
             wasOpen = false;
             if (ModelValueChanged.HasDelegate)
@@ -173,6 +190,23 @@ namespace Element
                 return;
             }
             await CloseAsync();
+        }
+
+        private async Task<bool> CanCloseAsync()
+        {
+            if (BeforeClose != null && !await BeforeClose())
+            {
+                return false;
+            }
+
+            if (!OnBeforeClose.HasDelegate)
+            {
+                return true;
+            }
+
+            var args = new ElementClosingEventArgs<ElDialog> { Target = this };
+            await OnBeforeClose.InvokeAsync(args);
+            return !args.Cancel;
         }
     }
 }

@@ -1,9 +1,6 @@
-
-using Microsoft.AspNetCore.Components;
+锘縰sing Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Element
@@ -14,62 +11,128 @@ namespace Element
         {
             DialogService = dialogService;
         }
-        DialogService DialogService { get; set; }
-        public async Task<MessageBoxResult> AlertAsync(string text)
+
+        private DialogService DialogService { get; }
+
+        public Task<MessageBoxResult> AlertAsync(string text)
         {
-            var option = CreateOption(text);
-            var okRenderFragment = CreateButtonRenderer(option, "确定", MessageBoxResult.Ok, ButtonType.Primary);
-            option.Buttons.Add(okRenderFragment);
+            return AlertAsync(new MessageBoxOption { Message = text });
+        }
+
+        public async Task<MessageBoxResult> AlertAsync(MessageBoxOption messageBoxOption)
+        {
+            messageBoxOption.ShowCancelButton = false;
+            messageBoxOption.ShowConfirmButton = true;
+            var dialogResult = await ShowAsync(messageBoxOption);
+            return dialogResult.Result;
+        }
+
+        public Task<MessageBoxResult> ConfirmAsync(string text)
+        {
+            return ConfirmAsync(new MessageBoxOption { Message = text });
+        }
+
+        public async Task<MessageBoxResult> ConfirmAsync(MessageBoxOption messageBoxOption)
+        {
+            messageBoxOption.ShowCancelButton = true;
+            messageBoxOption.ShowConfirmButton = true;
+            var dialogResult = await ShowAsync(messageBoxOption);
+            return dialogResult.Result;
+        }
+
+        public Task<MessageBoxPromptResult> PromptAsync(string message, string title = null)
+        {
+            return PromptAsync(new MessageBoxOption
+            {
+                Message = message,
+                Title = title ?? "鎻愮ず",
+                ShowInput = true,
+                ShowCancelButton = true
+            });
+        }
+
+        public async Task<MessageBoxPromptResult> PromptAsync(MessageBoxOption messageBoxOption)
+        {
+            messageBoxOption.ShowInput = true;
+            messageBoxOption.ShowCancelButton = true;
+            messageBoxOption.ShowConfirmButton = true;
+            return await ShowAsync(messageBoxOption);
+        }
+
+        private async Task<MessageBoxPromptResult> ShowAsync(MessageBoxOption messageBoxOption)
+        {
+            var option = CreateOption(messageBoxOption);
+            if (messageBoxOption.ShowCancelButton)
+            {
+                option.Buttons.Add(CreateButtonRenderer(option, messageBoxOption, messageBoxOption.CancelButtonText, MessageBoxResult.Cancel, messageBoxOption.CancelButtonType, MessageBoxAction.Cancel));
+            }
+            if (messageBoxOption.ShowConfirmButton)
+            {
+                option.Buttons.Add(CreateButtonRenderer(option, messageBoxOption, messageBoxOption.ConfirmButtonText, MessageBoxResult.Ok, messageBoxOption.ConfirmButtonType, MessageBoxAction.Confirm));
+            }
+
             DialogService.Dialogs.Add(option);
             var dialogResult = await option.TaskCompletionSource.Task;
             await Task.Delay(10);
-            return (MessageBoxResult)dialogResult.Result;
+            return dialogResult.Result as MessageBoxPromptResult ?? new MessageBoxPromptResult
+            {
+                Result = dialogResult.Result is MessageBoxResult result ? result : MessageBoxResult.Close,
+                Value = messageBoxOption.InputValue
+            };
         }
 
-        private DialogOption CreateOption(string text)
+        private DialogOption CreateOption(MessageBoxOption messageBoxOption)
         {
             var taskCompletionSource = new TaskCompletionSource<DialogResult>();
-            return new DialogOption()
+            return new DialogOption
             {
-                Title = "提示",
-                Content = text,
+                Title = messageBoxOption.Title,
+                Content = typeof(MessageBoxContent),
+                Parameters = new Dictionary<string, object>
+                {
+                    [nameof(MessageBoxContent.Option)] = messageBoxOption
+                },
                 IsDialog = false,
+                IsModal = true,
+                ShowClose = messageBoxOption.ShowClose,
+                CloseOnClickModal = messageBoxOption.CloseOnClickModal,
+                CloseOnPressEscape = messageBoxOption.CloseOnPressEscape,
+                MessageBoxOption = messageBoxOption,
                 TaskCompletionSource = taskCompletionSource
             };
         }
 
-        private RenderFragment CreateButtonRenderer(DialogOption option, string text, MessageBoxResult result, ButtonType type)
+        private RenderFragment CreateButtonRenderer(DialogOption option, MessageBoxOption messageBoxOption, string text, MessageBoxResult result, ButtonType type, MessageBoxAction action)
         {
             return builder =>
             {
                 builder.OpenComponent<ElButton>(0);
-                builder.AddAttribute(1, nameof(ElButton.OnClick), EventCallback.Factory.Create(option.Instance, async (MouseEventArgs e) =>
+                builder.AddAttribute(1, nameof(ElButton.OnClick), EventCallback.Factory.Create<MouseEventArgs>(option.Instance, async e =>
                 {
-                    await option.Instance.CloseDialogAsync(option, new DialogResult()
-                    {
-                        Result = result
-                    });
+                    await CloseAsync(option, messageBoxOption, result, action);
                 }));
-                builder.AddAttribute(2, "Type", type);
-                builder.AddAttribute(3, "ChildContent", new RenderFragment(__builder2 => __builder2.AddMarkupContent(4, text)));
-                builder.AddAttribute(5, "Size", ButtonSize.Small);
+                builder.AddAttribute(2, nameof(ElButton.Type), type);
+                builder.AddAttribute(3, nameof(ElButton.ChildContent), new RenderFragment(child => child.AddContent(0, text)));
+                builder.AddAttribute(4, nameof(ElButton.Size), ButtonSize.Small);
                 builder.CloseComponent();
             };
         }
 
-        public async Task<MessageBoxResult> ConfirmAsync(string text)
+        internal static async Task CloseAsync(DialogOption option, MessageBoxOption messageBoxOption, MessageBoxResult result, MessageBoxAction action)
         {
-            var option = CreateOption(text);
-            var cancelRenderFragment = CreateButtonRenderer(option, "取消", MessageBoxResult.Cancel, ButtonType.Default);
-            var okRenderFragment = CreateButtonRenderer(option, "确定", MessageBoxResult.Ok, ButtonType.Primary);
-            option.Buttons.Add(cancelRenderFragment);
-            option.Buttons.Add(okRenderFragment);
-            DialogService.Dialogs.Add(option);
-            Console.WriteLine("wait ConfirmAsync");
-            var dialogResult = await option.TaskCompletionSource.Task;
-            Console.WriteLine("end ConfirmAsync");
-            await Task.Delay(10);
-            return (MessageBoxResult)dialogResult.Result;
+            if (messageBoxOption.BeforeClose != null && !await messageBoxOption.BeforeClose(action))
+            {
+                return;
+            }
+
+            await option.Instance.CloseDialogAsync(option, new DialogResult
+            {
+                Result = new MessageBoxPromptResult
+                {
+                    Result = result,
+                    Value = messageBoxOption.InputValue
+                }
+            });
         }
     }
 }

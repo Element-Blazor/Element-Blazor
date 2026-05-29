@@ -11,7 +11,10 @@
         var message = Messages[i];
         var index = message.ZIndex;
         var clsBuilder = HtmlPropertyBuilder.CreateCssClassBuilder()
-           .Add("el-message", $"el-message--{message.Type.ToString().ToLower()}");
+           .Add("el-message", $"el-message--{message.Type.ToString().ToLower()}")
+           .AddIf(message.Plain, "is-plain")
+           .AddIf(message.ShowClose, "is-closable")
+           .Add(message.CustomClass);
         var styleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
             .Add($"top:{message.BeginTop}px", "opacity:0", $"z-index:{index}");
         var firstStyleBuilder = HtmlPropertyBuilder.CreateCssStyleBuilder()
@@ -22,18 +25,74 @@
         <ElTransition role="alert" Cls="@clsBuilder.ToString()" OnAllEnd="e=>DisposeMessage(message)" InitialStyle="@styleBuilder.ToString()">
             <Path>
                 <ElTransitionPath Style="@firstStyleBuilder.ToString()" Delay="200" Duration="300"></ElTransitionPath>
-                <ElTransitionPath Style="@secondStyleBuilder.ToString()" Delay="3000" Duration="300"></ElTransitionPath>
+                @if (message.Duration > 0)
+                {
+                    <ElTransitionPath Style="@secondStyleBuilder.ToString()" Delay="@message.Duration" Duration="300"></ElTransitionPath>
+                }
             </Path>
             <Content>
                 <i class="el-message__icon el-icon-@(message.Type.ToString().ToLower())"></i>
-                <p class="el-message__content">@message.Message</p>
+                <p class="el-message__content">
+                    @message.Message
+                    @if (message.RepeatCount > 1)
+                    {
+                        <span class="el-message__badge">@message.RepeatCount</span>
+                    }
+                </p>
+                @if (message.ShowClose)
+                {
+                    <i class="el-message__closeBtn el-icon-close" @onclick:stopPropagation="true" @onclick="async () => await CloseMessageAsync(message)"></i>
+                }
             </Content>
         </ElTransition>
+    }
+    for (int i = 0; i < Notifications.Count; i++)
+    {
+        var notification = Notifications[i];
+        var type = notification.Type.ToString().ToLowerInvariant();
+        var position = notification.Position.ToString();
+        var horizontal = position.EndsWith("Left", StringComparison.Ordinal) ? "left" : "right";
+        var verticalStyle = position.StartsWith("Top", StringComparison.Ordinal)
+            ? $"top:{notification.Top}px"
+            : $"bottom:{notification.Bottom}px";
+        var notificationClass = HtmlPropertyBuilder.CreateCssClassBuilder()
+            .Add("el-notification", horizontal)
+            .AddIf(notification.Type != MessageType.Info, $"el-notification--{type}")
+            .Add(notification.CustomClass);
+        var notificationStyle = HtmlPropertyBuilder.CreateCssStyleBuilder()
+            .Add($"z-index:{notification.ZIndex}", $"{horizontal}:16px", verticalStyle);
+        <div class="@notificationClass.ToString()" style="@notificationStyle.ToString()" role="alert">
+            @if (!string.IsNullOrWhiteSpace(notification.Icon) || notification.Type != MessageType.Info)
+            {
+                var icon = string.IsNullOrWhiteSpace(notification.Icon)
+                    ? $"el-icon-{(notification.Type == MessageType.Error ? "error" : type)}"
+                    : notification.Icon;
+                <i class="el-notification__icon @icon"></i>
+            }
+            <div class="el-notification__group">
+                @if (!string.IsNullOrWhiteSpace(notification.Title))
+                {
+                    <h2 class="el-notification__title">@notification.Title</h2>
+                }
+                @if (notification.MessageContent != null)
+                {
+                    <div class="el-notification__content">@notification.MessageContent</div>
+                }
+                else if (!string.IsNullOrWhiteSpace(notification.Message))
+                {
+                    <div class="el-notification__content">@notification.Message</div>
+                }
+                @if (notification.ShowClose)
+                {
+                    <i class="el-notification__closeBtn el-icon-close" @onclick="async () => await CloseNotificationAsync(notification)"></i>
+                }
+            </div>
+        </div>
     }
     for (int i = 0; i < LoadingOptions.Count; i++)
     {
         var option = LoadingOptions[i];
-        <div class="el-loading-mask" style="background-color: @option.Background;display:none;z-index;@(option.ZIndex)" @ref="option.Element">
+        <div class='@HtmlPropertyBuilder.CreateCssClassBuilder().Add("el-loading-mask", option.CustomClass).ToString()' style='background-color: @(option.Background ?? "var(--el-mask-color)");display:none;z-index:@(option.ZIndex)' @ref="option.Element">
             <div class="el-loading-spinner">
                 @if (string.IsNullOrWhiteSpace(option.IconClass))
                 {
@@ -139,27 +198,17 @@
                                 <!---->
                                 <span>@option.Title</span>
                             </div>
-                            <ElButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="(e => CloseDialogAsync(option, new DialogResult()
-                                                                                                                                                 {
-                                                                                                                                                     Result = MessageBoxResult.Close
-                                                                                                                                                 }))">
-                            </ElButton>
+                            @if (option.ShowClose)
+                            {
+                                <ElButton Icon="el-message-box__close el-icon-close" Cls="el-message-box__headerbtn" AppendCustomCls="false" OnClick="async e => await CloseMessageBoxAsync(option, MessageBoxResult.Close, MessageBoxAction.Close)">
+                                </ElButton>
+                            }
                         </div>
                     }
                     @if (option.Point == System.Drawing.Point.Empty)
                     {
                         <div class="el-message-box__content">
-                            <!---->
-                            <div class="el-message-box__message">
-                                <p><ElDynamicComponent Component="option.Content"></ElDynamicComponent></p>
-                            </div>
-                            <div class="el-message-box__input" style="display: none;">
-                                <div class="el-input">
-                                    <!---->
-                                    <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
-                                </div>
-                                <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
-                            </div>
+                            <ElDynamicComponent Component="option.Content" Parameters="option.Parameters"></ElDynamicComponent>
                         </div>
                         <div class="el-message-box__btns">
                             @foreach (var button in option.Buttons)

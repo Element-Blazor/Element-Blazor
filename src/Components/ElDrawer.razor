@@ -1,0 +1,43 @@
+@inherits ElementComponentBase
+
+@if (ShouldRenderDrawer)
+{
+    @if (Modal)
+    {
+        <div class="v-modal el-overlay" style="@ModalStyle" @onclick="CloseOnModalClickAsync"></div>
+    }
+    <div class="@WrapperClass" style="@WrapperStyle" tabindex="-1" role="presentation" @onclick="CloseOnModalClickAsync" @onkeydown="OnKeyDownAsync" @attributes="Attributes">
+        <div class="el-drawer__container" @onclick:stopPropagation>
+            <div class="@DrawerClass" style="@DrawerStyle" role="dialog" aria-modal="@Modal" aria-label="@Title">
+                @if (WithHeader)
+                {
+                    <header class="el-drawer__header">
+                        @if (Header != null)
+                        {
+                            @Header
+                        }
+                        else
+                        {
+                            <span class="el-drawer__title">@Title</span>
+                        }
+                        @if (ShowClose)
+                        {
+                            <button type="button" class="el-drawer__close-btn" aria-label="Close" @onclick="CloseAsync">
+                                <i class="el-icon-close"></i>
+                            </button>
+                        }
+                    </header>
+                }
+                <section class="el-drawer__body">
+                    @ChildContent
+                </section>
+                @if (Footer != null)
+                {
+                    <footer class="el-drawer__footer">
+                        @Footer
+                    </footer>
+                }
+            </div>
+        </div>
+    </div>
+}

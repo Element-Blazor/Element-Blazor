@@ -24,6 +24,9 @@ namespace Element
         private MessageService MessageService { get; set; }
 
         [Inject]
+        private NotificationService NotificationService { get; set; }
+
+        [Inject]
         private LoadingService LoadingService { get; set; }
 
         [Inject]
@@ -35,6 +38,7 @@ namespace Element
         private static int ZIndex { get; set; } = 2000;
         internal List<MessageInfo> Messages { get; set; } = new List<MessageInfo>();
         private List<MessageInfo> RemovingMessages = new List<MessageInfo>();
+        internal List<NotificationOption> Notifications { get; set; } = new List<NotificationOption>();
 
         protected List<LoadingOption> LoadingOptions = new List<LoadingOption>();
         internal List<DialogOption> DialogOptions = new List<DialogOption>();
@@ -65,6 +69,11 @@ namespace Element
             {
                 return;
             }
+            if (option.MessageBoxOption != null)
+            {
+                await CloseMessageBoxAsync(option, option.MessageBoxOption.DistinguishCancelAndClose ? MessageBoxResult.Close : MessageBoxResult.Cancel, MessageBoxAction.Close);
+                return;
+            }
             await CloseDialogAsync(option, new DialogResult());
         }
 
@@ -74,7 +83,28 @@ namespace Element
             {
                 return;
             }
+            if (option.MessageBoxOption != null)
+            {
+                await CloseMessageBoxAsync(option, option.MessageBoxOption.DistinguishCancelAndClose ? MessageBoxResult.Close : MessageBoxResult.Cancel, MessageBoxAction.Close);
+                return;
+            }
             await CloseDialogAsync(option, new DialogResult());
+        }
+
+        protected async Task CloseMessageBoxAsync(DialogOption option, MessageBoxResult result, MessageBoxAction action)
+        {
+            if (option.MessageBoxOption == null)
+            {
+                await CloseDialogAsync(option, new DialogResult { Result = result });
+                return;
+            }
+
+            if (action == MessageBoxAction.Close && !option.MessageBoxOption.DistinguishCancelAndClose)
+            {
+                result = MessageBoxResult.Cancel;
+            }
+
+            await MessageBox.CloseAsync(option, option.MessageBoxOption, result, action);
         }
 
         private async Task OnPauseAsync(DialogOption option)
@@ -105,6 +135,10 @@ namespace Element
             MessageService.Messages.CollectionChanged -= Messages_CollectionChanged;
             MessageService.Messages = new ObservableCollection<MessageInfo>();
             MessageService.Messages.CollectionChanged += Messages_CollectionChanged;
+
+            NotificationService.Notifications.CollectionChanged -= Notifications_CollectionChanged;
+            NotificationService.Notifications = new ObservableCollection<NotificationOption>();
+            NotificationService.Notifications.CollectionChanged += Notifications_CollectionChanged;
 
             LoadingService.LoadingOptions.CollectionChanged -= LoadingOptions_CollectionChanged;
             LoadingService.LoadingOptions = new ObservableCollection<LoadingOption>();
@@ -427,6 +461,94 @@ namespace Element
             }
         }
 
+        private void Notifications_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var notification in e.NewItems.OfType<NotificationOption>())
+                {
+                    notification.IsNew = true;
+                    notification.ZIndex = ZIndex++;
+                    PositionNotification(notification);
+                    Notifications.Add(notification);
+                    if (notification.Duration > 0)
+                    {
+                        _ = AutoCloseNotificationAsync(notification);
+                    }
+                }
+
+                InvokeAsync(StateHasChanged);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var notification in e.OldItems.OfType<NotificationOption>())
+                {
+                    Notifications.Remove(notification);
+                }
+
+                RepositionNotifications();
+                InvokeAsync(StateHasChanged);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                Notifications.Clear();
+                InvokeAsync(StateHasChanged);
+            }
+        }
+
+        private async Task AutoCloseNotificationAsync(NotificationOption notification)
+        {
+            await Task.Delay(notification.Duration);
+            if (!NotificationService.Notifications.Contains(notification))
+            {
+                return;
+            }
+
+            await NotificationService.CloseAsync(notification);
+        }
+
+        private void PositionNotification(NotificationOption notification)
+        {
+            var samePosition = Notifications.Where(x => x.Position == notification.Position).ToList();
+            var offset = notification.Offset;
+            foreach (var item in samePosition)
+            {
+                offset += 84;
+            }
+
+            if (notification.Position == NotificationPosition.TopLeft || notification.Position == NotificationPosition.TopRight)
+            {
+                notification.Top = offset;
+            }
+            else
+            {
+                notification.Bottom = offset;
+            }
+        }
+
+        private void RepositionNotifications()
+        {
+            foreach (var group in Notifications.GroupBy(x => x.Position))
+            {
+                var offset = group.First().Offset;
+                foreach (var notification in group)
+                {
+                    if (notification.Position == NotificationPosition.TopLeft || notification.Position == NotificationPosition.TopRight)
+                    {
+                        notification.Top = offset;
+                        notification.Bottom = 0;
+                    }
+                    else
+                    {
+                        notification.Bottom = offset;
+                        notification.Top = 0;
+                    }
+
+                    offset += 84;
+                }
+            }
+        }
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             ShadowCount = DialogOptions.Count(x => x.IsModal);
@@ -681,6 +803,23 @@ namespace Element
             {
                 MessageService.Messages.Remove(item);
             }
+            _ = item.OnClose?.Invoke();
+        }
+
+        protected async Task CloseMessageAsync(MessageInfo item)
+        {
+            if (Messages.Contains(item))
+            {
+                Messages.Remove(item);
+                StateHasChanged();
+            }
+
+            await MessageService.CloseAsync(item);
+        }
+
+        protected Task CloseNotificationAsync(NotificationOption item)
+        {
+            return NotificationService.CloseAsync(item);
         }
 
         protected void CloseDateTimePicker(DateTimePickerOption option)

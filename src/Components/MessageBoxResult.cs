@@ -9,6 +9,7 @@ namespace Element
     {
         Ok,
         Cancel,
-        Close
+        Close,
+        Confirm
     }
 }

@@ -15,6 +15,12 @@ namespace Element
         public string Message { get; set; }
         public int Duration { get; set; }
         public MessageType Type { get; set; } = MessageType.Info;
+        public bool ShowClose { get; set; }
+        public bool Plain { get; set; }
+        public bool Grouping { get; set; }
+        public int RepeatCount { get; set; } = 1;
+        public string CustomClass { get; set; }
+        public Func<Task> OnClose { get; set; }
         internal ElementReference Element { get; set; }
         internal bool IsNew { get; set; }
         internal int Index { get; set; }

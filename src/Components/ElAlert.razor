@@ -1,0 +1,37 @@
+@inherits ElementComponentBase
+
+@if (!isClosed)
+{
+    <div class="@AlertClass" style="@Style" role="alert" @attributes="Attributes">
+        @if (ShowIcon)
+        {
+            <i class="@IconClass"></i>
+        }
+        <div class="el-alert__content">
+            @if (TitleContent != null)
+            {
+                <span class="el-alert__title">@TitleContent</span>
+            }
+            else if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <span class="el-alert__title">@Title</span>
+            }
+            @if (DescriptionContent != null)
+            {
+                <p class="el-alert__description">@DescriptionContent</p>
+            }
+            else if (!string.IsNullOrWhiteSpace(Description))
+            {
+                <p class="el-alert__description">@Description</p>
+            }
+            else if (ChildContent != null)
+            {
+                <p class="el-alert__description">@ChildContent</p>
+            }
+            @if (Closable)
+            {
+                <i class="@CloseClass" @onclick="CloseAsync">@CloseText</i>
+            }
+        </div>
+    </div>
+}

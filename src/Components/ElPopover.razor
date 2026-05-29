@@ -1,0 +1,46 @@
+@inherits ElementComponentBase
+
+<span class="el-popover__reference-wrapper" style="@ReferenceStyle" @attributes="Attributes"
+      @onmouseover="OnMouseOverAsync"
+      @onmouseout="OnMouseOutAsync"
+      @onclick="OnClickAsync"
+      @onfocusin="OnFocusInAsync"
+      @onfocusout="OnFocusOutAsync"
+      @oncontextmenu="OnContextMenuAsync"
+      @oncontextmenu:preventDefault="PreventContextMenu">
+    <span class="el-popover__reference" aria-describedby="@PopoverId">
+        @Reference
+        @ChildContent
+    </span>
+    @if (ShouldShowPopover)
+    {
+        <div id="@PopoverId" class="@PopoverClassValue" style="@PopoverStyleValue" role="@Role" tabindex="@Tabindex" x-placement="@Placement">
+            @if (TitleContent != null)
+            {
+                <div class="el-popover__title">@TitleContent</div>
+            }
+            else if (!string.IsNullOrWhiteSpace(Title))
+            {
+                <div class="el-popover__title">@Title</div>
+            }
+            <div class="el-popover__content">
+                @if (ContentTemplate != null)
+                {
+                    @ContentTemplate
+                }
+                else
+                {
+                    @Content
+                }
+            </div>
+            @if (Footer != null)
+            {
+                <div class="el-popover__footer">@Footer</div>
+            }
+            @if (ShowArrow)
+            {
+                <div x-arrow="" class="popper__arrow"></div>
+            }
+        </div>
+    }
+</span>

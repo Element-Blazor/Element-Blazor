@@ -28,6 +28,8 @@ namespace Element
             services.AddSingleton<TableEditorMap>();
             services.AddScoped<Document>();
             services.AddScoped<MessageService>();
+            services.AddScoped<NotificationService>();
+            services.AddScoped<ElNotification>();
             services.AddSingleton<LoadingService>();
             services.AddScoped<DialogService>();
             services.AddScoped<PopupService>();

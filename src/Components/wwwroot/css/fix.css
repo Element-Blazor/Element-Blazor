@@ -883,3 +883,63 @@ div.el-form-item div.el-select {
 .el-page-header__main {
     color: var(--el-text-color-regular, #606266);
 }
+.el-tooltip__trigger,
+.el-popover__reference-wrapper,
+.el-popconfirm__reference-wrapper {
+  vertical-align: middle;
+}
+
+.el-tooltip__popper {
+  max-width: 260px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.el-tooltip__popper.is-dark {
+  color: var(--el-color-white, #fff);
+  background: var(--el-text-color-primary, #303133);
+}
+
+.el-tooltip__popper.is-light {
+  color: var(--el-text-color-primary, #303133);
+  background: var(--el-bg-color, #fff);
+}
+
+.el-popover__content {
+  color: var(--el-text-color-regular, #606266);
+  font-size: var(--el-font-size-base, 14px);
+}
+
+.el-popover__footer {
+  margin-top: 12px;
+  text-align: right;
+}
+
+.el-message__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 8px;
+  padding: 0 5px;
+  border-radius: 9px;
+  color: var(--el-color-white, #fff);
+  background: var(--el-color-danger, #f56c6c);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.el-drawer__footer {
+  padding: 10px 20px 20px;
+  text-align: right;
+}
+
+.demo-feedback__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}

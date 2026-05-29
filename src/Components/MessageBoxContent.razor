@@ -1,0 +1,19 @@
+<div class="el-message-box__message">
+    @if (Option.MessageContent != null)
+    {
+        @Option.MessageContent
+    }
+    else
+    {
+        <p>@Option.Message</p>
+    }
+</div>
+@if (Option.ShowInput)
+{
+    <div class="el-message-box__input">
+        <div class="el-input">
+            <input type="text" autocomplete="off" placeholder="@Option.InputPlaceholder" class="el-input__inner" @bind="Option.InputValue" />
+        </div>
+        <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+    </div>
+}

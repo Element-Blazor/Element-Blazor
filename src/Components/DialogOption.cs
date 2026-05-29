@@ -59,6 +59,8 @@ namespace Element
 
         public int? CustomZIndex { get; set; }
 
+        internal MessageBoxOption MessageBoxOption { get; set; }
+
         /// <summary>
         /// ´°¿ÚÏÔÊ¾Î»ÖÃ
         /// </summary>

@@ -1,0 +1,38 @@
+@inherits ElementComponentBase
+
+<span class="el-popconfirm__reference-wrapper" style="@ReferenceStyle" @attributes="Attributes"
+      @onclick="ToggleAsync"
+      @onmouseover="OnMouseOverAsync"
+      @onmouseout="OnMouseOutAsync">
+    <span class="el-popconfirm__reference">
+        @Reference
+        @ChildContent
+    </span>
+    @if (IsVisible)
+    {
+        <div class="@PopoverClassValue" style="@PopoverStyleValue" role="tooltip" x-placement="@Placement">
+            <div class="el-popconfirm__main">
+                @if (!string.IsNullOrWhiteSpace(Icon))
+                {
+                    <i class="@IconClass" style="@IconStyle"></i>
+                }
+                @if (TitleContent != null)
+                {
+                    @TitleContent
+                }
+                else
+                {
+                    @Title
+                }
+            </div>
+            <div class="el-popconfirm__action" @onclick:stopPropagation="true">
+                <ElButton Size="@ButtonSize.Small" Type="@CancelButtonType" Content="@CancelButtonText" Text="@(CancelButtonType == ButtonType.Text)" OnClick="CancelAsync"></ElButton>
+                <ElButton Size="@ButtonSize.Small" Type="@ConfirmButtonType" Content="@ConfirmButtonText" Text="@(ConfirmButtonType == ButtonType.Text)" OnClick="ConfirmAsync"></ElButton>
+            </div>
+            @if (ShowArrow)
+            {
+                <div x-arrow="" class="popper__arrow"></div>
+            }
+        </div>
+    }
+</span>
