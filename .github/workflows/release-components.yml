@@ -122,6 +122,25 @@ jobs:
             ${{ env.PACKAGE_OUTPUT }}/*.nupkg
             ${{ env.PACKAGE_OUTPUT }}/*.snupkg
 
+      - name: Verify package outputs
+        shell: bash
+        run: |
+          expected_packages=(
+            "Element.${{ steps.version.outputs.version }}.nupkg"
+            "Element.Markdown.${{ steps.version.outputs.version }}.nupkg"
+            "Element.X.${{ steps.version.outputs.version }}.nupkg"
+            "Element.${{ steps.version.outputs.version }}.snupkg"
+            "Element.Markdown.${{ steps.version.outputs.version }}.snupkg"
+            "Element.X.${{ steps.version.outputs.version }}.snupkg"
+          )
+
+          for package in "${expected_packages[@]}"; do
+            if [[ ! -f "${{ env.PACKAGE_OUTPUT }}/$package" ]]; then
+              echo "::error::Missing NuGet artifact: $package"
+              exit 1
+            fi
+          done
+
       - name: Publish to NuGet
         env:
           NUGET_KEY: ${{ secrets.NUGET_KEY }}
