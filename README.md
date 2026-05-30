@@ -96,4 +96,9 @@ git push origin v2.14.0-alpha.1
 
 ## 💬 社区
 
-欢迎在演示站 About 页面扫码加入企业微信交流群，也欢迎通过 GitHub Issues 一起推进组件、文档、主题和 AI 场景能力。
+欢迎加入微信群/企业微信交流群，也欢迎通过 GitHub Issues 一起推进组件、文档、主题和 AI 场景能力。
+
+- GitHub Pages 演示站：<https://element-blazor.github.io/>
+- GitHub Issues：<https://github.com/Element-Blazor/Element-Blazor/issues>
+
+<img src="demo/site/wwwroot/images/wecom-qr.jpg" alt="Element-Blazor 微信交流群二维码" width="240" />

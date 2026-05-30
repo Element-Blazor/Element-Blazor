@@ -5,7 +5,9 @@
          role="@Role"
          aria-live="@AriaLive"
          aria-relevant="@AriaRelevant"
+         aria-busy="@AriaBusyValue"
          @ref="listElement"
+         @onscroll="HandleScrollAsync"
          @attributes="Attributes">
     @if (ResolvedItems.Count == 0)
     {

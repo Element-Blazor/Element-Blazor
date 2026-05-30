@@ -80,6 +80,9 @@ namespace Element
         public string AriaLabel { get; set; }
 
         [Parameter]
+        public string AriaDescribedby { get; set; }
+
+        [Parameter]
         public string InputStyle { get; set; }
 
         [Parameter]
@@ -370,6 +373,8 @@ namespace Element
 
         private string AriaInvalid => IsAriaInvalid ? "true" : "false";
 
+        private string InputAriaDescribedBy => JoinAriaIds(AriaDescribedby, AriaDescribedBy);
+
         private string GetOptionId(int index) => $"{dropdownId}-option-{index}";
 
         private IEnumerable<string> ResolvePrefixes()
@@ -563,6 +568,12 @@ namespace Element
             activeMentionEnd = -1;
             dropdownVisible = false;
             activeIndex = 0;
+        }
+
+        private static string JoinAriaIds(params string[] ids)
+        {
+            var value = string.Join(" ", ids.Where(id => !string.IsNullOrWhiteSpace(id)));
+            return string.IsNullOrWhiteSpace(value) ? null : value;
         }
 
         private sealed class MentionContext

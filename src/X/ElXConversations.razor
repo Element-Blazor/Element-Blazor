@@ -10,10 +10,39 @@
         <button type="button"
                 class="el-x-conversations__create"
                 aria-label="@CreateAriaLabel"
+                disabled="@Disabled"
                 @onclick="CreateAsync">
             <ElIcon Name="@CreateIcon" />
             <span>@CreateText</span>
         </button>
+    }
+    @if (CreateInline && creating)
+    {
+        <div class="el-x-conversations__editor is-create">
+            <input class="el-x-conversations__input"
+                   value="@createTitle"
+                   placeholder="@CreatePlaceholder"
+                   aria-label="@CreateInputAriaLabel"
+                   disabled="@Disabled"
+                   @oninput="OnCreateInputAsync"
+                   @onkeydown="OnCreateKeyDownAsync" />
+            <span class="el-x-conversations__editor-actions">
+                <button type="button"
+                        class="el-x-conversations__action"
+                        aria-label="@CreateConfirmAriaLabel"
+                        title="@CreateConfirmText"
+                        @onclick="ConfirmCreateAsync">
+                    <ElIcon Name="@ConfirmIcon" />
+                </button>
+                <button type="button"
+                        class="el-x-conversations__action"
+                        aria-label="@CreateCancelAriaLabel"
+                        title="@CancelText"
+                        @onclick="CancelCreateAsync">
+                    <ElIcon Name="@CancelIcon" />
+                </button>
+            </span>
+        </div>
     }
     @foreach (var group in GroupedItems)
     {
@@ -25,52 +54,102 @@
         {
             var active = IsActive(item);
             <div class="@GetRowClass(item, active)">
-                <button type="button"
-                        class="@GetItemClass(item, active)"
-                        disabled="@item.Disabled"
-                        aria-current="@(active ? "page" : null)"
-                        @onclick="() => SelectAsync(item)">
-                    <span class="el-x-conversations__icon">
-                        <ElIcon Name="@(item.Icon ?? "chat-dot-round")" />
+                @if (IsEditing(item))
+                {
+                    <div class="@GetItemClass(item, active)">
+                        <span class="el-x-conversations__icon">
+                            <ElIcon Name="@(item.Icon ?? "chat-dot-round")" />
+                        </span>
+                        <input class="el-x-conversations__input"
+                               value="@editingTitle"
+                               aria-label="@GetRenameInputAriaLabel(item)"
+                               disabled="@Disabled"
+                               @oninput="OnRenameInputAsync"
+                               @onkeydown="args => OnRenameKeyDownAsync(args, item)" />
+                    </div>
+                    <span class="el-x-conversations__actions is-editing">
+                        <button type="button"
+                                class="el-x-conversations__action"
+                                aria-label="@GetRenameConfirmAriaLabel(item)"
+                                title="@RenameConfirmText"
+                                @onclick="() => ConfirmRenameAsync(item)">
+                            <ElIcon Name="@ConfirmIcon" />
+                        </button>
+                        <button type="button"
+                                class="el-x-conversations__action"
+                                aria-label="@GetRenameCancelAriaLabel(item)"
+                                title="@CancelText"
+                                @onclick="CancelRenameAsync">
+                            <ElIcon Name="@CancelIcon" />
+                        </button>
                     </span>
-                    <span class="el-x-conversations__body">
-                        <span class="el-x-conversations__title">@item.Title</span>
-                        @if (!string.IsNullOrWhiteSpace(item.Description))
+                }
+                else if (ItemTemplate != null)
+                {
+                    <button type="button"
+                            class="@GetItemClass(item, active)"
+                            disabled="@(Disabled || item.Disabled)"
+                            aria-current="@(active ? "page" : null)"
+                            @onclick="() => SelectAsync(item)">
+                        @ItemTemplate(item)
+                    </button>
+                }
+                else
+                {
+                    <button type="button"
+                            class="@GetItemClass(item, active)"
+                            disabled="@(Disabled || item.Disabled)"
+                            aria-current="@(active ? "page" : null)"
+                            @onclick="() => SelectAsync(item)">
+                        <span class="el-x-conversations__icon">
+                            <ElIcon Name="@(item.Icon ?? "chat-dot-round")" />
+                        </span>
+                        <span class="el-x-conversations__body">
+                            <span class="el-x-conversations__title">@item.Title</span>
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <span class="el-x-conversations__description">@item.Description</span>
+                            }
+                        </span>
+                        @if (item.Pinned)
                         {
-                            <span class="el-x-conversations__description">@item.Description</span>
+                            <span class="el-x-conversations__pin">@PinnedText</span>
                         }
-                    </span>
-                    @if (item.Pinned)
-                    {
-                        <span class="el-x-conversations__pin">Pin</span>
-                    }
-                    @if (item.Extra != null)
-                    {
-                        <span class="el-x-conversations__extra">@item.Extra</span>
-                    }
-                </button>
-                @if (ShowActions && !item.Disabled && HasItemActions)
+                        @if (item.Extra != null)
+                        {
+                            <span class="el-x-conversations__extra">@item.Extra</span>
+                        }
+                    </button>
+                }
+                @if (ShowActions && !Disabled && !item.Disabled && HasItemActions && !IsEditing(item))
                 {
                     <span class="el-x-conversations__actions">
-                        @if (ShowRename)
+                        @if (ActionTemplate != null)
                         {
-                            <button type="button"
-                                    class="el-x-conversations__action"
-                                    aria-label="@GetRenameAriaLabel(item)"
-                                    title="@RenameText"
-                                    @onclick="() => RenameAsync(item)">
-                                <ElIcon Name="@RenameIcon" />
-                            </button>
+                            @ActionTemplate(item)
                         }
-                        @if (ShowDelete)
+                        else
                         {
-                            <button type="button"
-                                    class="el-x-conversations__action is-danger"
-                                    aria-label="@GetDeleteAriaLabel(item)"
-                                    title="@DeleteText"
-                                    @onclick="() => DeleteAsync(item)">
-                                <ElIcon Name="@DeleteIcon" />
-                            </button>
+                            @if (ShowRename)
+                            {
+                                <button type="button"
+                                        class="el-x-conversations__action"
+                                        aria-label="@GetRenameAriaLabel(item)"
+                                        title="@RenameText"
+                                        @onclick="() => RenameAsync(item)">
+                                    <ElIcon Name="@RenameIcon" />
+                                </button>
+                            }
+                            @if (ShowDelete)
+                            {
+                                <button type="button"
+                                        class="el-x-conversations__action is-danger"
+                                        aria-label="@GetDeleteAriaLabel(item)"
+                                        title="@DeleteText"
+                                        @onclick="() => DeleteAsync(item)">
+                                    <ElIcon Name="@DeleteIcon" />
+                                </button>
+                            }
                         }
                     </span>
                 }

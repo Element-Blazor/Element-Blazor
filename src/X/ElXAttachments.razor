@@ -4,6 +4,7 @@
     @if (!Readonly)
     {
         <ElUpload Url="@UploadUrl"
+                  Method="@Method"
                   AutoUpload="@AutoUpload"
                   Multiple="@Multiple"
                   Limit="@Limit"
@@ -15,22 +16,32 @@
                   Disabled="@Disabled"
                   BeforeUpload="@BeforeUpload"
                   BeforeRemove="@BeforeRemove"
-                  HttpRequest="@HttpRequest"
+                  HttpRequest="@EffectiveHttpRequest"
                   OnChange="HandleUploadChangeAsync"
                   OnProgress="HandleUploadProgressAsync"
                   OnSuccess="HandleUploadSuccessAsync"
                   OnError="HandleUploadErrorAsync"
                   OnExceed="HandleUploadExceedAsync">
             <ChildContent>
-                @if (UploadContent != null)
+                @if (UploadTemplate != null)
+                {
+                    @UploadTemplate(this)
+                }
+                else if (UploadContent != null)
                 {
                     @UploadContent
                 }
                 else
                 {
-                    <ElButton Type="@ButtonType.Primary" Plain="true" Icon="el-icon-paperclip">Attach</ElButton>
+                    <ElButton Type="@ButtonType.Primary" Plain="true" Icon="@UploadIcon">@UploadText</ElButton>
                 }
             </ChildContent>
+            <Tip>
+                @if (TipTemplate != null)
+                {
+                    @TipTemplate
+                }
+            </Tip>
         </ElUpload>
     }
     @if (Items != null && Items.Any())
@@ -55,5 +66,9 @@
     else if (EmptyContent != null)
     {
         <div class="el-x-attachments__empty">@EmptyContent</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(ErrorText))
+    {
+        <div class="el-x-attachments__error" role="alert">@ErrorText</div>
     }
 </div>

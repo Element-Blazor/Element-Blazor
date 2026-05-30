@@ -1,4 +1,6 @@
 using Element;
+using System;
+
 namespace Element.X
 {
     public class XAttachmentItem
@@ -18,5 +20,13 @@ namespace Element.X
         public XAttachmentStatus Status { get; set; } = XAttachmentStatus.Ready;
 
         public string Error { get; set; }
+
+        public string ErrorCode { get; set; }
+
+        public IFileModel File { get; set; }
+
+        public UploadRequestResult Response { get; set; }
+
+        public Exception Exception { get; set; }
     }
 }

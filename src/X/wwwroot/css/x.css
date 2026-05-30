@@ -261,6 +261,46 @@
     color: var(--el-color-danger);
 }
 
+.el-x-conversations__editor {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 48px;
+    padding: 6px;
+    border-radius: var(--el-border-radius-base);
+    background: var(--el-fill-color-light);
+}
+
+.el-x-conversations__editor.is-create {
+    margin: 2px 0 4px;
+}
+
+.el-x-conversations__editor-actions,
+.el-x-conversations__actions.is-editing {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 2px;
+    opacity: 1;
+}
+
+.el-x-conversations__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid var(--el-border-color);
+    border-radius: var(--el-border-radius-base);
+    background: var(--el-fill-color-blank);
+    color: var(--el-text-color-primary);
+    font: inherit;
+    outline: 0;
+}
+
+.el-x-conversations__input:focus {
+    border-color: var(--el-color-primary);
+}
+
 .el-x-welcome {
     display: flex;
     align-items: flex-start;
@@ -450,6 +490,11 @@
     font-size: 13px;
 }
 
+.el-x-attachments__error {
+    color: var(--el-color-danger);
+    font-size: 13px;
+}
+
 .el-x-sender,
 .el-x-mention-sender {
     display: flex;
@@ -465,6 +510,14 @@
     display: flex;
     align-items: stretch;
     gap: 10px;
+}
+
+.el-x-sender__help,
+.el-x-mention-sender__help {
+    margin: 0;
+    color: var(--el-text-color-secondary);
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .el-x-sender__input {

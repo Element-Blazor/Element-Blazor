@@ -1,6 +1,10 @@
 @inherits ElementComponentBase
 
 <section class="@SenderClass" style="@Style" @attributes="Attributes">
+    @if (!string.IsNullOrWhiteSpace(HelpText))
+    {
+        <p class="el-x-sender__help" id="@HelpId">@HelpText</p>
+    }
     @if (Header != null)
     {
         <div class="el-x-sender__header">@Header</div>
@@ -29,6 +33,7 @@
                   aria-label="@AriaLabel"
                   aria-invalid="@AriaInvalidValue"
                   aria-describedby="@EffectiveAriaDescribedBy"
+                  aria-keyshortcuts="@AriaKeyShortcuts"
                   style="@InputStyle"
                   @oninput="OnInputAsync"
                   @onkeydown="OnKeyDownAsync"></textarea>
@@ -47,6 +52,7 @@
             {
                 <ElButton Type="@ButtonType.Info"
                           Text="true"
+                          Icon="@ClearButtonIcon"
                           Disabled="@IsClearDisabled"
                           OnClick="ClearAsync"
                           aria-label="@ClearButtonText">
@@ -57,6 +63,7 @@
             {
                 <ElButton Type="@ButtonType.Danger"
                           Plain="true"
+                          Icon="@StopButtonIcon"
                           OnClick="StopAsync"
                           aria-label="@StopButtonText">
                     @StopButtonText
@@ -64,6 +71,7 @@
             }
             <ElButton Type="@ButtonType.Primary"
                       Loading="@Loading"
+                      Icon="@SendButtonIcon"
                       Disabled="@IsSendDisabled"
                       OnClick="SendAsync"
                       aria-label="@SendButtonText">

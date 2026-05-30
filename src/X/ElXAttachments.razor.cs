@@ -38,7 +38,22 @@ namespace Element.X
         public EventCallback<UploadChangeEventArgs> OnChange { get; set; }
 
         [Parameter]
+        public EventCallback<XAttachmentUploadEventArgs> OnStatusChanged { get; set; }
+
+        [Parameter]
+        public EventCallback<XAttachmentUploadEventArgs> OnUploadException { get; set; }
+
+        [Parameter]
+        public EventCallback<XAttachmentUploadExceedEventArgs> OnUploadExceed { get; set; }
+
+        [Parameter]
         public RenderFragment UploadContent { get; set; }
+
+        [Parameter]
+        public RenderFragment<ElXAttachments> UploadTemplate { get; set; }
+
+        [Parameter]
+        public RenderFragment TipTemplate { get; set; }
 
         [Parameter]
         public RenderFragment<XAttachmentItem> ItemTemplate { get; set; }
@@ -48,6 +63,9 @@ namespace Element.X
 
         [Parameter]
         public string UploadUrl { get; set; } = "/";
+
+        [Parameter]
+        public string Method { get; set; } = "post";
 
         [Parameter]
         public bool AutoUpload { get; set; }
@@ -77,6 +95,24 @@ namespace Element.X
         public bool Disabled { get; set; }
 
         [Parameter]
+        public string UploadText { get; set; } = "Attach";
+
+        [Parameter]
+        public string UploadIcon { get; set; } = "el-icon-paperclip";
+
+        [Parameter]
+        public string ErrorText { get; set; }
+
+        [Parameter]
+        public string ExceedMessage { get; set; } = "The selected files exceed the upload limit.";
+
+        [Parameter]
+        public Func<IFileModel, UploadRequestResult, string> ErrorMessageSelector { get; set; }
+
+        [Parameter]
+        public Func<IFileModel, XAttachmentStatus> StatusMapper { get; set; }
+
+        [Parameter]
         public Func<UploadModel, Task<bool>> BeforeUpload { get; set; }
 
         [Parameter]
@@ -91,6 +127,9 @@ namespace Element.X
             .AddIf(Disabled, "is-disabled")
             .ToString();
 
+        protected Func<UploadRequestContext, Task<UploadRequestResult>> EffectiveHttpRequest =>
+            HttpRequest == null ? null : UploadRequestAsync;
+
         private async Task HandleUploadChangeAsync(UploadChangeEventArgs args)
         {
             Items = MapFiles(args?.FileList);
@@ -101,6 +140,7 @@ namespace Element.X
             }
 
             await NotifyItemsChangedAsync();
+            await NotifyStatusChangedAsync(FindItem(args?.File), args?.File);
         }
 
         private async Task HandleUploadProgressAsync(UploadProgressEventArgs args)
@@ -110,6 +150,9 @@ namespace Element.X
                 item.Status = XAttachmentStatus.Uploading;
                 item.Progress = args.Percent;
                 item.Error = null;
+                item.ErrorCode = null;
+                item.Response = null;
+                item.Exception = null;
             });
 
             if (OnProgress.HasDelegate)
@@ -118,6 +161,7 @@ namespace Element.X
             }
 
             await NotifyItemsChangedAsync();
+            await NotifyStatusChangedAsync(FindItem(args?.File), args?.File);
         }
 
         private async Task HandleUploadSuccessAsync(UploadRequestEventArgs args)
@@ -127,6 +171,9 @@ namespace Element.X
                 item.Status = XAttachmentStatus.Success;
                 item.Progress = 100;
                 item.Error = null;
+                item.ErrorCode = null;
+                item.Response = args?.Response;
+                item.Exception = null;
             });
 
             if (OnSuccess.HasDelegate)
@@ -135,6 +182,7 @@ namespace Element.X
             }
 
             await NotifyItemsChangedAsync();
+            await NotifyStatusChangedAsync(FindItem(args?.File), args?.File, args?.Response);
         }
 
         private async Task HandleUploadErrorAsync(UploadRequestEventArgs args)
@@ -143,7 +191,9 @@ namespace Element.X
             {
                 item.Status = XAttachmentStatus.Error;
                 item.Progress = 0;
-                item.Error = args?.Response?.Message ?? TryGetUploadMessage(args?.File) ?? "Upload failed.";
+                item.Error = ResolveErrorMessage(args?.File, args?.Response);
+                item.ErrorCode = args?.Response?.Code;
+                item.Response = args?.Response;
             });
 
             if (OnError.HasDelegate)
@@ -152,13 +202,23 @@ namespace Element.X
             }
 
             await NotifyItemsChangedAsync();
+            await NotifyStatusChangedAsync(FindItem(args?.File), args?.File, args?.Response);
         }
 
         private async Task HandleUploadExceedAsync(UploadExceedEventArgs args)
         {
+            ErrorText = ExceedMessage;
             if (OnExceed.HasDelegate)
             {
                 await OnExceed.InvokeAsync(args);
+            }
+            if (OnUploadExceed.HasDelegate)
+            {
+                await OnUploadExceed.InvokeAsync(new XAttachmentUploadExceedEventArgs
+                {
+                    UploadArgs = args,
+                    Message = ExceedMessage
+                });
             }
         }
 
@@ -176,11 +236,12 @@ namespace Element.X
                 Url = file?.Url,
                 Size = FormatSize(TryGetUploadSize(file)),
                 Type = ResolveFileType(file?.FileName),
-                Status = MapStatus(TryGetUploadStatus(file)),
+                Status = MapStatus(file),
                 Progress = TryGetUploadStatus(file) == UploadStatus.Success ? 100 : 0,
                 Error = TryGetUploadStatus(file) == UploadStatus.Failure
-                    ? TryGetUploadMessage(file) ?? "Upload failed."
-                    : null
+                    ? ResolveErrorMessage(file, null)
+                    : null,
+                File = file
             };
         }
 
@@ -207,6 +268,7 @@ namespace Element.X
                 item.Url = file.Url;
                 item.Size = FormatSize(TryGetUploadSize(file));
                 item.Type = ResolveFileType(file.FileName);
+                item.File = file;
             }
 
             update(item);
@@ -220,8 +282,26 @@ namespace Element.X
             }
         }
 
-        private static XAttachmentStatus MapStatus(UploadStatus? status)
+        private XAttachmentItem FindItem(IFileModel file)
         {
+            if (file == null)
+            {
+                return null;
+            }
+
+            return Items?.FirstOrDefault(x => string.Equals(x.Id, file.Id, StringComparison.Ordinal))
+                ?? Items?.FirstOrDefault(x => !string.IsNullOrWhiteSpace(file.FileName)
+                    && string.Equals(x.FileName, file.FileName, StringComparison.Ordinal));
+        }
+
+        private XAttachmentStatus MapStatus(IFileModel file)
+        {
+            if (StatusMapper != null)
+            {
+                return StatusMapper(file);
+            }
+
+            var status = TryGetUploadStatus(file);
             return status switch
             {
                 UploadStatus.Uploading => XAttachmentStatus.Uploading,
@@ -244,6 +324,16 @@ namespace Element.X
         private static string TryGetUploadMessage(IFileModel file)
         {
             return file is UploadModel model ? model.Message : null;
+        }
+
+        private string ResolveErrorMessage(IFileModel file, UploadRequestResult response)
+        {
+            if (ErrorMessageSelector != null)
+            {
+                return ErrorMessageSelector(file, response);
+            }
+
+            return response?.Message ?? TryGetUploadMessage(file) ?? "Upload failed.";
         }
 
         private static string ResolveFileType(string fileName)
@@ -308,6 +398,66 @@ namespace Element.X
             {
                 await OnPreview.InvokeAsync(item);
             }
+        }
+
+        private async Task<UploadRequestResult> UploadRequestAsync(UploadRequestContext context)
+        {
+            try
+            {
+                var result = HttpRequest != null
+                    ? await HttpRequest(context)
+                    : UploadRequestResult.Failure("Upload request is not configured.");
+                return result ?? UploadRequestResult.Failure("Upload failed.");
+            }
+            catch (Exception ex)
+            {
+                var result = UploadRequestResult.Failure(ex.Message);
+                UpdateItem(context?.File, item =>
+                {
+                    item.Status = XAttachmentStatus.Error;
+                    item.Progress = 0;
+                    item.Error = ResolveErrorMessage(context?.File, result);
+                    item.ErrorCode = result.Code;
+                    item.Response = result;
+                    item.Exception = ex;
+                });
+
+                var mappedItem = FindItem(context?.File);
+                await NotifyItemsChangedAsync();
+                var eventArgs = new XAttachmentUploadEventArgs
+                {
+                    Item = mappedItem,
+                    File = context?.File,
+                    Response = result,
+                    Exception = ex
+                };
+
+                if (OnUploadException.HasDelegate)
+                {
+                    await OnUploadException.InvokeAsync(eventArgs);
+                }
+                if (OnStatusChanged.HasDelegate)
+                {
+                    await OnStatusChanged.InvokeAsync(eventArgs);
+                }
+
+                return result;
+            }
+        }
+
+        private async Task NotifyStatusChangedAsync(XAttachmentItem item, IFileModel file, UploadRequestResult response = null)
+        {
+            if (!OnStatusChanged.HasDelegate || item == null)
+            {
+                return;
+            }
+
+            await OnStatusChanged.InvokeAsync(new XAttachmentUploadEventArgs
+            {
+                Item = item,
+                File = file,
+                Response = response
+            });
         }
     }
 }

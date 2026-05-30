@@ -10,6 +10,7 @@ namespace Element.X
     {
         private static long senderIdSeed;
         private readonly string generatedInputId = $"el-x-sender-input-{System.Threading.Interlocked.Increment(ref senderIdSeed)}";
+        private readonly string generatedHelpId = $"el-x-sender-help-{System.Threading.Interlocked.Increment(ref senderIdSeed)}";
         private ElementReference textareaElement;
 
         [Parameter]
@@ -29,6 +30,12 @@ namespace Element.X
 
         [Parameter]
         public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
+        [Parameter]
+        public EventCallback<KeyboardEventArgs> OnShortcutSubmit { get; set; }
+
+        [Parameter]
+        public EventCallback<KeyboardEventArgs> OnEscape { get; set; }
 
         [Parameter]
         public string Placeholder { get; set; } = "Ask anything";
@@ -55,6 +62,12 @@ namespace Element.X
         public bool SubmitOnMetaEnter { get; set; }
 
         [Parameter]
+        public bool SubmitOnShiftEnter { get; set; }
+
+        [Parameter]
+        public bool SubmitOnAltEnter { get; set; }
+
+        [Parameter]
         public bool ClearOnSubmit { get; set; }
 
         [Parameter]
@@ -62,6 +75,9 @@ namespace Element.X
 
         [Parameter]
         public bool ShowClearButton { get; set; }
+
+        [Parameter]
+        public bool ClearOnStop { get; set; }
 
         [Parameter]
         public bool AllowEmpty { get; set; }
@@ -74,6 +90,18 @@ namespace Element.X
 
         [Parameter]
         public string ClearButtonText { get; set; } = "Clear";
+
+        [Parameter]
+        public string SendButtonIcon { get; set; }
+
+        [Parameter]
+        public string StopButtonIcon { get; set; }
+
+        [Parameter]
+        public string ClearButtonIcon { get; set; } = "el-icon-circle-close";
+
+        [Parameter]
+        public string HelpText { get; set; }
 
         [Parameter]
         public string AriaLabel { get; set; } = "Message input";
@@ -119,9 +147,26 @@ namespace Element.X
 
         protected string InputId => string.IsNullOrWhiteSpace(Id) ? generatedInputId : Id;
 
+        protected string HelpId => generatedHelpId;
+
         protected string AriaInvalidValue => AriaInvalid ? "true" : "false";
 
-        protected string EffectiveAriaDescribedBy => AriaDescribedBy;
+        protected string EffectiveAriaDescribedBy
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(HelpText))
+                {
+                    return AriaDescribedBy;
+                }
+
+                return string.IsNullOrWhiteSpace(AriaDescribedBy)
+                    ? HelpId
+                    : $"{AriaDescribedBy} {HelpId}";
+            }
+        }
+
+        protected string AriaKeyShortcuts => BuildAriaKeyShortcuts();
 
         protected bool IsSendDisabled => Disabled || Readonly || Loading || (!AllowEmpty && string.IsNullOrWhiteSpace(Value));
 
@@ -131,6 +176,7 @@ namespace Element.X
             .Add("el-x-sender", Cls)
             .AddIf(Loading, "is-loading")
             .AddIf(Disabled, "is-disabled")
+            .AddIf(Readonly, "is-readonly")
             .ToString();
 
         private async Task OnInputAsync(ChangeEventArgs args)
@@ -151,8 +197,16 @@ namespace Element.X
 
             if (args.Key == "Escape" && ClearOnEscape)
             {
+                if (OnEscape.HasDelegate)
+                {
+                    await OnEscape.InvokeAsync(args);
+                }
                 await ClearValueAsync();
                 return;
+            }
+            if (args.Key == "Escape" && OnEscape.HasDelegate)
+            {
+                await OnEscape.InvokeAsync(args);
             }
 
             if (!ShouldSubmit(args))
@@ -160,6 +214,10 @@ namespace Element.X
                 return;
             }
 
+            if (OnShortcutSubmit.HasDelegate)
+            {
+                await OnShortcutSubmit.InvokeAsync(args);
+            }
             await SubmitAsync();
         }
 
@@ -192,6 +250,10 @@ namespace Element.X
             if (OnStop.HasDelegate)
             {
                 await OnStop.InvokeAsync();
+            }
+            if (ClearOnStop)
+            {
+                await ClearValueAsync();
             }
         }
 
@@ -233,9 +295,19 @@ namespace Element.X
 
         private bool ShouldSubmit(KeyboardEventArgs args)
         {
-            if (args?.Key != "Enter" || args.ShiftKey || args.AltKey)
+            if (args?.Key != "Enter")
             {
                 return false;
+            }
+
+            if (args.ShiftKey)
+            {
+                return SubmitOnShiftEnter;
+            }
+
+            if (args.AltKey)
+            {
+                return SubmitOnAltEnter;
             }
 
             if (args.CtrlKey)
@@ -249,6 +321,31 @@ namespace Element.X
             }
 
             return SubmitOnEnter;
+        }
+
+        private string BuildAriaKeyShortcuts()
+        {
+            if (SubmitOnCtrlEnter)
+            {
+                return "Control+Enter";
+            }
+
+            if (SubmitOnMetaEnter)
+            {
+                return "Meta+Enter";
+            }
+
+            if (SubmitOnShiftEnter)
+            {
+                return "Shift+Enter";
+            }
+
+            if (SubmitOnAltEnter)
+            {
+                return "Alt+Enter";
+            }
+
+            return SubmitOnEnter ? "Enter" : null;
         }
 
         public ValueTask FocusAsync()

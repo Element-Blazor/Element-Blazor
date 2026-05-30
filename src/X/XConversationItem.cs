@@ -20,5 +20,7 @@ namespace Element.X
         public bool Disabled { get; set; }
 
         public RenderFragment Extra { get; set; }
+
+        public bool Editing { get; set; }
     }
 }

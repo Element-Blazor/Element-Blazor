@@ -572,6 +572,19 @@ window.elementXBubbleListScrollToEnd = function (el, reverse, smooth, onlyWhenNe
 
     el.scrollTop = reverse ? 0 : maxScrollTop;
 };
+window.elementXBubbleListIsUserPinned = function (el, reverse, threshold) {
+    if (!el) {
+        return false;
+    }
+
+    threshold = typeof threshold === "number" ? threshold : 80;
+    var maxScrollTop = Math.max(0, (el.scrollHeight || 0) - (el.clientHeight || 0));
+    var distance = reverse
+        ? Math.abs(el.scrollTop || 0)
+        : Math.abs(maxScrollTop - (el.scrollTop || 0));
+
+    return distance > threshold;
+};
 window.elementResolveScrollContainer = function (target) {
     if (!target) {
         return window;

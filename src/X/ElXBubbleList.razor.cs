@@ -1,6 +1,7 @@
 using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Element.X
         private IReadOnlyList<XMessageItem> resolvedItems = new List<XMessageItem>();
         private int previousItemCount = -1;
         private string previousLastItemKey;
+        private bool pendingScrollRequest;
 
         [Parameter]
         public IEnumerable<XMessageItem> Items { get; set; }
@@ -43,6 +45,18 @@ namespace Element.X
         public int BottomThreshold { get; set; } = 80;
 
         [Parameter]
+        public bool AutoScrollOnStreaming { get; set; } = true;
+
+        [Parameter]
+        public bool LockAutoScrollWhenUserScrolls { get; set; }
+
+        [Parameter]
+        public bool UserPinned { get; set; }
+
+        [Parameter]
+        public EventCallback<bool> UserPinnedChanged { get; set; }
+
+        [Parameter]
         public bool Reverse { get; set; }
 
         [Parameter]
@@ -60,12 +74,18 @@ namespace Element.X
         [Parameter]
         public EventCallback OnAutoScrolled { get; set; }
 
+        [Parameter]
+        public EventCallback<bool> OnUserPinnedChanged { get; set; }
+
         protected IReadOnlyList<XMessageItem> ResolvedItems => resolvedItems;
+
+        protected string AriaBusyValue => resolvedItems.Any(x => x?.Loading == true) ? "true" : "false";
 
         protected string ListClass => HtmlPropertyBuilder.CreateCssClassBuilder()
             .Add("el-x-bubble-list", Cls)
             .AddIf(AutoScroll, "is-auto-scroll")
             .AddIf(Reverse, "is-reverse")
+            .AddIf(UserPinned, "is-user-pinned")
             .ToString();
 
         protected string ListStyle => HtmlPropertyBuilder.CreateCssStyleBuilder()
@@ -94,7 +114,7 @@ namespace Element.X
                     listElement,
                     Reverse,
                     SmoothScroll,
-                    ScrollOnlyWhenNearBottom,
+                    ScrollOnlyWhenNearBottom || UserPinned,
                     BottomThreshold);
 
                 if (OnAutoScrolled.HasDelegate)
@@ -107,6 +127,7 @@ namespace Element.X
             }
 
             CaptureSnapshot();
+            pendingScrollRequest = false;
         }
 
         public async Task ScrollToEndAsync(bool smooth = true)
@@ -120,11 +141,24 @@ namespace Element.X
             }
         }
 
+        public async Task RequestScrollToEndAsync(bool smooth = true)
+        {
+            pendingScrollRequest = true;
+            await ScrollToEndAsync(smooth);
+            pendingScrollRequest = false;
+            await SetUserPinnedAsync(false);
+        }
+
         private bool ShouldAutoScroll(bool firstRender)
         {
             if (!AutoScroll || !AutoScrollOnUpdate || resolvedItems.Count == 0)
             {
                 return false;
+            }
+
+            if (pendingScrollRequest)
+            {
+                return true;
             }
 
             if (firstRender || previousItemCount < 0)
@@ -133,7 +167,51 @@ namespace Element.X
             }
 
             var lastItemKey = GetLastItemKey();
-            return previousItemCount != resolvedItems.Count || previousLastItemKey != lastItemKey;
+            if (previousItemCount != resolvedItems.Count)
+            {
+                return true;
+            }
+
+            return AutoScrollOnStreaming && previousLastItemKey != lastItemKey;
+        }
+
+        private async Task HandleScrollAsync(EventArgs args)
+        {
+            if (!LockAutoScrollWhenUserScrolls && !UserPinned)
+            {
+                return;
+            }
+
+            try
+            {
+                var isPinned = await JSRuntime.InvokeAsync<bool>(
+                    "elementXBubbleListIsUserPinned",
+                    listElement,
+                    Reverse,
+                    BottomThreshold);
+                await SetUserPinnedAsync(isPinned);
+            }
+            catch
+            {
+            }
+        }
+
+        private async Task SetUserPinnedAsync(bool value)
+        {
+            if (UserPinned == value)
+            {
+                return;
+            }
+
+            UserPinned = value;
+            if (UserPinnedChanged.HasDelegate)
+            {
+                await UserPinnedChanged.InvokeAsync(value);
+            }
+            if (OnUserPinnedChanged.HasDelegate)
+            {
+                await OnUserPinnedChanged.InvokeAsync(value);
+            }
         }
 
         private void CaptureSnapshot()

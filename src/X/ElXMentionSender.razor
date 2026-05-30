@@ -18,9 +18,14 @@
                Name="@Name"
                InputStyle="@InputStyle"
                AriaLabel="@AriaLabel"
+               AriaDescribedby="@EffectiveAriaDescribedBy"
                OnSelect="HandleMentionSelectAsync"
                OnKeyDown="OnMentionKeyDownAsync">
     </ElMention>
+    @if (!string.IsNullOrWhiteSpace(HelpText))
+    {
+        <p class="el-x-mention-sender__help" id="@HelpId">@HelpText</p>
+    }
     <div class="el-x-mention-sender__actions">
         @if (Toolbar != null)
         {
@@ -28,8 +33,26 @@
         }
         @if (ShowClearButton)
         {
-            <ElButton Type="@ButtonType.Info" Text="true" Disabled="@IsClearDisabled" OnClick="ClearAsync">@ClearButtonText</ElButton>
+            <ElButton Type="@ButtonType.Info"
+                      Text="true"
+                      Icon="@ClearButtonIcon"
+                      Disabled="@IsClearDisabled"
+                      OnClick="ClearAsync"
+                      aria-label="@ClearButtonText">@ClearButtonText</ElButton>
         }
-        <ElButton Type="@ButtonType.Primary" Loading="@Loading" Disabled="@IsSendDisabled" OnClick="SendAsync">@SendButtonText</ElButton>
+        @if (Loading && OnStop.HasDelegate)
+        {
+            <ElButton Type="@ButtonType.Danger"
+                      Plain="true"
+                      Icon="@StopButtonIcon"
+                      OnClick="StopAsync"
+                      aria-label="@StopButtonText">@StopButtonText</ElButton>
+        }
+        <ElButton Type="@ButtonType.Primary"
+                  Loading="@Loading"
+                  Icon="@SendButtonIcon"
+                  Disabled="@IsSendDisabled"
+                  OnClick="SendAsync"
+                  aria-label="@SendButtonText">@SendButtonText</ElButton>
     </div>
 </section>
