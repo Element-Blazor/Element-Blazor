@@ -1,6 +1,6 @@
 # Element-Blazor 2.14 Release Checklist
 
-Use this checklist before publishing `Element` or companion packages such as `Element.Markdown`.
+Use this checklist before publishing `Element` or companion packages such as `Element.Markdown` and `Element.X`.
 
 ## Version and Source
 
@@ -13,6 +13,7 @@ Use this checklist before publishing `Element` or companion packages such as `El
 
 - [ ] Run `dotnet list src/Components/Element.csproj package --vulnerable --include-transitive`.
 - [ ] Run `dotnet list src/Markdown/Element.Markdown.csproj package --vulnerable --include-transitive`.
+- [ ] Run `dotnet list src/X/Element.X.csproj package --vulnerable --include-transitive`.
 - [ ] Review `dotnet list src/Components/Element.csproj package --outdated`.
 - [ ] Document any accepted dependency risk in the release notes.
 - [ ] Review suppressed historical analyzer warnings in `src/Components/Element.csproj` before removing `NoWarn` entries such as `BL0005` and `BL0007`.
@@ -40,6 +41,8 @@ Use this checklist before publishing `Element` or companion packages such as `El
 ## Package Contents
 
 - [ ] Run `dotnet pack src/Components/Element.csproj -c Release`.
+- [ ] Run `dotnet pack src/Markdown/Element.Markdown.csproj -c Release`.
+- [ ] Run `dotnet pack src/X/Element.X.csproj -c Release`.
 - [ ] Confirm the `.nupkg` contains `LOGO.png`, `LICENSE`, package readme, XML docs, and static web assets.
 - [ ] Confirm the `.snupkg` exists.
 - [ ] Install the package into a clean sample app if this is a public release.
@@ -49,6 +52,7 @@ Use this checklist before publishing `Element` or companion packages such as `El
 - [ ] Run `dotnet restore Element-Blazor.sln`.
 - [ ] Run `dotnet build src/Components/Element.csproj -c Release`.
 - [ ] Run `dotnet build src/Markdown/Element.Markdown.csproj -c Release`.
+- [ ] Run `dotnet build src/X/Element.X.csproj -c Release`.
 - [ ] Run `dotnet build Element-Blazor.sln -c Release`.
 - [ ] Run tests or document why tests were skipped.
 

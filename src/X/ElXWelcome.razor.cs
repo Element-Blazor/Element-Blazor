@@ -1,6 +1,7 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXWelcome : ElementComponentBase
     {

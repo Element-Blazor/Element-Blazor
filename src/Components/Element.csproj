@@ -65,7 +65,6 @@
     <None Include="wwwroot\css\fonts\element-icons.woff" />
     <None Include="wwwroot\css\index.css" />
     <None Include="wwwroot\css\theme.css" />
-    <None Include="wwwroot\css\x.css" />
     <None Include="wwwroot\js\dom.js" />
   </ItemGroup>
 

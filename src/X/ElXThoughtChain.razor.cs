@@ -1,7 +1,8 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXThoughtChain : ElementComponentBase
     {

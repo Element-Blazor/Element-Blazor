@@ -1,8 +1,9 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXBubble : ElementComponentBase
     {

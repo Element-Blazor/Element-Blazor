@@ -1,6 +1,7 @@
 ﻿# Element-Blazor
 
 [![NuGet](https://img.shields.io/nuget/dt/Element.svg)](https://www.nuget.org/packages/Element/)
+[![Element.X](https://img.shields.io/nuget/v/Element.X?label=Element.X)](https://www.nuget.org/packages/Element.X/)
 
 Element-Blazor is a Blazor UI component library. The project now targets [element-plus/element-plus](https://github.com/element-plus/element-plus) as its primary design and component baseline.
 
@@ -17,6 +18,7 @@ The project is currently under continuous refactoring and upgrade. See [ROADMAP.
 ## Current Status
 
 - Main component project: `src/Components/Element.csproj`
+- Optional X package: `src/X/Element.X.csproj`
 - Current target framework: `.NET 10`
 - Current alignment version line: `2.14.0-alpha.1`
 - Samples and demos: `template/Samples`, `demo`
@@ -64,6 +66,8 @@ If you only need to validate the component library, run:
 dotnet restore src/Components/Element.csproj
 dotnet build src/Components/Element.csproj
 ```
+
+Optional packages live outside the core package. Use `Element.Markdown` for Markdown editor components and `Element.X` for AI/conversation components.
 
 ### Run local samples and the full solution
 

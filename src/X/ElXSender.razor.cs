@@ -1,9 +1,10 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System;
 using System.Threading.Tasks;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXSender : ElementComponentBase
     {

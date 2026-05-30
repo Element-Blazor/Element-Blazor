@@ -9,8 +9,9 @@ This project follows Semantic Versioning and uses a Keep a Changelog style struc
 ### Added
 
 - Added release stabilization checklist in `docs/release-checklist.md`.
-- Added NuGet package readme files for `Element` and `Element.Markdown`.
+- Added NuGet package readme files for `Element`, `Element.Markdown`, and `Element.X`.
 - Added Source Link and `.snupkg` symbol package settings for packable projects.
+- Added independent `Element.X` package for optional AI and conversation components.
 
 ### Changed
 
@@ -18,6 +19,7 @@ This project follows Semantic Versioning and uses a Keep a Changelog style struc
 - Updated package license metadata to use the MIT license expression.
 - Updated package documentation file output paths to the `net10.0` target framework.
 - Replaced the unreadable changelog contents with a release-ready changelog baseline.
+- Moved X components and `x.css` out of the core `Element` package.
 
 ### Fixed
 

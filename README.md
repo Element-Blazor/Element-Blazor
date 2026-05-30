@@ -3,6 +3,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/Element?label=Element&logo=nuget&color=409eff)](https://www.nuget.org/packages/Element/)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Element?label=downloads&logo=nuget&color=67c23a)](https://www.nuget.org/packages/Element/)
 [![Markdown Version](https://img.shields.io/nuget/v/Element.Markdown?label=Element.Markdown&logo=nuget&color=e6a23c)](https://www.nuget.org/packages/Element.Markdown/)
+[![X Version](https://img.shields.io/nuget/v/Element.X?label=Element.X&logo=nuget&color=909399)](https://www.nuget.org/packages/Element.X/)
 [![GitHub Release](https://img.shields.io/github/v/release/Element-Blazor/Element-Blazor?label=release&logo=github)](https://github.com/Element-Blazor/Element-Blazor/releases)
 [![License](https://img.shields.io/github/license/Element-Blazor/Element-Blazor?label=license)](LICENSE)
 
@@ -44,12 +45,14 @@ builder.Services.AddElementServices();
 | --- | --- | --- | --- |
 | `Element` | [![NuGet](https://img.shields.io/nuget/v/Element?label=version)](https://www.nuget.org/packages/Element/) | [![Downloads](https://img.shields.io/nuget/dt/Element?label=downloads)](https://www.nuget.org/packages/Element/) | Element 风格 Blazor 组件库 |
 | `Element.Markdown` | [![NuGet](https://img.shields.io/nuget/v/Element.Markdown?label=version)](https://www.nuget.org/packages/Element.Markdown/) | [![Downloads](https://img.shields.io/nuget/dt/Element.Markdown?label=downloads)](https://www.nuget.org/packages/Element.Markdown/) | Markdown 编辑器组件 |
+| `Element.X` | [![NuGet](https://img.shields.io/nuget/v/Element.X?label=version)](https://www.nuget.org/packages/Element.X/) | [![Downloads](https://img.shields.io/nuget/dt/Element.X?label=downloads)](https://www.nuget.org/packages/Element.X/) | AI / conversation optional components |
 
 ## 🌈 项目状态
 
 - 📦 主包：`Element`
 - 🧱 主项目：`src/Components/Element.csproj`
 - ✍️ Markdown 包：`Element.Markdown`
+- 🤖 X 包：`Element.X` (`src/X/Element.X.csproj`)
 - ⚙️ 目标框架：`net10.0`
 - 🏷️ 当前版本线：`2.14.0-alpha.1`
 - 📜 开源协议：MIT
@@ -82,7 +85,7 @@ git tag v2.14.0-alpha.1
 git push origin v2.14.0-alpha.1
 ```
 
-流水线会根据 tag 去掉 `v` 后的版本号打包 `Element` 和 `Element.Markdown`，使用组织 Secret `NUGET_KEY` 发布到 NuGet，并同步创建 GitHub Release。
+流水线会根据 tag 去掉 `v` 后的版本号打包 `Element`、`Element.Markdown` 和 `Element.X`，使用组织 Secret `NUGET_KEY` 发布到 NuGet，并同步创建 GitHub Release。
 
 ## 📚 文档
 

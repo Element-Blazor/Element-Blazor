@@ -1,4 +1,5 @@
-namespace Element
+using Element;
+namespace Element.X
 {
     public class XAttachmentItem
     {

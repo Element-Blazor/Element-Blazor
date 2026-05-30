@@ -73,6 +73,8 @@ Details:
 ## Download and Links
 
 - NuGet: `https://www.nuget.org/packages/Element`
+- NuGet Markdown: `https://www.nuget.org/packages/Element.Markdown`
+- NuGet X: `https://www.nuget.org/packages/Element.X`
 - Source: `https://github.com/Element-Blazor/Element-Blazor`
 - Roadmap: `ROADMAP.md`
 - Changelog: `CHANGELOG.md`

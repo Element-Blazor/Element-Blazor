@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <PackageId>Element.X</PackageId>
+    <Title>Element-Blazor X</Title>
+    <Version>2.14.0-alpha.1</Version>
+    <Authors>wzxinchen;Element-Blazor</Authors>
+    <Company>Element-Blazor</Company>
+    <Description>AI and conversation scene components for Element-Blazor, inspired by Element Plus X.</Description>
+    <PackageProjectUrl>https://github.com/Element-Blazor/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Element-Blazor/Element-Blazor/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>Element.X</Product>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>PACKAGE_README.X.md</PackageReadmeFile>
+    <PackageIcon>LOGO.png</PackageIcon>
+    <PackageTags>blazor;components;element;element-plus;x;ai;chat;conversation;net10</PackageTags>
+    <PackageReleaseNotes>Element.X 2.14 alpha follows the Element-Blazor 2.14 version line and .NET 10 baseline.</PackageReleaseNotes>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <NoWarn>$(NoWarn);1591;1701;1702;CS0108;CS1573;BL0005;BL0007</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\net10.0\Element.X.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>obj\Release\net10.0\Element.X.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LOGO.png">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\LICENSE">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\PACKAGE_README.X.md">
+      <Pack>true</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="wwwroot\css\x.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Components\Element.csproj" />
+  </ItemGroup>
+
+</Project>

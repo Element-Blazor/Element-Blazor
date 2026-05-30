@@ -1,8 +1,9 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Threading.Tasks;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXFilesCard : ElementComponentBase
     {

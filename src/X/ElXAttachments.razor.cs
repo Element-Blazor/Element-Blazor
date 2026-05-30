@@ -1,10 +1,11 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXAttachments : ElementComponentBase
     {

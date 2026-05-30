@@ -60,6 +60,7 @@ jobs:
         run: |
           dotnet restore src/Components/Element.csproj
           dotnet restore src/Markdown/Element.Markdown.csproj
+          dotnet restore src/X/Element.X.csproj
           dotnet restore test/Element.ComponentTests/Element.ComponentTests.csproj
 
       - name: Test components
@@ -72,6 +73,10 @@ jobs:
             /p:Version=${{ steps.version.outputs.version }} \
             /p:GeneratePackageOnBuild=false
           dotnet build src/Markdown/Element.Markdown.csproj -c Release --no-restore \
+            /p:PackageVersion=${{ steps.version.outputs.version }} \
+            /p:Version=${{ steps.version.outputs.version }} \
+            /p:GeneratePackageOnBuild=false
+          dotnet build src/X/Element.X.csproj -c Release --no-restore \
             /p:PackageVersion=${{ steps.version.outputs.version }} \
             /p:Version=${{ steps.version.outputs.version }} \
             /p:GeneratePackageOnBuild=false
@@ -90,6 +95,17 @@ jobs:
       - name: Pack Element.Markdown
         run: >
           dotnet pack src/Markdown/Element.Markdown.csproj
+          -c Release
+          --no-build
+          --no-restore
+          -o ${{ env.PACKAGE_OUTPUT }}
+          /p:PackageVersion=${{ steps.version.outputs.version }}
+          /p:Version=${{ steps.version.outputs.version }}
+          /p:GeneratePackageOnBuild=false
+
+      - name: Pack Element.X
+        run: >
+          dotnet pack src/X/Element.X.csproj
           -c Release
           --no-build
           --no-restore

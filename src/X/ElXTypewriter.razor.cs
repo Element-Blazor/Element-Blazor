@@ -1,9 +1,10 @@
+using Element;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Element
+namespace Element.X
 {
     public partial class ElXTypewriter : ElementComponentBase, IDisposable
     {
