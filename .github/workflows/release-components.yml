@@ -65,23 +65,38 @@ jobs:
       - name: Test components
         run: dotnet test test/Element.ComponentTests/Element.ComponentTests.csproj -c Release --no-restore
 
+      - name: Build packages
+        run: |
+          dotnet build src/Components/Element.csproj -c Release --no-restore \
+            /p:PackageVersion=${{ steps.version.outputs.version }} \
+            /p:Version=${{ steps.version.outputs.version }} \
+            /p:GeneratePackageOnBuild=false
+          dotnet build src/Markdown/Element.Markdown.csproj -c Release --no-restore \
+            /p:PackageVersion=${{ steps.version.outputs.version }} \
+            /p:Version=${{ steps.version.outputs.version }} \
+            /p:GeneratePackageOnBuild=false
+
       - name: Pack Element
         run: >
           dotnet pack src/Components/Element.csproj
           -c Release
+          --no-build
           --no-restore
           -o ${{ env.PACKAGE_OUTPUT }}
           /p:PackageVersion=${{ steps.version.outputs.version }}
           /p:Version=${{ steps.version.outputs.version }}
+          /p:GeneratePackageOnBuild=false
 
       - name: Pack Element.Markdown
         run: >
           dotnet pack src/Markdown/Element.Markdown.csproj
           -c Release
+          --no-build
           --no-restore
           -o ${{ env.PACKAGE_OUTPUT }}
           /p:PackageVersion=${{ steps.version.outputs.version }}
           /p:Version=${{ steps.version.outputs.version }}
+          /p:GeneratePackageOnBuild=false
 
       - name: Upload NuGet artifacts
         uses: actions/upload-artifact@v7
