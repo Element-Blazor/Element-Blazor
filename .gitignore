@@ -12,3 +12,4 @@ launchSettings.json
 .user
 .suo
 *.user
+artifacts/
