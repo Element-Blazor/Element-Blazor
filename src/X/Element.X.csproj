@@ -55,6 +55,7 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="wwwroot\css\x.css" />
+    <None Include="wwwroot\js\x.js" />
   </ItemGroup>
 
   <ItemGroup>

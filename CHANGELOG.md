@@ -12,6 +12,7 @@ This project follows Semantic Versioning and uses a Keep a Changelog style struc
 - Added NuGet package readme files for `Element`, `Element.Markdown`, and `Element.X`.
 - Added Source Link and `.snupkg` symbol package settings for packable projects.
 - Added independent `Element.X` package for optional AI and conversation components.
+- Added `ElementXStreamService`, `ElementXRequestService`, and `ElementXRecordService` with offline stream, cancellation, browser recording fallback, and service tests.
 
 ### Changed
 

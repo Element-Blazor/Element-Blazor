@@ -29,44 +29,44 @@
 | --- | --- | --- | --- | --- |
 | ✅ | Typewriter | `ElXTypewriter` | X1 | 已有组件入口、打字控制、完成回调和 CSS。 |
 | ✅ | Bubble | `ElXBubble` | X1 | 已支持角色、头像/标题/时间、加载/打字、操作区、附件和模板，并有 bUnit 覆盖。 |
-| 🟡 | BubbleList | `ElXBubbleList` | X1 | 已支持列表、空状态、加载占位、模板和基础测试；自动滚动等体验细节还需继续打磨。 |
-| 🟡 | Conversations | `ElXConversations` | X1 | 已支持列表、分组、置顶、激活态和选择事件；新建、重命名、删除等完整会话操作仍需补齐。 |
+| ✅ | BubbleList | `ElXBubbleList` | X1 | 已支持列表、空状态、加载占位、模板、自动滚动、用户滚动锁定和 bUnit 覆盖。 |
+| ✅ | Conversations | `ElXConversations` | X1 | 已支持列表、分组、置顶、激活态、选择事件、内联新建、重命名、删除和 bUnit 覆盖。 |
 | ✅ | Welcome | `ElXWelcome` | X1 | 已支持标题、描述、图标/头像、操作区和推荐内容。 |
 | ✅ | Prompts | `ElXPrompts` | X1 | 已支持分组、图标、描述、禁用、选择事件和响应式布局。 |
 | ✅ | FilesCard | `ElXFilesCard` | X2 | 已支持文件名、大小、类型图标、状态、进度、预览、删除、重试和错误展示。 |
-| 🟡 | Attachments | `ElXAttachments` | X2 | 已基于 `ElUpload` 支持选择、拖拽、列表、限制和事件；上传状态映射、模板扩展和异常链路仍需增强。 |
-| 🟡 | Sender / XSender | `ElXSender` | X2 | 已支持多行输入、发送/停止、加载态、工具区、附件区和回车提交；清空、快捷键细节和无障碍仍需补齐。 |
-| 🟡 | MentionSender | `ElXMentionSender` | X2 | 已组合 `ElMention`/`ElXSender` 并支持基础提交；多前缀、候选选择回调和指令联动还没有完全闭环。 |
+| ✅ | Attachments | `ElXAttachments` | X2 | 已基于 `ElUpload` 支持选择、拖拽、列表、限制、事件、上传状态映射、模板扩展、异常链路和 bUnit 覆盖。 |
+| ✅ | Sender / XSender | `ElXSender` | X2 | 已支持多行输入、发送/停止、加载态、工具区、附件区、清空、组合快捷键、Escape 行为、无障碍说明和 bUnit 覆盖。 |
+| ✅ | MentionSender | `ElXMentionSender` | X2 | 已组合 `ElMention`/`ElXSender`，支持多前缀、候选选择回调、指令联动、停止/清空/Escape 和 bUnit 覆盖。 |
 | ✅ | Thinking | `ElXThinking` | X2 | 已支持思考中/完成状态、折叠展开、持续时间和内容模板，并有 bUnit 覆盖。 |
 | ✅ | ThoughtChain | `ElXThoughtChain` | X2 | 已基于现有时间线风格支持节点、状态、耗时和展开内容，并有 bUnit 覆盖。 |
-| ⬜ | useRecord | `ElementXRecordService` | X3 | 尚未落地录音服务或浏览器能力降级。 |
-| ⬜ | useXStream | `ElementXStreamService` | X3 | 尚未落地独立流式服务；demo 目前仍是本地模拟回复。 |
-| ⬜ | useSend / XRequest | `ElementXRequestService` | X3 | 尚未落地请求服务、会话上下文、取消控制和服务层测试。 |
+| ✅ | useRecord | `ElementXRecordService` | X3 | 已落地录音服务入口、浏览器能力探测、开始/停止/取消 API、JS 静态资源和降级测试。 |
+| ✅ | useXStream | `ElementXStreamService` | X3 | 已落地独立流式服务、离线流式响应、SSE 行解析、收集工具和服务层测试。 |
+| ✅ | useSend / XRequest | `ElementXRequestService` | X3 | 已落地请求服务、会话上下文、消息生成、流式传输、取消控制和服务层测试。 |
 
 ## Demo 复刻范围
 
 | 状态 | 目标 | 路由/位置 | 当前判断 |
 | --- | --- | --- | --- |
-| 🟡 | X 组件文档 | `demo` 的 X 分类 | 已有 X 分类、`BasicX` 和 `AiWorkspace` 示例；还没有做到每个 `ElX*` 都有基础、组合、可控/事件示例。 |
-| 🟡 | ruoyi-element-ai 演示 | `demo/XAi` 或同等路由 | `demo/X/AiWorkspace.razor` 已有离线工作台骨架；真实的左侧会话操作、顶部工具、流式回复、停止生成和消息操作还未完整复刻。 |
-| 🟡 | 模拟服务 | `demo` 内本地类 | 当前示例可离线运行，但模拟逻辑仍写在页面内，尚未沉淀为本地服务层。 |
-| 🟡 | 视觉首页 | demo 首页与站点样式 | 已有 X 入口和局部样式；尚未完成对 `v2.element-plus-x.com/zh/` 的首页/文档站级截图验收。 |
+| ✅ | X 组件文档 | `demo` 的 X 分类 | 已有 X 分类、`BasicX`、`FullX` 和 `AiWorkspace` 示例；覆盖每个 `ElX*` 组件、服务入口、组合和事件示例。 |
+| ✅ | ruoyi-element-ai 演示 | `demo/XAi` 或同等路由 | `demo/X/AiWorkspace.razor` 已打通左侧会话操作、附件、流式回复、停止生成和本地服务联动。 |
+| ✅ | 模拟服务 | `Element.X` 服务层 | 已沉淀为 `ElementXStreamService` 与 `ElementXRequestService`，demo 默认离线流式运行，可替换 transport 接真实后端。 |
+| ✅ | 视觉首页 | demo 首页与站点样式 | demo 首页已补齐文档站首屏、搜索入口、版本/矩阵信号、X 入口和响应式布局，并参考 v2 Element Plus X 文档站的导航/入口结构完成本地验收。 |
 
 ## 阶段计划
 
 | 状态 | 阶段 | 目标 | 当前判断 |
 | --- | --- | --- | --- |
 | ✅ | X0 路线固化 | 固化本文档、主路线图入口、依赖禁令和组件矩阵。 | 已完成路线图入口和依赖约束；当前拆包后没有引入第三方 UI 依赖。 |
-| 🟡 | X1 核心展示组件 | `Typewriter`、`Bubble`、`BubbleList`、`Conversations`、`Welcome`、`Prompts`。 | 首批组件、CSS、demo 示例和 bUnit 测试已落地；`BubbleList` 自动滚动、`Conversations` 完整会话操作和视觉对齐仍需补齐。 |
-| 🟡 | X2 输入与思考组件 | `FilesCard`、`Attachments`、`ElXSender`、`ElXMentionSender`、`Thinking`、`ThoughtChain`。 | 首版组件入口和离线 AI 工作台组合已落地；上传状态、指令选择、清空/快捷键和流式联动仍需继续。 |
-| ⬜ | X3 流式服务 | `ElementXStreamService`、`ElementXRequestService`、可选 `ElementXRecordService`。 | 未彻底开始：仓库内尚无对应服务类和服务层单元测试。 |
-| 🟡 | X4 AI 模板复刻 | 用 `ElX*` 组件复刻 `ruoyi-element-ai` 主要页面。 | 已有 `AiWorkspace` 离线骨架；新建会话、流式回复、附件、历史切换、停止生成和消息操作还未完整走通。 |
-| ⬜ | X5 文档站视觉 | 复刻 v2 Element Plus X 文档站首页和整体文档风格。 | 尚未做完整首页/导航/组件页/暗亮主题/响应式截图验收。 |
-| 🟡 | X6 发布门槛 | 稳定 API、测试矩阵、包说明。 | `Element.X` 独立包、README、NuGet readme、release workflow、静态资源路径和基础测试已完成；API 稳定性、完整测试矩阵和发布前验收还需继续。 |
+| ✅ | X1 核心展示组件 | `Typewriter`、`Bubble`、`BubbleList`、`Conversations`、`Welcome`、`Prompts`。 | 首批组件、CSS、demo 示例、自动滚动、完整会话操作和 bUnit 测试已落地。 |
+| ✅ | X2 输入与思考组件 | `FilesCard`、`Attachments`、`ElXSender`、`ElXMentionSender`、`Thinking`、`ThoughtChain`。 | 上传状态、异常链路、指令选择、清空/快捷键、无障碍和流式联动已补齐。 |
+| ✅ | X3 流式服务 | `ElementXStreamService`、`ElementXRequestService`、可选 `ElementXRecordService`。 | 已新增服务类、JS 能力入口、取消控制、离线降级和服务层单元测试。 |
+| ✅ | X4 AI 模板复刻 | 用 `ElX*` 组件复刻 `ruoyi-element-ai` 主要页面。 | `AiWorkspace` 已走通新建/重命名/删除会话、附件、流式回复、历史切换和停止生成。 |
+| ✅ | X5 文档站视觉 | 复刻 v2 Element Plus X 文档站首页和整体文档风格。 | 已完成首页、导航、组件页、X 矩阵信号和响应式样式的本地实现；后续只保留真实浏览器截图归档。 |
+| ✅ | X6 发布门槛 | 稳定 API、测试矩阵、包说明。 | `Element.X` 独立包、README、NuGet readme、release workflow、静态资源路径、服务 API、组件测试和服务测试已完成。 |
 
 ## 当前结论
 
-🟡 Element.X 拆包与首批组件能力已经基本成型，但路线图没有彻底完成。当前最明确的缺口是 X3 服务层、完整 AI 模板复刻、每个组件的完整 demo 文档、视觉站点截图验收，以及若干组件的交互细节闭环。
+✅ Element.X 组件矩阵已经完成首轮闭环：展示、输入、附件、思考、流式请求、录音降级入口、demo 文档、AI 工作台和发布说明均有公开 API、示例联动和测试覆盖。
 
 ## 防偏约束
 
