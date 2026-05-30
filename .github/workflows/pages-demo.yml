@@ -15,25 +15,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Install WebAssembly workload
+        run: dotnet workload install wasm-tools
+
+      - name: Restore ClientRender demo
+        run: dotnet restore template/Samples/Renders/ClientRender/Element.ClientRender.csproj
+
+      - name: Publish ClientRender demo
+        run: dotnet publish template/Samples/Renders/ClientRender/Element.ClientRender.csproj -c Release -o ./artifacts/site --no-restore
+
+      - name: Prepare Pages artifact
+        shell: bash
+        run: |
+          touch ./artifacts/site/wwwroot/.nojekyll
+          cp ./artifacts/site/wwwroot/index.html ./artifacts/site/wwwroot/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./artifacts/site/wwwroot
+
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload demo artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./demo
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

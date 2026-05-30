@@ -1,0 +1,126 @@
+name: Release Components To NuGet
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Package version, for example 2.14.0-alpha.1"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  PACKAGE_OUTPUT: artifacts/packages
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Resolve package version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+
+          if [[ ! "$VERSION" =~ ^[0-9]+(\.[0-9]+){1,3}(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Tag must look like v1.2.3 or v1.2.3-alpha.1. Got: ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "release_tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Restore
+        run: |
+          dotnet restore src/Components/Element.csproj
+          dotnet restore src/Markdown/Element.Markdown.csproj
+          dotnet restore test/Element.ComponentTests/Element.ComponentTests.csproj
+
+      - name: Test components
+        run: dotnet test test/Element.ComponentTests/Element.ComponentTests.csproj -c Release --no-restore
+
+      - name: Pack Element
+        run: >
+          dotnet pack src/Components/Element.csproj
+          -c Release
+          --no-restore
+          -o ${{ env.PACKAGE_OUTPUT }}
+          /p:PackageVersion=${{ steps.version.outputs.version }}
+          /p:Version=${{ steps.version.outputs.version }}
+
+      - name: Pack Element.Markdown
+        run: >
+          dotnet pack src/Markdown/Element.Markdown.csproj
+          -c Release
+          --no-restore
+          -o ${{ env.PACKAGE_OUTPUT }}
+          /p:PackageVersion=${{ steps.version.outputs.version }}
+          /p:Version=${{ steps.version.outputs.version }}
+
+      - name: Upload NuGet artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: element-blazor-${{ steps.version.outputs.version }}-packages
+          path: |
+            ${{ env.PACKAGE_OUTPUT }}/*.nupkg
+            ${{ env.PACKAGE_OUTPUT }}/*.snupkg
+
+      - name: Publish to NuGet
+        env:
+          NUGET_KEY: ${{ secrets.NUGET_KEY }}
+        run: |
+          for package in "${{ env.PACKAGE_OUTPUT }}"/*.nupkg; do
+            dotnet nuget push "$package" \
+              --api-key "$NUGET_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
+          for symbols in "${{ env.PACKAGE_OUTPUT }}"/*.snupkg; do
+            dotnet nuget push "$symbols" \
+              --api-key "$NUGET_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          PRERELEASE_FLAG=""
+          if [[ "${{ steps.version.outputs.version }}" == *-* ]]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          gh release create "${{ steps.version.outputs.release_tag }}" \
+            ${{ env.PACKAGE_OUTPUT }}/*.nupkg \
+            ${{ env.PACKAGE_OUTPUT }}/*.snupkg \
+            --title "Element-Blazor ${{ steps.version.outputs.version }}" \
+            --notes "Element-Blazor ${{ steps.version.outputs.version }} packages published to NuGet." \
+            $PRERELEASE_FLAG
