@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 136" role="img" aria-labelledby="title desc">
+  <title id="title">Element-Blazor wordmark</title>
+  <desc id="desc">A horizontal Element-Blazor wordmark using the unified Element Plus, X, and Blazor mark.</desc>
+  <defs>
+    <linearGradient id="ebx-bg" x1="16" y1="16" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#409eff"/>
+      <stop offset=".48" stop-color="#5c7cfa"/>
+      <stop offset="1" stop-color="#6f42c1"/>
+    </linearGradient>
+    <linearGradient id="ebx-x" x1="39" y1="98" x2="98" y2="39" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67c23a"/>
+      <stop offset=".52" stop-color="#40c9ff"/>
+      <stop offset="1" stop-color="#e6a23c"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="12" y="12" width="112" height="112" rx="28" fill="#ffffff"/>
+  <rect x="18" y="18" width="100" height="100" rx="24" fill="url(#ebx-bg)"/>
+  <path fill="#ffffff" fill-opacity=".96" d="M42 40h52c3.3 0 6 2.7 6 6v8H52v14h40v13H52v14h48v8c0 3.3-2.7 6-6 6H42c-3.3 0-6-2.7-6-6V46c0-3.3 2.7-6 6-6Z"/>
+  <path fill="url(#ebx-x)" d="M88.3 34.4c2.4-2.4 6.1-2.4 8.5 0l3.8 3.8c2.4 2.4 2.4 6.1 0 8.5L46.7 100.6c-2.4 2.4-6.1 2.4-8.5 0l-3.8-3.8c-2.4-2.4-2.4-6.1 0-8.5L88.3 34.4Z"/>
+  <path fill="#ffffff" fill-opacity=".92" d="M46.7 34.4l53.9 53.9c2.4 2.4 2.4 6.1 0 8.5l-3.8 3.8c-2.4 2.4-6.1 2.4-8.5 0L34.4 46.7c-2.4-2.4-2.4-6.1 0-8.5l3.8-3.8c2.4-2.4 6.1-2.4 8.5 0Z"/>
+  <circle cx="96" cy="38" r="8" fill="#ffffff"/>
+  <circle cx="96" cy="38" r="4" fill="#67c23a"/>
+
+  <text x="150" y="64" fill="#1f2d3d" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="42" font-weight="800" letter-spacing="0">Element-Blazor</text>
+  <text x="151" y="103" fill="#606266" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="650" letter-spacing="0">Element Plus X for Blazor</text>
+</svg>

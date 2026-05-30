@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Element-Blazor X logo</title>
+  <desc id="desc">A unified static logo for Element Plus, Element X, and Blazor.</desc>
+  <defs>
+    <linearGradient id="ebx-bg" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#409eff"/>
+      <stop offset=".48" stop-color="#5c7cfa"/>
+      <stop offset="1" stop-color="#6f42c1"/>
+    </linearGradient>
+    <linearGradient id="ebx-x" x1="142" y1="370" x2="370" y2="142" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67c23a"/>
+      <stop offset=".52" stop-color="#40c9ff"/>
+      <stop offset="1" stop-color="#e6a23c"/>
+    </linearGradient>
+    <filter id="ebx-shadow" x="18" y="18" width="476" height="476" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#1f2d3d" flood-opacity=".18"/>
+    </filter>
+  </defs>
+
+  <rect x="56" y="56" width="400" height="400" rx="92" fill="#ffffff"/>
+  <rect x="72" y="72" width="368" height="368" rx="78" fill="url(#ebx-bg)" filter="url(#ebx-shadow)"/>
+
+  <path fill="#ffffff" fill-opacity=".96" d="M158 152h196c13.3 0 24 10.7 24 24v31H198v49h150v48H198v49h180v31c0 13.3-10.7 24-24 24H158c-13.3 0-24-10.7-24-24V176c0-13.3 10.7-24 24-24Z"/>
+
+  <path fill="url(#ebx-x)" d="M334.2 130.7c9-9 23.6-9 32.6 0l14.5 14.5c9 9 9 23.6 0 32.6L177.8 381.3c-9 9-23.6 9-32.6 0l-14.5-14.5c-9-9-9-23.6 0-32.6L334.2 130.7Z"/>
+  <path fill="#ffffff" fill-opacity=".92" d="M177.8 130.7l203.5 203.5c9 9 9 23.6 0 32.6l-14.5 14.5c-9 9-23.6 9-32.6 0L130.7 177.8c-9-9-9-23.6 0-32.6l14.5-14.5c9-9 23.6-9 32.6 0Z"/>
+
+  <circle cx="366" cy="146" r="28" fill="#ffffff"/>
+  <circle cx="366" cy="146" r="14" fill="#67c23a"/>
+</svg>
