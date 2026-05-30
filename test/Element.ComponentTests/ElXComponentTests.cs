@@ -2,6 +2,7 @@ using Bunit;
 using Element;
 using Element.X;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,6 +15,10 @@ namespace Element.ComponentTests
         public ElXComponentTests()
         {
             Services.AddElementServices();
+            JSInterop.SetupVoid("elementXBubbleListScrollToEnd", _ => true).SetVoidResult();
+            JSInterop.SetupVoid("execFocus", _ => true).SetVoidResult();
+            JSInterop.Setup<int[]>("elementMentionGetSelection", _ => true).SetResult(new[] { 2, 2 });
+            JSInterop.SetupVoid("elementMentionSetSelection", _ => true).SetVoidResult();
         }
 
         [Fact]
@@ -79,6 +84,33 @@ namespace Element.ComponentTests
         }
 
         [Fact]
+        public void ConversationsEmitsCreateRenameAndDelete()
+        {
+            var created = false;
+            XConversationItem renamed = null;
+            XConversationItem deleted = null;
+
+            var cut = Render<ElXConversations>(parameters => parameters
+                .Add(x => x.ShowCreate, true)
+                .Add(x => x.ShowActions, true)
+                .Add(x => x.OnCreate, () => created = true)
+                .Add(x => x.OnRename, item => renamed = item)
+                .Add(x => x.OnDelete, item => deleted = item)
+                .Add(x => x.Items, new[]
+                {
+                    new XConversationItem { Id = "a", Title = "Current" }
+                }));
+
+            cut.Find(".el-x-conversations__create").Click();
+            cut.Find("[aria-label='Rename Current']").Click();
+            cut.Find("[aria-label='Delete Current']").Click();
+
+            Assert.True(created);
+            Assert.Equal("a", renamed.Id);
+            Assert.Equal("a", deleted.Id);
+        }
+
+        [Fact]
         public void PromptsEmitsSelectedPrompt()
         {
             XPromptItem selected = null;
@@ -117,6 +149,90 @@ namespace Element.ComponentTests
 
             cut.Find(".el-button--danger").Click();
             Assert.True(stopped);
+        }
+
+        [Fact]
+        public void SenderClearsAndSupportsShortcutSubmit()
+        {
+            string value = "Explain Blazor";
+            string submitted = null;
+            string cleared = null;
+
+            var cut = Render<ElXSender>(parameters => parameters
+                .Add(x => x.Value, value)
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.OnSubmit, next => submitted = next)
+                .Add(x => x.OnClear, next => cleared = next)
+                .Add(x => x.SubmitOnEnter, false)
+                .Add(x => x.SubmitOnCtrlEnter, true)
+                .Add(x => x.ClearOnSubmit, true)
+                .Add(x => x.ShowClearButton, true));
+
+            cut.Find("textarea").KeyDown(new KeyboardEventArgs { Key = "Enter" });
+            Assert.Null(submitted);
+
+            cut.Find("textarea").KeyDown(new KeyboardEventArgs { Key = "Enter", CtrlKey = true });
+            Assert.Equal("Explain Blazor", submitted);
+            Assert.Equal("Explain Blazor", cleared);
+            Assert.Equal(string.Empty, value);
+        }
+
+        [Fact]
+        public async Task AttachmentsMapsUploadStatusAndTemplate()
+        {
+            IList<XAttachmentItem> latest = null;
+            RenderFragment<XAttachmentItem> template = item => builder =>
+            {
+                builder.OpenElement(0, "span");
+                builder.AddAttribute(1, "class", "attachment-template");
+                builder.AddContent(2, $"{item.FileName}:{item.Status}:{item.Size}:{item.Type}");
+                builder.CloseElement();
+            };
+
+            var file = new UploadModel
+            {
+                Id = "file-1",
+                FileName = "report.pdf",
+                Size = 2048,
+                Url = "/files/report.pdf",
+                Status = UploadStatus.UnStart
+            };
+
+            var cut = Render<ElXAttachments>(parameters => parameters
+                .Add(x => x.UploadUrl, "/upload")
+                .Add(x => x.ItemTemplate, template)
+                .Add(x => x.ItemsChanged, items => latest = items));
+
+            await cut.InvokeAsync(() => cut.FindComponent<ElUpload>().Instance.OnChange.InvokeAsync(new UploadChangeEventArgs
+            {
+                File = file,
+                FileList = new IFileModel[] { file }
+            }));
+            cut.Render();
+
+            Assert.Contains("report.pdf:Ready:2 KB:pdf", cut.Find(".attachment-template").TextContent);
+
+            await cut.InvokeAsync(() => cut.FindComponent<ElUpload>().Instance.OnProgress.InvokeAsync(new UploadProgressEventArgs
+            {
+                File = file,
+                FileList = new IFileModel[] { file },
+                Percent = 45
+            }));
+
+            Assert.Equal(XAttachmentStatus.Uploading, latest[0].Status);
+            Assert.Equal(45, latest[0].Progress);
+
+            file.Status = UploadStatus.Failure;
+            file.Message = "network error";
+            await cut.InvokeAsync(() => cut.FindComponent<ElUpload>().Instance.OnError.InvokeAsync(new UploadRequestEventArgs
+            {
+                File = file,
+                FileList = new IFileModel[] { file },
+                Response = UploadRequestResult.Failure("network error")
+            }));
+
+            Assert.Equal(XAttachmentStatus.Error, latest[0].Status);
+            Assert.Equal("network error", latest[0].Error);
         }
 
         [Fact]
@@ -165,6 +281,34 @@ namespace Element.ComponentTests
             cut.Find(".el-button").Click();
 
             Assert.Equal("/summarize roadmap", submitted);
+        }
+
+        [Fact]
+        public void MentionSenderAppliesSelectedCommandAndSubmitsShortcut()
+        {
+            string value = null;
+            string submitted = null;
+            MentionOption selected = null;
+
+            var cut = Render<ElXMentionSender>(parameters => parameters
+                .Add(x => x.ValueChanged, next => value = next)
+                .Add(x => x.OnCommandSelect, option => selected = option)
+                .Add(x => x.OnSubmit, next => submitted = next)
+                .Add(x => x.ApplyCommandOnSelect, true)
+                .Add(x => x.SubmitOnEnter, false)
+                .Add(x => x.SubmitOnCtrlEnter, true)
+                .Add(x => x.Options, new[] { new MentionOption { Value = "summarize", Label = "Summarize" } }));
+
+            cut.Find("textarea").Input("/s");
+            cut.Find("textarea").KeyDown(new KeyboardEventArgs { Key = "Enter" });
+
+            Assert.Equal("summarize", selected.Value);
+            Assert.Equal("/summarize ", value);
+
+            cut.Render(parameters => parameters.Add(x => x.Value, value));
+            cut.Find("textarea").KeyDown(new KeyboardEventArgs { Key = "Enter", CtrlKey = true });
+
+            Assert.Equal("/summarize ", submitted);
         }
     }
 }

@@ -10,7 +10,17 @@
                   Accept="@Accept"
                   Drag="@Drag"
                   ShowFileList="false"
-                  OnChange="HandleUploadChangeAsync">
+                  AllowExtensions="@AllowExtensions"
+                  MaxSize="@MaxSize"
+                  Disabled="@Disabled"
+                  BeforeUpload="@BeforeUpload"
+                  BeforeRemove="@BeforeRemove"
+                  HttpRequest="@HttpRequest"
+                  OnChange="HandleUploadChangeAsync"
+                  OnProgress="HandleUploadProgressAsync"
+                  OnSuccess="HandleUploadSuccessAsync"
+                  OnError="HandleUploadErrorAsync"
+                  OnExceed="HandleUploadExceedAsync">
             <ChildContent>
                 @if (UploadContent != null)
                 {
@@ -28,8 +38,22 @@
         <div class="el-x-attachments__list">
             @foreach (var item in Items)
             {
-                <ElXFilesCard File="@item" OnRemove="RemoveAsync" OnPreview="PreviewAsync" />
+                @if (ItemTemplate != null)
+                {
+                    @ItemTemplate(item)
+                }
+                else
+                {
+                    <ElXFilesCard File="@item"
+                                  Readonly="@Readonly"
+                                  OnRemove="RemoveAsync"
+                                  OnPreview="PreviewAsync" />
+                }
             }
         </div>
+    }
+    else if (EmptyContent != null)
+    {
+        <div class="el-x-attachments__empty">@EmptyContent</div>
     }
 </div>

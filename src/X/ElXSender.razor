@@ -15,11 +15,21 @@
             <div class="el-x-sender__prefix">@Prefix</div>
         }
         <textarea class="el-x-sender__input"
+                  id="@InputId"
+                  name="@Name"
+                  @ref="textareaElement"
                   value="@Value"
                   placeholder="@Placeholder"
                   rows="@Rows"
+                  maxlength="@Maxlength"
+                  autocomplete="@Autocomplete"
+                  autofocus="@Autofocus"
                   disabled="@Disabled"
                   readonly="@Readonly"
+                  aria-label="@AriaLabel"
+                  aria-invalid="@AriaInvalidValue"
+                  aria-describedby="@EffectiveAriaDescribedBy"
+                  style="@InputStyle"
                   @oninput="OnInputAsync"
                   @onkeydown="OnKeyDownAsync"></textarea>
         @if (Suffix != null)
@@ -33,11 +43,30 @@
             <div class="el-x-sender__tools">@Footer</div>
         }
         <div class="el-x-sender__actions">
+            @if (ShowClearButton)
+            {
+                <ElButton Type="@ButtonType.Info"
+                          Text="true"
+                          Disabled="@IsClearDisabled"
+                          OnClick="ClearAsync"
+                          aria-label="@ClearButtonText">
+                    @ClearButtonText
+                </ElButton>
+            }
             @if (Loading)
             {
-                <ElButton Type="@ButtonType.Danger" Plain="true" OnClick="StopAsync">Stop</ElButton>
+                <ElButton Type="@ButtonType.Danger"
+                          Plain="true"
+                          OnClick="StopAsync"
+                          aria-label="@StopButtonText">
+                    @StopButtonText
+                </ElButton>
             }
-            <ElButton Type="@ButtonType.Primary" Loading="@Loading" Disabled="@IsSendDisabled" OnClick="SendAsync">
+            <ElButton Type="@ButtonType.Primary"
+                      Loading="@Loading"
+                      Disabled="@IsSendDisabled"
+                      OnClick="SendAsync"
+                      aria-label="@SendButtonText">
                 @SendButtonText
             </ElButton>
         </div>

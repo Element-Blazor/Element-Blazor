@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  packages: write
 
 concurrency:
   group: release-${{ github.ref_name }}
@@ -158,19 +159,51 @@ jobs:
               --skip-duplicate
           done
 
-      - name: Create GitHub Release
+      - name: Publish to GitHub Packages
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          dotnet nuget remove source github >/dev/null 2>&1 || true
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --name github \
+            --username "${{ github.actor }}" \
+            --password "$GITHUB_TOKEN" \
+            --store-password-in-clear-text
+
+          for package in "${{ env.PACKAGE_OUTPUT }}"/*.nupkg; do
+            dotnet nuget push "$package" \
+              --api-key "$GITHUB_TOKEN" \
+              --source github \
+              --skip-duplicate
+          done
+
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
-          PRERELEASE_FLAG=""
+          RELEASE_TAG="${{ steps.version.outputs.release_tag }}"
+          RELEASE_TITLE="Element-Blazor ${{ steps.version.outputs.version }}"
+          RELEASE_NOTES="Element-Blazor ${{ steps.version.outputs.version }} packages published to NuGet."
+          ASSETS=(
+            "${{ env.PACKAGE_OUTPUT }}"/*.nupkg
+            "${{ env.PACKAGE_OUTPUT }}"/*.snupkg
+          )
+          PRERELEASE_FLAGS=()
           if [[ "${{ steps.version.outputs.version }}" == *-* ]]; then
-            PRERELEASE_FLAG="--prerelease"
+            PRERELEASE_FLAGS+=(--prerelease)
           fi
 
-          gh release create "${{ steps.version.outputs.release_tag }}" \
-            ${{ env.PACKAGE_OUTPUT }}/*.nupkg \
-            ${{ env.PACKAGE_OUTPUT }}/*.snupkg \
-            --title "Element-Blazor ${{ steps.version.outputs.version }}" \
-            --notes "Element-Blazor ${{ steps.version.outputs.version }} packages published to NuGet." \
-            $PRERELEASE_FLAG
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release edit "$RELEASE_TAG" \
+              --title "$RELEASE_TITLE" \
+              --notes "$RELEASE_NOTES" \
+              "${PRERELEASE_FLAGS[@]}"
+            gh release upload "$RELEASE_TAG" "${ASSETS[@]}" --clobber
+          else
+            gh release create "$RELEASE_TAG" "${ASSETS[@]}" \
+              --title "$RELEASE_TITLE" \
+              --notes "$RELEASE_NOTES" \
+              "${PRERELEASE_FLAGS[@]}"
+          fi

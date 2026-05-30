@@ -547,6 +547,31 @@ window.elementScrollbarGetState = function (el) {
         clientWidth: el.clientWidth || 0
     };
 };
+window.elementXBubbleListScrollToEnd = function (el, reverse, smooth, onlyWhenNearBottom, threshold) {
+    if (!el) {
+        return;
+    }
+
+    threshold = typeof threshold === "number" ? threshold : 80;
+    var maxScrollTop = Math.max(0, (el.scrollHeight || 0) - (el.clientHeight || 0));
+    var distance = reverse
+        ? Math.abs(el.scrollTop || 0)
+        : Math.abs(maxScrollTop - (el.scrollTop || 0));
+
+    if (onlyWhenNearBottom && distance > threshold) {
+        return;
+    }
+
+    if (el.scrollTo) {
+        el.scrollTo({
+            top: reverse ? 0 : maxScrollTop,
+            behavior: smooth ? "smooth" : "auto"
+        });
+        return;
+    }
+
+    el.scrollTop = reverse ? 0 : maxScrollTop;
+};
 window.elementResolveScrollContainer = function (target) {
     if (!target) {
         return window;

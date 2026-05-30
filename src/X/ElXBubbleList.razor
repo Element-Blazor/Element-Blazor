@@ -1,7 +1,13 @@
 @inherits ElementComponentBase
 
-<section class="@ListClass" style="@Style" @attributes="Attributes">
-    @if (Items == null || !Items.Any())
+<section class="@ListClass"
+         style="@ListStyle"
+         role="@Role"
+         aria-live="@AriaLive"
+         aria-relevant="@AriaRelevant"
+         @ref="listElement"
+         @attributes="Attributes">
+    @if (ResolvedItems.Count == 0)
     {
         @if (EmptyContent != null)
         {
@@ -14,7 +20,7 @@
     }
     else
     {
-        @foreach (var item in Items)
+        @foreach (var item in ResolvedItems)
         {
             @if (ItemTemplate != null)
             {

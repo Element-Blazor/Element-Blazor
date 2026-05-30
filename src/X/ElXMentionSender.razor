@@ -6,13 +6,30 @@
                Options="@Options"
                Prefixes="@Prefixes"
                Prefix="@Prefix"
+               ItemTemplate="@ItemTemplate"
                Placeholder="@Placeholder"
                Rows="@Rows"
                Disabled="@Disabled"
                Readonly="@Readonly"
-               OnSelect="@OnMentionSelect">
+               Clearable="@Clearable"
+               Autocomplete="@Autocomplete"
+               Tabindex="@Tabindex"
+               Id="@Id"
+               Name="@Name"
+               InputStyle="@InputStyle"
+               AriaLabel="@AriaLabel"
+               OnSelect="HandleMentionSelectAsync"
+               OnKeyDown="OnMentionKeyDownAsync">
     </ElMention>
     <div class="el-x-mention-sender__actions">
+        @if (Toolbar != null)
+        {
+            <div class="el-x-mention-sender__tools">@Toolbar</div>
+        }
+        @if (ShowClearButton)
+        {
+            <ElButton Type="@ButtonType.Info" Text="true" Disabled="@IsClearDisabled" OnClick="ClearAsync">@ClearButtonText</ElButton>
+        }
         <ElButton Type="@ButtonType.Primary" Loading="@Loading" Disabled="@IsSendDisabled" OnClick="SendAsync">@SendButtonText</ElButton>
     </div>
 </section>

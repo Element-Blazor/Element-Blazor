@@ -108,6 +108,9 @@ namespace Element
         public EventCallback<string> OnInput { get; set; }
 
         [Parameter]
+        public EventCallback<KeyboardEventArgs> OnKeyDown { get; set; }
+
+        [Parameter]
         public EventCallback<MentionOption> OnSelect { get; set; }
 
         [Parameter]
@@ -242,12 +245,20 @@ namespace Element
             {
                 await CaptureSelectionAsync();
                 RefreshSearch();
+                if (!dropdownVisible && OnKeyDown.HasDelegate)
+                {
+                    await OnKeyDown.InvokeAsync(e);
+                }
                 return;
             }
 
             var options = FilteredOptions.ToList();
             if (!dropdownVisible || !options.Any())
             {
+                if (OnKeyDown.HasDelegate)
+                {
+                    await OnKeyDown.InvokeAsync(e);
+                }
                 return;
             }
 
@@ -274,6 +285,10 @@ namespace Element
             else if (e.Key == "End")
             {
                 activeIndex = FindNextEnabledIndex(options, options.Count - 1, -1);
+            }
+            else if (OnKeyDown.HasDelegate)
+            {
+                await OnKeyDown.InvokeAsync(e);
             }
         }
 
