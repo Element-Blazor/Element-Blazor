@@ -101,4 +101,4 @@ git push origin v2.14.0-alpha.1
 - GitHub Pages 演示站：<https://element-blazor.github.io/>
 - GitHub Issues：<https://github.com/Element-Blazor/Element-Blazor/issues>
 
-<img src="demo/site/wwwroot/images/wecom-qr.jpg" alt="Element-Blazor 微信交流群二维码" width="240" />
+<img src="https://element-blazor.github.io/images/wecom-qr.jpg" alt="Element-Blazor 微信交流群二维码" width="240" />
