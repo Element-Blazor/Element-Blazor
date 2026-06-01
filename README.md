@@ -14,7 +14,7 @@ Element-Blazor 是一个对齐 [Element Plus](https://element-plus.org/) 设计�
 安装主包：
 
 ```powershell
-dotnet add package Element --prerelease
+dotnet add package Element  
 ```
 
 注册服务：
